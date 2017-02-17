@@ -1,0 +1,2 @@
+刚初始化完Project，运行react-native run-ios ，编译报错。
+用xcode打开该项目，build一下，把的报红的注掉。
