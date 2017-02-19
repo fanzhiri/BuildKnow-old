@@ -33,6 +33,7 @@ import HomePage from './views/HomePage'
 import BuildQuestion from './views/BuildQuestion'
 import Collect from './views/Collect'
 import Statistics from './views/Statistics'
+import BookCover from './views/BookCover'
 
 export default class BuildKnow extends Component {
     render() {
@@ -54,6 +55,7 @@ export default class BuildKnow extends Component {
                 <Scene key="buildquestion" title="注册" component={BuildQuestion} duration={0} />
                 <Scene key="collect" title="注册" component={Collect} duration={0} />
                 <Scene key="statistics" title="注册" component={Statistics} duration={0} />
+                <Scene key="bookcover" title="书面" component={BookCover} duration={0} />
             </Router>
         );
     }

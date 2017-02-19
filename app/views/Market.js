@@ -35,7 +35,7 @@ class Market extends Component {
             <View style={styles.container}>
                 <ScrollView marginTop={64}>
                 <Swiper height={240} loop={true} autoplay={true}>
-                    <View style={styles.slide}>
+                    <View style={styles.slide} >
                         <Text> abc </Text>
                     </View>
                     <View style={styles.slide}>
@@ -46,7 +46,7 @@ class Market extends Component {
                     </View>
                 </Swiper>
 
-                <Text>本周排行</Text>
+                <Text onPress={() => Actions.bookcover()}>本周排行</Text>
 
                 <ListView
                     horizontal={true}
