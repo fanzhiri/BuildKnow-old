@@ -25,6 +25,14 @@ import Follow from './views/Follow'
 import Discover from './views/Discover'
 import Me from './views/Me'
 import MainTabbarIcon from './views/MainTabbarIcon'
+import Help from './views/Help'
+import Setting from './views/Setting'
+import MyBookList from './views/MyBookList'
+
+import HomePage from './views/HomePage'
+import BuildQuestion from './views/BuildQuestion'
+import Collect from './views/Collect'
+import Statistics from './views/Statistics'
 
 export default class BuildKnow extends Component {
     render() {
@@ -37,8 +45,15 @@ export default class BuildKnow extends Component {
                     <Scene key="market" title="市场" component={Market} duration={0} icon={MainTabbarIcon}/>
                     <Scene key="follow" title="关注" component={Follow} duration={0} icon={MainTabbarIcon}/>
                     <Scene key="discover" title="发现" component={Discover} duration={0} icon={MainTabbarIcon}/>
-                    <Scene key="me" title="我" component={Me} duration={0} icon={MainTabbarIcon}/>
+                    <Scene key="me" title="我" component={Me} duration={0} icon={MainTabbarIcon} />
                 </Scene>
+                <Scene key="setting" title="设置" component={Setting} duration={0} />
+                <Scene key="help" title="帮助" component={Help} duration={0} />
+                <Scene key="mybooklist" title="注册" component={MyBookList} duration={0} />
+                <Scene key="homepage" title="注册" component={HomePage} duration={0} />
+                <Scene key="buildquestion" title="注册" component={BuildQuestion} duration={0} />
+                <Scene key="collect" title="注册" component={Collect} duration={0} />
+                <Scene key="statistics" title="注册" component={Statistics} duration={0} />
             </Router>
         );
     }

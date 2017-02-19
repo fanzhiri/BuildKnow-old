@@ -16,17 +16,15 @@ const styles = StyleSheet.create({
 
 });
 
-class Me extends Component {
+class HomePage extends Component {
     render(){
         return (
             <View style={styles.container}>
-                <Text>Me</Text>
-                <Button onPress={Actions.pop}>Me</Button>
-                <Button onPress={() => Actions.setting()}>设置</Button>
-
+                <Text>HomePage</Text>
+                <Button onPress={Actions.pop}>HomePage</Button>
             </View>
         );
     }
 }
 
-module.exports = Me;
+module.exports = HomePage;
