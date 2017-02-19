@@ -11,6 +11,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#F5FCFF',
+        marginTop:64,
     },
     slide: {
         flex: 1,
@@ -33,7 +34,7 @@ class Market extends Component {
     render(){
         return (
             <View style={styles.container}>
-                <ScrollView marginTop={64}>
+                <ScrollView >
                 <Swiper height={240} loop={true} autoplay={true}>
                     <View style={styles.slide} >
                         <Text> abc </Text>

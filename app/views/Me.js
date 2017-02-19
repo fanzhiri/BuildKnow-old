@@ -23,7 +23,7 @@ class Me extends Component {
                 <Text>Me</Text>
                 <Button onPress={Actions.pop}>Me</Button>
                 <Button onPress={() => Actions.setting()}>设置</Button>
-
+                <Button onPress={() => Actions.homepage()}>我的主页</Button>
             </View>
         );
     }
