@@ -36,6 +36,11 @@ import Statistics from './views/Statistics'
 import BookCover from './views/BookCover'
 import FriendList from './views/FriendList'
 
+import BookIntroduce from './views/BookIntroduce'
+import BookDiscuss from './views/BookDiscuss'
+import BookHistory from './views/BookHistory'
+
+
 export default class BuildKnow extends Component {
     render() {
         return (
@@ -51,12 +56,17 @@ export default class BuildKnow extends Component {
                 </Scene>
                 <Scene key="setting" title="设置" component={Setting} duration={0} />
                 <Scene key="help" title="帮助" component={Help} duration={0} />
-                <Scene key="mybooklist" title="注册" component={MyBookList} duration={0} />
-                <Scene key="homepage" title="注册" component={HomePage} duration={0} />
-                <Scene key="buildquestion" title="注册" component={BuildQuestion} duration={0} />
-                <Scene key="collect" title="注册" component={Collect} duration={0} />
-                <Scene key="statistics" title="注册" component={Statistics} duration={0} />
+                <Scene key="mybooklist" title="书架" component={MyBookList} duration={0} />
+                <Scene key="homepage" title="主页" component={HomePage} duration={0} />
+                <Scene key="buildquestion" title="建题" component={BuildQuestion} duration={0} />
+                <Scene key="collect" title="收藏" component={Collect} duration={0} />
+                <Scene key="statistics" title="统计" component={Statistics} duration={0} />
                 <Scene key="bookcover" title="书面" component={BookCover} duration={0} />
+                {/*<Scene key="bookcover" tabs={true} title="书面"  duration={0} >*/}
+                    {/*<Scene key="bookintroduce" title="统计" component={BookIntroduce} duration={0} />*/}
+                    {/*<Scene key="bookdiscuss" title="统计" component={BookDiscuss} duration={0} />*/}
+                    {/*<Scene key="bookhistory" title="统计" component={BookHistory} duration={0} />*/}
+                {/*</Scene>*/}
                 <Scene key="friendlist" title="友人" component={FriendList} duration={0} />
             </Router>
         );
