@@ -10,6 +10,7 @@
     "react": "~15.4.0",
     "react-native": "0.41.2",
     "react-native-button": "^1.8.2",
+    "react-native-foldview": "^1.1.1",
     "react-native-parallax-scroll-view": "^0.19.0",
     "react-native-router-flux": "^3.37.0",
     "react-native-swiper": "^1.5.4"
