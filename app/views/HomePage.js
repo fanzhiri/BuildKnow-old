@@ -25,9 +25,9 @@ class HomePage extends Component {
                 <ParallaxScrollView
                     backgroundColor="blue"
                     contentBackgroundColor="pink"
-                    parallaxHeaderHeight={300}
+                    parallaxHeaderHeight={200}
                     renderForeground={() => (
-                    <View style={{ height: 300, flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+                    <View style={{ height: 200, flex: 1, alignItems: 'center', justifyContent: 'center' }}>
                         <Text>Hello World!</Text>
                     </View>
                     )}>

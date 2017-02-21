@@ -51,11 +51,15 @@ const styles = StyleSheet.create({
 });
 
 class BookCover extends Component {
-    getInitialState() {
-        return {
-            selectedIndex: 0,
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            selectedIndex:0
         };
+        this._onChange = this._onChange.bind(this)
     }
+
     _onChange(event) {
         this.setState({
             selectedIndex: event.nativeEvent.selectedSegmentIndex,
@@ -81,16 +85,44 @@ class BookCover extends Component {
                         onChange={this._onChange}
                     />
                 </View>
-                <View>
-                    {/*<Router>*/}
-                        {/*<Scene key="bookintroduce"component={BookIntroduce} duration={0} initial={true}/>*/}
-                        {/*<Scene key="bookdiscuss"  component={BookDiscuss} duration={0} />*/}
-                        {/*<Scene key="bookhistory"  component={BookHistory} duration={0} />*/}
-                    {/*</Router>*/}
-                </View>
+                {this.renderSegmentedView()}
 
             </View>
         );
+    }
+
+    renderSegmentedView() {
+        if (this.state.selectedIndex === 0) {
+            return (
+                this.renderIntroduceView()
+            )
+        } else if (this.state.selectedIndex === 1) {
+            return (
+                this.renderDiscussView()
+            )
+        } else if (this.state.selectedIndex === 2) {
+            return (
+                this.renderHistoryView()
+            )
+        }
+    }
+
+    renderIntroduceView(){
+        return (
+            <Text>IntroduceView</Text>
+        )
+    }
+
+    renderDiscussView(){
+        return (
+            <Text>Discuss</Text>
+        )
+    }
+
+    renderHistoryView(){
+        return (
+            <Text>History</Text>
+        )
     }
 }
 
