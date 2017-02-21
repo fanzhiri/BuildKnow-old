@@ -5,6 +5,7 @@ import React, { Component } from 'react';
 import {View, Text, StyleSheet} from "react-native";
 import {Actions} from "react-native-router-flux";
 import Button from "react-native-button";
+import GlobleStyles from '../styles/GlobleStyles';
 
 const styles = StyleSheet.create({
     container: {
@@ -19,7 +20,7 @@ const styles = StyleSheet.create({
 class Login extends Component {
     render(){
         return (
-            <View style={styles.container}>
+            <View style={GlobleStyles.withoutTitleContainer}>
                 <Button onPress={()=> Actions.main()}>登录</Button>
                 <Button onPress={()=> Actions.register()}>注册</Button>
             </View>
