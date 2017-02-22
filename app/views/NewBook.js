@@ -22,7 +22,9 @@ class NewBook extends Component {
         return (
             <View style={GlobleStyles.withoutTitleContainer}>
                 <Text>NewBook</Text>
+                <Image>
 
+                </Image>
             </View>
         );
     }

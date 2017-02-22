@@ -42,6 +42,8 @@ import AnswerQuestion from './views/AnswerQuestion'
 import NewBook from './views/NewBook'
 import NewOneQuestion from './views/NewOneQuestion'
 import NewSomeQuestions from './views/NewSomeQuestions'
+import Introduce from './views/Introduce'
+
 
 export default class BuildKnow extends Component {
     render() {
@@ -49,7 +51,7 @@ export default class BuildKnow extends Component {
             <Router>
                 <Scene key="login" title="登录" component={Login} duration={0} initial={true}/>
                 <Scene key="register" title="注册" component={Register} duration={0} />
-
+                <Scene key="introduce" hideNavBar component={Introduce} duration={0} />
                 <Scene key="main" tabs={true} type={ActionConst.REPLACE}>
                     <Scene key="market" title="市场" component={Market} duration={0} icon={MainTabbarIcon}/>
                     <Scene key="follow" title="关注" component={Follow} duration={0} icon={MainTabbarIcon}/>

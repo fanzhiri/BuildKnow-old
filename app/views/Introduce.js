@@ -10,23 +10,22 @@ import GlobleStyles from '../styles/GlobleStyles';
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
+
         backgroundColor: '#F5FCFF',
     },
 
 });
 
-class Login extends Component {
+class Introduce extends Component {
     render(){
         return (
-            <View style={GlobleStyles.withoutTitleContainer}>
-                <Button onPress={()=> Actions.main()}>登录</Button>
-                <Button onPress={()=> Actions.register()}>注册</Button>
-                <Button onPress={()=> Actions.introduce()}>介绍</Button>
+            <View style={styles.container}>
+                <Text>Introduce</Text>
+                <Button onPress={Actions.pop}>Setting</Button>
+                <Button onPress={() => Actions.help()}>帮助</Button>
             </View>
         );
     }
 }
 
-module.exports = Login;
+module.exports = Introduce;

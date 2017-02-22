@@ -21,9 +21,8 @@ class NewOneQuestion extends Component {
     render(){
         return (
             <View style={GlobleStyles.withoutTitleContainer}>
-                <Text>NewOneQuestion</Text>
-                <Button onPress={Actions.pop}>Setting</Button>
-                <Button onPress={() => Actions.help()}>帮助</Button>
+                <Image></Image>
+                <Text>人每天要喝多少水？</Text>
             </View>
         );
     }
