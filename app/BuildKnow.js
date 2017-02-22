@@ -36,10 +36,12 @@ import Statistics from './views/Statistics'
 import BookCover from './views/BookCover'
 import FriendList from './views/FriendList'
 
-import BookIntroduce from './views/BookIntroduce'
-import BookDiscuss from './views/BookDiscuss'
-import BookHistory from './views/BookHistory'
-
+import ForgetPasswd from './views/ForgetPasswd'
+import BookDetial from './views/BookDetial'
+import AnswerQuestion from './views/AnswerQuestion'
+import NewBook from './views/NewBook'
+import NewOneQuestion from './views/NewOneQuestion'
+import NewSomeQuestions from './views/NewSomeQuestions'
 
 export default class BuildKnow extends Component {
     render() {
@@ -62,12 +64,14 @@ export default class BuildKnow extends Component {
                 <Scene key="collect" title="收藏" component={Collect} duration={0} />
                 <Scene key="statistics" title="统计" component={Statistics} duration={0} />
                 <Scene key="bookcover" title="书面" component={BookCover} duration={0} />
-                {/*<Scene key="bookcover" tabs={true} title="书面"  duration={0} >*/}
-                    {/*<Scene key="bookintroduce" title="统计" component={BookIntroduce} duration={0} />*/}
-                    {/*<Scene key="bookdiscuss" title="统计" component={BookDiscuss} duration={0} />*/}
-                    {/*<Scene key="bookhistory" title="统计" component={BookHistory} duration={0} />*/}
-                {/*</Scene>*/}
+
+                <Scene key="bookdetial" title="题本详情" component={BookDetial} duration={0} />
+                <Scene key="forgetpasswd" title="忘记密码" component={ForgetPasswd} duration={0} />
+                <Scene key="answerquestion" title="答题" component={AnswerQuestion} duration={0} />
+                <Scene key="newbook" title="新建题本" component={NewBook} duration={0} />
                 <Scene key="friendlist" title="友人" component={FriendList} duration={0} />
+                <Scene key="newonequestion" title="新建单个题目" component={NewOneQuestion} duration={0} />
+                <Scene key="newsomequestions" title="新建一列题目" component={NewSomeQuestions} duration={0} />
             </Router>
         );
     }

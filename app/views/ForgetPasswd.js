@@ -17,16 +17,15 @@ const styles = StyleSheet.create({
 
 });
 
-class Setting extends Component {
+class ForgetPasswd extends Component {
     render(){
         return (
             <View style={GlobleStyles.withoutTitleContainer}>
-                <Text>Setting</Text>
-                <Button onPress={Actions.pop}>Setting</Button>
-                <Button onPress={() => Actions.help()}>帮助</Button>
+                <Text>ForgetPasswd</Text>
+
             </View>
         );
     }
 }
 
-module.exports = Setting;
+module.exports = ForgetPasswd;

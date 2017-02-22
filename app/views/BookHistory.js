@@ -6,6 +6,7 @@ import {View, Text, Image, StyleSheet} from "react-native";
 import {Actions} from "react-native-router-flux";
 import Button from "react-native-button";
 
+
 const styles = StyleSheet.create({
     container: {
         flex: 1,

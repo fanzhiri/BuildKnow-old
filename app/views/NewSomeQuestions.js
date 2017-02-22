@@ -17,11 +17,11 @@ const styles = StyleSheet.create({
 
 });
 
-class Setting extends Component {
+class NewSomeQuestions extends Component {
     render(){
         return (
             <View style={GlobleStyles.withoutTitleContainer}>
-                <Text>Setting</Text>
+                <Text>NewSomeQuestions</Text>
                 <Button onPress={Actions.pop}>Setting</Button>
                 <Button onPress={() => Actions.help()}>帮助</Button>
             </View>
@@ -29,4 +29,4 @@ class Setting extends Component {
     }
 }
 
-module.exports = Setting;
+module.exports = NewSomeQuestions;
