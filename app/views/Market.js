@@ -2,16 +2,21 @@
  * Created by slako on 17/2/18.
  */
 import React, { Component } from 'react';
-import {View, Text, StyleSheet, ListView, ScrollView} from "react-native";
+import {View, Text, StyleSheet, ListView, ScrollView, Image} from "react-native";
 import {Actions} from "react-native-router-flux";
 import Button from "react-native-button";
-import Swiper from 'react-native-swiper'
+import Swiper from 'react-native-swiper';
+import MarketListItem from '../component/MarketListItem';
+import Marketlistdata from '../testdata/Marketlist.json'
+
+//var Marketlistdata = require('../testdata/Marketlist.json');
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
+
         backgroundColor: '#F5FCFF',
         marginTop:64,
+        height:548
     },
     slide: {
         flex: 1,
@@ -19,64 +24,79 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: '#9DD6EB',
     },
+    imgCarousel:{
+        width:380,
+        height:200,
+        resizeMode:'cover',
+    },
+    title:{
+        color: 'red',
+        fontSize: 24,
+    }
 });
 
 class Market extends Component {
+
+
     constructor(props) {
         super(props);
         const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
         this.state = {
-            dataSource: ds.cloneWithRows([
-                'John', 'Joel', 'James', 'Jimmy', 'Jackson', 'Jillian', 'Julie', 'John', 'Joel', 'James', 'Jimmy', 'Jackson', 'Jillian', 'Julie', 'Devin'
-            ])
+
+            dataSource: ds.cloneWithRows(Marketlistdata)
         };
+        this.renderRow = this.renderRow.bind(this);
     }
+
+    renderRow(rowData, sectionID, rowID) {
+        return (
+            <MarketListItem rowID={rowID}  cover={rowData.cover} name={rowData.name}/>
+            //<Text>{rowData.name}</Text>
+        );
+    }
+
     render(){
         return (
             <View style={styles.container}>
                 <ScrollView >
-                <Swiper height={240} loop={true} autoplay={true}>
+                <Swiper height={200} loop={true} autoplay={true}>
                     <View style={styles.slide} >
-                        <Text> abc </Text>
+                        <Image source={require('../image/market/carousel/1.jpg')} style={styles.imgCarousel}></Image>
+
                     </View>
                     <View style={styles.slide}>
-                        <Text> def </Text>
+                        <Image source={require('../image/market/carousel/2.jpg')} style={styles.imgCarousel}></Image>
                     </View>
                     <View style={styles.slide}>
-                        <Text> ghi </Text>
+                        <Image source={require('../image/market/carousel/3.jpg')} style={styles.imgCarousel}></Image>
                     </View>
                 </Swiper>
 
-                <Text onPress={() => Actions.bookcover()}>本周排行</Text>
-
+                <Text  style={styles.title} onPress={() => Actions.bookcover()}>本周排行</Text>
                 <ListView
                     horizontal={true}
                     dataSource={this.state.dataSource}
-                    renderRow={(rowData) => <Text>{rowData}</Text>} />
-                <Text>本月排行</Text>
-
+                    renderRow={this.renderRow} />
+                <Text style={styles.title} >本月排行</Text>
                 <ListView
                     horizontal={true}
                     dataSource={this.state.dataSource}
-                    renderRow={(rowData) => <Text>{rowData}</Text>} />
-                <Text>年度排行</Text>
-
+                    renderRow={this.renderRow} />
+                <Text style={styles.title} >年度排行</Text>
                 <ListView
                     horizontal={true}
                     dataSource={this.state.dataSource}
-                    renderRow={(rowData) => <Text>{rowData}</Text>} />
-                <Text>收费排行</Text>
-
+                    renderRow={this.renderRow} />
+                <Text style={styles.title} >收费排行</Text>
                 <ListView
                     horizontal={true}
                     dataSource={this.state.dataSource}
-                    renderRow={(rowData) => <Text>{rowData}</Text>} />
-                <Text>热门推荐</Text>
-
+                    renderRow={this.renderRow} />
+                <Text style={styles.title} >热门推荐</Text>
                 <ListView
                     horizontal={true}
                     dataSource={this.state.dataSource}
-                    renderRow={(rowData) => <Text>{rowData}</Text>} />
+                    renderRow={this.renderRow} />
                 </ScrollView>
             </View>
         );

@@ -70,7 +70,7 @@ class BookCover extends Component {
             <View style={GlobleStyles.withoutTitleContainer}>
                 <View marginTop={10} style={styles.container1}>
                     <View>
-                        <Image style={styles.image} source={require('../image/carousel/1.jpg')}/>
+                        <Image style={styles.image} source={require('../image/market/carousel/1.jpg')}/>
                     </View>
                     <View style={styles.container2}>
                         <Text>历史人物</Text>
