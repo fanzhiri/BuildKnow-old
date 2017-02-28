@@ -46,14 +46,16 @@ class Market extends Component {
             dataSource: ds.cloneWithRows(Marketlistdata)
         };
         this.renderRow = this.renderRow.bind(this);
+
     }
 
     renderRow(rowData, sectionID, rowID) {
         return (
-            <MarketListItem rowID={rowID}  cover={rowData.cover} name={rowData.name}/>
-            //<Text>{rowData.name}</Text>
+            <MarketListItem rowID={rowID}  cover={rowData.cover} name={rowData.name} />
         );
     }
+
+
 
     render(){
         return (
@@ -72,7 +74,7 @@ class Market extends Component {
                     </View>
                 </Swiper>
 
-                <Text  style={styles.title} onPress={() => Actions.bookcover()}>本周排行</Text>
+                <Text  style={styles.title} onPress={()=>(Actions.bookcover())} >本周排行</Text>
                 <ListView
                     horizontal={true}
                     dataSource={this.state.dataSource}

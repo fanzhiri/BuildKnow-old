@@ -2,6 +2,7 @@
  * Created by fanzhiri on 2017/2/27.
  */
 import React, {Component, PropTypes} from 'react';
+import {Actions} from "react-native-router-flux";
 import {
     TouchableOpacity,
     View,
@@ -44,7 +45,7 @@ class MarketListItem extends Component {
     render() {
         const {rowID, cover} = this.props;
         return (
-            <TouchableOpacity rowID={rowID} >
+            <TouchableOpacity rowID={rowID}  onPress={()=>(Actions.bookcover())} >
                 <View>
                     <Image style={[styles.image, this.props.imageStyle]} resizeMode="cover" source={require('../image/market/month/C加加.jpg')}/>
                     {this.renderBottomText()}
