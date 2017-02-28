@@ -1,7 +1,7 @@
 /**
  * Created by slako on 17/2/18.
  */
-import React, { Component } from 'react';
+import React, { Component ,PropTypes} from 'react';
 import {View, Text, Image, StyleSheet, SegmentedControlIOS} from "react-native";
 
 import Button from "react-native-button";
@@ -58,6 +58,7 @@ class BookCover extends Component {
             selectedIndex:0
         };
         this._onChange = this._onChange.bind(this)
+        this._handlePress = this._handlePress.bind(this)
     }
 
     _onChange(event) {
@@ -65,7 +66,12 @@ class BookCover extends Component {
             selectedIndex: event.nativeEvent.selectedSegmentIndex,
         });
     }
+    _handlePress(event) {
+
+    }
+
     render(){
+        const {rowID} = this.props;
         return (
             <View style={GlobleStyles.withoutTitleContainer}>
                 <View marginTop={10} style={styles.container1}>
@@ -74,7 +80,9 @@ class BookCover extends Component {
                     </View>
                     <View style={styles.container2}>
                         <Text>历史人物</Text>
+                        <Text>{rowID}</Text>
                         <Text>100个国家400位领导人</Text>
+                        <Button style={{fontSize: 16,color: 'green' ,width:38,height:24, overflow:'hidden', borderRadius:4, backgroundColor: 'red'}} onPress={() => this._handlePress()}>获取</Button>
                     </View>
                 </View>
                 <View>
@@ -125,5 +133,9 @@ class BookCover extends Component {
         )
     }
 }
+
+BookCover.PropTypes = {
+    rowID: PropTypes.number,
+};
 
 module.exports = BookCover;

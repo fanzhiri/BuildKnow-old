@@ -45,7 +45,7 @@ class MarketListItem extends Component {
     render() {
         const {rowID, cover} = this.props;
         return (
-            <TouchableOpacity rowID={rowID}  onPress={()=>(Actions.bookcover())} >
+            <TouchableOpacity rowID={rowID}  onPress={()=>(Actions.bookcover({rowID}))} >
                 <View>
                     <Image style={[styles.image, this.props.imageStyle]} resizeMode="cover" source={require('../image/market/month/C加加.jpg')}/>
                     {this.renderBottomText()}
