@@ -6,6 +6,7 @@ import {View, Text, StyleSheet} from "react-native";
 import {Actions} from "react-native-router-flux";
 import Button from "react-native-button";
 import GlobleStyles from '../styles/GlobleStyles';
+import {GiftedForm, GiftedFormManager} from "react-native-gifted-form";
 
 const styles = StyleSheet.create({
     container: {
@@ -61,11 +62,91 @@ class Login extends Component {
     render(){
         return (
             <View style={GlobleStyles.withoutTitleContainer}>
-                <Text>{this.state.loginresult}</Text>
-                <Button onPress={this._dologin}>登录</Button>
-                {/*<Button onPress={()=> Actions.main()}>登录</Button>*/}
+                <GiftedForm
+                    keyboardShouldPersistTaps="always"
+                    formName='loginForm'
+                    clearOnClose={false}
+
+                    defaults={{
+                        username: '',
+                        password: '',
+
+                    }}
+                    validators={{
+                        username: {
+                            title: 'Username',
+                            validate: [{
+                                validator: 'isLength',
+                                arguments: [3, 16],
+                                message: '{TITLE} must be between {ARGS[0]} and {ARGS[1]} characters'
+                            },{
+                                validator: 'matches',
+                                arguments: /^[a-zA-Z0-9]*$/,
+                                message: '{TITLE} can contains only alphanumeric characters'
+                            }]
+                        },
+                        password: {
+                            title: 'Password',
+                            validate: [{
+                                validator: 'isLength',
+                                arguments: [6, 16],
+                                message: '{TITLE} must be between {ARGS[0]} and {ARGS[1]} characters'
+                            }]
+                        },
+                    }}
+                >
+                    <GiftedForm.TextInputWidget
+                        name='username'
+                        title='Username'
+
+                        placeholder='MarcoPolo'
+                        clearButtonMode='while-editing'
+
+
+                    />
+
+                    <GiftedForm.TextInputWidget
+                        name='password' // mandatory
+                        title='Password'
+                        placeholder='******'
+                        clearButtonMode='while-editing'
+                        secureTextEntry={true}
+
+                    />
+
+                    <GiftedForm.ErrorsWidget />
+                    <GiftedForm.SubmitWidget
+                        title='Login'
+                        widgetStyles={{
+                            submitButton: {
+                                backgroundColor: '#fa0000',
+                            }
+                        }}
+                        onSubmit={(isValid, values, validationResults, postSubmit = null, modalNavigator = null) => {
+                            if (isValid === true) {
+                                // prepare object
+
+                                /* Implement the request to your server using values variable
+                                 ** then you can do:
+                                 ** postSubmit(['An error occurred, please try again']); // disable the loader and display an error message
+                                 ** postSubmit(['Username already taken', 'Email already taken']); // disable the loader and display an error message
+                                 ** GiftedFormManager.reset('signupForm'); // clear the states of the form manually. 'signupForm' is the formName used
+                                 */
+
+                                //postSubmit('An error occurred, please try again');
+                                postSubmit();
+                                //postSubmit(['Username already taken', 'Email already taken']);
+                                //GiftedFormManager.reset('registerForm');
+                                //this._dologin();
+                            }
+                            this._dologin();
+                        }}
+
+                    />
+
+                    <GiftedForm.HiddenWidget name='tos' value={true} />
+                </GiftedForm>
                 <Button onPress={()=> Actions.register()}>注册</Button>
-                <Button onPress={()=> Actions.introduce()}>介绍</Button>
             </View>
         );
     }
