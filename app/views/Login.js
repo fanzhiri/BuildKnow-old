@@ -18,23 +18,28 @@ const styles = StyleSheet.create({
 
 });
 
-var dologinpostUrl = "https://slako.applinzi.com/index.php?m=question&c=api&a=login";
-
+//var dologinpostUrl = "https://slako.applinzi.com/index.php?m=question&c=api&a=login";
+var dologinpostUrl = "https://slako.applinzi.com/index.php?m=member&c=index&a=login";
+var dologoutpostUrl = "https://slako.applinzi.com/index.php?m=member&c=index&a=logout";
 class Login extends Component {
 
     constructor(props) {
         super(props);
 
         this.state = {
-            loginresult:"no"
+            loginresult:"no",
+            code:0
         };
-        this._dologin = this.dologin.bind(this)
+        this._dologin = this.dologin.bind(this);
+        this._dologout = this.dologout.bind(this);
     }
 
     dologin(){
         let formData = new FormData();
-        formData.append("username","fanzhiri");
-        formData.append("password","123456");
+        formData.append("username","zi");
+        formData.append("password","zzzzzz");
+        formData.append("dosubmit","true");
+        formData.append("api","true");
         var opts = {
             method:"POST",
             body:formData
@@ -42,14 +47,51 @@ class Login extends Component {
         fetch(dologinpostUrl,opts)
             .then((response) => response.json())
             .then((responseData) => {
-                if(responseData.message =="success"){
+
+                this.setState({
+                    code:responseData.code
+                })
+                if(responseData.code == 890){
                     this.setState({
                         loginresult:"ok"
                     })
                     Actions.main();
                 }else{
                     this.setState({
-                        loginresult:responseData.message
+                        loginresult:responseData.code
+                    })
+                }
+
+            })
+            .catch((error) => {
+                alert(error)
+            })
+    }
+
+    dologout(name,passwd){
+        let formData = new FormData();
+        formData.append("username",name);
+        formData.append("password",passwd);
+        formData.append("dosubmit","true");
+        formData.append("api","true");
+        var opts = {
+            method:"POST",
+            body:formData
+        }
+        fetch(dologoutpostUrl,opts)
+            .then((response) => response.json())
+            .then((responseData) => {
+                this.setState({
+                    code:responseData.code
+                })
+                if(responseData.code == 890){
+                    this.setState({
+                        loginresult:"ok"
+                    })
+                    Actions.main();
+                }else{
+                    this.setState({
+                        loginresult:responseData.code
                     })
                 }
 
@@ -62,6 +104,7 @@ class Login extends Component {
     render(){
         return (
             <View style={GlobleStyles.withoutTitleContainer}>
+                <Text >{this.state.code}</Text>
                 <GiftedForm
                     keyboardShouldPersistTaps="always"
                     formName='loginForm'
@@ -77,7 +120,7 @@ class Login extends Component {
                             title: 'Username',
                             validate: [{
                                 validator: 'isLength',
-                                arguments: [3, 16],
+                                arguments: [2, 16],
                                 message: '{TITLE} must be between {ARGS[0]} and {ARGS[1]} characters'
                             },{
                                 validator: 'matches',
@@ -132,21 +175,21 @@ class Login extends Component {
                                  ** postSubmit(['Username already taken', 'Email already taken']); // disable the loader and display an error message
                                  ** GiftedFormManager.reset('signupForm'); // clear the states of the form manually. 'signupForm' is the formName used
                                  */
-
+                                this._dologin(values.username,values.password);
                                 //postSubmit('An error occurred, please try again');
                                 postSubmit();
                                 //postSubmit(['Username already taken', 'Email already taken']);
                                 //GiftedFormManager.reset('registerForm');
                                 //this._dologin();
                             }
-                            this._dologin();
+
                         }}
 
                     />
 
                     <GiftedForm.HiddenWidget name='tos' value={true} />
                 </GiftedForm>
-                <Button onPress={()=> Actions.register()}>注册</Button>
+                {/*<Button onPress={() => (this._dologout())}>推出</Button>*/}
             </View>
         );
     }
