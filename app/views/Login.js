@@ -20,7 +20,7 @@ const styles = StyleSheet.create({
 
 //var dologinpostUrl = "https://slako.applinzi.com/index.php?m=question&c=api&a=login";
 var dologinpostUrl = "https://slako.applinzi.com/index.php?m=member&c=index&a=login";
-var dologoutpostUrl = "https://slako.applinzi.com/index.php?m=member&c=index&a=logout";
+
 class Login extends Component {
 
     constructor(props) {
@@ -31,15 +31,15 @@ class Login extends Component {
             code:0
         };
         this._dologin = this.dologin.bind(this);
-        this._dologout = this.dologout.bind(this);
-    }
 
-    dologin(){
+    }
+    dologin(name,passwd){
         let formData = new FormData();
-        formData.append("username","zi");
-        formData.append("password","zzzzzz");
+        formData.append("username",name);
+        formData.append("password",passwd);
         formData.append("dosubmit","true");
         formData.append("api","true");
+
         var opts = {
             method:"POST",
             body:formData
@@ -51,7 +51,7 @@ class Login extends Component {
                 this.setState({
                     code:responseData.code
                 })
-                if(responseData.code == 890){
+                if(responseData.code == 100){
                     this.setState({
                         loginresult:"ok"
                     })
@@ -68,43 +68,12 @@ class Login extends Component {
             })
     }
 
-    dologout(name,passwd){
-        let formData = new FormData();
-        formData.append("username",name);
-        formData.append("password",passwd);
-        formData.append("dosubmit","true");
-        formData.append("api","true");
-        var opts = {
-            method:"POST",
-            body:formData
-        }
-        fetch(dologoutpostUrl,opts)
-            .then((response) => response.json())
-            .then((responseData) => {
-                this.setState({
-                    code:responseData.code
-                })
-                if(responseData.code == 890){
-                    this.setState({
-                        loginresult:"ok"
-                    })
-                    Actions.main();
-                }else{
-                    this.setState({
-                        loginresult:responseData.code
-                    })
-                }
 
-            })
-            .catch((error) => {
-                alert(error)
-            })
-    }
 
     render(){
         return (
             <View style={GlobleStyles.withoutTitleContainer}>
-                <Text >{this.state.code}</Text>
+                {/*<Text >{this.state.code}</Text>*/}
                 <GiftedForm
                     keyboardShouldPersistTaps="always"
                     formName='loginForm'
@@ -189,7 +158,8 @@ class Login extends Component {
 
                     <GiftedForm.HiddenWidget name='tos' value={true} />
                 </GiftedForm>
-                {/*<Button onPress={() => (this._dologout())}>推出</Button>*/}
+
+                <Button onPress={() => Actions.register()}>注册</Button>
             </View>
         );
     }

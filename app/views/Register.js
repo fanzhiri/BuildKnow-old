@@ -19,6 +19,8 @@ var Person = TcombForm.struct({
     rememberMe: TcombForm.Boolean        // a boolean
 });
 
+var doregisterpostUrl = "https://slako.applinzi.com/index.php?m=member&c=index&a=register";
+
 var options = {};
 
 const styles = StyleSheet.create({
@@ -32,6 +34,49 @@ const styles = StyleSheet.create({
 });
 
 class Register extends Component {
+
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            registerresult:"ready",
+            code:0
+        };
+        this._doregister = this.doregister.bind(this);
+
+    }
+
+    doregister(name,passwd,email){
+        let formData = new FormData();
+        formData.append("username",name);
+        formData.append("password",passwd);
+        formData.append("email",email);
+        formData.append("dosubmit","true");
+        formData.append("api","true");
+        var opts = {
+            method:"POST",
+            body:formData
+        }
+        fetch(doregisterpostUrl,opts)
+            .then((response) => response.json())
+            .then((responseData) => {
+                if(responseData.code == 100){
+                    this.setState({
+                        registerresult:"ok"
+                    })
+                    Actions.main();
+                }else{
+                    this.setState({
+                        registerresult:responseData.message
+                    })
+                }
+
+            })
+            .catch((error) => {
+                alert(error)
+            })
+    }
+
     render(){
         return (
             <View style={GlobleStyles.withoutTitleContainer} >
@@ -75,7 +120,7 @@ class Register extends Component {
                                 message: '{TITLE} must be between {ARGS[0]} and {ARGS[1]} characters'
                             }]
                         },
-                        emailAddress: {
+                        emailaddress: {
                             title: 'Email address',
                             validate: [{
                                 validator: 'isLength',
@@ -91,11 +136,8 @@ class Register extends Component {
                     <GiftedForm.TextInputWidget
                         name='username'
                         title='Username'
-
-                        placeholder='MarcoPolo'
+                        placeholder='fantexi'
                         clearButtonMode='while-editing'
-
-
                     />
 
                     <GiftedForm.TextInputWidget
@@ -104,7 +146,6 @@ class Register extends Component {
                         placeholder='******'
                         clearButtonMode='while-editing'
                         secureTextEntry={true}
-
                     />
 
                     <GiftedForm.TextInputWidget
@@ -113,13 +154,12 @@ class Register extends Component {
                         placeholder='******'
                         clearButtonMode='while-editing'
                         secureTextEntry={true}
-
                     />
 
                     <GiftedForm.TextInputWidget
-                        name='emailAddress' // mandatory
+                        name='emailaddress' // mandatory
                         title='Email address'
-                        placeholder='example@nomads.ly'
+                        placeholder='example@qq.com'
 
                         keyboardType='email-address'
 
@@ -147,7 +187,13 @@ class Register extends Component {
 
                                 //postSubmit('An error occurred, please try again');
                                 //postSubmit();
-                                postSubmit(['Username already taken', 'Email already taken']);
+                                if(values.password == values.passwordagain){
+                                   this._doregister(values.username,values.password,values.emailaddress);
+                                    postSubmit();
+                                }else{
+                                    postSubmit('go check passwordagain');
+                                }
+
                                 //GiftedFormManager.reset('registerForm');
                             }
                         }}
@@ -159,7 +205,9 @@ class Register extends Component {
                     />
 
                     <GiftedForm.HiddenWidget name='tos' value={true} />
+
                 </GiftedForm>
+                <Text>{this.state.registerresult}</Text>
             </View>
         );
     }

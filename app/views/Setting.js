@@ -16,14 +16,60 @@ const styles = StyleSheet.create({
     },
 
 });
+var dologoutpostUrl = "https://slako.applinzi.com/index.php?m=member&c=index&a=logout";
 
 class Setting extends Component {
+
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            logoutresult:'no',
+            code:0
+        };
+        this._dologout = this.dologout.bind(this);
+    }
+
+    dologout(name,passwd){
+        let formData = new FormData();
+        formData.append("username",name);
+        formData.append("password",passwd);
+        formData.append("dosubmit","true");
+        formData.append("api","true");
+        var opts = {
+            method:"POST",
+            body:formData
+        }
+        fetch(dologoutpostUrl,opts)
+            .then((response) => response.json())
+            .then((responseData) => {
+                this.setState({
+                    code:responseData.code
+                })
+                if(responseData.code == 100){
+                    this.setState({
+                        logoutresult:"ok"
+                    })
+                    Actions.login();
+                }else{
+                    this.setState({
+                        logoutresult:responseData.code
+                    })
+                }
+
+            })
+            .catch((error) => {
+                alert(error)
+            })
+    }
+
     render(){
         return (
             <View style={GlobleStyles.withoutTitleContainer}>
                 <Text>Setting</Text>
                 <Button onPress={Actions.pop}>Setting</Button>
                 <Button onPress={() => Actions.help()}>帮助</Button>
+                <Button onPress={() => (this._dologout())}>退出</Button>
             </View>
         );
     }
