@@ -1,7 +1,8 @@
 /**
  * Created by slako on 17/2/18.
  */
-import React, { Component } from 'react';
+
+import React, { Component ,PropTypes} from 'react';
 import {View, Text, StyleSheet} from "react-native";
 import {Actions} from "react-native-router-flux";
 import Button from "react-native-button";
@@ -19,7 +20,13 @@ const styles = StyleSheet.create({
 });
 
 class HomePage extends Component {
+    constructor(props) {
+        super(props);
+
+    }
+
     render(){
+        const {userId} = this.props;
         return (
             <View style={GlobleStyles.withoutTitleContainer}>
                 <ParallaxScrollView
@@ -33,6 +40,8 @@ class HomePage extends Component {
                     )}>
                     <View style={{ height: 500 }}>
                         <Text>Scroll me</Text>
+                        <Text>{userId}</Text>
+                        <Text>abc</Text>
                     </View>
                 </ParallaxScrollView>
             </View>
@@ -40,5 +49,10 @@ class HomePage extends Component {
         );
     }
 }
+
+HomePage.PropTypes = {
+    userId: PropTypes.string,
+};
+
 
 module.exports = HomePage;

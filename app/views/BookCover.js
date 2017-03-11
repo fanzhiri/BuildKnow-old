@@ -2,6 +2,7 @@
  * Created by slako on 17/2/18.
  */
 import React, { Component ,PropTypes} from 'react';
+
 import {View, Text, Image, StyleSheet, SegmentedControlIOS} from "react-native";
 
 import Button from "react-native-button";

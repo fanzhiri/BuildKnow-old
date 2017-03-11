@@ -67,7 +67,7 @@ class Setting extends Component {
         return (
             <View style={GlobleStyles.withoutTitleContainer}>
                 <Text>Setting</Text>
-                <Button onPress={Actions.pop}>Setting</Button>
+                <Button onPress={() => Actions.about()}>关于</Button>
                 <Button onPress={() => Actions.help()}>帮助</Button>
                 <Button onPress={() => (this._dologout())}>退出</Button>
             </View>

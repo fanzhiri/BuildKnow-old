@@ -2,7 +2,14 @@
  * Created by slako on 17/2/18.
  */
 import React, { Component } from 'react';
-import {View, Text, StyleSheet, SegmentedControlIOS, ListView,Image} from "react-native";
+import {
+    TouchableOpacity,
+    View,
+    Text,
+    StyleSheet,
+    SegmentedControlIOS,
+    ListView,Image
+} from "react-native";
 import {Actions} from "react-native-router-flux";
 import Button from "react-native-button";
 import GlobleStyles from '../styles/GlobleStyles';
@@ -62,6 +69,7 @@ class Follow extends Component {
         this._onChange = this.onChange.bind(this);
         this._peoplelist = this.peoplelist.bind(this);
         this._renderPeople = this.renderPeople.bind(this);
+        this._doOnPress = this.doOnPress.bind(this);
 
     }
 
@@ -143,17 +151,27 @@ class Follow extends Component {
         )
     }
 
-    renderPeople(people){
-        return (
-            <View style={styles.peopleItem}>
-                <Image source={{uri:'https://slako.applinzi.com/statics/images/question/head/boy/1.jpg'}} style={styles.leftImgStyle}/>
-                <View>
-                    <Text style={styles.topTitleStyle}>
-                        {people.username}
-                    </Text>
-                </View>
-            </View>
+    doOnPress(userid){
+        Actions.homepage({userid});
+    }
 
+    renderPeople(people){
+        var userId = (people.userid);
+        return (
+
+            <TouchableOpacity onPress={() => Actions.homepage({userId})}>
+                <View style={styles.peopleItem}>
+                    <Image source={{uri:'https://slako.applinzi.com/statics/images/question/head/boy/1.jpg'}} style={styles.leftImgStyle}/>
+                    <View>
+                        <Text style={styles.topTitleStyle}>
+                            {people.username}
+                        </Text>
+                        <Text >
+                            {people.userid}
+                        </Text>
+                    </View>
+                </View>
+            </TouchableOpacity>
         )
     }
 
