@@ -80,8 +80,8 @@ class Login extends Component {
                     clearOnClose={false}
 
                     defaults={{
-                        username: '',
-                        password: '',
+                        username: 'fantexi',
+                        password: 'fantexi',
 
                     }}
                     validators={{
@@ -111,7 +111,7 @@ class Login extends Component {
                         name='username'
                         title='Username'
 
-                        placeholder='MarcoPolo'
+                        placeholder='fantexi'
                         clearButtonMode='while-editing'
 
 
@@ -120,7 +120,7 @@ class Login extends Component {
                     <GiftedForm.TextInputWidget
                         name='password' // mandatory
                         title='Password'
-                        placeholder='******'
+                        placeholder='fantexi'
                         clearButtonMode='while-editing'
                         secureTextEntry={true}
 
