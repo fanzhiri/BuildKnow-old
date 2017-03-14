@@ -6,6 +6,7 @@ import React, { Component ,PropTypes} from 'react';
 import {View, Text, Image, StyleSheet, SegmentedControlIOS} from "react-native";
 
 import Button from "react-native-button";
+
 import {
     Scene,
     Reducer,
@@ -54,6 +55,9 @@ const styles = StyleSheet.create({
         marginTop:10,
         width:240,
         alignSelf:'center'
+    },
+    button:{
+        fontSize: 16,color: 'green' ,width:38,height:24, overflow:'hidden', borderRadius:4, backgroundColor: 'red'
     }
 });
 
@@ -64,8 +68,10 @@ class BuildingBook extends Component {
         this.state = {
             selectedIndex:0
         };
-        this._onChange = this._onChange.bind(this)
-        this._handlePress = this._handlePress.bind(this)
+        this._onChange = this._onChange.bind(this);
+        this._handleRandom = this.handleRandom.bind(this);
+        this._handleOrder = this.handleOrder.bind(this);
+        this._handleSection = this.handleSection.bind(this);
     }
 
     _onChange(event) {
@@ -73,9 +79,20 @@ class BuildingBook extends Component {
             selectedIndex: event.nativeEvent.selectedSegmentIndex,
         });
     }
-    _handlePress(event) {
 
+    handleRandom() {
+        var type = 'random';
+        Actions.answerquestion(type);
     }
+    handleOrder() {
+        var type = 'order';
+        Actions.answerquestion(type);
+    }
+    handleSection() {
+        var type = 'section';
+        Actions.answerquestion(type);
+    }
+
 
     render(){
         const {rowID} = this.props;
@@ -86,14 +103,14 @@ class BuildingBook extends Component {
                         <Image style={styles.image} source={require('../image/market/carousel/1.jpg')}/>
                     </View>
                     <View style={styles.container2}>
-                        <Button style={{fontSize: 16,color: 'green' ,width:38,height:24, overflow:'hidden', borderRadius:4, backgroundColor: 'red'}} >随机</Button>
-                        <Button style={{fontSize: 16,color: 'green' ,width:38,height:24, overflow:'hidden', borderRadius:4, backgroundColor: 'red'}} >顺序</Button>
-                        <Button style={{fontSize: 16,color: 'green' ,width:38,height:24, overflow:'hidden', borderRadius:4, backgroundColor: 'red'}} >收藏</Button>
+                        <Button style={styles.button} onPress={() => this._handleRandom()} >随机</Button>
+                        <Button style={styles.button} onPress={() => this._handleOrder()}>顺序</Button>
+                        <Button style={styles.button} onPress={() => this._handleSection()}>章节</Button>
                     </View>
                     <View style={styles.container2}>
-                        <Button style={{fontSize: 16,color: 'green' ,width:38,height:24, overflow:'hidden', borderRadius:4, backgroundColor: 'red'}} >随机</Button>
-                        <Button style={{fontSize: 16,color: 'green' ,width:38,height:24, overflow:'hidden', borderRadius:4, backgroundColor: 'red'}} >顺序</Button>
-                        <Button style={{fontSize: 16,color: 'green' ,width:38,height:24, overflow:'hidden', borderRadius:4, backgroundColor: 'red'}} >收藏</Button>
+                        <Button style={styles.button} >错题</Button>
+                        <Button style={styles.button} >收藏</Button>
+                        <Button style={styles.button} >测试</Button>
                     </View>
                 </View>
                 <View>
