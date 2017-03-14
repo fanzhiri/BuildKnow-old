@@ -44,6 +44,7 @@ import NewOneQuestion from './views/NewOneQuestion'
 import NewSomeQuestions from './views/NewSomeQuestions'
 import Introduce from './views/Introduce'
 import About from './views/About'
+import BuildingBook from './views/BuildingBook'
 
 export default class BuildKnow extends Component {
     render() {
@@ -66,6 +67,7 @@ export default class BuildKnow extends Component {
                 <Scene key="collect" title="收藏" component={Collect} duration={0} />
                 <Scene key="statistics" title="统计" component={Statistics} duration={0} />
                 <Scene key="bookcover" title="书面" component={BookCover} duration={0} />
+                <Scene key="buildingbook" title="题集" component={BuildingBook} duration={0} />
                 <Scene key="about" title="关于" component={About} duration={0} />
                 <Scene key="bookdetial" title="题本详情" component={BookDetial} duration={0} />
                 <Scene key="forgetpasswd" title="忘记密码" component={ForgetPasswd} duration={0} />

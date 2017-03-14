@@ -48,6 +48,9 @@ const styles = StyleSheet.create({
     },
     bottomTitleStyle:{
         color:'blue'
+    },
+    list:{
+        marginBottom:48
     }
 });
 
@@ -178,6 +181,7 @@ class Follow extends Component {
     renderIntroduceView(){
         return (
             <ListView
+                style={styles.list}
                 dataSource={DataStore.cloneWithRows(this.state.people_list_data_source)}
                 renderRow={(rowData) => this._renderPeople(rowData)}
             />

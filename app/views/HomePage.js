@@ -65,10 +65,10 @@ class HomePage extends Component {
         const {userId} = this.props;
     }
 
-    fetchHomepage(userid){
+    fetchHomepage(){
         let formData = new FormData();
         formData.append("api","true");
-        formData.append("userid",userid);
+        formData.append("userid",this.props.userId);
         var opts = {
             method:"POST",
             body:formData
@@ -156,7 +156,7 @@ class HomePage extends Component {
             }
 
         }else{
-            this._fetchHomepage('22');
+            this._fetchHomepage();
             return (this.renderLoading())
         }
 

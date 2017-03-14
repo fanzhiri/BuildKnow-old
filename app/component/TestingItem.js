@@ -34,6 +34,16 @@ const styles = StyleSheet.create({
         height: 20,
         width: 80
     },
+    listItem:{
+
+        padding:10,
+        backgroundColor:'white',
+        borderBottomWidth:0.5,
+        borderBottomColor:'#e8e8e8',
+
+        //主轴方向
+        flexDirection:'row',
+    },
 });
 
 class TestingItem extends Component {
@@ -45,8 +55,8 @@ class TestingItem extends Component {
     render() {
         const { bookid, cover} = this.props;
         return (
-            <TouchableOpacity  onPress={()=>(Actions.bookcover({bookid}))} >
-                <View>
+            <TouchableOpacity  onPress={()=>(Actions.buildingbook({bookid}))} >
+                <View style={styles.listItem}>
                     <Image style={[styles.image, this.props.imageStyle]} resizeMode="cover" source={require('../image/market/month/C加加.jpg')}/>
                     {this.renderBottomText()}
                 </View>
