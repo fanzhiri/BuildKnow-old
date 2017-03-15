@@ -95,7 +95,7 @@ class BuildingBook extends Component {
 
 
     render(){
-        const {rowID} = this.props;
+        const {bookid} = this.props;
         return (
             <View style={GlobleStyles.withoutTitleContainer}>
                 <View marginTop={10} style={styles.container1}>
@@ -163,7 +163,7 @@ class BuildingBook extends Component {
 }
 
 BuildingBook.PropTypes = {
-    rowID: PropTypes.number,
+    bookid: PropTypes.number,
 };
 
 module.exports = BuildingBook;

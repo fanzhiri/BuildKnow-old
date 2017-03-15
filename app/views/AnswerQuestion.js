@@ -128,6 +128,7 @@ class AnswerQuestion extends Component {
 AnswerQuestion.PropTypes = {
     questiontype: PropTypes.string.isRequired,
     bookid:PropTypes.string.isRequired,
+    qids:PropTypes.array.isRequired,
 };
 
 module.exports = AnswerQuestion;
