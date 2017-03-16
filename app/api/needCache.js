@@ -11,3 +11,24 @@ export function cacheByYearAndMonthAndDay(year, month, day) {
         return true;
     }
 }
+
+function cachemins(inData,t) {
+    let date = new Date();
+    let inDataTime=inData.getTime();
+    let tempinDataTime=inDataTime+(t*60*1000);
+    let tempDataTime=data.getTime();
+
+    if (tempDataTime > tempinDataTime) {
+        return false;
+    } else {
+        return true;
+    }
+}
+
+export function cache5mins(inData) {
+    return cachemins(inData,5);
+}
+
+export function cache10mins(inData) {
+    return cachemins(inData,10);
+}
