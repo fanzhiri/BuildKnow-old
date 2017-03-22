@@ -1,7 +1,7 @@
 /**
  * Created by slako on 17/3/16.
  */
-import apiCache from './apiCache'
+import apiCache from './ApiCache'
 
 const baseUrl = 'https://slako.applinzi.com/api';
 
