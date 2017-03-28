@@ -50,6 +50,7 @@ const styles = StyleSheet.create({
 
 var homepagetUrl = "https://slako.applinzi.com/index.php?m=question&c=index&a=personalhp";
 
+var doGetHomePageBaseUrl = "https://slako.applinzi.com/api/1/homepage/";
 
 class HomePage extends Component {
     constructor(props) {
@@ -62,18 +63,16 @@ class HomePage extends Component {
         this._onChange = this.onChange.bind(this);
         this._renderRow = this.renderRow.bind(this);
         this._fetchHomepage = this.fetchHomepage.bind(this);
-        const {userId} = this.props;
+
     }
 
     fetchHomepage(){
-        let formData = new FormData();
-        formData.append("api","true");
-        formData.append("userid",this.props.userId);
+        const {userId} = this.props;
+        let url = `${doGetHomePageBaseUrl}${userId}`;
         var opts = {
-            method:"POST",
-            body:formData
+            method:"GET"
         }
-        fetch(homepagetUrl,opts)
+        fetch(url,opts)
             .then((response) => response.json())
             .then((responseData) => {
                 if(responseData.code == 100){
@@ -164,7 +163,7 @@ class HomePage extends Component {
 
     renderRow(rowData, sectionID, rowID) {
         var bookid =rowData.question_book_id;
-        var cover = rowData.imgsrc;
+        var cover = rowData.cover;
         var name =rowData.bookname;
         var bookbrief =rowData.bookbrief;
             return (
@@ -206,7 +205,7 @@ class HomePage extends Component {
 }
 
 HomePage.PropTypes = {
-    userId: PropTypes.string,
+    userId: PropTypes.string.isRequired,
 };
 
 

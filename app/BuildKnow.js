@@ -45,6 +45,8 @@ import NewSomeQuestions from './views/NewSomeQuestions'
 import Introduce from './views/Introduce'
 import About from './views/About'
 import BuildingBook from './views/BuildingBook'
+import ComposeBook from './views/ComposeBook'
+
 
 export default class BuildKnow extends Component {
     render() {
@@ -76,6 +78,7 @@ export default class BuildKnow extends Component {
                 <Scene key="friendlist" title="友人" component={FriendList} duration={0} />
                 <Scene key="newonequestion" title="新建单个题目" component={NewOneQuestion} duration={0} />
                 <Scene key="newsomequestions" title="新建一列题目" component={NewSomeQuestions} duration={0} />
+                <Scene key="composebook" title="组建题本" component={ComposeBook} duration={0} />
             </Router>
         );
     }

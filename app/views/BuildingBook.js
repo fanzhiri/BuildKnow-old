@@ -23,6 +23,8 @@ import BookHistory from './BookHistory'
 
 import GlobleStyles from '../styles/GlobleStyles';
 
+var doGetBookBaseUrl = "https://slako.applinzi.com/api/1/book/";
+var httpsBaseUrl = "https://slako.applinzi.com/";
 
 const styles = StyleSheet.create({
     container: {
@@ -66,12 +68,45 @@ class BuildingBook extends Component {
         super(props);
 
         this.state = {
-            selectedIndex:0
+            selectedIndex:0,
+            bookdata:null,
+            bookCover:null,
         };
         this._onChange = this._onChange.bind(this);
         this._handleRandom = this.handleRandom.bind(this);
         this._handleOrder = this.handleOrder.bind(this);
         this._handleSection = this.handleSection.bind(this);
+        this._renderBook = this.renderBook.bind(this);
+        this._renderLoading = this.renderLoading.bind(this);
+        this._doFetchBook = this.doFetchBook.bind(this);
+    }
+
+    doFetchBook(bookid){
+        let url = `${doGetBookBaseUrl}${bookid}`;
+        var opts = {
+            method:"GET"
+        }
+        fetch(url,opts)
+            .then((response) => response.json())
+            .then((responseData) => {
+
+                if(responseData.code == 100){
+
+                    this.setState({
+                        bookdata:responseData.data,
+                        bookCover:`${httpsBaseUrl}${responseData.data.cover}`,
+                        fetchresult:"ok",
+
+                    })
+
+                }else{
+
+                }
+
+            })
+            .catch((error) => {
+                alert(error)
+            })
     }
 
     _onChange(event) {
@@ -93,14 +128,13 @@ class BuildingBook extends Component {
         Actions.answerquestion(type);
     }
 
-
-    render(){
-        const {bookid} = this.props;
+    renderBook(){
         return (
             <View style={GlobleStyles.withoutTitleContainer}>
+
                 <View marginTop={10} style={styles.container1}>
                     <View>
-                        <Image style={styles.image} source={require('../image/market/carousel/1.jpg')}/>
+                        <Image style={styles.image} source={{uri:this.state.bookCover}}/>
                     </View>
                     <View style={styles.container2}>
                         <Button style={styles.button} onPress={() => this._handleRandom()} >随机</Button>
@@ -127,6 +161,18 @@ class BuildingBook extends Component {
         );
     }
 
+    render(){
+        if(this.state.bookdata == null){
+            const {bookid} = this.props;
+            this._doFetchBook(bookid);
+            return this._renderLoading();
+        }else{
+            return this._renderBook();
+        }
+
+
+    }
+
     renderSegmentedView() {
         if (this.state.selectedIndex === 0) {
             return (
@@ -145,7 +191,7 @@ class BuildingBook extends Component {
 
     renderIntroduceView(){
         return (
-            <Text>IntroduceView</Text>
+            <Text>题目数量 :{this.state.bookdata.q_count}</Text>
         )
     }
 
@@ -158,6 +204,12 @@ class BuildingBook extends Component {
     renderHistoryView(){
         return (
             <Text>History</Text>
+        )
+    }
+
+    renderLoading(){
+        return (
+            <Text>Loading ...</Text>
         )
     }
 }

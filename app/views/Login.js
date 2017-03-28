@@ -7,6 +7,7 @@ import {Actions} from "react-native-router-flux";
 import Button from "react-native-button";
 import GlobleStyles from '../styles/GlobleStyles';
 import {GiftedForm, GiftedFormManager} from "react-native-gifted-form";
+import {storageSave,storeageGet} from '../util/NativeStore';
 
 const styles = StyleSheet.create({
     container: {
@@ -55,6 +56,20 @@ class Login extends Component {
                     this.setState({
                         loginresult:"ok"
                     })
+                    if(responseData.data){
+                        storageSave("auth", responseData.data.auth);
+                        storageSave("userid", responseData.data.userid);
+                        storageSave("username", responseData.data.username);
+                        storageSave("groupid", responseData.data.groupid);
+                        storageSave("nickname", responseData.data.nickname);
+                        storageSave("userhead", responseData.data.userhead);
+                    }
+                    global.auth=responseData.data.auth;
+                    global.userid=responseData.data.userid;
+                    global.username=responseData.data.username;
+                    global.groupid=responseData.data.groupid;
+                    global.nickname=responseData.data.nickname;
+                    global.userhead=responseData.data.userhead;
                     Actions.main();
                 }else{
                     this.setState({

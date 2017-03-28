@@ -18,6 +18,7 @@
     "react-native-router-flux": "^3.37.0",
     "react-native-simple-radio-button": "^2.5.0-alpha.1",
     "react-native-simple-store": "^1.1.0",
+    "react-native-storage": "^0.1.5",
     "react-native-swiper": "^1.5.4",
     "tcomb-form-native": "^0.6.5"
   },

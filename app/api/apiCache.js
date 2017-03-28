@@ -11,7 +11,7 @@ import store from 'react-native-simple-store';
  * @param fetchFunc
  * @param cached 是否从缓存中取
  */
-export default apiCache = (key, fetchFunc, cached = true) => {
+export default ApiCache = (key, fetchFunc, cached = true) => {
     if (!cached) {
         //不缓存
         console.log(`cached = false. get api data from network ————  key = ${key}`);
@@ -30,3 +30,4 @@ export default apiCache = (key, fetchFunc, cached = true) => {
         }
     });
 };
+

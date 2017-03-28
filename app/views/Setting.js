@@ -6,6 +6,7 @@ import {View, Text, StyleSheet} from "react-native";
 import {Actions} from "react-native-router-flux";
 import Button from "react-native-button";
 import GlobleStyles from '../styles/GlobleStyles';
+import {storageSave,storeageGet} from '../util/NativeStore';
 
 const styles = StyleSheet.create({
     container: {
@@ -31,11 +32,13 @@ class Setting extends Component {
     }
 
     dologout(name,passwd){
+
         let formData = new FormData();
         formData.append("username",name);
         formData.append("password",passwd);
         formData.append("dosubmit","true");
         formData.append("api","true");
+        formData.append("auth",global.auth);
         var opts = {
             method:"POST",
             body:formData
@@ -55,6 +58,7 @@ class Setting extends Component {
                     this.setState({
                         logoutresult:responseData.code
                     })
+                    alert(responseData.code)
                 }
 
             })

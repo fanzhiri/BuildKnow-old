@@ -28,7 +28,6 @@ const styles = StyleSheet.create({
         backgroundColor:'white',
         borderBottomWidth:0.5,
         borderBottomColor:'#e8e8e8',
-
         //主轴方向
         flexDirection:'row',
     },
@@ -184,6 +183,7 @@ class Follow extends Component {
                 style={styles.list}
                 dataSource={DataStore.cloneWithRows(this.state.people_list_data_source)}
                 renderRow={(rowData) => this._renderPeople(rowData)}
+                enableEmptySections = {true}
             />
         )
     }

@@ -1,5 +1,5 @@
 /**
- * Created by fanzhiri on 2017/2/27.
+ * Created by fanzhiri on 2017/3/23.
  */
 import React, {Component, PropTypes} from 'react';
 import {Actions} from "react-native-router-flux";
@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
     },
 });
 
-class TestingItem extends Component {
+class BookItem extends Component {
     constructor(props) {
         super(props);
         this.renderBottomText = this.renderBottomText.bind(this);
@@ -82,7 +82,7 @@ class TestingItem extends Component {
     }
 }
 
-TestingItem.PropTypes = {
+BookItem.PropTypes = {
     bookid:PropTypes.menubar,
     name: PropTypes.string.isRequired,
     cover: PropTypes.string.isRequired,
@@ -90,4 +90,4 @@ TestingItem.PropTypes = {
 
 };
 
-export default TestingItem;
+export default BookItem;
