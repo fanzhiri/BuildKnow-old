@@ -169,18 +169,22 @@ class ComposeBook extends Component {
 
     renderQuestionListView(){
         return (
-            <ListView
-                style={styles.list}
-                dataSource={DataStore.cloneWithRows(this.state.bookquestion_data_source)}
-                renderRow={(rowData, sectionID, rowID) => this._renderQuestionItem(rowData, sectionID, rowID)}
-                enableEmptySections = {true}
-            />
+
+
+                <ListView
+                    style={styles.list}
+                    dataSource={DataStore.cloneWithRows(this.state.bookquestion_data_source)}
+                    renderRow={(rowData, sectionID, rowID) => this._renderQuestionItem(rowData, sectionID, rowID)}
+                    enableEmptySections = {true}
+                />
+
+
         )
     }
 
     renderDiscussView(){
         return (
-            <Text>Discuss</Text>
+            <Button onPress={() => Actions.newonequestion()}>添加题目</Button>
         )
     }
 
