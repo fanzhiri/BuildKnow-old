@@ -13,7 +13,7 @@
     "react-native-button": "^1.8.2",
     "react-native-foldview": "^1.1.1",
     "react-native-gifted-form": "0.0.13",
-    "react-native-image-picker": "^0.25.6",
+    "react-native-image-picker": "^0.26.2",
     "react-native-parallax-scroll-view": "^0.19.0",
     "react-native-router-flux": "^3.37.0",
     "react-native-simple-radio-button": "^2.5.0-alpha.1",

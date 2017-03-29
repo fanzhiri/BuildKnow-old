@@ -132,7 +132,7 @@ class MyBookList extends Component {
     render(){
         return (
             <View style={GlobleStyles.withoutTitleContainer}>
-
+                <Button onPress={() => Actions.newbook()}>添加题本</Button>
                 {this.renderMyBooksView()}
             </View>
         );

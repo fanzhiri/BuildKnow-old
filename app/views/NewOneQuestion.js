@@ -79,7 +79,7 @@ class NewOneQuestion extends Component {
 
     onPress(){
         var value = this.refs.form.getValue();
-        
+
         if (value != null) {
             //this.docommit(value);
         }else{
