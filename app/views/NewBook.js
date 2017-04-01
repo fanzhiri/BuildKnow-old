@@ -8,6 +8,9 @@ import Button from "react-native-button";
 import GlobleStyles from '../styles/GlobleStyles';
 
 import ImagePicker from "react-native-image-picker";
+import TcombForm from "tcomb-form-native";
+
+var Tform = TcombForm.form.Form;
 
 const styles = StyleSheet.create({
     container: {
@@ -19,7 +22,15 @@ const styles = StyleSheet.create({
 
 });
 
+var NewBookForm = TcombForm.struct({
+    bookname: TcombForm.String,
+    bookbrief: TcombForm.String,
+    bookdescription: TcombForm.String,
+});
 
+var options = {};
+
+var doCommitNewBookPostUrl = "https://slako.applinzi.com/index.php?m=question&c=personal&a=addbook";
 
 
 
@@ -36,12 +47,44 @@ class NewBook extends Component {
         this._onSelectCoverPress = this.onSelectCoverPress.bind(this)
     }
 
+    docommit(newbookdata){
+
+        let formData = new FormData();
+        let file = {uri: this.state.coverSource, type: 'multipart/form-data', name: 'bookcover8080.jpg'};
+        formData.append("auth",global.auth);
+        formData.append("userid",global.userid);
+        formData.append("bookname",newbookdata.bookname);
+        formData.append("bookbrief",newbookdata.bookbrief);
+        formData.append("bookdescription",newbookdata.bookdescription);
+        formData.append("bookcover8080",file);
+        var opts = {
+            method:"POST",
+            headers:{
+                'Content-Type':'multipart/form-data',
+            },
+            body:formData
+        }
+        fetch(doCommitNewBookPostUrl,opts)
+            .then((response) => response.json())
+            .then((responseData) => {
+                if(responseData.code == 100){
+
+                    Actions.pop();
+                }else{
+                    alert(global.auth);
+                    alert(responseData.message)
+                }
+
+            })
+            .catch((error) => {
+                alert(error)
+            })
+    }
+
     onSelectCoverPress(){
         var options = {
             title: 'Select Cover',
-            customButtons: [
-                {name: 'fb', title: 'Choose Photo for Cover'},
-            ],
+
             storageOptions: {
                 skipBackup: true,
                 path: 'images'
@@ -74,16 +117,28 @@ class NewBook extends Component {
 
     }
 
+    onPress(){
+        var value = this.refs.form.getValue();
+
+        if (value != null) {
+            this.docommit(value);
+        }else{
+            alert(" not finish set ");
+        }
+    }
 
     render(){
         return (
             <View style={GlobleStyles.withoutTitleContainer}>
-                {/*<Image source={{uri:"https://slako.applinzi.com/statics/images/question/util/addcover.png"}}  />*/}
-                {/*<Image source={{uri:'https://slako.applinzi.com/statics/images/question/util/addcover.png', width: 80, height: 80 }} />*/}
-
+                <Tform
+                    ref="form"
+                    type={NewBookForm}
+                    options={options}
+                />
                 <TouchableOpacity onPress={()=>this._onSelectCoverPress()} >
                     <Image source={this.state.coverSource}  />
                 </TouchableOpacity>
+                <Button onPress={() => this.onPress()}>添加题本</Button>
             </View>
         );
     }

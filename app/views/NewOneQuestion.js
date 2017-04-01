@@ -1,7 +1,7 @@
 /**
  * Created by slako on 17/2/18.
  */
-import React, { Component ,TouchableHighlight} from 'react';
+import React, { Component ,TouchableHighlight,PropTypes} from 'react';
 import {View, Text, StyleSheet,TouchableOpacity} from "react-native";
 import {Actions} from "react-native-router-flux";
 import Button from "react-native-button";
@@ -46,29 +46,40 @@ var options = {};
 
 var docommitpostUrl = "https://slako.applinzi.com/index.php?m=question&c=personal&a=addquestion";
 
+
+
 class NewOneQuestion extends Component {
 
+    constructor(props) {
+
+        super(props);
+
+    }
+
     docommit(newquestion){
+        const {bookid} = this.props;
         let formData = new FormData();
+        formData.append("auth",global.auth);
+        formData.append("userid",global.userid);
+        formData.append("bookid",bookid);
         formData.append("ask",newquestion.ask);
-        formData.append("rightanswer",newquestion.rightanswer);
-        formData.append("wronganswier1",newquestion.wronganswier1);
-        formData.append("wronganswier2",newquestion.wronganswier2);
-        formData.append("wronganswier3",newquestion.wronganswier3);
+        formData.append("right_answer",newquestion.rightanswer);
+        formData.append("wrong_answer_1",newquestion.wronganswier1);
+        formData.append("wrong_answer_2",newquestion.wronganswier2);
+        formData.append("wrong_answer_3",newquestion.wronganswier3);
         var opts = {
             method:"POST",
             body:formData
         }
-        fetch(doregisterpostUrl,opts)
+        fetch(docommitpostUrl,opts)
             .then((response) => response.json())
             .then((responseData) => {
                 if(responseData.code == 100){
-                    this.setState({
-                        registerresult:"ok"
-                    })
 
+                    Actions.pop();
                 }else{
-
+                    alert(global.auth);
+                    alert(responseData.message)
                 }
 
             })
@@ -81,27 +92,31 @@ class NewOneQuestion extends Component {
         var value = this.refs.form.getValue();
 
         if (value != null) {
-            //this.docommit(value);
+            this.docommit(value);
         }else{
             alert("rightanswer not set ");
         }
     }
 
     render(){
+         const {bookid} = this.props;
         return (
             <View style={GlobleStyles.withoutTitleContainer}>
+
                 <Tform
                     ref="form"
                     type={NewQuestion}
                     options={options}
                 />
-                {/*<TouchableHighlight style={styles.button} onPress={()=>this.onPress()} underlayColor='#99d9f4'>*/}
-                    {/*<Text style={styles.buttonText}>Save</Text>*/}
-                {/*</TouchableHighlight>*/}
-                <Button onPress={() => this.onPress()}>添加题目</Button>
+
+                <Button onPress={() => this.onPress()}>为{bookid}添加题目</Button>
             </View>
         );
     }
 }
+
+NewOneQuestion.PropTypes = {
+    bookid: PropTypes.number,
+};
 
 module.exports = NewOneQuestion;

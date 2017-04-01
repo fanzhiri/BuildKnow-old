@@ -183,8 +183,9 @@ class ComposeBook extends Component {
     }
 
     renderDiscussView(){
+        const {bookid} = this.props;
         return (
-            <Button onPress={() => Actions.newonequestion()}>添加题目</Button>
+            <Button onPress={() => Actions.newonequestion({bookid})}>添加题目到{bookid}</Button>
         )
     }
 
