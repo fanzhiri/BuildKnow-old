@@ -2,13 +2,19 @@
  * Created by slako on 17/2/18.
  */
 import React, { Component } from 'react';
-import {View, Text, StyleSheet} from "react-native";
+import {View, Text, StyleSheet, ScrollView} from "react-native";
 import {Actions} from "react-native-router-flux";
 import Button from "react-native-button";
 import GlobleStyles from '../styles/GlobleStyles';
 import {storageSave,storeageGet} from '../util/NativeStore';
+import SettingItem from '../component/SettingItem'
 
 const styles = StyleSheet.create({
+    list:{
+        borderTopWidth: 1,
+        borderTopColor: '#e4e4e4',
+        marginTop: 12
+    },
     container: {
         flex: 1,
         justifyContent: 'center',
@@ -70,10 +76,26 @@ class Setting extends Component {
     render(){
         return (
             <View style={GlobleStyles.withoutTitleContainer}>
-                <Text>Setting</Text>
-                <Button onPress={() => Actions.about()}>关于</Button>
-                <Button onPress={() => Actions.help()}>帮助</Button>
-                <Button onPress={() => (this._dologout())}>退出</Button>
+                <ScrollView>
+                    <View style={styles.list}>
+                        <SettingItem text={"邮箱"} subText={"未设置"}/>
+                        <SettingItem text={"手机号"} subText={"未设置"}/>
+                    </View>
+                    <View style={styles.list}>
+                        <SettingItem text={"绑定新浪微博"} subText={"未设置"} isHasSwitcher={true}/>
+                        <SettingItem text={"绑定微信"} subText={"未设置"} isHasSwitcher={true}/>
+                    </View>
+                    <View style={styles.list}>
+                        <SettingItem text="用户反馈" />
+                        <SettingItem text={"关于"} onPress={() => Actions.about()}/>
+                        <SettingItem text={"帮助"} onPress={() => Actions.help()}/>
+                        <SettingItem text={"退出登录"} onPress={() => (this._dologout())}/>
+
+                    </View>
+
+
+                </ScrollView>
+
             </View>
         );
     }
