@@ -66,7 +66,7 @@ class Me extends Component {
                         <MeItem icon={"md-settings"} text={"我的题本"} onPress={() => Actions.mybooklist()} />
                         <MeItem icon={"md-heart"} text={"我的收藏"} subText={"15篇"} iconColor="#32cd32" />
                         <MeItem icon={"md-settings"} text={"设置"} onPress={() => Actions.setting()} />
-                        
+
                     </View>
                 </ScrollView>
 
