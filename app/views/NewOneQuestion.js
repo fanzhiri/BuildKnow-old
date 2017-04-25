@@ -47,6 +47,7 @@ var options = {};
 
 var docommitpostUrl = "https://slako.applinzi.com/index.php?m=question&c=personal&a=addquestion";
 
+var addimguri ={uri:"https://slako.applinzi.com/statics/images/question/util/addimg.jpg", width: 100, height: 68 };
 
 
 class NewOneQuestion extends Component {
@@ -54,7 +55,6 @@ class NewOneQuestion extends Component {
     constructor(props) {
 
         super(props);
-        let addimguri ={uri:"https://slako.applinzi.com/statics/images/question/util/addimg.jpg", width: 100, height: 68 };
         this.state = {
             imgSource: addimguri,
         };
@@ -74,14 +74,24 @@ class NewOneQuestion extends Component {
         formData.append("wrong_answer_1",newquestion.wronganswier1);
         formData.append("wrong_answer_2",newquestion.wronganswier2);
         formData.append("wrong_answer_3",newquestion.wronganswier3);
-        formData.append("pic320240",file);
-        var opts = {
-            method:"POST",
-            headers:{
-                'Content-Type':'multipart/form-data',
-            },
-            body:formData
+        var opts =null;
+        if(this.state.imgSource == addimguri){
+            //formData.append("pic320240",file);
+            opts = {
+                method:"POST",
+                body:formData
+            }
+        }else{
+            formData.append("pic320240",file);
+            opts = {
+                method:"POST",
+                headers:{
+                    'Content-Type':'multipart/form-data',
+                },
+                body:formData
+            }
         }
+
         fetch(docommitpostUrl,opts)
             .then((response) => response.json())
             .then((responseData) => {
