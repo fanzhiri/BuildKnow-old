@@ -10,10 +10,13 @@ import {
     View
 } from 'react-native';
 
+import Icon from 'react-native-vector-icons/Ionicons';
 
 const propTypes = {
     selected: PropTypes.bool,
     title: PropTypes.string,
+    iconName: PropTypes.string,
+    selectIconName: PropTypes.string,
 };
 
 const styles = StyleSheet.create({
@@ -29,8 +32,10 @@ const styles = StyleSheet.create({
 
 const MainTabbarIcon = (props) => (
     <View style={styles.container}>
+        <Icon style={{textAlign: 'center', marginRight: 0}} name={props.selected ? props.selectIconName : props.iconName} size={25} color={props.selected ? "red" : "black"}/>
+
         <Text
-            style={{ color: props.selected ? 'red' : 'black' ,fontSize:20}}
+            style={{ color: props.selected ? 'red' : 'black' ,fontSize:12}}
         >
             {props.title}
         </Text>

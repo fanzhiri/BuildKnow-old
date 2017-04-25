@@ -56,10 +56,18 @@ export default class BuildKnow extends Component {
                 <Scene key="register" title="注册" component={Register} duration={0} />
                 <Scene key="introduce" hideNavBar component={Introduce} duration={0} />
                 <Scene key="main" tabs={true} type={ActionConst.REPLACE}>
-                    <Scene key="market" title="市场" component={Market} duration={0} icon={MainTabbarIcon}/>
-                    <Scene key="follow" title="关注" component={Follow} duration={0} icon={MainTabbarIcon}/>
-                    <Scene key="discover" title="发现" component={Discover} duration={0} icon={MainTabbarIcon}/>
-                    <Scene key="me" title="我" component={Me} duration={0} icon={MainTabbarIcon} />
+                    <Scene key="market" title="市场" component={Market} duration={0} icon={MainTabbarIcon}
+                           iconName="ios-home-outline"
+                           selectIconName="ios-home"/>
+                    <Scene key="follow" title="关注" component={Follow} duration={0} icon={MainTabbarIcon}
+                           iconName="ios-eye-outline"
+                           selectIconName="ios-eye"/>
+                    <Scene key="discover" title="发现" component={Discover} duration={0} icon={MainTabbarIcon}
+                           iconName="ios-compass-outline"
+                           selectIconName="ios-compass"/>
+                    <Scene key="me" title="我" component={Me} duration={0} icon={MainTabbarIcon}
+                           iconName="ios-body-outline"
+                           selectIconName="ios-body"/>
                 </Scene>
                 <Scene key="setting" title="设置" component={Setting} duration={0} />
                 <Scene key="help" title="帮助" component={Help} duration={0} />
