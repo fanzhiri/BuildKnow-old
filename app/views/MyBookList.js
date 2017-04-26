@@ -19,7 +19,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#F5FCFF',
     },
     list:{
-        marginBottom:48
+        marginBottom:0
     },
     listItem:{
 
@@ -132,7 +132,7 @@ class MyBookList extends Component {
     render(){
         return (
             <View style={GlobleStyles.withoutTitleContainer}>
-                <Button onPress={() => Actions.newbook()}>添加题本</Button>
+                {/*<Button onPress={() => Actions.newbook()}>添加题本</Button>*/}
                 {this.renderMyBooksView()}
             </View>
         );

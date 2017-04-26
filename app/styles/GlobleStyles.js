@@ -4,7 +4,8 @@ const globleStyles = StyleSheet.create({
     withoutTitleContainer: {
         flex: 1,
         marginTop:64,
-        height:548
+        height:848,
+        backgroundColor: '#d9d6c3'
     },
 });
 

@@ -2,7 +2,7 @@
  * Created by slako on 17/2/18.
  */
 import React, { Component } from 'react';
-import {View, Text, StyleSheet,ScrollView} from "react-native";
+import {View, TouchableOpacity, Text, Image,StyleSheet,ScrollView} from "react-native";
 import {Actions} from "react-native-router-flux";
 import Button from "react-native-button";
 import GlobleStyles from '../styles/GlobleStyles';
@@ -26,7 +26,30 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: '#F5FCFF',
     },
+    personalinfo:{
 
+        padding:10,
+        backgroundColor:'white',
+        borderBottomWidth:0.5,
+        borderBottomColor:'#e8e8e8',
+
+        //主轴方向
+        flexDirection:'row',
+    },
+    headimage: {
+        width: 80,
+        height: 80,
+    },
+    bottomTextContainer: {
+        width: 80,
+        height: 20,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    bottomText: {
+        fontSize: 16,
+        justifyContent: 'center',
+    },
 });
 
 class Me extends Component {
@@ -61,6 +84,14 @@ class Me extends Component {
                 {/*<Button onPress={() => this._showAuth()}>show auth</Button>*/}
 
                 <ScrollView>
+                    <TouchableOpacity  onPress={()=>(Actions.personalcenter())} >
+                        <View style={styles.personalinfo}>
+                        <Image style={styles.headimage} resizeMode="cover" source={{uri:'https://slako.applinzi.com/statics/images/question/head/boy/1.jpg'}}/>
+                        <View style={styles.bottomTextContainer}>
+                            <Text style={styles.bottomText}>name</Text>
+                        </View>
+                    </View>
+                    </TouchableOpacity>
                     <View style={styles.list}>
                         <MeItem icon={"md-settings"} text={"我的主页"} onPress={() => Actions.homepage()} />
                         <MeItem icon={"md-settings"} text={"我的题本"} onPress={() => Actions.mybooklist()} />

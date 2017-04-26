@@ -28,7 +28,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     bottomText: {
-
         fontSize: 16,
         justifyContent: 'center',
     },

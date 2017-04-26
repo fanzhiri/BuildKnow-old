@@ -46,7 +46,7 @@ import Introduce from './views/Introduce'
 import About from './views/About'
 import BuildingBook from './views/BuildingBook'
 import ComposeBook from './views/ComposeBook'
-
+import PersonalCenter from './views/PersonalCenter'
 
 export default class BuildKnow extends Component {
     render() {
@@ -71,7 +71,7 @@ export default class BuildKnow extends Component {
                 </Scene>
                 <Scene key="setting" title="设置" component={Setting} duration={0} />
                 <Scene key="help" title="帮助" component={Help} duration={0} />
-                <Scene key="mybooklist" title="书架" component={MyBookList} duration={0} />
+                <Scene key="mybooklist" title="书架" component={MyBookList} duration={0} rightTitle={"添加"} onRight={() => Actions.newbook()}/>
                 <Scene key="homepage" title="主页" component={HomePage} duration={0} />
                 <Scene key="buildquestion" title="建题" component={BuildQuestion} duration={0} />
                 <Scene key="collect" title="收藏" component={Collect} duration={0} />
@@ -87,6 +87,7 @@ export default class BuildKnow extends Component {
                 <Scene key="newonequestion" title="新建单个题目" component={NewOneQuestion} duration={0} />
                 <Scene key="newsomequestions" title="新建一列题目" component={NewSomeQuestions} duration={0} />
                 <Scene key="composebook" title="组建题本" component={ComposeBook} duration={0} />
+                <Scene key="personalcenter" title="个人信息" component={PersonalCenter} duration={0} />
             </Router>
         );
     }
