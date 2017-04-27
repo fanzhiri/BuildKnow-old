@@ -34,12 +34,14 @@ class SettingItem extends Component{
     }
 
     render(){
-        const {text, textColor, subText, onPress, isHasSwitcher, switcherValue} = this.props;
+        const {text, textColor, subText, onPress, isHasSwitcher, switcherValue,imgUri} = this.props;
 
         if(Platform.OS === 'android'){
             return(
                 <TouchableNativeFeedback onPress={onPress}>
+
                     <View style={styles.listItem}>
+
                         <Text style={{color: textColor, fontSize: 14}}>{text}</Text>
                         <View style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-end', alignItems:'center'}}>
                             <Text style={{color: "#ccc"}}>{subText}</Text>
@@ -60,17 +62,25 @@ class SettingItem extends Component{
                 <TouchableOpacity onPress={onPress} activeOpacity={0.8}>
                     <View style={styles.listItem}>
                         <Text style={{color: textColor, fontSize: 14}}>{text}</Text>
-                        <View style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-end', alignItems:'center'}}>
-                            <Text style={{color: "#ccc"}}>{subText}</Text>
-                            { isHasSwitcher ?
-                                <Switch
-                                    onValueChange={(value) => this.setState({switchIsOn: value})}
-                                    style={{marginLeft: 4}}
-                                    value={this.state.switchIsOn}/>
-                                :
-                                null
-                            }
-                        </View>
+                        {imgUri?
+                            <View style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-end', alignItems:'center'}}>
+                                <Image style={styles.headimage} resizeMode="cover" source={{uri:imgUri}}></Image>
+                            </View>
+                            :
+                            <View style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-end', alignItems:'center'}}>
+                                <Text style={{color: "#ccc"}}>{subText}</Text>
+                                { isHasSwitcher ?
+                                    <Switch
+                                        onValueChange={(value) => this.setState({switchIsOn: value})}
+                                        style={{marginLeft: 4}}
+                                        value={this.state.switchIsOn}/>
+                                    :
+                                    null
+                                }
+                            </View>
+
+                        }
+
                     </View>
                 </TouchableOpacity>
             );
@@ -91,6 +101,21 @@ const styles = StyleSheet.create({
         borderBottomColor: '#c4c4c4',
         borderBottomWidth: 1
     },
+    imagelistItem: {
+        flex: 1,
+        height: 80,
+        backgroundColor: 'white',
+        flexDirection: 'row',
+        alignItems: 'center',
+        paddingLeft: 25,
+        paddingRight: 25,
+        borderBottomColor: '#c4c4c4',
+        borderBottomWidth: 1
+    },
+    headimage: {
+        width: 40,
+        height: 40,
+    },
 });
 
 SettingItem.propTypes = {
@@ -99,7 +124,8 @@ SettingItem.propTypes = {
     subText: PropTypes.string,
     onPress: PropTypes.func,
     isHasSwitcher: PropTypes.bool,
-    switcherValue: PropTypes.bool
+    switcherValue: PropTypes.bool,
+    imgUri:PropTypes.string
 }
 
 export default SettingItem;

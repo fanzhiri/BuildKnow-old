@@ -47,6 +47,7 @@ import About from './views/About'
 import BuildingBook from './views/BuildingBook'
 import ComposeBook from './views/ComposeBook'
 import PersonalCenter from './views/PersonalCenter'
+import SetHeadPic from './views/SetHeadPic'
 
 export default class BuildKnow extends Component {
     render() {
@@ -88,6 +89,7 @@ export default class BuildKnow extends Component {
                 <Scene key="newsomequestions" title="新建一列题目" component={NewSomeQuestions} duration={0} />
                 <Scene key="composebook" title="组建题本" component={ComposeBook} duration={0} />
                 <Scene key="personalcenter" title="个人信息" component={PersonalCenter} duration={0} />
+                <Scene key="setheadpic" title="上传头像" component={SetHeadPic} duration={0} />
             </Router>
         );
     }

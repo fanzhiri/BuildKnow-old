@@ -6,9 +6,9 @@ import {View, Text,Image, StyleSheet,TouchableOpacity} from "react-native";
 import {Actions} from "react-native-router-flux";
 import Button from "react-native-button";
 import GlobleStyles from '../styles/GlobleStyles';
-import TcombForm from "tcomb-form-native";
-import ImagePicker from "react-native-image-picker";
 
+import ImagePicker from "react-native-image-picker";
+import TcombForm from "tcomb-form-native";
 var Tform = TcombForm.form.Form;
 
 const styles = StyleSheet.create({

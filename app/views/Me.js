@@ -14,6 +14,8 @@ import Icon from 'react-native-vector-icons/Ionicons';
 
 import {storageSave,storeageGet} from '../util/NativeStore';
 
+var httpsBaseUrl = "https://slako.applinzi.com/";
+
 const styles = StyleSheet.create({
     list:{
         borderTopWidth: 1,
@@ -77,25 +79,19 @@ class Me extends Component {
         return (
             <View style={GlobleStyles.withoutTitleContainer}>
 
-                {/*<Button onPress={() => Actions.setting()}>设置</Button>*/}
-                {/*<Button onPress={() => Actions.homepage()}>我的主页</Button>*/}
-                {/*<Button onPress={() => Actions.mybooklist()}>我的题本</Button>*/}
-                {/*<Button onPress={() => this._savemyAuth()}>save auth</Button>*/}
-                {/*<Button onPress={() => this._showAuth()}>show auth</Button>*/}
-
                 <ScrollView>
                     <TouchableOpacity  onPress={()=>(Actions.personalcenter())} >
                         <View style={styles.personalinfo}>
-                        <Image style={styles.headimage} resizeMode="cover" source={{uri:'https://slako.applinzi.com/statics/images/question/head/boy/1.jpg'}}/>
+                        <Image style={styles.headimage} resizeMode="cover" source={{uri:`${httpsBaseUrl}${global.userhead}`}}/>
                         <View style={styles.bottomTextContainer}>
-                            <Text style={styles.bottomText}>name</Text>
+                            <Text style={styles.bottomText}>{global.nickname}</Text>
                         </View>
                     </View>
                     </TouchableOpacity>
                     <View style={styles.list}>
                         <MeItem icon={"md-settings"} text={"我的主页"} onPress={() => Actions.homepage()} />
                         <MeItem icon={"md-settings"} text={"我的题本"} onPress={() => Actions.mybooklist()} />
-                        <MeItem icon={"md-heart"} text={"我的收藏"} subText={"15篇"} iconColor="#32cd32" />
+                        <MeItem icon={"md-heart"} text={"我的收藏"} subText={"10篇"} iconColor="#32cd32" />
                         <MeItem icon={"md-settings"} text={"设置"} onPress={() => Actions.setting()} />
 
                     </View>
