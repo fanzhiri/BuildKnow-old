@@ -1,5 +1,6 @@
 /**
  * Created by slako on 17/3/28.
+ * 组建题本
  */
 import React, { Component ,PropTypes} from 'react';
 

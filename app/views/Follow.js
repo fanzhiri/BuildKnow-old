@@ -55,6 +55,8 @@ const styles = StyleSheet.create({
 
 var peoplelistUrl = "https://slako.applinzi.com/index.php?m=question&c=index&a=peoplelist";
 
+var httpsBaseUrl = "https://slako.applinzi.com/";
+
 class Follow extends Component {
 
 
@@ -163,7 +165,7 @@ class Follow extends Component {
 
             <TouchableOpacity onPress={() => Actions.homepage({userId})}>
                 <View style={styles.peopleItem}>
-                    <Image source={{uri:'https://slako.applinzi.com/statics/images/question/head/boy/1.jpg'}} style={styles.leftImgStyle}/>
+                    <Image source={{uri:`${httpsBaseUrl}${people.head}`}} style={styles.leftImgStyle}/>
                     <View>
                         <Text style={styles.topTitleStyle}>
                             {people.username}

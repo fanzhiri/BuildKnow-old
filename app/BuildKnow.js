@@ -48,6 +48,7 @@ import BuildingBook from './views/BuildingBook'
 import ComposeBook from './views/ComposeBook'
 import PersonalCenter from './views/PersonalCenter'
 import SetHeadPic from './views/SetHeadPic'
+import ShareManager from './views/ShareManager'
 
 export default class BuildKnow extends Component {
     render() {
@@ -90,6 +91,7 @@ export default class BuildKnow extends Component {
                 <Scene key="composebook" title="组建题本" component={ComposeBook} duration={0} />
                 <Scene key="personalcenter" title="个人信息" component={PersonalCenter} duration={0} />
                 <Scene key="setheadpic" title="上传头像" component={SetHeadPic} duration={0} />
+                <Scene key="sharemanager" title="分享管理" component={ShareManager} duration={0} />
             </Router>
         );
     }

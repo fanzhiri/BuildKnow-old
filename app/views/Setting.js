@@ -77,14 +77,7 @@ class Setting extends Component {
         return (
             <View style={GlobleStyles.withoutTitleContainer}>
                 <ScrollView>
-                    <View style={styles.list}>
-                        <SettingItem text={"邮箱"} subText={"未设置"}/>
-                        <SettingItem text={"手机号"} subText={"未设置"}/>
-                    </View>
-                    <View style={styles.list}>
-                        <SettingItem text={"绑定新浪微博"} subText={"未设置"} isHasSwitcher={true}/>
-                        <SettingItem text={"绑定微信"} subText={"未设置"} isHasSwitcher={true}/>
-                    </View>
+
                     <View style={styles.list}>
                         <SettingItem text="用户反馈" />
                         <SettingItem text={"关于"} onPress={() => Actions.about()}/>

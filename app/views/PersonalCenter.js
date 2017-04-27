@@ -110,6 +110,11 @@ class PersonalCenter extends Component {
                         <SettingItem text={"绑定微信"} subText={"未设置"} isHasSwitcher={true}/>
                     </View>
                     <View style={styles.list}>
+                        <SettingItem text={"邮箱"} subText={"未设置"}/>
+                        <SettingItem text={"手机号"} subText={"未设置"}/>
+                    </View>
+
+                    <View style={styles.list}>
 
                         <SettingItem text={"性别"} onPress={() => Actions.about()}/>
                         <SettingItem text={"地区"} onPress={() => Actions.help()}/>
