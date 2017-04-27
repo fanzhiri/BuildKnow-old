@@ -22,10 +22,13 @@ const styles = StyleSheet.create({
         height: 80,
     },
     bottomTextContainer: {
-        width: 80,
-        height: 20,
+
+        height: 80,
         justifyContent: 'center',
-        alignItems: 'center',
+    },
+    titleText: {
+        fontSize: 20,
+        justifyContent: 'center',
     },
     bottomText: {
         fontSize: 16,
@@ -67,11 +70,13 @@ class TestingItem extends Component {
     }
 
     renderBottomText() {
-        const {name} = this.props;
+        const {name,bookbrief,questionsnumber} = this.props;
         if (name) {
             return (
                 <View style={styles.bottomTextContainer}>
-                    <Text style={styles.bottomText}>{name}</Text>
+                    <Text style={styles.titleText}>{name}</Text>
+                    <Text style={styles.bottomText}>简介：{bookbrief}</Text>
+                    <Text style={styles.bottomText}>题数：{questionsnumber}</Text>
                     {/*<Image resizeMode="cover" style={styles.bottomImage} source={require('../image/score_line.png')}/>*/}
                 </View>
             );
@@ -86,7 +91,7 @@ TestingItem.PropTypes = {
     name: PropTypes.string.isRequired,
     cover: PropTypes.string.isRequired,
     bookbrief: PropTypes.string.isRequired,
-
+    questionsnumber:PropTypes.string.isRequired,
 };
 
 export default TestingItem;

@@ -192,7 +192,12 @@ class BuildingBook extends Component {
 
     renderIntroduceView(){
         return (
-            <Text>题目数量 :{this.state.bookdata.q_count}</Text>
+            <View>
+                <Text>题目数量 :{this.state.bookdata.q_count}</Text>
+                <Text>题本简介 :{this.state.bookdata.bookbrief}</Text>
+                <Text>题本详情 :{this.state.bookdata.bookdescription}</Text>
+            </View>
+
         )
     }
 

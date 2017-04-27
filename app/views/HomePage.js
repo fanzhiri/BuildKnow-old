@@ -166,8 +166,9 @@ class HomePage extends Component {
         var cover = rowData.cover;
         var name =rowData.bookname;
         var bookbrief =rowData.bookbrief;
+        var questionsnumber =rowData.q_count;
             return (
-            <TestingItem bookid={bookid}  cover={cover} name={name} bookbrief={bookbrief}/>
+            <TestingItem bookid={bookid}  cover={cover} name={name} bookbrief={bookbrief} questionsnumber={questionsnumber}/>
         );
 
     }

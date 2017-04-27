@@ -49,6 +49,8 @@ import ComposeBook from './views/ComposeBook'
 import PersonalCenter from './views/PersonalCenter'
 import SetHeadPic from './views/SetHeadPic'
 import ShareManager from './views/ShareManager'
+import NewShareMode from './views/NewShareMode'
+
 
 export default class BuildKnow extends Component {
     render() {
@@ -91,7 +93,8 @@ export default class BuildKnow extends Component {
                 <Scene key="composebook" title="组建题本" component={ComposeBook} duration={0} />
                 <Scene key="personalcenter" title="个人信息" component={PersonalCenter} duration={0} />
                 <Scene key="setheadpic" title="上传头像" component={SetHeadPic} duration={0} />
-                <Scene key="sharemanager" title="分享管理" component={ShareManager} duration={0} />
+                <Scene key="sharemanager" title="分享管理" component={ShareManager} duration={0} rightTitle={"添加"} onRight={() => Actions.newsharemode()}/>
+                <Scene key="newsharemode" title="新建分享方式" component={NewShareMode} duration={0} />
             </Router>
         );
     }
