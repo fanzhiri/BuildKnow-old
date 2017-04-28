@@ -118,14 +118,17 @@ class BuildingBook extends Component {
 
     handleRandom() {
         var type = 'random';
+        global.bookqids=JSON.parse(this.state.bookdata.qids);
         Actions.answerquestion(type);
     }
     handleOrder() {
         var type = 'order';
+        global.bookqids=JSON.parse(this.state.bookdata.qids);
         Actions.answerquestion(type);
     }
     handleSection() {
         var type = 'section';
+        global.bookqids=JSON.parse(this.state.bookdata.qids);
         Actions.answerquestion(type);
     }
 
@@ -196,6 +199,7 @@ class BuildingBook extends Component {
                 <Text>题目数量 :{this.state.bookdata.q_count}</Text>
                 <Text>题本简介 :{this.state.bookdata.bookbrief}</Text>
                 <Text>题本详情 :{this.state.bookdata.bookdescription}</Text>
+                <Text>题目编号 :{this.state.bookdata.qids}</Text>
             </View>
 
         )

@@ -29,6 +29,8 @@ const window = Dimensions.get('window');
 var doanswerquestionpostUrl = "https://slako.applinzi.com/index.php?m=question&c=index&a=getquestion";
 var doGetQuestionGetBaseUrl = "https://slako.applinzi.com/api/1/question/";
 
+var question_number=0;
+
 class AnswerQuestion extends Component {
     constructor(props) {
         super(props);
@@ -86,7 +88,10 @@ class AnswerQuestion extends Component {
 
     renderquestion(){
         if(this.state.questiondata == null){
-            this._dofetchquestion(4);
+
+            var qid=global.bookqids.shift();
+
+            this._dofetchquestion(qid);
 
             return this._renderloading();
         }else{
@@ -94,10 +99,18 @@ class AnswerQuestion extends Component {
         }
     }
 
+    onPressNext(){
+
+        var qid=global.bookqids.shift();
+
+        this._dofetchquestion(qid);
+    }
+
     showquestion(){
 
         return (
             <View style={styles.container}>
+
                 <Image source={{uri:'https://slako.applinzi.com/statics/images/question/personalhomepage/1.jpg', width: window.width, height: 200 }} />
                 <Text style={styles.question}>{this.state.ask}</Text>
                 <RadioForm
@@ -105,6 +118,7 @@ class AnswerQuestion extends Component {
                     initial={-1}
                     onPress={(value) => {this.setState({value:value})}}
                 />
+                <Button onPress={() => this.onPressNext()}>下一个题目</Button>
             </View>
         )
     }
