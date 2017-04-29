@@ -2,7 +2,7 @@
  * Created by slako on 17/2/18.
  */
 import React, { Component } from 'react';
-import {View, TouchableOpacity, Text, Image,StyleSheet,ScrollView} from "react-native";
+import {View, TouchableOpacity, Text, Image,StyleSheet,ScrollView,Dimensions} from "react-native";
 import {Actions} from "react-native-router-flux";
 import Button from "react-native-button";
 import GlobleStyles from '../styles/GlobleStyles';
@@ -13,6 +13,8 @@ import SettingItem from '../component/SettingItem'
 import Icon from 'react-native-vector-icons/Ionicons';
 
 import {storageSave,storeageGet} from '../util/NativeStore';
+
+const window = Dimensions.get('window');
 
 var httpsBaseUrl = "https://slako.applinzi.com/";
 
@@ -43,8 +45,8 @@ const styles = StyleSheet.create({
         height: 80,
     },
     bottomTextContainer: {
-        width: 80,
-        height: 20,
+        width: window.width-80,
+        height: 80,
         justifyContent: 'center',
         alignItems: 'center',
     },
@@ -82,17 +84,18 @@ class Me extends Component {
                 <ScrollView>
                     <TouchableOpacity  onPress={()=>(Actions.personalcenter())} >
                         <View style={styles.personalinfo}>
-                        <Image style={styles.headimage} resizeMode="cover" source={{uri:`${httpsBaseUrl}${global.userhead}`}}/>
-                        <View style={styles.bottomTextContainer}>
-                            <Text style={styles.bottomText}>{global.nickname}</Text>
+                            <Image style={styles.headimage} resizeMode="cover" source={{uri:`${httpsBaseUrl}${global.userhead}`}}/>
+                            <View style={styles.bottomTextContainer}>
+                                <Text style={styles.bottomText}>{global.nickname}</Text>
+                            </View>
                         </View>
-                    </View>
                     </TouchableOpacity>
                     <View style={styles.list}>
-                        <MeItem icon={"md-settings"} text={"我的主页"} onPress={() => Actions.homepage()} />
-                        <MeItem icon={"md-settings"} text={"我的题本"} onPress={() => Actions.mybooklist()} />
-                        <MeItem icon={"md-settings"} text={"分享管理"} onPress={() => Actions.sharemanager()} />
+                        <MeItem icon={"ios-medal"} text={"我的主页"} onPress={() => Actions.homepage()} />
+                        <MeItem icon={"md-build"} text={"我的题本"} onPress={() => Actions.mybooklist()} />
+                        <MeItem icon={"md-link"} text={"分享管理"} onPress={() => Actions.sharemanager()} />
                         <MeItem icon={"md-heart"} text={"我的收藏"} subText={"10篇"} iconColor="#32cd32" />
+                        <MeItem icon={"md-sync"} text={"更新"} onPress={() => Actions.mybooklist()} />
                         <MeItem icon={"md-settings"} text={"设置"} onPress={() => Actions.setting()} />
 
                     </View>

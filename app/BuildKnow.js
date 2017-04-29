@@ -50,7 +50,9 @@ import PersonalCenter from './views/PersonalCenter'
 import SetHeadPic from './views/SetHeadPic'
 import ShareManager from './views/ShareManager'
 import NewShareMode from './views/NewShareMode'
+import ClassCatalogue from './views/ClassCatalogue'
 
+import Icon from 'react-native-vector-icons/Ionicons';
 
 export default class BuildKnow extends Component {
     render() {
@@ -62,7 +64,10 @@ export default class BuildKnow extends Component {
                 <Scene key="main" tabs={true} type={ActionConst.REPLACE}>
                     <Scene key="market" title="市场" component={Market} duration={0} icon={MainTabbarIcon}
                            iconName="ios-home-outline"
-                           selectIconName="ios-home"/>
+                           selectIconName="ios-home"
+                           leftTitle={"分类"}
+                           onLeft={() => Actions.classcatalogue()}
+                    />
                     <Scene key="follow" title="关注" component={Follow} duration={0} icon={MainTabbarIcon}
                            iconName="ios-eye-outline"
                            selectIconName="ios-eye"/>
@@ -95,6 +100,7 @@ export default class BuildKnow extends Component {
                 <Scene key="setheadpic" title="上传头像" component={SetHeadPic} duration={0} />
                 <Scene key="sharemanager" title="分享管理" component={ShareManager} duration={0} rightTitle={"添加"} onRight={() => Actions.newsharemode()}/>
                 <Scene key="newsharemode" title="新建分享方式" component={NewShareMode} duration={0} />
+                <Scene key="classcatalogue" title="分类目录" component={ClassCatalogue} duration={0} />
             </Router>
         );
     }

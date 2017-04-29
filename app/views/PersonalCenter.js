@@ -122,6 +122,11 @@ class PersonalCenter extends Component {
                         <SettingItem text={"个性签名"} onPress={() => Actions.help()}/>
 
                     </View>
+                    <View style={styles.list}>
+
+                        <SettingItem text={"密码更改"} onPress={() => Actions.about()}/>
+
+                    </View>
                 </ScrollView>
 
             </View>

@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
     container2: {
         flex: 2,
         marginLeft:10,
-        justifyContent: 'center',
+        justifyContent: 'space-around',
         alignItems: 'center',
     },
 
@@ -61,6 +61,9 @@ const styles = StyleSheet.create({
     },
     button:{
         fontSize: 16,color: 'green' ,width:38,height:24, overflow:'hidden', borderRadius:4, backgroundColor: 'red'
+    },
+    textmargin:{
+        marginTop:10,
     }
 });
 
@@ -196,10 +199,10 @@ class BuildingBook extends Component {
     renderIntroduceView(){
         return (
             <View>
-                <Text>题目数量 :{this.state.bookdata.q_count}</Text>
-                <Text>题本简介 :{this.state.bookdata.bookbrief}</Text>
-                <Text>题本详情 :{this.state.bookdata.bookdescription}</Text>
-                <Text>题目编号 :{this.state.bookdata.qids}</Text>
+                <Text style={styles.textmargin}>题目数量 :{this.state.bookdata.q_count}</Text>
+                <Text style={styles.textmargin}>题本简介 :{this.state.bookdata.bookbrief}</Text>
+                <Text style={styles.textmargin}>题本详情 :{this.state.bookdata.bookdescription}</Text>
+                <Text style={styles.textmargin}>题目编号 :{this.state.bookdata.qids}</Text>
             </View>
 
         )

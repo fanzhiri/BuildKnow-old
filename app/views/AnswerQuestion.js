@@ -28,6 +28,8 @@ const window = Dimensions.get('window');
 
 var doanswerquestionpostUrl = "https://slako.applinzi.com/index.php?m=question&c=index&a=getquestion";
 var doGetQuestionGetBaseUrl = "https://slako.applinzi.com/api/1/question/";
+var httpsBaseUrl = "https://slako.applinzi.com";
+
 
 var question_number=0;
 
@@ -111,8 +113,14 @@ class AnswerQuestion extends Component {
         return (
             <View style={styles.container}>
 
-                <Image source={{uri:'https://slako.applinzi.com/statics/images/question/personalhomepage/1.jpg', width: window.width, height: 200 }} />
-                <Text style={styles.question}>{this.state.ask}</Text>
+                {
+                    this.state.questiondata.img?
+                        <Image resizeMode="cover" source={{uri:`${httpsBaseUrl}${this.state.questiondata.img}`, width: window.width, height: 200 }} ></Image>
+                        :
+                        <Text></Text>
+                }
+
+                <Text style={styles.question}>{this.state.questiondata.ask}</Text>
                 <RadioForm
                     radio_props={this.state.radio}
                     initial={-1}
