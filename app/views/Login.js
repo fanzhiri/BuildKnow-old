@@ -174,7 +174,7 @@ class Login extends Component {
                     <GiftedForm.HiddenWidget name='tos' value={true} />
                 </GiftedForm>
 
-                <Button onPress={() => Actions.register()}>注册</Button>
+
             </View>
         );
     }

@@ -167,8 +167,14 @@ class HomePage extends Component {
         var name =rowData.bookname;
         var bookbrief =rowData.bookbrief;
         var questionsnumber =rowData.q_count;
-            return (
-            <TestingItem bookid={bookid}  cover={cover} name={name} bookbrief={bookbrief} questionsnumber={questionsnumber}/>
+        var follow =rowData.follow;
+
+        return (
+            <TestingItem bookid={bookid}  cover={cover}
+                         name={name} bookbrief={bookbrief}
+                         questionsnumber={questionsnumber}
+                         follow={follow}
+            />
         );
 
     }

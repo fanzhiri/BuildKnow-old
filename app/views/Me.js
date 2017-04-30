@@ -18,6 +18,7 @@ const window = Dimensions.get('window');
 
 var httpsBaseUrl = "https://slako.applinzi.com/";
 
+
 const styles = StyleSheet.create({
     list:{
         borderTopWidth: 1,
@@ -45,14 +46,14 @@ const styles = StyleSheet.create({
         height: 80,
     },
     bottomTextContainer: {
-        width: window.width-80,
+        width: window.width-20,
         height: 80,
-        justifyContent: 'center',
-        alignItems: 'center',
+        marginLeft: 10,
+        justifyContent: 'space-around',
+        //alignItems: 'center',
     },
     bottomText: {
         fontSize: 16,
-        justifyContent: 'center',
     },
 });
 
@@ -77,6 +78,7 @@ class Me extends Component {
 
     }
     render(){
+        var userId = (global.userid);
 
         return (
             <View style={GlobleStyles.withoutTitleContainer}>
@@ -86,13 +88,15 @@ class Me extends Component {
                         <View style={styles.personalinfo}>
                             <Image style={styles.headimage} resizeMode="cover" source={{uri:`${httpsBaseUrl}${global.userhead}`}}/>
                             <View style={styles.bottomTextContainer}>
-                                <Text style={styles.bottomText}>{global.nickname}</Text>
+                                <Text style={styles.bottomText}>昵称：{global.nickname}</Text>
+                                <Text style={styles.bottomText}>个人中心</Text>
                             </View>
                         </View>
                     </TouchableOpacity>
                     <View style={styles.list}>
-                        <MeItem icon={"ios-medal"} text={"我的主页"} onPress={() => Actions.homepage()} />
-                        <MeItem icon={"md-build"} text={"我的题本"} onPress={() => Actions.mybooklist()} />
+
+                        <MeItem icon={"ios-medal"} text={"我的主页"} onPress={() => Actions.homepage({userId})} />
+                        <MeItem icon={"md-build"} text={"我的题本"} iconColor="#FF0000"  onPress={() => Actions.mybooklist()} />
                         <MeItem icon={"md-link"} text={"分享管理"} onPress={() => Actions.sharemanager()} />
                         <MeItem icon={"md-heart"} text={"我的收藏"} subText={"10篇"} iconColor="#32cd32" />
                         <MeItem icon={"md-sync"} text={"更新"} onPress={() => Actions.mybooklist()} />

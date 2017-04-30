@@ -108,10 +108,14 @@ class ComposeBook extends Component {
     }
 
     render(){
-        const {BookID} = this.props;
+        const {bookid} = this.props;
+        global.composeBookid=bookid;
         return (
             <View style={GlobleStyles.withoutTitleContainer}>
-
+                <View>
+                    <Button onPress={() => Actions.newonequestion({bookid})}>添加题目</Button>
+                    <Button onPress={() => Actions.newonequestion({bookid})}>批量添加</Button>
+                </View>
                 <View>
                     <SegmentedControlIOS
                         values={['题目','发布','历史']}
@@ -160,7 +164,7 @@ class ComposeBook extends Component {
                     {rowID}
                 </Text>
                 <Text >
-                    {ask}
+                    {ask.substring(0,24)}
                 </Text>
             </View>
 
@@ -186,7 +190,7 @@ class ComposeBook extends Component {
     renderDiscussView(){
         const {bookid} = this.props;
         return (
-            <Button onPress={() => Actions.newonequestion({bookid})}>添加题目到{bookid}</Button>
+            <Text>Discuss</Text>
         )
     }
 

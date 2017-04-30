@@ -156,7 +156,9 @@ class NewOneQuestion extends Component {
     }
 
     render(){
-         const {bookid} = this.props;
+
+        var abookid=global.composeBookid;
+
         return (
             <View style={GlobleStyles.withoutTitleContainer}>
 
@@ -168,7 +170,9 @@ class NewOneQuestion extends Component {
                 <TouchableOpacity onPress={()=>this._onSelectImgPress()} >
                     <Image source={this.state.imgSource}  />
                 </TouchableOpacity>
-                <Button onPress={() => this.onPress()}>为{bookid}添加题目</Button>
+                <Text>{abookid}</Text>
+
+                <Button onPress={() => this.onPress()}>为{global.composeBookid}添加题目</Button>
             </View>
         );
     }

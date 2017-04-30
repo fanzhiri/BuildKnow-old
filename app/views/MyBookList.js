@@ -112,6 +112,9 @@ class MyBookList extends Component {
                         <Text >
                             {book.bookbrief}
                         </Text>
+                        <Text >
+                            题数:{book.q_count}  关注:{book.follow}   分享:{book.share}
+                        </Text>
                     </View>
                 </View>
             </TouchableOpacity>

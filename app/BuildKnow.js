@@ -48,6 +48,7 @@ import BuildingBook from './views/BuildingBook'
 import ComposeBook from './views/ComposeBook'
 import PersonalCenter from './views/PersonalCenter'
 import SetHeadPic from './views/SetHeadPic'
+import SetHomePagePic from './views/SetHomePagePic'
 import ShareManager from './views/ShareManager'
 import NewShareMode from './views/NewShareMode'
 import ClassCatalogue from './views/ClassCatalogue'
@@ -58,7 +59,7 @@ export default class BuildKnow extends Component {
     render() {
         return (
             <Router>
-                <Scene key="login" title="登录" component={Login} type={ActionConst.RESET} duration={0} initial={true}/>
+                <Scene key="login" title="登录" component={Login} type={ActionConst.RESET} duration={0} initial={true} rightTitle={"注册"} onRight={() => Actions.register()}/>
                 <Scene key="register" title="注册" component={Register} duration={0} />
                 <Scene key="introduce" hideNavBar component={Introduce} duration={0} />
                 <Scene key="main" tabs={true} type={ActionConst.REPLACE}>
@@ -95,9 +96,10 @@ export default class BuildKnow extends Component {
                 <Scene key="friendlist" title="友人" component={FriendList} duration={0} />
                 <Scene key="newonequestion" title="新建单个题目" component={NewOneQuestion} duration={0} />
                 <Scene key="newsomequestions" title="新建一列题目" component={NewSomeQuestions} duration={0} />
-                <Scene key="composebook" title="组建题本" component={ComposeBook} duration={0} />
+                <Scene key="composebook" title="组建题本" component={ComposeBook} duration={0} rightTitle={"添加"} onRight={() => Actions.newonequestion()}/>
                 <Scene key="personalcenter" title="个人信息" component={PersonalCenter} duration={0} />
                 <Scene key="setheadpic" title="上传头像" component={SetHeadPic} duration={0} />
+                <Scene key="sethomepagepic" title="上传主页背景" component={SetHomePagePic} duration={0} />
                 <Scene key="sharemanager" title="分享管理" component={ShareManager} duration={0} rightTitle={"添加"} onRight={() => Actions.newsharemode()}/>
                 <Scene key="newsharemode" title="新建分享方式" component={NewShareMode} duration={0} />
                 <Scene key="classcatalogue" title="分类目录" component={ClassCatalogue} duration={0} />

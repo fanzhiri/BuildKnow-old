@@ -1,5 +1,5 @@
 /**
- * Created by slako on 17/2/18.
+ * Created by slako on 17/4/30.
  */
 import React, { Component } from 'react';
 import {View, Text, StyleSheet} from "react-native";
@@ -17,19 +17,15 @@ const styles = StyleSheet.create({
 
 });
 
-class About extends Component {
+class TestResult extends Component {
     render(){
         return (
             <View style={GlobleStyles.withoutTitleContainer}>
-                <View style={styles.container}>
-                    <Text>Version 1.1</Text>
-                    <Text>CEO slakofan</Text>
-                    <Text>Phone 13246715168</Text>
-                    <Text>Email 48921093@qq.com</Text>
-                </View>
+                <Text>TestResult</Text>
+                <Button onPress={Actions.pop}>Help</Button>
             </View>
         );
     }
 }
 
-module.exports = About;
+module.exports = TestResult;

@@ -100,7 +100,7 @@ class PersonalCenter extends Component {
 
                     <View style={styles.list}>
                         <SettingItem text={"头像"} subText={"未设置"} imgUri={`${httpsBaseUrl}${global.userhead}`} onPress={() => Actions.setheadpic()}/>
-                        <SettingItem text={"主页背景"} imgUri={`${httpsBaseUrl}${global.userhead}`} onPress={() => Actions.setheadpic()}/>
+                        <SettingItem text={"主页背景"} imgUri={`${httpsBaseUrl}${global.userhead}`} onPress={() => Actions.sethomepagepic()}/>
                         <SettingItem text={"昵称"} subText={global.nickname}/>
                         <SettingItem text={"建识号"} subText={global.username}/>
                         <SettingItem text={"二维码名片"} />
