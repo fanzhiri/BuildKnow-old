@@ -53,6 +53,10 @@ const styles = StyleSheet.create({
     list:{
         marginBottom:20
     },
+    questionitem:{
+        marginTop:8,
+        marginLeft:8
+    }
 });
 
 var doGetMyBookQuestionUrl = "https://slako.applinzi.com/index.php?m=question&c=personal&a=getmybookquestion";
@@ -114,7 +118,8 @@ class ComposeBook extends Component {
             <View style={GlobleStyles.withoutTitleContainer}>
                 <View>
                     <Button onPress={() => Actions.newonequestion({bookid})}>添加题目</Button>
-                    <Button onPress={() => Actions.newonequestion({bookid})}>批量添加</Button>
+                    <Button onPress={() => Actions.newsomequestions({bookid})}>批量添加</Button>
+                    <Button onPress={() => Actions.sharecontrol({bookid})}>分享控制</Button>
                 </View>
                 <View>
                     <SegmentedControlIOS
@@ -160,12 +165,10 @@ class ComposeBook extends Component {
         var ask = (rowData.ask);
         return (
             <View>
-                <Text >
-                    {rowID}
+                <Text style={styles.questionitem}>
+                    {rowID}:{ask.substring(0,24)}
                 </Text>
-                <Text >
-                    {ask.substring(0,24)}
-                </Text>
+
             </View>
 
 

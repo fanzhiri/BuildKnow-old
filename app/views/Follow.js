@@ -171,7 +171,7 @@ class Follow extends Component {
                             {people.username}
                         </Text>
                         <Text >
-                            {people.userid}
+                            粉丝:{people.follow}  在建:{people.buildingshare}  发布:{people.releaseshare}
                         </Text>
                     </View>
                 </View>

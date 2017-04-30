@@ -94,14 +94,12 @@ class Me extends Component {
                         </View>
                     </TouchableOpacity>
                     <View style={styles.list}>
-
-                        <MeItem icon={"ios-medal"} text={"我的主页"} onPress={() => Actions.homepage({userId})} />
+                        <MeItem icon={"ios-medal"} text={"我的主页"} iconColor="#c88400" onPress={() => Actions.homepage({userId})} />
                         <MeItem icon={"md-build"} text={"我的题本"} iconColor="#FF0000"  onPress={() => Actions.mybooklist()} />
                         <MeItem icon={"md-link"} text={"分享管理"} onPress={() => Actions.sharemanager()} />
                         <MeItem icon={"md-heart"} text={"我的收藏"} subText={"10篇"} iconColor="#32cd32" />
                         <MeItem icon={"md-sync"} text={"更新"} onPress={() => Actions.mybooklist()} />
-                        <MeItem icon={"md-settings"} text={"设置"} onPress={() => Actions.setting()} />
-
+                        <MeItem icon={"md-settings"} text={"设置"} iconColor="#ea66a6" onPress={() => Actions.setting()} />
                     </View>
                 </ScrollView>
 

@@ -49,7 +49,7 @@ var NewQuestion = TcombForm.struct({
 
 var options = {};
 
-var docommitpostUrl = "https://slako.applinzi.com/index.php?m=question&c=personal&a=addquestion";
+var docommitpostUrl = "https://slako.applinzi.com/index.php?m=question&c=personal&a=addshareway";
 
 var addimguri ={uri:"https://slako.applinzi.com/statics/images/question/util/addimg.jpg", width: 100, height: 68 };
 

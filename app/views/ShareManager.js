@@ -2,10 +2,11 @@
  * Created by slako on 17/4/27.
  */
 import React, { Component } from 'react';
-import {View, Text, StyleSheet} from "react-native";
+import {View, Text, StyleSheet,ListView,} from "react-native";
 import {Actions} from "react-native-router-flux";
 import Button from "react-native-button";
 import GlobleStyles from '../styles/GlobleStyles';
+import DataStore from '../util/DataStore';
 
 const styles = StyleSheet.create({
     container: {
@@ -25,6 +26,9 @@ const styles = StyleSheet.create({
     },
 });
 
+var doGetShareWayUrl = "https://slako.applinzi.com/index.php?m=question&c=personal&a=getshareway";
+var httpsBaseUrl = "https://slako.applinzi.com/";
+
 class ShareManager extends Component {
     constructor(props) {
 
@@ -37,12 +41,39 @@ class ShareManager extends Component {
         };
         //this._onChange = this.onChange.bind(this);
         //this._peoplelist = this.peoplelist.bind(this);
-        this._renderShareWay = this.renderShareWay.bind(this);
+        this._renderShareWayItem = this.renderShareWayItem.bind(this);
         //this._doOnPress = this.doOnPress.bind(this);
 
     }
 
-    renderShareWay(way){
+    fetchShareWayData(){
+        let formData = new FormData();
+        formData.append("auth",global.auth);
+        formData.append("userid",global.userid);
+        var opts = {
+            method:"POST",
+            body:formData
+        }
+        fetch(doGetShareWayUrl,opts)
+            .then((response) => response.json())
+            .then((responseData) => {
+                if(responseData.code == 100){
+                    this.setState({
+                        share_list_data_source:responseData.data
+                    })
+                }else{
+                    this.setState({
+                        netresult:responseData.code
+                    })
+                }
+
+            })
+            .catch((error) => {
+                alert(error)
+            })
+    }
+
+    renderShareWayItem(way){
 
         return (
             <View style={styles.shareWayItem}>
@@ -59,12 +90,29 @@ class ShareManager extends Component {
     }
 
     render(){
+        if(this.state.share_list_data_source){
+            return (this.renderShareWay())
+        }else{
+            //this.fetchShareWayData();
+            return (this.renderLoading())
+        }
+    }
+
+    renderLoading(){
+        return (
+            <View style={styles.container}>
+                <Text>Loading...</Text>
+            </View>
+
+        )
+    }
+
+    renderShareWay(){
         return (
             <View style={GlobleStyles.withoutTitleContainer}>
                 <ListView
-
                     dataSource={DataStore.cloneWithRows(this.state.share_list_data_source)}
-                    renderRow={(rowData) => this._renderShareWay(rowData)}
+                    renderRow={(rowData) => this._renderShareWayItem(rowData)}
                     enableEmptySections = {true}
                 />
             </View>
