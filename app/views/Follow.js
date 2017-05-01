@@ -8,6 +8,7 @@ import {
     Text,
     StyleSheet,
     SegmentedControlIOS,
+    RefreshControl,
     ListView,Image
 } from "react-native";
 import {Actions} from "react-native-router-flux";
@@ -55,6 +56,9 @@ const styles = StyleSheet.create({
 
 var peoplelistUrl = "https://slako.applinzi.com/index.php?m=question&c=index&a=peoplelist";
 
+var getFollowUrl = "https://slako.applinzi.com/index.php?m=question&c=personal&a=getfollowperson";
+
+
 var httpsBaseUrl = "https://slako.applinzi.com/";
 
 class Follow extends Component {
@@ -68,7 +72,7 @@ class Follow extends Component {
             netresult:'no',
             people_list_data_source: null,
             selectedIndex:0,
-
+            gorefreshing:false,
         };
         this._onChange = this.onChange.bind(this);
         this._peoplelist = this.peoplelist.bind(this);
@@ -78,19 +82,23 @@ class Follow extends Component {
     }
 
     peoplelist(){
+
         let formData = new FormData();
-        formData.append("api","true");
+        formData.append("auth",global.auth);
+        formData.append("userid",global.userid);
         var opts = {
             method:"POST",
             body:formData
         }
-        fetch(peoplelistUrl,opts)
+        fetch(getFollowUrl,opts)
             .then((response) => response.json())
             .then((responseData) => {
                 if(responseData.code == 100){
                     this.setState({
-                        people_list_data_source:responseData.data
+                        people_list_data_source:responseData.data,
+                        gorefreshing:false,
                     })
+
                 }else{
                     this.setState({
                         netresult:responseData.code
@@ -178,10 +186,23 @@ class Follow extends Component {
             </TouchableOpacity>
         )
     }
-
+/*
+    refreshControl={
+<RefreshControl
+refreshing={this.state.gorefreshing}
+onRefresh={this._peoplelist()}
+/>
+}
+*/
     renderIntroduceView(){
         return (
             <ListView
+                refreshControl={
+                    <RefreshControl
+                        refreshing={this.state.gorefreshing}
+                        onRefresh={() => this._peoplelist()}
+                    />
+                }
                 style={styles.list}
                 dataSource={DataStore.cloneWithRows(this.state.people_list_data_source)}
                 renderRow={(rowData) => this._renderPeople(rowData)}

@@ -3,7 +3,7 @@
  */
 
 import React, { Component ,PropTypes} from 'react';
-import {View, Text, StyleSheet, Image, SegmentedControlIOS, Dimensions, ListView} from "react-native";
+import {View, Text, StyleSheet, Image, SegmentedControlIOS, Dimensions, TouchableOpacity,ListView} from "react-native";
 import {Actions} from "react-native-router-flux";
 import Button from "react-native-button";
 import ParallaxScrollView from 'react-native-parallax-scroll-view';
@@ -46,9 +46,20 @@ const styles = StyleSheet.create({
         color: 'white',
         fontSize: 20,
     },
+    bottomButtonViewContainer:{
+        flexDirection:'row',
+        justifyContent: 'space-around',
+        height: 32,
+        alignItems: 'center',
+    },
+    bottomButtonText: {
+        fontSize: 16,
+    },
 });
 
 var homepagetUrl = "https://slako.applinzi.com/index.php?m=question&c=index&a=personalhp";
+
+var followUrl = "https://slako.applinzi.com/index.php?m=question&c=personal&a=addfollow";
 
 var doGetHomePageBaseUrl = "https://slako.applinzi.com/api/1/homepage/";
 
@@ -132,9 +143,44 @@ class HomePage extends Component {
                 >
                     {this.renderSegmentedView()}
                 </ParallaxScrollView>
+                <View style={styles.bottomButtonViewContainer}>
+                    <TouchableOpacity  onPress={()=> this.dofollow()} >
+                        <Text style={styles.bottomButtonText} >关注</Text>
+                    </TouchableOpacity>
+                    <Text style={styles.bottomButtonText} >私信</Text>
+                    <Text style={styles.bottomButtonText} >备注</Text>
+                </View>
             </View>
 
         );
+    }
+
+    dofollow(){
+        const {userId} = this.props;
+
+        let formData = new FormData();
+        formData.append("auth",global.auth);
+        formData.append("userid",global.userid);
+        formData.append("followid",userId);
+        var opts = {
+            method:"POST",
+            body:formData
+        }
+        fetch(followUrl,opts)
+            .then((response) => response.json())
+            .then((responseData) => {
+                if(responseData.code == 100){
+                    alert("ok")
+                }else{
+                    this.setState({
+                        netresult:responseData.code
+                    })
+                }
+
+            })
+            .catch((error) => {
+                alert(error)
+            })
     }
 
     renderSegmentedView() {

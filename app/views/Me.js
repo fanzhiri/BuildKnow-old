@@ -89,6 +89,7 @@ class Me extends Component {
                             <Image style={styles.headimage} resizeMode="cover" source={{uri:`${httpsBaseUrl}${global.userhead}`}}/>
                             <View style={styles.bottomTextContainer}>
                                 <Text style={styles.bottomText}>昵称：{global.nickname}</Text>
+                                <Text style={styles.bottomText}>学术等级：10</Text>
                                 <Text style={styles.bottomText}>个人中心</Text>
                             </View>
                         </View>
@@ -98,7 +99,10 @@ class Me extends Component {
                         <MeItem icon={"md-build"} text={"我的题本"} iconColor="#FF0000"  onPress={() => Actions.mybooklist()} />
                         <MeItem icon={"md-link"} text={"分享管理"} onPress={() => Actions.sharemanager()} />
                         <MeItem icon={"md-heart"} text={"我的收藏"} subText={"10篇"} iconColor="#32cd32" />
-                        <MeItem icon={"md-sync"} text={"更新"} onPress={() => Actions.mybooklist()} />
+                        <MeItem icon={"md-sync"} text={"更新"}  subText={"4本"} onPress={() => Actions.mybooklist()} />
+                        <MeItem icon={"md-mail"} text={"消息"}  subText={"10条"} iconColor="#1e90ff" onPress={() => Actions.mybooklist()} />
+                        <MeItem icon={"md-podium"} text={"数据"} iconColor="#7fff00" onPress={() => Actions.mybooklist()} />
+                        <MeItem icon={"md-time"} text={"日程"} iconColor="#912CEE" onPress={() => Actions.mybooklist()} />
                         <MeItem icon={"md-settings"} text={"设置"} iconColor="#ea66a6" onPress={() => Actions.setting()} />
                     </View>
                 </ScrollView>

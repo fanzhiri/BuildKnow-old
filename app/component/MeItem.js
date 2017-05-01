@@ -26,11 +26,16 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         flexDirection: 'row',
         alignItems: 'center',
-        paddingLeft: 25,
+        paddingLeft: 16,
         paddingRight: 25,
         borderBottomColor: '#c4c4c4',
         borderBottomWidth: 1
     },
+    IconItem:{
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: 40,
+    }
 });
 
 class MeItem extends Component{
@@ -48,7 +53,7 @@ class MeItem extends Component{
                 <TouchableNativeFeedback onPress={onPress}>
                     <View style={styles.listItem}>
                         {/*<Icon name={icon} size={22} color={iconColor}/>*/}
-                        <Text style={{color: 'black', fontSize: 14, marginLeft: 20}}>{text}</Text>
+                        <Text style={{color: 'black', fontSize: 14, marginLeft: 12}}>{text}</Text>
                         <View style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-end'}}>
                             <Text style={{color: "#ccc"}}>{subText}</Text>
                         </View>
@@ -59,7 +64,10 @@ class MeItem extends Component{
             return(
                 <TouchableOpacity onPress={onPress} activeOpacity={0.8}>
                     <View style={styles.listItem}>
-                        <Icon name={icon} size={22} color={iconColor}/>
+                        <View style={styles.IconItem}>
+                            <Icon name={icon} size={22} color={iconColor}/>
+                        </View>
+
                         <Text style={{color: 'black', fontSize: 14, marginLeft: 20}}>{text}</Text>
                         <View style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-end'}}>
                             <Text style={{color: "#ccc"}}>{subText}</Text>
