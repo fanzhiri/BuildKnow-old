@@ -156,7 +156,7 @@ class BuildingBook extends Component {
                 </View>
                 <View>
                     <SegmentedControlIOS
-                        values={['介绍','评论','历史']}
+                        values={['介绍','评论','计划','历史']}
                         selectedIndex={this.state.selectedIndex}
                         style={styles.segmented}
                         onChange={this._onChange}
@@ -193,6 +193,10 @@ class BuildingBook extends Component {
             return (
                 this.renderHistoryView()
             )
+        } else if (this.state.selectedIndex === 3) {
+            return (
+                this.renderHistoryView()
+            )
         }
     }
 
@@ -203,6 +207,7 @@ class BuildingBook extends Component {
                 <Text style={styles.textmargin}>题本简介 :{this.state.bookdata.bookbrief}</Text>
                 <Text style={styles.textmargin}>题本详情 :{this.state.bookdata.bookdescription}</Text>
                 <Text style={styles.textmargin}>题目编号 :{this.state.bookdata.qids}</Text>
+                <Text style={styles.textmargin}>关注人数 :{this.state.bookdata.follow}</Text>
             </View>
 
         )

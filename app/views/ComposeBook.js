@@ -53,9 +53,34 @@ const styles = StyleSheet.create({
     list:{
         marginBottom:20
     },
+    questionitemcontainer:{
+
+        padding:5,
+        backgroundColor:'white',
+        borderBottomWidth:1,
+        borderBottomColor:'#ab82ff',
+    },
     questionitem:{
         marginTop:8,
-        marginLeft:8
+        marginLeft:8,
+        fontSize: 16,
+    },
+    questioneditcontainer:{
+        justifyContent: 'space-around',
+        alignItems: 'center',
+        flexDirection:'row',
+        borderTopWidth:0.5,
+        borderLeftWidth:0.5,
+        borderRightWidth:0.5,
+        borderBottomColor:'#9acd32',
+        marginTop:4,
+    },
+    questionedittext:{
+        fontSize: 14,
+        borderLeftWidth:0.5,
+        borderRightWidth:0.5,
+        borderBottomColor:'#9acd32',
+        color:'#CD2626'
     }
 });
 
@@ -68,6 +93,7 @@ class ComposeBook extends Component {
         this.state = {
             bookquestion_data_source:null,
             selectedIndex:0,
+            selectedQuestion:-1,
         };
         this._onChange = this._onChange.bind(this);
         this._handlePress = this._handlePress.bind(this);
@@ -116,6 +142,7 @@ class ComposeBook extends Component {
         global.composeBookid=bookid;
         return (
             <View style={GlobleStyles.withoutTitleContainer}>
+                <Text>{this.state.selectedQuestion}</Text>
                 <View>
                     <Button onPress={() => Actions.newonequestion({bookid})}>添加题目</Button>
                     <Button onPress={() => Actions.newsomequestions({bookid})}>批量添加</Button>
@@ -160,17 +187,36 @@ class ComposeBook extends Component {
         }
 
     }
+    selectquestion(index){
+        this.setState({
+            selectedQuestion:index
+        });
+    }
+
+    renderEditView(index){
+        if(index == this.state.selectedQuestion){
+            return (
+                <View style={styles.questioneditcontainer}>
+                    <Text style={styles.questionedittext} >查看</Text>
+                    <Text style={styles.questionedittext} >编辑</Text>
+                    <Text style={styles.questionedittext} >删除</Text>
+                </View>
+
+            )
+        }
+    }
 
     renderQuestionItem(rowData,sectionID, rowID){
         var ask = (rowData.ask);
         return (
-            <View>
-                <Text style={styles.questionitem}>
-                    {rowID}:{ask.substring(0,24)}
-                </Text>
-
-            </View>
-
+            <TouchableOpacity onPress={() => this.selectquestion(rowID)}>
+                <View  style={styles.questionitemcontainer}>
+                    <Text style={styles.questionitem}>
+                        {rowID}:{ask.substring(0,24)}
+                    </Text>
+                    {this.renderEditView(rowID)}
+                </View>
+            </TouchableOpacity>
 
         )
     }
@@ -185,6 +231,7 @@ class ComposeBook extends Component {
                     renderRow={(rowData, sectionID, rowID) => this._renderQuestionItem(rowData, sectionID, rowID)}
                     enableEmptySections = {true}
                 />
+
 
 
         )

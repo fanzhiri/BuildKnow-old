@@ -55,6 +55,14 @@ const styles = StyleSheet.create({
     bottomButtonText: {
         fontSize: 16,
     },
+    topViewContainer:{
+        height: 200,
+
+    },
+    topImgView:{
+        position:'absolute',
+
+    },
 });
 
 var homepagetUrl = "https://slako.applinzi.com/index.php?m=question&c=index&a=personalhp";
@@ -118,7 +126,14 @@ class HomePage extends Component {
                     parallaxHeaderHeight={240}
                     renderForeground={() => (
                         <View>
-                            <Image source={{uri:'https://slako.applinzi.com/statics/images/question/personalhomepage/1.jpg', width: window.width, height: 200 }} />
+                            <View style={styles.topViewContainer}>
+                                <View >
+                                    <Image style={styles.topImgView} source={{uri:'https://slako.applinzi.com/statics/images/question/personalhomepage/1.jpg', width: window.width, height: 200 }} />
+                                    <Image style={styles.topImgView} source={{uri:'https://slako.applinzi.com/statics/images/question/head/boy/4.jpg', width: 80, height: 80 }} />
+                                </View>
+                            </View>
+
+
                             <SegmentedControlIOS
                                 values={['内测','发布','关于']}
                                 selectedIndex={this.state.selectedIndex}
