@@ -54,6 +54,9 @@ import NewShareMode from './views/NewShareMode'
 import ClassCatalogue from './views/ClassCatalogue'
 import ShareControl from './views/ShareControl'
 import MessageList from './views/MessageList'
+import NotificationList from './views/NotificationList'
+import Schedule from './views/Schedule'
+import FriendVerify from './views/FriendVerify'
 
 
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -112,6 +115,9 @@ export default class BuildKnow extends Component {
                 <Scene key="classcatalogue" title="分类目录" component={ClassCatalogue} duration={0} />
                 <Scene key="sharecontrol" title="分享控制" component={ShareControl} duration={0} />
                 <Scene key="messagelist" title="消息列表" component={MessageList} duration={0} />
+                <Scene key="notificationlist" title="通知列表" component={NotificationList} duration={0} />
+                <Scene key="schedule" title="日程" component={Schedule} duration={0} />
+                <Scene key="friendverify" title="朋友验证" component={FriendVerify} duration={0} />
             </Router>
         );
     }

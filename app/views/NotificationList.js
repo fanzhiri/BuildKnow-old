@@ -1,5 +1,5 @@
 /**
- * Created by slako on 17/2/18.
+ * Created by slako on 17/5/2.
  */
 import React, { Component } from 'react';
 import {
@@ -8,17 +8,18 @@ import {
     Text,
     StyleSheet,
     SegmentedControlIOS,
-    RefreshControl,
     ListView,Image
 } from "react-native";
 import {Actions} from "react-native-router-flux";
 import Button from "react-native-button";
 import GlobleStyles from '../styles/GlobleStyles';
+
+
 import DataStore from '../util/DataStore';
 
 const styles = StyleSheet.create({
     container: {
-
+        flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: '#F5FCFF',
@@ -52,17 +53,15 @@ const styles = StyleSheet.create({
     list:{
         marginBottom:48
     }
+
 });
+
 
 var peoplelistUrl = "https://slako.applinzi.com/index.php?m=question&c=index&a=peoplelist";
 
-var getFollowUrl = "https://slako.applinzi.com/index.php?m=question&c=personal&a=getfollowperson";
-
-
 var httpsBaseUrl = "https://slako.applinzi.com/";
 
-class Follow extends Component {
-
+class NotificationList extends Component {
 
     constructor(props) {
 
@@ -72,7 +71,7 @@ class Follow extends Component {
             netresult:'no',
             people_list_data_source: null,
             selectedIndex:0,
-            gorefreshing:false,
+
         };
         this._onChange = this.onChange.bind(this);
         this._peoplelist = this.peoplelist.bind(this);
@@ -82,23 +81,19 @@ class Follow extends Component {
     }
 
     peoplelist(){
-
         let formData = new FormData();
-        formData.append("auth",global.auth);
-        formData.append("userid",global.userid);
+        formData.append("api","true");
         var opts = {
             method:"POST",
             body:formData
         }
-        fetch(getFollowUrl,opts)
+        fetch(peoplelistUrl,opts)
             .then((response) => response.json())
             .then((responseData) => {
                 if(responseData.code == 100){
                     this.setState({
-                        people_list_data_source:responseData.data,
-                        gorefreshing:false,
+                        people_list_data_source:responseData.data
                     })
-
                 }else{
                     this.setState({
                         netresult:responseData.code
@@ -122,7 +117,7 @@ class Follow extends Component {
             <View style={GlobleStyles.withoutTitleContainer}>
                 <View>
                     <SegmentedControlIOS
-                        values={['好友','个人','组织','公司']}
+                        values={['广场','大咖','需求']}
                         selectedIndex={this.state.selectedIndex}
                         style={styles.segmented}
                         onChange={this._onChange}
@@ -132,8 +127,9 @@ class Follow extends Component {
             </View>
         );
     }
+
     renderSegmentedView() {
-        if (this.state.selectedIndex === 1) {
+        if (this.state.selectedIndex === 0) {
 
             if(this.state.people_list_data_source){
 
@@ -143,15 +139,11 @@ class Follow extends Component {
                 return (this.renderLoading())
             }
 
-        } else if (this.state.selectedIndex === 0) {
+        } else if (this.state.selectedIndex === 1) {
             return (
                 this.renderLoading()
             )
         } else if (this.state.selectedIndex === 2) {
-            return (
-                this.renderLoading()
-            )
-        } else if (this.state.selectedIndex === 3) {
             return (
                 this.renderLoading()
             )
@@ -190,40 +182,17 @@ class Follow extends Component {
             </TouchableOpacity>
         )
     }
-/*
-    refreshControl={
-<RefreshControl
-refreshing={this.state.gorefreshing}
-onRefresh={this._peoplelist()}
-/>
-}
-*/
-    rankList(){
-
-    }
 
     renderIntroduceView(){
         return (
-            <View>
-                <Button onPress={this.rankList()}>排名方法</Button>
-                <ListView
-                    refreshControl={
-                        <RefreshControl
-                            refreshing={this.state.gorefreshing}
-                            onRefresh={() => this._peoplelist()}
-                        />
-                    }
-                    style={styles.list}
-                    dataSource={DataStore.cloneWithRows(this.state.people_list_data_source)}
-                    renderRow={(rowData) => this._renderPeople(rowData)}
-                    enableEmptySections = {true}
-                />
-            </View>
-
+            <ListView
+                style={styles.list}
+                dataSource={DataStore.cloneWithRows(this.state.people_list_data_source)}
+                renderRow={(rowData) => this._renderPeople(rowData)}
+                enableEmptySections = {true}
+            />
         )
     }
-
-
 }
 
-module.exports = Follow;
+module.exports = NotificationList;

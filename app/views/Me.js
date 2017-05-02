@@ -55,6 +55,10 @@ const styles = StyleSheet.create({
     bottomText: {
         fontSize: 16,
     },
+    settingItemList:{
+        marginBottom:48
+    }
+
 });
 
 class Me extends Component {
@@ -83,7 +87,7 @@ class Me extends Component {
         return (
             <View style={GlobleStyles.withoutTitleContainer}>
 
-                <ScrollView>
+                <ScrollView style={styles.settingItemList}>
                     <TouchableOpacity  onPress={()=>(Actions.personalcenter())} >
                         <View style={styles.personalinfo}>
                             <Image style={styles.headimage} resizeMode="cover" source={{uri:`${httpsBaseUrl}${global.userhead}`}}/>
@@ -103,6 +107,7 @@ class Me extends Component {
                         <MeItem icon={"md-mail"} text={"消息"}  subText={"10条"} iconColor="#1e90ff" onPress={() => Actions.mybooklist()} />
                         <MeItem icon={"md-podium"} text={"数据"} iconColor="#7fff00" onPress={() => Actions.mybooklist()} />
                         <MeItem icon={"md-time"} text={"日程"} iconColor="#912CEE" onPress={() => Actions.mybooklist()} />
+                        <MeItem icon={"md-notifications"} text={"通知"} iconColor="#1C86EE" onPress={() => Actions.notificationlist()} />
                         <MeItem icon={"md-settings"} text={"设置"} iconColor="#ea66a6" onPress={() => Actions.setting()} />
                     </View>
                 </ScrollView>
