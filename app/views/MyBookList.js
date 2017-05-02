@@ -113,7 +113,7 @@ class MyBookList extends Component {
                             {book.bookbrief}
                         </Text>
                         <Text >
-                            题数:{book.q_count}  关注:{book.follow}   分享:{book.share}
+                            题数:{book.q_count}  关注:{book.follow}  分享:{book.share}  评论:{10}
                         </Text>
                     </View>
                 </View>

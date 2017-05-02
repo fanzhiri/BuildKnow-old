@@ -22,7 +22,7 @@ import BookDiscuss from './BookDiscuss'
 import BookHistory from './BookHistory'
 import DataStore from '../util/DataStore';
 import GlobleStyles from '../styles/GlobleStyles';
-
+import SettingItem from '../component/SettingItem'
 
 const styles = StyleSheet.create({
     container: {
@@ -51,7 +51,7 @@ const styles = StyleSheet.create({
         alignSelf:'center'
     },
     list:{
-        marginBottom:20
+        marginTop:20
     },
     questionitemcontainer:{
 
@@ -81,7 +81,28 @@ const styles = StyleSheet.create({
         borderRightWidth:0.5,
         borderBottomColor:'#9acd32',
         color:'#CD2626'
-    }
+    },
+    sharecontrolcontainer:{
+        height:32,
+        borderTopColor:'#9acd32',
+        borderBottomColor:'#9acd32',
+        borderTopWidth:0.5,
+        borderBottomWidth:0.5,
+        flexDirection:'row',
+        alignItems:'center',
+        marginLeft:10,
+    },
+    sharecontrolcontainer2:{
+        flex: 1,
+        height:32,
+        justifyContent: 'flex-end',
+        alignItems:'center',
+        flexDirection:'row',
+        marginRight:10,
+    },
+    sharecontroltext:{
+        fontSize: 14,
+    },
 });
 
 var doGetMyBookQuestionUrl = "https://slako.applinzi.com/index.php?m=question&c=personal&a=getmybookquestion";
@@ -137,16 +158,31 @@ class ComposeBook extends Component {
 
     }
 
+    deletebook(){
+
+    }
+
     render(){
         const {bookid} = this.props;
         global.composeBookid=bookid;
         return (
             <View style={GlobleStyles.withoutTitleContainer}>
-                <Text>{this.state.selectedQuestion}</Text>
+
                 <View>
                     <Button onPress={() => Actions.newonequestion({bookid})}>添加题目</Button>
                     <Button onPress={() => Actions.newsomequestions({bookid})}>批量添加</Button>
-                    <Button onPress={() => Actions.sharecontrol({bookid})}>分享控制</Button>
+                    <Button onPress={() => this.deletebook({bookid})}>删除题本</Button>
+                    <View  style={styles.sharecontrolcontainer}>
+                        <Text style={styles.sharecontroltext} >分享方式</Text>
+                        <View style={styles.sharecontrolcontainer2}>
+                            {/*<Button onPress={() => Actions.sharecontrol({bookid})}>私密</Button>*/}
+                            <TouchableOpacity onPress={() => Actions.sharecontrol({bookid})}>
+                                <Text>私密</Text>
+                            </TouchableOpacity>
+                        </View>
+
+                    </View>
+
                 </View>
                 <View>
                     <SegmentedControlIOS
@@ -212,7 +248,7 @@ class ComposeBook extends Component {
             <TouchableOpacity onPress={() => this.selectquestion(rowID)}>
                 <View  style={styles.questionitemcontainer}>
                     <Text style={styles.questionitem}>
-                        {rowID}:{ask.substring(0,24)}
+                        {rowID} : {ask.substring(0,20)}
                     </Text>
                     {this.renderEditView(rowID)}
                 </View>

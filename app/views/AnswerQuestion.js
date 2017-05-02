@@ -122,6 +122,7 @@ class AnswerQuestion extends Component {
 
                 <Text style={styles.question}>{this.state.questiondata.ask}</Text>
                 <RadioForm
+
                     radio_props={this.state.radio}
                     initial={-1}
                     onPress={(value) => {this.setState({value:value})}}

@@ -60,8 +60,9 @@ const styles = StyleSheet.create({
 
     },
     topImgView:{
-        position:'absolute',
-
+        //position:'absolute',
+        justifyContent: 'center',
+        alignItems: 'center',
     },
 });
 
@@ -127,10 +128,12 @@ class HomePage extends Component {
                     renderForeground={() => (
                         <View>
                             <View style={styles.topViewContainer}>
-                                <View >
-                                    <Image style={styles.topImgView} source={{uri:'https://slako.applinzi.com/statics/images/question/personalhomepage/1.jpg', width: window.width, height: 200 }} />
-                                    <Image style={styles.topImgView} source={{uri:'https://slako.applinzi.com/statics/images/question/head/boy/4.jpg', width: 80, height: 80 }} />
-                                </View>
+                                <Image style={styles.topImgView} source={{uri:'https://slako.applinzi.com/statics/images/question/personalhomepage/1.jpg', width: window.width, height: 200 }} >
+                                    <Image source={{uri:'https://slako.applinzi.com/statics/images/question/head/boy/4.jpg', width: 80, height: 80 }} />
+                                    <Text>昵称:abc</Text>
+                                    <Text>题本数:5</Text>
+                                    <Text>粉丝:20  题本被收藏:60</Text>
+                                </Image>
                             </View>
 
 
@@ -163,6 +166,7 @@ class HomePage extends Component {
                         <Text style={styles.bottomButtonText} >关注</Text>
                     </TouchableOpacity>
                     <Text style={styles.bottomButtonText} >私信</Text>
+                    <Text style={styles.bottomButtonText} >交友</Text>
                     <Text style={styles.bottomButtonText} >备注</Text>
                 </View>
             </View>

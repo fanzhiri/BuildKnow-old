@@ -52,6 +52,9 @@ import SetHomePagePic from './views/SetHomePagePic'
 import ShareManager from './views/ShareManager'
 import NewShareMode from './views/NewShareMode'
 import ClassCatalogue from './views/ClassCatalogue'
+import ShareControl from './views/ShareControl'
+import MessageList from './views/MessageList'
+
 
 import Icon from 'react-native-vector-icons/Ionicons';
 
@@ -59,7 +62,11 @@ export default class BuildKnow extends Component {
     render() {
         return (
             <Router>
-                <Scene key="login" title="登录" component={Login} type={ActionConst.RESET} duration={0} initial={true} rightTitle={"注册"} onRight={() => Actions.register()}/>
+                <Scene key="login" title="登录" component={Login}
+                       type={ActionConst.RESET} duration={0} initial={true}
+                       leftTitle={"注册"} onLeft={() => Actions.register()}
+                       rightTitle={"找回密码"} onRight={() => Actions.forgetpasswd()}
+                />
                 <Scene key="register" title="注册" component={Register} duration={0} />
                 <Scene key="introduce" hideNavBar component={Introduce} duration={0} />
                 <Scene key="main" tabs={true} type={ActionConst.REPLACE}>
@@ -103,6 +110,8 @@ export default class BuildKnow extends Component {
                 <Scene key="sharemanager" title="分享管理" component={ShareManager} duration={0} rightTitle={"添加"} onRight={() => Actions.newsharemode()}/>
                 <Scene key="newsharemode" title="新建分享方式" component={NewShareMode} duration={0} />
                 <Scene key="classcatalogue" title="分类目录" component={ClassCatalogue} duration={0} />
+                <Scene key="sharecontrol" title="分享控制" component={ShareControl} duration={0} />
+                <Scene key="messagelist" title="消息列表" component={MessageList} duration={0} />
             </Router>
         );
     }
