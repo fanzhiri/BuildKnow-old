@@ -65,6 +65,10 @@ const styles = StyleSheet.create({
 var getnotificationlistUrl = "https://slako.applinzi.com/index.php?m=question&c=personal&a=getnotificationlist";
 
 var getiaskfriendlistUrl = "https://slako.applinzi.com/index.php?m=question&c=personal&a=getiaskfriendlist";
+//接受
+var acceptfriendUrl = "https://slako.applinzi.com/index.php?m=question&c=personal&a=acceptfriend";
+//拒绝
+var rejectfriendUrl = "https://slako.applinzi.com/index.php?m=question&c=personal&a=rejectfriend";
 
 var httpsBaseUrl = "https://slako.applinzi.com/";
 
@@ -143,6 +147,62 @@ class NotificationList extends Component {
             })
     }
 
+    fetchacceptfriend(askmsgid){
+        let formData = new FormData();
+
+        formData.append("auth",global.auth);
+        formData.append("userid",global.userid);
+        formData.append("askmsgid",askmsgid);
+        var opts = {
+            method:"POST",
+            body:formData
+        }
+        fetch(acceptfriendUrl,opts)
+            .then((response) => response.json())
+            .then((responseData) => {
+                if(responseData.code == 100){
+                    alert("accept ok");
+
+                }else{
+                    this.setState({
+                        netresult:responseData.code
+                    })
+                }
+
+            })
+            .catch((error) => {
+                alert(error)
+            })
+    }
+
+    fetchrejectfriend(askmsgid){
+        let formData = new FormData();
+
+        formData.append("auth",global.auth);
+        formData.append("userid",global.userid);
+        formData.append("askmsgid",askmsgid);
+        var opts = {
+            method:"POST",
+            body:formData
+        }
+        fetch(rejectfriendUrl,opts)
+            .then((response) => response.json())
+            .then((responseData) => {
+                if(responseData.code == 100){
+                    alert("reject ok");
+
+                }else{
+                    this.setState({
+                        netresult:responseData.code
+                    })
+                }
+
+            })
+            .catch((error) => {
+                alert(error)
+            })
+    }
+
     onChange(event) {
         this.setState({
             selectedIndex: event.nativeEvent.selectedSegmentIndex,
@@ -206,16 +266,10 @@ class NotificationList extends Component {
 
     }
 
-    acceptfriend(userid){
-        alert("acceptfriend");
-    }
-
-    rejectfriend(userid){
-        alert("rejectfriend");
-    }
 
     renderAskFriend(people){
         var userId = (people.userid);
+        var askId = (people.askid);
         return (
 
             <TouchableOpacity onPress={() => this.wearefriend({userId})}>
@@ -223,14 +277,14 @@ class NotificationList extends Component {
                     <Image source={{uri:`${httpsBaseUrl}${people.head}`}} style={styles.leftImgStyle}/>
 
                     <View style={styles.leftbutton}>
-                        <TouchableOpacity onPress={() => this.acceptfriend({userId})}>
+                        <TouchableOpacity onPress={() => this.fetchacceptfriend(askId)}>
                             <Text >
-                                接受
+                                接受{askId}
                             </Text>
                         </TouchableOpacity>
-                        <TouchableOpacity onPress={() => this.rejectfriend({userId})}>
+                        <TouchableOpacity onPress={() => this.fetchrejectfriend(askId)}>
                             <Text >
-                                拒绝
+                                拒绝{askId}
                             </Text>
                         </TouchableOpacity>
                     </View>
