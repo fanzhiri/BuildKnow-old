@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
 });
 
 
-var peoplelistUrl = "https://slako.applinzi.com/index.php?m=question&c=index&a=peoplelist";
+var getnotificationlistUrl = "https://slako.applinzi.com/index.php?m=question&c=personal&a=getnotificationlist";
 
 var httpsBaseUrl = "https://slako.applinzi.com/";
 
@@ -69,31 +69,31 @@ class NotificationList extends Component {
 
         this.state = {
             netresult:'no',
-            people_list_data_source: null,
+            notifi_list_data_source: null,
             selectedIndex:0,
 
         };
         this._onChange = this.onChange.bind(this);
-        this._peoplelist = this.peoplelist.bind(this);
-        this._renderPeople = this.renderPeople.bind(this);
-        this._doOnPress = this.doOnPress.bind(this);
 
     }
 
-    peoplelist(){
+    fetchnotificationlist(){
         let formData = new FormData();
-        formData.append("api","true");
+
+        formData.append("auth",global.auth);
+        formData.append("userid",global.userid);
         var opts = {
             method:"POST",
             body:formData
         }
-        fetch(peoplelistUrl,opts)
+        fetch(getnotificationlistUrl,opts)
             .then((response) => response.json())
             .then((responseData) => {
                 if(responseData.code == 100){
                     this.setState({
-                        people_list_data_source:responseData.data
+                        notifi_list_data_source:responseData.data
                     })
+
                 }else{
                     this.setState({
                         netresult:responseData.code
@@ -117,7 +117,7 @@ class NotificationList extends Component {
             <View style={GlobleStyles.withoutTitleContainer}>
                 <View>
                     <SegmentedControlIOS
-                        values={['广场','大咖','需求']}
+                        values={['交友','系统','申请']}
                         selectedIndex={this.state.selectedIndex}
                         style={styles.segmented}
                         onChange={this._onChange}
@@ -131,11 +131,11 @@ class NotificationList extends Component {
     renderSegmentedView() {
         if (this.state.selectedIndex === 0) {
 
-            if(this.state.people_list_data_source){
+            if(this.state.notifi_list_data_source){
 
                 return (this.renderIntroduceView())
             }else{
-                this._peoplelist();
+                this.fetchnotificationlist();
                 return (this.renderLoading())
             }
 
@@ -159,15 +159,17 @@ class NotificationList extends Component {
         )
     }
 
-    doOnPress(userid){
-        Actions.homepage({userid});
+
+
+    wearefriend(userid){
+
     }
 
-    renderPeople(people){
+    renderAskFriend(people){
         var userId = (people.userid);
         return (
 
-            <TouchableOpacity onPress={() => Actions.homepage({userId})}>
+            <TouchableOpacity onPress={() => this.wearefriend({userId})}>
                 <View style={styles.peopleItem}>
                     <Image source={{uri:`${httpsBaseUrl}${people.head}`}} style={styles.leftImgStyle}/>
                     <View>
@@ -175,7 +177,7 @@ class NotificationList extends Component {
                             {people.username}
                         </Text>
                         <Text >
-                            粉丝:{people.follow}  在建:{people.buildingshare}  发布:{people.releaseshare}
+                            请求:{people.content}
                         </Text>
                     </View>
                 </View>
@@ -187,8 +189,8 @@ class NotificationList extends Component {
         return (
             <ListView
                 style={styles.list}
-                dataSource={DataStore.cloneWithRows(this.state.people_list_data_source)}
-                renderRow={(rowData) => this._renderPeople(rowData)}
+                dataSource={DataStore.cloneWithRows(this.state.notifi_list_data_source)}
+                renderRow={(rowData) => this.renderAskFriend(rowData)}
                 enableEmptySections = {true}
             />
         )

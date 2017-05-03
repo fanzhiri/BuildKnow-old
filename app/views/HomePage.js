@@ -118,7 +118,7 @@ class HomePage extends Component {
     }
 
     render(){
-
+        const {userId} = this.props;
         return (
             <View style={GlobleStyles.withoutTitleContainer}>
                 <ParallaxScrollView
@@ -166,13 +166,17 @@ class HomePage extends Component {
                         <Text style={styles.bottomButtonText} >关注</Text>
                     </TouchableOpacity>
                     <Text style={styles.bottomButtonText} >私信</Text>
-                    <Text style={styles.bottomButtonText} >交友</Text>
+                    <TouchableOpacity  onPress={()=> Actions.friendverify({userId})} >
+                        <Text style={styles.bottomButtonText} >交友</Text>
+                    </TouchableOpacity>
                     <Text style={styles.bottomButtonText} >备注</Text>
                 </View>
             </View>
 
         );
     }
+
+
 
     dofollow(){
         const {userId} = this.props;
