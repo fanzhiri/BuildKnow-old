@@ -52,12 +52,19 @@ const styles = StyleSheet.create({
     },
     list:{
         marginBottom:48
+    },
+    leftbutton:{
+        justifyContent:'space-around',
+        marginRight:10,
+        alignItems: 'center',
     }
 
 });
 
 
 var getnotificationlistUrl = "https://slako.applinzi.com/index.php?m=question&c=personal&a=getnotificationlist";
+
+var getiaskfriendlistUrl = "https://slako.applinzi.com/index.php?m=question&c=personal&a=getiaskfriendlist";
 
 var httpsBaseUrl = "https://slako.applinzi.com/";
 
@@ -70,6 +77,7 @@ class NotificationList extends Component {
         this.state = {
             netresult:'no',
             notifi_list_data_source: null,
+            iask_list_data_source: null,
             selectedIndex:0,
 
         };
@@ -92,6 +100,35 @@ class NotificationList extends Component {
                 if(responseData.code == 100){
                     this.setState({
                         notifi_list_data_source:responseData.data
+                    })
+
+                }else{
+                    this.setState({
+                        netresult:responseData.code
+                    })
+                }
+
+            })
+            .catch((error) => {
+                alert(error)
+            })
+    }
+
+    fetchiaskfriendlist(){
+        let formData = new FormData();
+
+        formData.append("auth",global.auth);
+        formData.append("userid",global.userid);
+        var opts = {
+            method:"POST",
+            body:formData
+        }
+        fetch(getiaskfriendlistUrl,opts)
+            .then((response) => response.json())
+            .then((responseData) => {
+                if(responseData.code == 100){
+                    this.setState({
+                        iask_list_data_source:responseData.data
                     })
 
                 }else{
@@ -144,9 +181,13 @@ class NotificationList extends Component {
                 this.renderLoading()
             )
         } else if (this.state.selectedIndex === 2) {
-            return (
-                this.renderLoading()
-            )
+
+            if(this.state.iask_list_data_source){
+                return (this.renderIAskView())
+            }else{
+                this.fetchiaskfriendlist();
+                return (this.renderLoading())
+            }
         }
     }
 
@@ -165,6 +206,14 @@ class NotificationList extends Component {
 
     }
 
+    acceptfriend(userid){
+        alert("acceptfriend");
+    }
+
+    rejectfriend(userid){
+        alert("rejectfriend");
+    }
+
     renderAskFriend(people){
         var userId = (people.userid);
         return (
@@ -172,6 +221,19 @@ class NotificationList extends Component {
             <TouchableOpacity onPress={() => this.wearefriend({userId})}>
                 <View style={styles.peopleItem}>
                     <Image source={{uri:`${httpsBaseUrl}${people.head}`}} style={styles.leftImgStyle}/>
+
+                    <View style={styles.leftbutton}>
+                        <TouchableOpacity onPress={() => this.acceptfriend({userId})}>
+                            <Text >
+                                接受
+                            </Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={() => this.rejectfriend({userId})}>
+                            <Text >
+                                拒绝
+                            </Text>
+                        </TouchableOpacity>
+                    </View>
                     <View>
                         <Text style={styles.topTitleStyle}>
                             {people.username}
@@ -181,7 +243,19 @@ class NotificationList extends Component {
                         </Text>
                     </View>
                 </View>
+
             </TouchableOpacity>
+        )
+    }
+
+    renderIAskView(){
+        return (
+            <ListView
+                style={styles.list}
+                dataSource={DataStore.cloneWithRows(this.state.iask_list_data_source)}
+                renderRow={(rowData) => this.renderAskFriend(rowData)}
+                enableEmptySections = {true}
+            />
         )
     }
 

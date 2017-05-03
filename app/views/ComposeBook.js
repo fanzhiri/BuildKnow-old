@@ -72,8 +72,11 @@ const styles = StyleSheet.create({
         borderTopWidth:0.5,
         borderLeftWidth:0.5,
         borderRightWidth:0.5,
+        borderBottomWidth:0.5,
         borderBottomColor:'#9acd32',
-        marginTop:4,
+        marginTop:8,
+        marginBottom:8,
+        padding:4,
     },
     questionedittext:{
         fontSize: 14,
@@ -273,10 +276,16 @@ class ComposeBook extends Component {
         )
     }
 
+    applyforrelease(){
+
+    }
+
     renderDiscussView(){
         const {bookid} = this.props;
         return (
-            <Text>Discuss</Text>
+            <TouchableOpacity onPress={() => this.applyforrelease({bookid})}>
+                <Text>发布申请</Text>
+            </TouchableOpacity>
         )
     }
 

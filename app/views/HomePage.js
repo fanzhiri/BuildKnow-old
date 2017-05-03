@@ -133,6 +133,9 @@ class HomePage extends Component {
                                     <Text>昵称:abc</Text>
                                     <Text>题本数:5</Text>
                                     <Text>粉丝:20  题本被收藏:60</Text>
+                                    <TouchableOpacity  onPress={()=> Actions.complaint({userId})} >
+                                        <Text style={styles.bottomButtonText} >投诉</Text>
+                                    </TouchableOpacity>
                                 </Image>
                             </View>
 
@@ -159,7 +162,8 @@ class HomePage extends Component {
 
                     )}
                 >
-                    {this.renderSegmentedView()}
+
+                {this.renderSegmentedView()}
                 </ParallaxScrollView>
                 <View style={styles.bottomButtonViewContainer}>
                     <TouchableOpacity  onPress={()=> this.dofollow()} >

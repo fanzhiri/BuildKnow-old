@@ -57,7 +57,7 @@ import MessageList from './views/MessageList'
 import NotificationList from './views/NotificationList'
 import Schedule from './views/Schedule'
 import FriendVerify from './views/FriendVerify'
-
+import Complaint from './views/Complaint'
 
 import Icon from 'react-native-vector-icons/Ionicons';
 
@@ -95,7 +95,7 @@ export default class BuildKnow extends Component {
                 <Scene key="homepage" title="主页" component={HomePage} duration={0} />
                 <Scene key="buildquestion" title="建题" component={BuildQuestion} duration={0} />
                 <Scene key="collect" title="收藏" component={Collect} duration={0} />
-                <Scene key="statistics" title="统计" component={Statistics} duration={0} />
+                <Scene key="statistics" title="数据统计" component={Statistics} duration={0} />
                 <Scene key="bookcover" title="书面" component={BookCover} duration={0} />
                 <Scene key="buildingbook" title="题集" component={BuildingBook} duration={0} />
                 <Scene key="about" title="关于" component={About} duration={0} />
@@ -118,6 +118,7 @@ export default class BuildKnow extends Component {
                 <Scene key="notificationlist" title="通知列表" component={NotificationList} duration={0} />
                 <Scene key="schedule" title="日程" component={Schedule} duration={0} />
                 <Scene key="friendverify" title="朋友验证" component={FriendVerify} duration={0} />
+                <Scene key="complaint" title="投诉" component={Complaint} duration={0} />
             </Router>
         );
     }

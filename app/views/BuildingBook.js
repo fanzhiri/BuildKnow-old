@@ -18,6 +18,10 @@ import {
     ActionConst,
 } from 'react-native-router-flux';
 
+import {Menu,MenuOptions,MenuOption,MenuTrigger,renderers} from 'react-native-popup-menu'
+
+const {SlideInMenu}=renderers;
+
 import BookIntroduce from './BookIntroduce'
 import BookDiscuss from './BookDiscuss'
 import BookHistory from './BookHistory'
