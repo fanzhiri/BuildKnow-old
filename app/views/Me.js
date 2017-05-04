@@ -101,6 +101,7 @@ class Me extends Component {
                     <View style={styles.list}>
                         <MeItem icon={"ios-medal"} text={"我的主页"} iconColor="#c88400" onPress={() => Actions.homepage({userId})} />
                         <MeItem icon={"md-build"} text={"我的题本"} iconColor="#FF0000"  onPress={() => Actions.mybooklist()} />
+                        <MeItem icon={"md-cube"} text={"答案库"} iconColor="#D15FEE"  onPress={() => Actions.answerlib()} />
                         <MeItem icon={"md-link"} text={"分享管理"} onPress={() => Actions.sharemanager()} />
                         <MeItem icon={"md-heart"} text={"我的收藏"} subText={"10篇"} iconColor="#32cd32" />
                         <MeItem icon={"md-sync"} text={"更新"}  subText={"4本"} onPress={() => Actions.mybooklist()} />

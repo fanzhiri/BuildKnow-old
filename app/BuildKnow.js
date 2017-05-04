@@ -58,6 +58,9 @@ import NotificationList from './views/NotificationList'
 import Schedule from './views/Schedule'
 import FriendVerify from './views/FriendVerify'
 import Complaint from './views/Complaint'
+import SearchBook from './views/SearchBook'
+import AnswerLib from './views/AnswerLib'
+import ApplyRelease from './views/ApplyRelease'
 
 import Icon from 'react-native-vector-icons/Ionicons';
 
@@ -76,8 +79,8 @@ export default class BuildKnow extends Component {
                     <Scene key="market" title="市场" component={Market} duration={0} icon={MainTabbarIcon}
                            iconName="ios-home-outline"
                            selectIconName="ios-home"
-                           leftTitle={"分类"}
-                           onLeft={() => Actions.classcatalogue()}
+                           leftTitle  ={"分类"}  onLeft  ={() => Actions.classcatalogue()}
+                           rightTitle ={"搜索"}  onRight ={() => Actions.searchbook()}
                     />
                     <Scene key="follow" title="关注" component={Follow} duration={0} icon={MainTabbarIcon}
                            iconName="ios-eye-outline"
@@ -119,6 +122,9 @@ export default class BuildKnow extends Component {
                 <Scene key="schedule" title="日程" component={Schedule} duration={0} />
                 <Scene key="friendverify" title="朋友验证" component={FriendVerify} duration={0} />
                 <Scene key="complaint" title="投诉" component={Complaint} duration={0} />
+                <Scene key="searchbook" title="搜索" component={SearchBook} duration={0} />
+                <Scene key="answerlib" title="答案库" component={AnswerLib} duration={0} />
+                <Scene key="applyrelease" title="申请发布" component={ApplyRelease} duration={0} />
             </Router>
         );
     }

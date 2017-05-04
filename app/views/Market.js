@@ -30,6 +30,9 @@ const styles = StyleSheet.create({
         resizeMode:'cover',
     },
     title:{
+        marginTop:16,
+        marginBottom:8,
+        marginLeft:8,
         color: 'red',
         fontSize: 24,
     }
@@ -51,7 +54,9 @@ class Market extends Component {
 
     renderRow(rowData, sectionID, rowID) {
         return (
-            <MarketListItem rowID={rowID}  cover={rowData.cover} name={rowData.name} />
+            <MarketListItem
+
+                rowID={rowID}  cover={rowData.cover} name={rowData.name} />
         );
     }
 

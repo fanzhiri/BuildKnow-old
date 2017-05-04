@@ -277,14 +277,14 @@ class ComposeBook extends Component {
         )
     }
 
-    applyforrelease(){
-
+    applyforrelease(bookid){
+        Actions.applyrelease(bookid);
     }
 
     renderDiscussView(){
         const {bookid} = this.props;
         return (
-            <TouchableOpacity onPress={() => this.applyforrelease({bookid})}>
+            <TouchableOpacity onPress={() => this.applyforrelease(bookid)}>
                 <Text>发布申请</Text>
             </TouchableOpacity>
         )

@@ -34,6 +34,10 @@ const styles = StyleSheet.create({
         height: 20,
         width: 80
     },
+    mkitem:{
+        marginRight:8,
+        marginLeft:8,
+    }
 });
 
 class MarketListItem extends Component {
@@ -46,7 +50,7 @@ class MarketListItem extends Component {
         const {rowID, cover} = this.props;
         return (
             <TouchableOpacity rowID={rowID}  onPress={()=>(Actions.bookcover({rowID}))} >
-                <View>
+                <View style={styles.mkitem}>
                     <Image style={[styles.image, this.props.imageStyle]} resizeMode="cover" source={require('../image/market/month/C加加.jpg')}/>
                     {this.renderBottomText()}
                 </View>

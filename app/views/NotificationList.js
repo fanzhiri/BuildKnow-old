@@ -55,7 +55,8 @@ const styles = StyleSheet.create({
     },
     leftbutton:{
         justifyContent:'space-around',
-        marginRight:10,
+        marginRight:6,
+        marginLeft:10,
         alignItems: 'center',
     }
 
@@ -266,8 +267,35 @@ class NotificationList extends Component {
 
     }
 
+    renderStatus(from,status,askId){
+        if((status == 0) && from){
+            return(
+                <View style={styles.leftbutton}>
+                    <TouchableOpacity onPress={() => this.fetchacceptfriend(askId)}>
+                        <Text >接受</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => this.fetchrejectfriend(askId)}>
+                        <Text >拒绝</Text>
+                    </TouchableOpacity>
+                </View>
+            );
+        }else if(status == 1) {
+            return (
+                <View style={styles.leftbutton}>
+                    <Text>已经接受</Text>
+                </View>
+            );
+        }else if(status == 2){
+            return (
+                <View style={styles.leftbutton}>
+                    <Text>已经拒绝</Text>
+                </View>
+            );
+        }
 
-    renderAskFriend(people){
+    }
+
+    renderAskFriend(people,from){
         var userId = (people.userid);
         var askId = (people.askid);
         return (
@@ -275,19 +303,8 @@ class NotificationList extends Component {
             <TouchableOpacity onPress={() => this.wearefriend({userId})}>
                 <View style={styles.peopleItem}>
                     <Image source={{uri:`${httpsBaseUrl}${people.head}`}} style={styles.leftImgStyle}/>
+                    {this.renderStatus(from,people.askstatus,askId)}
 
-                    <View style={styles.leftbutton}>
-                        <TouchableOpacity onPress={() => this.fetchacceptfriend(askId)}>
-                            <Text >
-                                接受{askId}
-                            </Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity onPress={() => this.fetchrejectfriend(askId)}>
-                            <Text >
-                                拒绝{askId}
-                            </Text>
-                        </TouchableOpacity>
-                    </View>
                     <View>
                         <Text style={styles.topTitleStyle}>
                             {people.username}
@@ -307,7 +324,7 @@ class NotificationList extends Component {
             <ListView
                 style={styles.list}
                 dataSource={DataStore.cloneWithRows(this.state.iask_list_data_source)}
-                renderRow={(rowData) => this.renderAskFriend(rowData)}
+                renderRow={(rowData) => this.renderAskFriend(rowData,false)}
                 enableEmptySections = {true}
             />
         )
@@ -318,7 +335,7 @@ class NotificationList extends Component {
             <ListView
                 style={styles.list}
                 dataSource={DataStore.cloneWithRows(this.state.notifi_list_data_source)}
-                renderRow={(rowData) => this.renderAskFriend(rowData)}
+                renderRow={(rowData) => this.renderAskFriend(rowData,true)}
                 enableEmptySections = {true}
             />
         )
