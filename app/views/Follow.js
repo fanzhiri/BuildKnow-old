@@ -50,13 +50,15 @@ const styles = StyleSheet.create({
         color:'blue'
     },
     list:{
-        marginBottom:48
+        marginBottom:80
     }
 });
 
 var peoplelistUrl = "https://slako.applinzi.com/index.php?m=question&c=index&a=peoplelist";
 
 var getFollowUrl = "https://slako.applinzi.com/index.php?m=question&c=personal&a=getfollowperson";
+
+var getFrieldUrl = "https://slako.applinzi.com/index.php?m=question&c=personal&a=getfriendlist";
 
 
 var httpsBaseUrl = "https://slako.applinzi.com/";
@@ -71,6 +73,7 @@ class Follow extends Component {
         this.state = {
             netresult:'no',
             people_list_data_source: null,
+            friend_list_data_source: null,
             selectedIndex:0,
             gorefreshing:false,
         };
@@ -79,6 +82,36 @@ class Follow extends Component {
         this._renderPeople = this.renderPeople.bind(this);
         this._doOnPress = this.doOnPress.bind(this);
 
+    }
+
+    fetchfriendlist(){
+
+        let formData = new FormData();
+        formData.append("auth",global.auth);
+        formData.append("userid",global.userid);
+        var opts = {
+            method:"POST",
+            body:formData
+        }
+        fetch(getFrieldUrl,opts)
+            .then((response) => response.json())
+            .then((responseData) => {
+                if(responseData.code == 100){
+                    this.setState({
+                        friend_list_data_source:responseData.data,
+                        gorefreshing:false,
+                    })
+
+                }else{
+                    this.setState({
+                        netresult:responseData.code
+                    })
+                }
+
+            })
+            .catch((error) => {
+                alert(error)
+            })
     }
 
     peoplelist(){
@@ -144,9 +177,12 @@ class Follow extends Component {
             }
 
         } else if (this.state.selectedIndex === 0) {
-            return (
-                this.renderLoading()
-            )
+            if(this.state.friend_list_data_source){
+                return (this.renderFriendView())
+            }else{
+                this.fetchfriendlist();
+                return (this.renderLoading())
+            }
         } else if (this.state.selectedIndex === 2) {
             return (
                 this.renderLoading()
@@ -200,6 +236,27 @@ onRefresh={this._peoplelist()}
 */
     rankList(){
 
+    }
+
+    renderFriendView(){
+        return (
+            <View>
+                <Button onPress={this.rankList()}>排名方法</Button>
+                <ListView
+                    refreshControl={
+                        <RefreshControl
+                            refreshing={this.state.gorefreshing}
+                            onRefresh={() => this.fetchfriendlist()}
+                        />
+                    }
+                    style={styles.list}
+                    dataSource={DataStore.cloneWithRows(this.state.friend_list_data_source)}
+                    renderRow={(rowData) => this._renderPeople(rowData)}
+                    enableEmptySections = {true}
+                />
+            </View>
+
+        )
     }
 
     renderIntroduceView(){

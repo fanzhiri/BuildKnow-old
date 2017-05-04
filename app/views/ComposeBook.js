@@ -24,6 +24,8 @@ import DataStore from '../util/DataStore';
 import GlobleStyles from '../styles/GlobleStyles';
 import SettingItem from '../component/SettingItem'
 
+import Dialog from "react-native-dialog";
+
 const styles = StyleSheet.create({
     container: {
         flex: 1,
@@ -110,6 +112,9 @@ const styles = StyleSheet.create({
 
 var doGetMyBookQuestionUrl = "https://slako.applinzi.com/index.php?m=question&c=personal&a=getmybookquestion";
 
+var doDeleteQuestionUrl = "https://slako.applinzi.com/index.php?m=question&c=personal&a=deletequestion";
+
+
 class ComposeBook extends Component {
     constructor(props) {
         super(props);
@@ -142,6 +147,31 @@ class ComposeBook extends Component {
                     this.setState({
                         bookquestion_data_source:responseData.data
                     })
+                }else{
+                    alert(responseData.message);
+                }
+
+            })
+            .catch((error) => {
+                alert(error)
+            })
+    }
+
+    dofetch_deletequestion(id){
+
+        let formData = new FormData();
+        formData.append("auth",global.auth);
+        formData.append("questionid",id);
+        formData.append("userid",global.userid);
+        var opts = {
+            method:"POST",
+            body:formData
+        }
+        fetch(doDeleteQuestionUrl,opts)
+            .then((response) => response.json())
+            .then((responseData) => {
+                if(responseData.code == 100){
+                    this.dofetch_mybookquestion();
                 }else{
                     alert(responseData.message);
                 }
@@ -233,13 +263,26 @@ class ComposeBook extends Component {
         });
     }
 
-    renderEditView(index){
+    deletequestion(id){
+        this.dofetch_deletequestion(id);
+    }
+
+    checkquestion(id){
+        //this.dofetch_deletequestion(id);
+    }
+
+    renderEditView(index,qId){
         if(index == this.state.selectedQuestion){
             return (
                 <View style={styles.questioneditcontainer}>
-                    <Text style={styles.questionedittext} >查看</Text>
+
+                    <TouchableOpacity  onPress={()=> this.checkquestion(qId)} >
+                        <Text style={styles.questionedittext} >查看</Text>
+                    </TouchableOpacity>
                     <Text style={styles.questionedittext} >编辑</Text>
-                    <Text style={styles.questionedittext} >删除</Text>
+                    <TouchableOpacity  onPress={()=> this.deletequestion(qId)} >
+                        <Text style={styles.questionedittext} >删除</Text>
+                    </TouchableOpacity>
                 </View>
 
             )
@@ -248,13 +291,14 @@ class ComposeBook extends Component {
 
     renderQuestionItem(rowData,sectionID, rowID){
         var ask = (rowData.ask);
+        var qId = (rowData.questionid);
         return (
             <TouchableOpacity onPress={() => this.selectquestion(rowID)}>
                 <View  style={styles.questionitemcontainer}>
                     <Text style={styles.questionitem}>
                         {rowID} : {ask.substring(0,20)}
                     </Text>
-                    {this.renderEditView(rowID)}
+                    {this.renderEditView(rowID,qId)}
                 </View>
             </TouchableOpacity>
 

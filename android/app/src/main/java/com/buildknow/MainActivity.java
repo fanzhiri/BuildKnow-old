@@ -1,6 +1,7 @@
 package com.buildknow;
 
 import com.facebook.react.ReactActivity;
+import com.honaf.dialog.MyDialogPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
 
 public class MainActivity extends ReactActivity {

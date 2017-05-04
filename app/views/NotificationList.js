@@ -162,7 +162,7 @@ class NotificationList extends Component {
             .then((response) => response.json())
             .then((responseData) => {
                 if(responseData.code == 100){
-                    alert("accept ok");
+                    this.fetchnotificationlist();
 
                 }else{
                     this.setState({
@@ -190,7 +190,7 @@ class NotificationList extends Component {
             .then((response) => response.json())
             .then((responseData) => {
                 if(responseData.code == 100){
-                    alert("reject ok");
+                    this.fetchnotificationlist();
 
                 }else{
                     this.setState({

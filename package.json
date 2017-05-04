@@ -13,6 +13,7 @@
     "react-native-banner": "^0.1.0",
     "react-native-button": "^1.8.2",
     "react-native-countdown": "0.0.3",
+    "react-native-dialog": "^1.0.7",
     "react-native-foldview": "^1.1.1",
     "react-native-gifted-chat": "^0.1.4",
     "react-native-gifted-form": "0.0.13",
