@@ -205,7 +205,7 @@ class ComposeBook extends Component {
                     <Button onPress={() => Actions.newonequestion({bookid})}>添加题目</Button>
                     <Button onPress={() => Actions.newsomequestions({bookid})}>批量添加</Button>
                     <Button onPress={() => this.deletebook({bookid})}>删除题本</Button>
-                    <Button onPress={() => this.deletebook({bookid})}>修改题本</Button>
+                    <Button onPress={() => this.deletebook({bookid})}>修改题本{bookid}</Button>
                     <View  style={styles.sharecontrolcontainer}>
                         <Text style={styles.sharecontroltext} >分享方式</Text>
                         <View style={styles.sharecontrolcontainer2}>
@@ -321,14 +321,15 @@ class ComposeBook extends Component {
         )
     }
 
-    applyforrelease(bookid){
-        Actions.applyrelease(bookid);
+    applyforrelease(){
+        var bookid=this.props.bookid;
+        Actions.applyrelease({bookid});
     }
 
     renderDiscussView(){
-        const {bookid} = this.props;
+        //const {bookid} = this.props;
         return (
-            <TouchableOpacity onPress={() => this.applyforrelease(bookid)}>
+            <TouchableOpacity onPress={() => this.applyforrelease()}>
                 <Text>发布申请</Text>
             </TouchableOpacity>
         )

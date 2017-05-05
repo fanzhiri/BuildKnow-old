@@ -31,25 +31,25 @@ const styles = StyleSheet.create({
 
 });
 
-var askforfriendUrl = "https://slako.applinzi.com/index.php?m=question&c=personal&a=addfriend";
+var askforreleaseUrl = "https://slako.applinzi.com/index.php?m=question&c=personal&a=applyreleasebook";
 
 
 class ApplyRelease extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            descriptiontext:"我是"
+            descriptiontext:"我要发布"
         };
 
     }
 
     render(){
-        const {userId} = this.props;
+
         return (
             <View style={GlobleStyles.withoutTitleContainer}>
                 <View>
                     <Text style={styles.fromhint}>
-                        你需要发送验证申请，等对方通过
+                        你准备发布{this.props.bookid}需要发送审核申请，等批准通过
                     </Text>
                     <TextInput
                         style={styles.descriptioninput}
@@ -64,18 +64,17 @@ class ApplyRelease extends Component {
     }
 
     askforfriend(){
-        const {userId} = this.props;
 
         let formData = new FormData();
         formData.append("auth",global.auth);
         formData.append("userid",global.userid);
-        formData.append("askforfriendid",userId);
+        formData.append("askforreleasebookid",this.props.bookid);
         formData.append("msg",this.state.descriptiontext);
         var opts = {
             method:"POST",
             body:formData
         }
-        fetch(askforfriendUrl,opts)
+        fetch(askforreleaseUrl,opts)
             .then((response) => response.json())
             .then((responseData) => {
                 if(responseData.code == 100){
@@ -94,7 +93,7 @@ class ApplyRelease extends Component {
 }
 
 ApplyRelease.PropTypes = {
-    bookId: PropTypes.string.isRequired,
+    bookId: PropTypes.number.isRequired,
 };
 
 module.exports = ApplyRelease;
