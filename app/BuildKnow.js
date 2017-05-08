@@ -62,6 +62,7 @@ import SearchBook from './views/SearchBook'
 import AnswerLib from './views/AnswerLib'
 import ApplyRelease from './views/ApplyRelease'
 import Admin from './views/Admin'
+import ReleaseReview from './views/ReleaseReview'
 
 
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -128,6 +129,7 @@ export default class BuildKnow extends Component {
                 <Scene key="answerlib" title="答案库" component={AnswerLib} duration={0} />
                 <Scene key="applyrelease" title="申请发布" component={ApplyRelease} duration={0} />
                 <Scene key="admin" title="管理事务" component={Admin} duration={0} />
+                <Scene key="releasereview" title="审核发布" component={ReleaseReview} duration={0} />
             </Router>
         );
     }

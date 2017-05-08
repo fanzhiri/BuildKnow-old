@@ -107,8 +107,8 @@ class Admin extends Component {
                         </View>
                     </TouchableOpacity>
                     <View style={styles.list}>
-                        <MeItem icon={"md-build"} text={"发布审核"} iconColor="#FF0000"  onPress={() => Actions.help()} />
-                        <MeItem icon={"md-cube"}  text={"注册审核"} iconColor="#D15FEE"  onPress={() => Actions.help()} />
+                        <MeItem icon={"md-film"} text={"发布审核"} iconColor="#FF0000"  onPress={() => Actions.releasereview()} />
+                        <MeItem icon={"md-contacts"}  text={"注册审核"} iconColor="#D15FEE"  onPress={() => Actions.help()} />
 
                     </View>
                 </ScrollView>

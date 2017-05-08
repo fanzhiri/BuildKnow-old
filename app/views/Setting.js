@@ -33,7 +33,7 @@ class Setting extends Component {
         this.state = {
             logoutresult:'no',
             code:0
-        };
+        }
         this._dologout = this.dologout.bind(this);
     }
 

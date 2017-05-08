@@ -25,7 +25,7 @@ const styles = StyleSheet.create({
 
         padding:10,
         backgroundColor:'white',
-        borderBottomWidth:0.5,
+        borderBottomWidth:1,
         borderBottomColor:'#e8e8e8',
         //主轴方向
         flexDirection:'row',
@@ -40,9 +40,13 @@ const styles = StyleSheet.create({
         height:60,
         marginRight:15
     },
-    topTitleStyle:{
-        fontSize:15,
+    topTitleStyle: {
+        fontSize:16,
         marginBottom:10
+    },statusText: {
+        fontSize: 14,
+        justifyContent: 'center',
+        color: 'red',
     },
 });
 
@@ -98,6 +102,19 @@ class MyBookList extends Component {
         }
     }
 
+    renderReviewing(status){
+
+        if(status == 1){
+            return(
+                <View >
+                    <Text style={styles.statusText}>等待审核中</Text>
+                </View>
+            )
+        }else{
+            return null;
+        }
+    }
+
     renderBookItem(book){
         var cover = (book.cover);
         var bookid= (book.question_book_id);
@@ -109,6 +126,7 @@ class MyBookList extends Component {
                         <Text style={styles.topTitleStyle}>
                             {book.bookname}
                         </Text>
+                        {this.renderReviewing(book.status)}
                         <Text >
                             {book.bookbrief}
                         </Text>

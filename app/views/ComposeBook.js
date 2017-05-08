@@ -4,7 +4,7 @@
  */
 import React, { Component ,PropTypes} from 'react';
 
-import {View, Text, Image, StyleSheet, SegmentedControlIOS, ListView, TouchableOpacity} from "react-native";
+import {View, Text, Image, StyleSheet, SegmentedControlIOS, ListView, TouchableOpacity,Alert} from "react-native";
 
 import Button from "react-native-button";
 import {
@@ -25,6 +25,8 @@ import GlobleStyles from '../styles/GlobleStyles';
 import SettingItem from '../component/SettingItem'
 
 import Dialog from "react-native-dialog";
+
+import Toast, {DURATION} from 'react-native-easy-toast'
 
 const styles = StyleSheet.create({
     container: {
@@ -227,7 +229,16 @@ class ComposeBook extends Component {
                     />
                 </View>
                 {this.renderSegmentedView()}
-
+                <Toast
+                    ref="toastmsg"
+                    style={{backgroundColor:'green'}}
+                    position='bottom'
+                    positionValue={200}
+                    fadeInDuration={750}
+                    fadeOutDuration={1000}
+                    opacity={0.8}
+                    textStyle={{color:'red'}}
+                />
             </View>
         );
     }
@@ -326,12 +337,34 @@ class ComposeBook extends Component {
         Actions.applyrelease({bookid});
     }
 
+    docancelapply(){
+        this.refs.toastmsg.show('真的吗!',DURATION.LENGTH_LONG)
+    }
+
+    cancelapplydialog(){
+        //var bookid=this.props.bookid;
+        //Actions.applyrelease({bookid});
+        Alert.alert('撤销发布申请','确定撤销吗?',[
+            {text:'是的',onPress:()=> this.docancelapply()},
+            {text:'不了'}
+        ]);
+    }
+/*
+{text:'是的',onPress:()=> this.refs.toastmsg.show('hello world!',DURATION.LENGTH_LONG)},
+{text:'不了',onPress:()=>this.refs.toastmsg.show('hello cancel!',DURATION.LENGTH_LONG)}
+    */
     renderDiscussView(){
         //const {bookid} = this.props;
         return (
-            <TouchableOpacity onPress={() => this.applyforrelease()}>
-                <Text>发布申请</Text>
-            </TouchableOpacity>
+            <View>
+                <TouchableOpacity onPress={() => this.applyforrelease()}>
+                    <Text>发布申请</Text>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => this.cancelapplydialog()}>
+                    <Text>撤销申请</Text>
+                </TouchableOpacity>
+            </View>
+
         )
     }
 
