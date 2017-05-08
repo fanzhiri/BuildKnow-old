@@ -70,6 +70,7 @@ class Login extends Component {
                     global.groupid=responseData.data.groupid;
                     global.nickname=responseData.data.nickname;
                     global.userhead=responseData.data.userhead;
+                    global.adminid=responseData.data.adminid;
                     Actions.main();
                 }else{
                     this.setState({
