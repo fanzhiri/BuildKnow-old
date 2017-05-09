@@ -139,6 +139,10 @@ class BuildingBook extends Component {
         Actions.answerquestion(type);
     }
 
+    handleBeginTest() {
+        Actions.begintest();
+    }
+
     renderBook(){
         return (
             <View style={GlobleStyles.withoutTitleContainer}>
@@ -155,7 +159,7 @@ class BuildingBook extends Component {
                     <View style={styles.container2}>
                         <Button style={styles.button} >错题</Button>
                         <Button style={styles.button} >收藏</Button>
-                        <Button style={styles.button} >测试</Button>
+                        <Button style={styles.button} onPress={() => this.handleBeginTest()} >测试</Button>
                     </View>
                 </View>
                 <View>

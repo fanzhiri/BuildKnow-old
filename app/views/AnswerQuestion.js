@@ -4,7 +4,7 @@
 import React, { Component,PropTypes } from 'react';
 import {View, Text, StyleSheet, Image, Dimensions} from "react-native";
 import {Actions} from "react-native-router-flux";
-import Button from "react-native-button";
+import Button from 'apsl-react-native-button'
 import GlobleStyles from '../styles/GlobleStyles';
 import RadioForm, {RadioButton, RadioButtonInput, RadioButtonLabel} from 'react-native-simple-radio-button';
 
@@ -15,6 +15,17 @@ const styles = StyleSheet.create({
     },
     question:{
         fontSize:24
+    },
+    nextperbuttoncontainer:{
+        flexDirection:'row',
+        justifyContent: 'space-around',
+        alignItems: 'center',
+    },
+    nextperbutton:{
+        width:120,
+        height:30,
+
+        backgroundColor: '#00EE00'
     }
 });
 var init_radio_props = [
@@ -36,13 +47,14 @@ var question_number=0;
 class AnswerQuestion extends Component {
     constructor(props) {
         super(props);
-
+        question_number=global.bookqids.length;
         this.state = {
             count:0,
             fetchresult:null,
             questiondata:null,
             radio:init_radio_props,
             ask:null,
+            selectone:-1
         };
         this._dofetchquestion = this.dofetchquestion.bind(this);
         this._renderloading = this.renderloading.bind(this);
@@ -61,7 +73,8 @@ class AnswerQuestion extends Component {
 
                 if(responseData.code == 100){
                     let rightindex = Math.floor(Math.random() * 4);
-                    let answer=Array.of(responseData.data.wrong_answer_1,responseData.data.wrong_answer_2,responseData.data.wrong_answer_3);
+                    //let answer=Array.of(responseData.data.wrong_answer_1,responseData.data.wrong_answer_2,responseData.data.wrong_answer_3);
+                    let answer=JSON.parse(responseData.data.wrong_answer);
                     let rightanswer=responseData.data.right_answer;
                     answer.splice(rightindex,0,rightanswer);
 
@@ -102,7 +115,16 @@ class AnswerQuestion extends Component {
     }
 
     onPressNext(){
+        this.setState({selectone:-1})
+        this.setState({count:this.state.count+1})
+        var qid=global.bookqids.shift();
+        //global.bookqids
+        global.bookqids
+        this._dofetchquestion(qid);
+    }
 
+    onPressPre(){
+        this.setState({selectone:-1})
         var qid=global.bookqids.shift();
 
         this._dofetchquestion(qid);
@@ -119,15 +141,20 @@ class AnswerQuestion extends Component {
                         :
                         <Text></Text>
                 }
-
+                <Text style={styles.question}>完成进度 {this.state.count}:{question_number}</Text>
                 <Text style={styles.question}>{this.state.questiondata.ask}</Text>
                 <RadioForm
 
                     radio_props={this.state.radio}
-                    initial={-1}
-                    onPress={(value) => {this.setState({value:value})}}
+                    initial={this.state.selectone}
+                    onPress={(value) => {this.setState({selectone:value})}}
                 />
-                <Button onPress={() => this.onPressNext()}>下一个题目</Button>
+                <View style={styles.nextperbuttoncontainer}>
+                    <Button style={styles.nextperbutton} textStyle={{fontSize: 16}} onPress={() => this.onPressPre() }>上一个</Button>
+                    <Button style={styles.nextperbutton} textStyle={{fontSize: 16}} onPress={() => this.onPressNext()}>下一个</Button>
+
+                </View>
+
             </View>
         )
     }
@@ -152,7 +179,8 @@ class AnswerQuestion extends Component {
 }
 
 AnswerQuestion.PropTypes = {
-    questiontype: PropTypes.string.isRequired,
+    questiontype: PropTypes.string.isRequired,//random随机；order顺序
+    questioncount:PropTypes.number,
     // bookid:PropTypes.string.isRequired,
     // qids:PropTypes.array.isRequired,
 };
