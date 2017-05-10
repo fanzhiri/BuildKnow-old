@@ -64,6 +64,8 @@ import ApplyRelease from './views/ApplyRelease'
 import Admin from './views/Admin'
 import ReleaseReview from './views/ReleaseReview'
 import BeginTest from './views/BeginTest'
+import RegisterVerify from './views/RegisterVerify'
+
 
 import Icon from 'react-native-vector-icons/Ionicons';
 
@@ -131,6 +133,7 @@ export default class BuildKnow extends Component {
                 <Scene key="admin" title="管理事务" component={Admin} duration={0} />
                 <Scene key="releasereview" title="审核发布" component={ReleaseReview} duration={0} />
                 <Scene key="begintest" title="准备测试" component={BeginTest} duration={0} />
+                <Scene key="registerverify" title="审核注册" component={RegisterVerify} duration={0} />
             </Router>
         );
     }

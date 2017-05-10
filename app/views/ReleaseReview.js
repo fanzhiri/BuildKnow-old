@@ -99,6 +99,11 @@ const styles = StyleSheet.create({
 });
 
 var doPendingReleaseBooksUrl = "https://slako.applinzi.com/index.php?m=question&c=personal&a=getpendingreleasebook";
+var doReviewBookUrl = "https://slako.applinzi.com/index.php?m=question&c=personal&a=reviewbook";
+var doPassBookUrl = "https://slako.applinzi.com/index.php?m=question&c=personal&a=passbook";
+var doRejectBooksUrl = "https://slako.applinzi.com/index.php?m=question&c=personal&a=rejectbook";
+
+
 var httpsBaseUrl = "https://slako.applinzi.com/";
 
 class ReleaseReview extends Component {
@@ -108,19 +113,21 @@ class ReleaseReview extends Component {
         this.state = {
             netresult:'no',
             book_list_data_source: null,
-
+            book_reviewing_list_data_source: null,
+            selectedIndex:0,
         };
-
+        this._onChange = this.onChange.bind(this);
         this._renderRow = this.renderRow.bind(this);
     }
 
 
-    fetchNeedReviewBook(){
+    fetchBooklist(status){
 
         let formData = new FormData();
         formData.append("auth",global.auth);
         formData.append("userid",global.userid);
         formData.append("adminid",global.adminid);
+        formData.append("status",status);
         var opts = {
             method:"POST",
             body:formData
@@ -144,18 +151,46 @@ class ReleaseReview extends Component {
 
 
     renderBookList(){
-        if(this.state.book_list_data_source){
-            return (this.renderBookListView())
-        }else{
-            this.fetchNeedReviewBook();
-            return (this.renderLoading())
+        if (this.state.selectedIndex === 0) {
+            if (this.state.book_list_data_source) {
+                return (this.renderBookListView())
+            } else {
+                this.fetchBooklist(1);
+                return (this.renderLoading())
+            }
+        }else if (this.state.selectedIndex === 1) {
+            if (this.state.book_list_data_source) {
+                return (this.renderBookListView())
+            } else {
+                this.fetchBooklist(2);
+                return (this.renderLoading())
+            }
+        }else if (this.state.selectedIndex === 2) {
+            return (
+                this.renderLoading()
+            )
         }
+    }
+
+    onChange(event) {
+        this.setState({
+            book_list_data_source:null,
+            selectedIndex: event.nativeEvent.selectedSegmentIndex,
+        });
     }
 
     render(){
         const {userId} = this.props;
         return (
             <View style={GlobleStyles.withoutTitleContainer}>
+                <View>
+                    <SegmentedControlIOS
+                        values={['等待','审核中','审完']}
+                        selectedIndex={this.state.selectedIndex}
+                        style={styles.segmented}
+                        onChange={this._onChange}
+                    />
+                </View>
                 {this.renderBookList()}
             </View>
 
@@ -171,8 +206,67 @@ class ReleaseReview extends Component {
         )
     }
 
-    fetchpass(){}
-    fetchreject(){}
+    fetchpass(bookid){
+        this.fetchgroup(bookid, doPassBookUrl);
+    }
+    fetchreject(bookid){
+        this.fetchgroup(bookid, doRejectBooksUrl);
+    }
+    fetchbeginreview(bookid) {
+        this.fetchgroup(bookid, doReviewBookUrl);
+    }
+
+    fetchgroup(bookid,url){
+        let formData = new FormData();
+        formData.append("auth",global.auth);
+        formData.append("userid",global.userid);
+        formData.append("adminid",global.adminid);
+        formData.append("bookid",bookid);
+        var opts = {
+            method:"POST",
+            body:formData
+        }
+        fetch(url,opts)
+            .then((response) => response.json())
+            .then((responseData) => {
+                if(responseData.code == 100){
+                    //alert(bookid);
+                    this.setState({
+                        book_list_data_source:null,
+                    });
+                }else{
+
+                }
+
+            })
+            .catch((error) => {
+                alert(error)
+            })
+    }
+
+    renderControlButton(bookstatus,bookid){
+        if(bookstatus == 1){
+            return(
+                <View style={styles.leftbutton}>
+                    <TouchableOpacity onPress={() => this.fetchbeginreview(bookid)}>
+                        <Text >开始审核</Text>
+                    </TouchableOpacity>
+                </View>
+            )
+        }else if(bookstatus == 2){
+            return(
+                <View style={styles.leftbutton}>
+                    <TouchableOpacity onPress={() => this.fetchpass(bookid)}>
+                        <Text >通过</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => this.fetchreject(bookid)}>
+                        <Text >拒绝</Text>
+                    </TouchableOpacity>
+                </View>
+            )
+        }
+
+    }
 
     renderRow(rowData, sectionID, rowID) {
         var bookid =rowData.question_book_id;
@@ -181,7 +275,7 @@ class ReleaseReview extends Component {
         var bookbrief =rowData.bookbrief;
         var questionsnumber =rowData.q_count;
         var follow =rowData.follow;
-
+        var bookstatus =rowData.status;
         return (
             <TouchableOpacity  onPress={()=>(Actions.buildingbook({bookid}))} >
                 <View style={styles.listItem}>
@@ -191,14 +285,7 @@ class ReleaseReview extends Component {
                         {/*<Text style={styles.bottomText}>简介:{bookbrief}</Text>*/}
                         <Text style={styles.bottomText}>题数:{questionsnumber} 关注:{follow} </Text>
                     </View>
-                    <View style={styles.leftbutton}>
-                        <TouchableOpacity onPress={() => this.fetchpass()}>
-                            <Text >通过</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity onPress={() => this.fetchreject()}>
-                            <Text >拒绝</Text>
-                        </TouchableOpacity>
-                    </View>
+                    {this.renderControlButton(bookstatus,bookid)}
                 </View>
             </TouchableOpacity>
         );

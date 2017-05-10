@@ -64,7 +64,8 @@ class Register extends Component {
                     this.setState({
                         registerresult:"ok"
                     })
-                    Actions.main();
+                    alert(responseData.message);
+
                 }else{
                     this.setState({
                         registerresult:responseData.message
@@ -86,10 +87,10 @@ class Register extends Component {
                     clearOnClose={false}
 
                     defaults={{
-                        username: '',
-                        password: '',
-                        passwordagain:'',
-                        emailAddress:'',
+                        username: 'sunnyhu',
+                        password: 'sunnyhu',
+                        passwordagain:'sunnyhu',
+                        emailAddress:'sunnyhu@qq.com',
                     }}
                     validators={{
                         username: {

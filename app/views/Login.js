@@ -71,6 +71,8 @@ class Login extends Component {
                     global.nickname=responseData.data.nickname;
                     global.userhead=responseData.data.userhead;
                     global.adminid=responseData.data.adminid;
+                    global.followperson=responseData.data.followperson;
+                    global.friend=responseData.data.friend;
                     Actions.main();
                 }else{
                     this.setState({

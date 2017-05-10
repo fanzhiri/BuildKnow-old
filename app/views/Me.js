@@ -109,6 +109,7 @@ class Me extends Component {
                         </View>
                     </TouchableOpacity>
                     <View style={styles.list}>
+                        {this.renderAdmin()}
                         <MeItem icon={"ios-medal"} text={"我的主页"} iconColor="#c88400" onPress={() => Actions.homepage({userId})} />
                         <MeItem icon={"md-build"} text={"我的题本"} iconColor="#FF0000"  onPress={() => Actions.mybooklist()} />
                         <MeItem icon={"md-cube"} text={"答案库"} iconColor="#D15FEE"  onPress={() => Actions.answerlib()} />
@@ -120,7 +121,7 @@ class Me extends Component {
                         <MeItem icon={"md-time"} text={"日程"} iconColor="#912CEE" onPress={() => Actions.schedule()} />
                         <MeItem icon={"md-notifications"} text={"通知"} iconColor="#1C86EE" onPress={() => Actions.notificationlist()} />
                         <MeItem icon={"md-settings"} text={"设置"} iconColor="#ea66a6" onPress={() => Actions.setting()} />
-                        {this.renderAdmin()}
+
                     </View>
                 </ScrollView>
 
