@@ -79,7 +79,7 @@ class Setting extends Component {
                 <ScrollView>
 
                     <View style={styles.list}>
-                        <SettingItem text={"用户反馈"} />
+                        <SettingItem text={"意见反馈"} onPress={() => Actions.feedback()}/>
                         <SettingItem text={"关于"} onPress={() => Actions.about()}/>
                         <SettingItem text={"帮助"} onPress={() => Actions.help()}/>
                         <SettingItem text={"退出登录"} onPress={() => (this._dologout())}/>
