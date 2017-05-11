@@ -78,7 +78,8 @@ class HomePage extends Component {
         this.state = {
             netresult:'no',
             homepage_data_source: null,
-            selectedIndex:0
+            selectedIndex:0,
+            followhim:global.followperson.contains(this.props.userId),
         };
         this._onChange = this.onChange.bind(this);
         this._renderRow = this.renderRow.bind(this);
@@ -115,6 +116,27 @@ class HomePage extends Component {
         this.setState({
             selectedIndex: event.nativeEvent.selectedSegmentIndex,
         });
+    }
+
+
+    renderFollowControl(){
+
+        if(this.state.followhim){
+            return(
+                <TouchableOpacity  onPress={()=> this.dofollow(0)} >
+                    <Text style={styles.bottomButtonText} >取消关注</Text>
+                </TouchableOpacity>
+                )
+
+        }else{
+            return(
+                <TouchableOpacity  onPress={()=> this.dofollow(1)} >
+                    <Text style={styles.bottomButtonText} >关注</Text>
+                </TouchableOpacity>
+                )
+
+        }
+
     }
 
     render(){
@@ -166,9 +188,7 @@ class HomePage extends Component {
                 {this.renderSegmentedView()}
                 </ParallaxScrollView>
                 <View style={styles.bottomButtonViewContainer}>
-                    <TouchableOpacity  onPress={()=> this.dofollow()} >
-                        <Text style={styles.bottomButtonText} >关注</Text>
-                    </TouchableOpacity>
+                    {this.renderFollowControl()}
                     <Text style={styles.bottomButtonText} >私信</Text>
                     <TouchableOpacity  onPress={()=> Actions.friendverify({userId})} >
                         <Text style={styles.bottomButtonText} >交友</Text>
@@ -182,13 +202,14 @@ class HomePage extends Component {
 
 
 
-    dofollow(){
+    dofollow(follow){
         const {userId} = this.props;
 
         let formData = new FormData();
         formData.append("auth",global.auth);
         formData.append("userid",global.userid);
         formData.append("followid",userId);
+        formData.append("follow",follow);
         var opts = {
             method:"POST",
             body:formData
@@ -197,7 +218,10 @@ class HomePage extends Component {
             .then((response) => response.json())
             .then((responseData) => {
                 if(responseData.code == 100){
-                    alert("ok")
+                    global.followperson=JSON.parse(responseData.data);
+                    this.setState({
+                        followhim:global.followperson.contains(this.props.userId)
+                    })
                 }else{
                     this.setState({
                         netresult:responseData.code
@@ -288,5 +312,13 @@ HomePage.PropTypes = {
     userId: PropTypes.string.isRequired,
 };
 
+Array.prototype.contains = function (element) {
+    for (var i=0;i<this.length;i++){
+        if(this[i]==element){
+            return true;
+        }
+    }
+    return false;
+}
 
 module.exports = HomePage;

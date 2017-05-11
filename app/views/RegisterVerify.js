@@ -246,7 +246,7 @@ class RegisterVerify extends Component {
                         {people.username}
                     </Text>
                     <Text >
-                        来源:{people.registerfrom}  邮件:{people.email}
+                        邮件:{people.email}
                     </Text>
                 </View>
                 {this.renderControlButton(people.userid)}
