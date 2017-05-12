@@ -18,17 +18,17 @@ const styles = StyleSheet.create({
         marginLeft:20,
         marginRight:20,
         marginTop:10,
-        height: 120,
+        height: 160,
         borderColor: 'gray',
-        borderWidth: 1
+        borderWidth: 2
     },
     fromhint:{
         marginLeft:20,
-        marginTop:20,
-        fontSize: 18,
+        marginTop:30,
+        fontSize: 24,
     },button:{
-        width:120,
-        height:36,
+        width:160,
+        height:48,
         backgroundColor: '#00EE00'
     },buttonContainer:{
         marginLeft:20,

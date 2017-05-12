@@ -70,6 +70,9 @@ var homepagetUrl = "https://slako.applinzi.com/index.php?m=question&c=index&a=pe
 
 var followUrl = "https://slako.applinzi.com/index.php?m=question&c=personal&a=addfollow";
 
+var friendUrl = "https://slako.applinzi.com/index.php?m=question&c=personal&a=friendchange";
+
+
 var doGetHomePageBaseUrl = "https://slako.applinzi.com/api/1/homepage/";
 
 class HomePage extends Component {
@@ -80,6 +83,7 @@ class HomePage extends Component {
             homepage_data_source: null,
             selectedIndex:0,
             followhim:global.followperson.contains(this.props.userId),
+            friendhim:global.friend.contains(this.props.userId),
         };
         this._onChange = this.onChange.bind(this);
         this._renderRow = this.renderRow.bind(this);
@@ -139,6 +143,26 @@ class HomePage extends Component {
 
     }
 
+    renderFriendControl(){
+
+        if(this.state.friendhim){
+            return(
+                <TouchableOpacity  onPress={()=> this.dofriend(0)} >
+                    <Text style={styles.bottomButtonText} >断交</Text>
+                </TouchableOpacity>
+            )
+
+        }else{
+            return(
+                <TouchableOpacity  onPress={()=> Actions.friendverify(this.props.userId)} >
+                    <Text style={styles.bottomButtonText} >交友申请</Text>
+                </TouchableOpacity>
+            )
+
+        }
+
+    }
+
     render(){
         const {userId} = this.props;
         return (
@@ -190,9 +214,7 @@ class HomePage extends Component {
                 <View style={styles.bottomButtonViewContainer}>
                     {this.renderFollowControl()}
                     <Text style={styles.bottomButtonText} >私信</Text>
-                    <TouchableOpacity  onPress={()=> Actions.friendverify({userId})} >
-                        <Text style={styles.bottomButtonText} >交友</Text>
-                    </TouchableOpacity>
+                    {this.renderFriendControl()}
                     <Text style={styles.bottomButtonText} >备注</Text>
                 </View>
             </View>
@@ -200,7 +222,37 @@ class HomePage extends Component {
         );
     }
 
+    dofriend(friend){
+        const {userId} = this.props;
 
+        let formData = new FormData();
+        formData.append("auth",global.auth);
+        formData.append("userid",global.userid);
+        formData.append("friendid",userId);
+        formData.append("friend",friend);
+        var opts = {
+            method:"POST",
+            body:formData
+        }
+        fetch(friendUrl,opts)
+            .then((response) => response.json())
+            .then((responseData) => {
+                if(responseData.code == 100){
+                    global.friend=JSON.parse(responseData.data);
+                    this.setState({
+                        friendhim:global.friend.contains(this.props.userId)
+                    })
+                }else{
+                    this.setState({
+                        netresult:responseData.code
+                    })
+                }
+
+            })
+            .catch((error) => {
+                alert(error)
+            })
+    }
 
     dofollow(follow){
         const {userId} = this.props;

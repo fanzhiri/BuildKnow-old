@@ -117,7 +117,7 @@ class Discover extends Component {
             <View style={GlobleStyles.withoutTitleContainer}>
                 <View>
                     <SegmentedControlIOS
-                        values={['广场','大咖','需求']}
+                        values={['用户','知识','需求']}
                         selectedIndex={this.state.selectedIndex}
                         style={styles.segmented}
                         onChange={this._onChange}

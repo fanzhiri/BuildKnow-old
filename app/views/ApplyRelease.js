@@ -2,10 +2,12 @@
  * Created by slako on 17/5/4.
  */
 import React, { Component,PropTypes } from 'react';
-import {View, Text, StyleSheet,TextInput} from "react-native";
+import {View, Text, StyleSheet,TextInput,PickerIOS} from "react-native";
 import {Actions} from "react-native-router-flux";
 import Button from "react-native-button";
 import GlobleStyles from '../styles/GlobleStyles';
+
+var PickerItemIOS = PickerIOS.Item;
 
 const styles = StyleSheet.create({
     container: {
@@ -33,12 +35,34 @@ const styles = StyleSheet.create({
 
 var askforreleaseUrl = "https://slako.applinzi.com/index.php?m=question&c=personal&a=applyreleasebook";
 
+/*
+var NUMBER_PICK_ITEM=['0','100','1000','10000','100000'];
+<Text>面向的人数</Text>
+<PickerIOS
+selectedValue={this.state.numberpeopleselect}
+onValueChange={(nindex)=> this.setState({
+    numberpeopleselect:nindex
+})}
+>
+{
+    Object.keys(NUMBER_PICK_ITEM).map((nindex)=>(
+            <PickerItemIOS
+                key={nindex}
+                value={nindex}
+                label={NUMBER_PICK_ITEM[nindex]}
+            />
+        )
+    )
+}
+</PickerIOS>
+*/
 
 class ApplyRelease extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            descriptiontext:"我要发布"
+            descriptiontext:"我要发布",
+            numberpeopleselect:0,
         };
 
     }
@@ -57,6 +81,7 @@ class ApplyRelease extends Component {
                         value={this.state.descriptiontext}
                         placeholder={"  描述你自己"}
                     />
+
                     <Button onPress={() => this.askforfriend()}>发送验证申请</Button>
                 </View>
             </View>

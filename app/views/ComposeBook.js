@@ -172,8 +172,10 @@ class ComposeBook extends Component {
         fetch(doDeleteQuestionUrl,opts)
             .then((response) => response.json())
             .then((responseData) => {
-                if(responseData.code == 100){
+                if(responseData.code == 100 ){
                     this.dofetch_mybookquestion();
+                }else if(responseData.code == 101){
+                    alert("正在审核中");
                 }else{
                     alert(responseData.message);
                 }
