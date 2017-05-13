@@ -1,7 +1,7 @@
 /**
  * Created by slako on 17/2/18.
  */
-import React, { Component } from 'react';
+import React, { Component ,PropTypes} from 'react';
 import {View, Text, StyleSheet} from "react-native";
 import {Actions} from "react-native-router-flux";
 import Button from "react-native-button";
@@ -18,14 +18,25 @@ const styles = StyleSheet.create({
 });
 
 class Help extends Component {
+
+    constructor(props) {
+        super(props);
+    }
+
     render(){
+        const {idNumber} = this.props;
         return (
             <View style={GlobleStyles.withoutTitleContainer}>
-                <Text>Help</Text>
+                <Text>{this.props.name}</Text>
+                <Text>{this.props.idnumber}</Text>
                 <Button onPress={Actions.pop}>Help</Button>
             </View>
         );
     }
 }
+
+Help.PropTypes = {
+    idnumber:PropTypes.number,
+};
 
 module.exports = Help;

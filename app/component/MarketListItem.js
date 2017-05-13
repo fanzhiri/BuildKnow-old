@@ -59,11 +59,11 @@ class MarketListItem extends Component {
     }
 
     renderBottomText() {
-        const {name} = this.props;
-        if (name) {
+        const {bookname} = this.props;
+        if (bookname) {
             return (
                 <View style={styles.bottomTextContainer}>
-                    <Text style={styles.bottomText}>{name}</Text>
+                    <Text style={styles.bottomText}>{bookname}</Text>
                     {/*<Image resizeMode="cover" style={styles.bottomImage} source={require('../image/score_line.png')}/>*/}
                 </View>
             );
@@ -75,7 +75,7 @@ class MarketListItem extends Component {
 
 MarketListItem.PropTypes = {
     rowID: PropTypes.number,
-    name: PropTypes.string.isRequired,
+    bookname: PropTypes.string.isRequired,
     cover: PropTypes.string.isRequired,
 
 };

@@ -41,14 +41,15 @@ var doanswerquestionpostUrl = "https://slako.applinzi.com/index.php?m=question&c
 var doGetQuestionGetBaseUrl = "https://slako.applinzi.com/api/1/question/";
 var httpsBaseUrl = "https://slako.applinzi.com";
 
-var doauditpostUrl = "https://slako.applinzi.com/index.php?m=question&c=index&a=setaudit";
+var doauditpostUrl = "https://slako.applinzi.com/index.php?m=question&c=personal&a=setaudit";
 
 var question_number=0;
+
+var questionid=-1;
 
 class ReviewQuestion extends Component {
     constructor(props) {
         super(props);
-        question_number=global.bookqids.length;
         this.state = {
             count:0,
             fetchresult:null,
@@ -57,10 +58,6 @@ class ReviewQuestion extends Component {
             ask:null,
             selectone:-1
         };
-        this._dofetchquestion = this.dofetchquestion.bind(this);
-        this._renderloading = this.renderloading.bind(this);
-        this._renderquestion = this.renderquestion.bind(this);
-        this._showquestion = this.showquestion.bind(this);
     }
 
     dofetchquestion(questionid){
@@ -104,31 +101,24 @@ class ReviewQuestion extends Component {
 
     renderquestion(){
         if(this.state.questiondata == null){
-
-            var qid=global.bookqids.shift();
-
-            this._dofetchquestion(qid);
-
-            return this._renderloading();
+            this.dofetchquestion(this.props.reviewqid);
+            return this.renderloading();
         }else{
-            return this._showquestion();
+            return this.showquestion();
         }
     }
 
     onPressNext(){
-        this.setState({selectone:-1})
-        this.setState({count:this.state.count+1})
-        var qid=global.bookqids.shift();
-        //global.bookqids
-        global.bookqids
-        this._dofetchquestion(qid);
+        // this.setState({selectone:-1})
+        // this.setState({count:this.state.count+1})
+        // var qid=global.bookqids.shift();
+        // this._dofetchquestion(qid);
     }
 
     onPressPre(){
-        this.setState({selectone:-1})
-        var qid=global.bookqids.shift();
-
-        this._dofetchquestion(qid);
+        // this.setState({selectone:-1})
+        // var qid=global.bookqids.shift();
+        // this._dofetchquestion(qid);
     }
 
     fetchAudit(pass){
@@ -137,6 +127,8 @@ class ReviewQuestion extends Component {
         formData.append("userid",global.userid);
         formData.append("adminid",global.adminid);
         formData.append("audit",pass);
+        formData.append("questionid",this.props.reviewqid);
+
         var opts = {
             method:"POST",
             body:formData
@@ -158,6 +150,7 @@ class ReviewQuestion extends Component {
 
     passAudit(){
         this.fetchAudit(1);
+        Actions.pop;
     }
 
     rejectAudit(){
@@ -165,19 +158,15 @@ class ReviewQuestion extends Component {
     }
 
     renderReviewButton(){
-        if(this.props.review == 1){
-            return(
-                <View style={styles.nextperbuttoncontainer}>
-                    <Button style={styles.nextperbutton} textStyle={{fontSize: 16}} onPress={() => this.passAudit() }>通过</Button>
-                    <Button style={styles.nextperbutton} textStyle={{fontSize: 16}} onPress={() => this.rejectAudit()}>拒绝</Button>
-                </View>
-            );
-        }
-
+        return(
+            <View style={styles.nextperbuttoncontainer}>
+                <Button style={styles.nextperbutton} textStyle={{fontSize: 16}} onPress={() => this.passAudit() }>通过</Button>
+                <Button style={styles.nextperbutton} textStyle={{fontSize: 16}} onPress={() => this.rejectAudit()}>拒绝</Button>
+            </View>
+        );
     }
 
     showquestion(){
-
         return (
             <View style={styles.container}>
 
@@ -193,7 +182,7 @@ class ReviewQuestion extends Component {
 
                     radio_props={this.state.radio}
                     initial={this.state.selectone}
-                    onPress={(value) => {}}
+                    onPress={(value) => {this.setState({selectone:value})}}
                 />
                 <View style={styles.nextperbuttoncontainer}>
                     <Button style={styles.nextperbutton} textStyle={{fontSize: 16}} onPress={() => this.onPressPre() }>上一个</Button>
@@ -217,15 +206,14 @@ class ReviewQuestion extends Component {
     render(){
         return (
             <View style={GlobleStyles.withoutTitleContainer}>
-                {this._renderquestion()}
-                {/*<Text>abc</Text>*/}
+                {this.renderquestion()}
             </View>
         )
     }
 }
 
 ReviewQuestion.PropTypes = {
-    review:PropTypes.number,
+    reviewqid:PropTypes.number,
 };
 
 module.exports = ReviewQuestion;

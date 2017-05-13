@@ -166,9 +166,12 @@ class ReleaseReview extends Component {
                 return (this.renderLoading())
             }
         }else if (this.state.selectedIndex === 2) {
-            return (
-                this.renderLoading()
-            )
+            if (this.state.book_list_data_source) {
+                return (this.renderBookListView())
+            } else {
+                this.fetchBooklist(3);
+                return (this.renderLoading())
+            }
         }
     }
 
@@ -206,22 +209,22 @@ class ReleaseReview extends Component {
         )
     }
 
-    fetchpass(bookid){
-        this.fetchgroup(bookid, doPassBookUrl);
+    fetchpass(reviewid){
+        this.fetchgroup(reviewid, doPassBookUrl);
     }
-    fetchreject(bookid){
-        this.fetchgroup(bookid, doRejectBooksUrl);
+    fetchreject(reviewid){
+        this.fetchgroup(reviewid, doRejectBooksUrl);
     }
-    fetchbeginreview(bookid) {
-        this.fetchgroup(bookid, doReviewBookUrl);
+    fetchbeginreview(reviewid) {
+        this.fetchgroup(reviewid, doReviewBookUrl);
     }
 
-    fetchgroup(bookid,url){
+    fetchgroup(reviewid,url){
         let formData = new FormData();
         formData.append("auth",global.auth);
         formData.append("userid",global.userid);
         formData.append("adminid",global.adminid);
-        formData.append("bookid",bookid);
+        formData.append("reviewid",reviewid);
         var opts = {
             method:"POST",
             body:formData
@@ -234,6 +237,9 @@ class ReleaseReview extends Component {
                     this.setState({
                         book_list_data_source:null,
                     });
+                }else if(responseData.code == 201){
+                    alert("没有审核完");
+                    alert(responseData.data);
                 }else{
 
                 }
@@ -244,11 +250,11 @@ class ReleaseReview extends Component {
             })
     }
 
-    renderControlButton(bookstatus,bookid){
+    renderControlButton(bookstatus,reviewid){
         if(bookstatus == 1){
             return(
                 <View style={styles.leftbutton}>
-                    <TouchableOpacity onPress={() => this.fetchbeginreview(bookid)}>
+                    <TouchableOpacity onPress={() => this.fetchbeginreview(reviewid)}>
                         <Text >开始审核</Text>
                     </TouchableOpacity>
                 </View>
@@ -256,10 +262,10 @@ class ReleaseReview extends Component {
         }else if(bookstatus == 2){
             return(
                 <View style={styles.leftbutton}>
-                    <TouchableOpacity onPress={() => this.fetchpass(bookid)}>
+                    <TouchableOpacity onPress={() => this.fetchpass(reviewid)}>
                         <Text >通过</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => this.fetchreject(bookid)}>
+                    <TouchableOpacity onPress={() => this.fetchreject(reviewid)}>
                         <Text >拒绝</Text>
                     </TouchableOpacity>
                 </View>
@@ -286,7 +292,7 @@ class ReleaseReview extends Component {
                         <Text style={styles.bottomText}>审核id:{reviewid}</Text>
                         <Text style={styles.bottomText}>题数:{questionsnumber} 关注:{follow} </Text>
                     </View>
-                    {this.renderControlButton(bookstatus,bookid)}
+                    {this.renderControlButton(bookstatus,reviewid)}
                 </View>
             </TouchableOpacity>
         );
@@ -298,7 +304,7 @@ class ReleaseReview extends Component {
             <ListView
                 enableEmptySections={true}
                 dataSource={DataStore.cloneWithRows(this.state.book_list_data_source)}
-                renderRow={this._renderRow} />
+                renderRow={this.renderRow} />
 
         )
     }

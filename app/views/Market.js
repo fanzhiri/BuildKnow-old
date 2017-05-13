@@ -8,8 +8,7 @@ import Button from "react-native-button";
 import Swiper from 'react-native-swiper';
 import MarketListItem from '../component/MarketListItem';
 import Marketlistdata from '../testdata/Marketlist.json'
-
-//var Marketlistdata = require('../testdata/Marketlist.json');
+import DataStore from '../util/DataStore';
 
 const styles = StyleSheet.create({
     container: {
@@ -38,6 +37,8 @@ const styles = StyleSheet.create({
     }
 });
 
+var doGetPublickBookPostUrl = "https://slako.applinzi.com/index.php?m=question&c=index&a=getbookstore";
+
 class Market extends Component {
 
 
@@ -45,7 +46,7 @@ class Market extends Component {
         super(props);
         const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
         this.state = {
-
+            newbookdataSource:null,
             dataSource: ds.cloneWithRows(Marketlistdata)
         };
         this.renderRow = this.renderRow.bind(this);
@@ -55,12 +56,54 @@ class Market extends Component {
     renderRow(rowData, sectionID, rowID) {
         return (
             <MarketListItem
-
-                rowID={rowID}  cover={rowData.cover} name={rowData.name} />
+                rowID={rowID}  cover={rowData.cover} name={rowData.bookname} />
         );
     }
 
+    renderNewBookView(){
+        if(this.state.newbookdataSource == null){
+            this.fetchBookStorelist(1);
 
+        }else{
+            return(
+                <view>
+                    <Text style={styles.title} >最新审核</Text>
+                    <ListView
+                        enableEmptySections={true}
+                        horizontal={true}
+                        dataSource={DataStore.cloneWithRows(this.state.newbookdataSource)}
+                        renderRow={this._renderRow} />
+                </view>
+            );
+        }
+
+    }
+
+    fetchBookStorelist(type){
+        let formData = new FormData();
+        formData.append("auth",global.auth);
+        formData.append("userid",global.userid);
+        formData.append("type",type);
+        var opts = {
+            method:"POST",
+            body:formData
+        }
+        fetch(doGetPublickBookPostUrl,opts)
+            .then((response) => response.json())
+            .then((responseData) => {
+                if(responseData.code == 100){
+                    this.setState({
+                        newbookdataSource:responseData.data
+                    })
+                }else{
+
+                }
+
+            })
+            .catch((error) => {
+                alert(error)
+            })
+    }
 
     render(){
         return (
@@ -104,6 +147,7 @@ class Market extends Component {
                     horizontal={true}
                     dataSource={this.state.dataSource}
                     renderRow={this.renderRow} />
+                 {this.renderNewBookView()}
                 </ScrollView>
             </View>
         );

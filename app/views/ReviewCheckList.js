@@ -181,9 +181,12 @@ class ReviewCheckList extends Component {
                 return (this.renderLoading())
             }
         }else if (this.state.selectedIndex === 2) {
-            return (
-                this.renderLoading()
-            )
+            if (this.state.question_audit_list_data_source) {
+                return (this.renderBookListView())
+            } else {
+                this.fetchQuestionlist(2);
+                return (this.renderLoading())
+            }
         }
     }
 
@@ -200,7 +203,7 @@ class ReviewCheckList extends Component {
             <View style={GlobleStyles.withoutTitleContainer}>
                 <View>
                     <SegmentedControlIOS
-                        values={['未核','核完']}
+                        values={['未核','核完','拒绝']}
                         selectedIndex={this.state.selectedIndex}
                         style={styles.segmented}
                         onChange={this._onChange}
@@ -283,18 +286,16 @@ class ReviewCheckList extends Component {
 
     }
 
-    selectquestion(index){
 
-    }
 
     renderRow(rowData, sectionID, rowID) {
         var ask = (rowData.ask);
         var qId = (rowData.questionid);
         return (
-            <TouchableOpacity onPress={() => this.selectquestion(rowID)}>
+            <TouchableOpacity onPress={() => Actions.reviewquestion({reviewqid:qId})}>
                 <View  style={styles.questionitemcontainer}>
                     <Text style={styles.questionitem}>
-                        {rowID} : {ask.substring(0,20)}
+                        {rowID} :[{qId}] {ask.substring(0,20)}
                     </Text>
                 </View>
             </TouchableOpacity>
@@ -316,7 +317,7 @@ class ReviewCheckList extends Component {
 }
 
 ReviewCheckList.PropTypes = {
-    reviewid: PropTypes.number,
+    reviewid:PropTypes.number,
 };
 
 
