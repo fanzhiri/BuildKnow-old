@@ -17,7 +17,7 @@ import {
     Actions,
     ActionConst,
 } from 'react-native-router-flux';
-
+//1
 import Login from './views/Login'
 import Register from './views/Register'
 import Market from './views/Market'
@@ -28,18 +28,18 @@ import MainTabbarIcon from './views/MainTabbarIcon'
 import Help from './views/Help'
 import Setting from './views/Setting'
 import MyBookList from './views/MyBookList'
-
+//11
 import HomePage from './views/HomePage'
 import BuildQuestion from './views/BuildQuestion'
 import Collect from './views/Collect'
 import Statistics from './views/Statistics'
 import BookCover from './views/BookCover'
 import FriendList from './views/FriendList'
-
 import ForgetPasswd from './views/ForgetPasswd'
 import BookDetial from './views/BookDetial'
 import AnswerQuestion from './views/AnswerQuestion'
 import NewBook from './views/NewBook'
+//21
 import NewOneQuestion from './views/NewOneQuestion'
 import NewSomeQuestions from './views/NewSomeQuestions'
 import Introduce from './views/Introduce'
@@ -50,6 +50,7 @@ import PersonalCenter from './views/PersonalCenter'
 import SetHeadPic from './views/SetHeadPic'
 import SetHomePagePic from './views/SetHomePagePic'
 import ShareManager from './views/ShareManager'
+//31
 import NewShareMode from './views/NewShareMode'
 import ClassCatalogue from './views/ClassCatalogue'
 import ShareControl from './views/ShareControl'
@@ -60,12 +61,15 @@ import FriendVerify from './views/FriendVerify'
 import Complaint from './views/Complaint'
 import SearchBook from './views/SearchBook'
 import AnswerLib from './views/AnswerLib'
+//41
 import ApplyRelease from './views/ApplyRelease'
 import Admin from './views/Admin'
 import ReleaseReview from './views/ReleaseReview'
 import BeginTest from './views/BeginTest'
 import RegisterVerify from './views/RegisterVerify'
 import FeedBack from './views/FeedBack'
+import ReviewCheckList from './views/ReviewCheckList'
+import ReviewQuestion from './views/ReviewQuestion'
 
 import Icon from 'react-native-vector-icons/Ionicons';
 
@@ -135,6 +139,8 @@ export default class BuildKnow extends Component {
                 <Scene key="begintest" title="准备测试" component={BeginTest} duration={0} />
                 <Scene key="registerverify" title="审核注册" component={RegisterVerify} duration={0} />
                 <Scene key="feedback" title="意见反馈" component={FeedBack} duration={0} />
+                <Scene key="reviewchecklist" title="审核表" component={ReviewCheckList} duration={0} />
+                <Scene key="reviewquestion" title="审核题目" component={ReviewQuestion} duration={0} />
             </Router>
         );
     }

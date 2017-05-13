@@ -1,5 +1,5 @@
 /**
- * Created by slako on 17/5/8.
+ * Created by slako on 17/5/13.
  */
 
 import React, { Component ,PropTypes} from 'react';
@@ -95,25 +95,38 @@ const styles = StyleSheet.create({
         marginRight:4,
         marginLeft:4,
         alignItems: 'center',
-    }
+    },
+    questionitemcontainer:{
+
+        padding:5,
+        backgroundColor:'white',
+        borderBottomWidth:1,
+        borderBottomColor:'#ab82ff',
+    },
+    questionitem:{
+        marginTop:8,
+        marginLeft:8,
+        fontSize: 16,
+    },
 });
 
-var doPendingReleaseBooksUrl = "https://slako.applinzi.com/index.php?m=question&c=personal&a=getpendingreleasebook";
+var reviewQuestionsUrl = "https://slako.applinzi.com/index.php?m=question&c=personal&a=getauditquestions";
+/*
 var doReviewBookUrl = "https://slako.applinzi.com/index.php?m=question&c=personal&a=reviewbook";
 var doPassBookUrl = "https://slako.applinzi.com/index.php?m=question&c=personal&a=passbook";
 var doRejectBooksUrl = "https://slako.applinzi.com/index.php?m=question&c=personal&a=rejectbook";
 
-
+*/
 var httpsBaseUrl = "https://slako.applinzi.com/";
 
-class ReleaseReview extends Component {
+class ReviewCheckList extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
             netresult:'no',
-            book_list_data_source: null,
-            book_reviewing_list_data_source: null,
+            question_audit_list_data_source: null,
+
             selectedIndex:0,
         };
         this._onChange = this.onChange.bind(this);
@@ -121,26 +134,28 @@ class ReleaseReview extends Component {
     }
 
 
-    fetchBooklist(status){
+    fetchQuestionlist(audit){
 
         let formData = new FormData();
         formData.append("auth",global.auth);
         formData.append("userid",global.userid);
         formData.append("adminid",global.adminid);
-        formData.append("status",status);
+        formData.append("audit",audit);
+        formData.append("reviewid",this.props.reviewid);
         var opts = {
             method:"POST",
             body:formData
         }
-        fetch(doPendingReleaseBooksUrl,opts)
+        fetch(reviewQuestionsUrl,opts)
             .then((response) => response.json())
             .then((responseData) => {
                 if(responseData.code == 100){
+                    //alert(responseData.data);
                     this.setState({
-                        book_list_data_source:responseData.data
+                        question_audit_list_data_source:responseData.data
                     })
                 }else{
-
+                    alert(responseData.message);
                 }
 
             })
@@ -150,19 +165,19 @@ class ReleaseReview extends Component {
     }
 
 
-    renderBookList(){
+    renderCheckList(){
         if (this.state.selectedIndex === 0) {
-            if (this.state.book_list_data_source) {
+            if (this.state.question_audit_list_data_source) {
                 return (this.renderBookListView())
             } else {
-                this.fetchBooklist(1);
+                this.fetchQuestionlist(0);
                 return (this.renderLoading())
             }
         }else if (this.state.selectedIndex === 1) {
-            if (this.state.book_list_data_source) {
+            if (this.state.question_audit_list_data_source) {
                 return (this.renderBookListView())
             } else {
-                this.fetchBooklist(2);
+                this.fetchQuestionlist(1);
                 return (this.renderLoading())
             }
         }else if (this.state.selectedIndex === 2) {
@@ -174,7 +189,7 @@ class ReleaseReview extends Component {
 
     onChange(event) {
         this.setState({
-            book_list_data_source:null,
+            question_audit_list_data_source:null,
             selectedIndex: event.nativeEvent.selectedSegmentIndex,
         });
     }
@@ -185,13 +200,13 @@ class ReleaseReview extends Component {
             <View style={GlobleStyles.withoutTitleContainer}>
                 <View>
                     <SegmentedControlIOS
-                        values={['等待','审核中','审完']}
+                        values={['未核','核完']}
                         selectedIndex={this.state.selectedIndex}
                         style={styles.segmented}
                         onChange={this._onChange}
                     />
                 </View>
-                {this.renderBookList()}
+                {this.renderCheckList()}
             </View>
 
         );
@@ -268,36 +283,30 @@ class ReleaseReview extends Component {
 
     }
 
+    selectquestion(index){
+
+    }
+
     renderRow(rowData, sectionID, rowID) {
-        var bookid =rowData.bookid;
-        var cover = rowData.cover;
-        var name =rowData.bookname;
-        var bookbrief =rowData.bookbrief;
-        var questionsnumber =rowData.q_count;
-        var follow =rowData.follow;
-        var bookstatus =rowData.status;
-        var reviewid =rowData.reviewid;
+        var ask = (rowData.ask);
+        var qId = (rowData.questionid);
         return (
-            <TouchableOpacity  onPress={()=>(Actions.reviewchecklist({reviewid}))} >
-                <View style={styles.listItem}>
-                    <Image style={styles.image} resizeMode="cover" source={{uri:`${httpsBaseUrl}${cover}`}}/>
-                    <View style={styles.bottomTextContainer}>
-                        <Text style={styles.titleText}>{name}</Text>
-                        <Text style={styles.bottomText}>审核id:{reviewid}</Text>
-                        <Text style={styles.bottomText}>题数:{questionsnumber} 关注:{follow} </Text>
-                    </View>
-                    {this.renderControlButton(bookstatus,bookid)}
+            <TouchableOpacity onPress={() => this.selectquestion(rowID)}>
+                <View  style={styles.questionitemcontainer}>
+                    <Text style={styles.questionitem}>
+                        {rowID} : {ask.substring(0,20)}
+                    </Text>
                 </View>
             </TouchableOpacity>
-        );
 
+        )
     }
 
     renderBookListView(){
         return (
             <ListView
                 enableEmptySections={true}
-                dataSource={DataStore.cloneWithRows(this.state.book_list_data_source)}
+                dataSource={DataStore.cloneWithRows(this.state.question_audit_list_data_source)}
                 renderRow={this._renderRow} />
 
         )
@@ -306,9 +315,9 @@ class ReleaseReview extends Component {
 
 }
 
-ReleaseReview.PropTypes = {
-    userId: PropTypes.string,
+ReviewCheckList.PropTypes = {
+    reviewid: PropTypes.number,
 };
 
 
-module.exports = ReleaseReview;
+module.exports = ReviewCheckList;
