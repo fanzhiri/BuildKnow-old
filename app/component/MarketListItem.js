@@ -37,8 +37,11 @@ const styles = StyleSheet.create({
     mkitem:{
         marginRight:8,
         marginLeft:8,
+        height: 100,
     }
 });
+
+var httpsBaseUrl = "https://slako.applinzi.com/";
 
 class MarketListItem extends Component {
     constructor() {
@@ -49,9 +52,9 @@ class MarketListItem extends Component {
     render() {
         const {rowID, cover} = this.props;
         return (
-            <TouchableOpacity rowID={rowID}  onPress={()=>(Actions.bookcover({rowID}))} >
+            <TouchableOpacity rowID={rowID}  onPress={()=>(Actions.bookcover({bookdata:this.props.book}))} >
                 <View style={styles.mkitem}>
-                    <Image style={[styles.image, this.props.imageStyle]} resizeMode="cover" source={require('../image/market/month/C加加.jpg')}/>
+                    <Image style={[styles.image, this.props.imageStyle]} resizeMode="cover" source={{uri:`${httpsBaseUrl}${cover}`}} />
                     {this.renderBottomText()}
                 </View>
             </TouchableOpacity>
@@ -59,17 +62,12 @@ class MarketListItem extends Component {
     }
 
     renderBottomText() {
-        const {bookname} = this.props;
-        if (bookname) {
-            return (
-                <View style={styles.bottomTextContainer}>
-                    <Text style={styles.bottomText}>{bookname}</Text>
-                    {/*<Image resizeMode="cover" style={styles.bottomImage} source={require('../image/score_line.png')}/>*/}
-                </View>
-            );
-        } else {
-            return null;
-        }
+        return (
+            <View style={styles.bottomTextContainer}>
+                <Text style={styles.bottomText}>{this.props.bookname}</Text>
+                {/*<Image resizeMode="cover" style={styles.bottomImage} source={require('../image/score_line.png')}/>*/}
+            </View>
+        );
     }
 }
 
@@ -77,6 +75,7 @@ MarketListItem.PropTypes = {
     rowID: PropTypes.number,
     bookname: PropTypes.string.isRequired,
     cover: PropTypes.string.isRequired,
+    book:PropTypes.object,
 
 };
 

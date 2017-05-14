@@ -51,6 +51,8 @@ const styles = StyleSheet.create({
     }
 });
 
+var httpsBaseUrl = "https://slako.applinzi.com/";
+
 class BookCover extends Component {
     constructor(props) {
         super(props);
@@ -72,17 +74,17 @@ class BookCover extends Component {
     }
 
     render(){
-        const {rowID} = this.props;
+
         return (
             <View style={GlobleStyles.withoutTitleContainer}>
                 <View marginTop={10} style={styles.container1}>
                     <View>
-                        <Image style={styles.image} source={require('../image/market/carousel/1.jpg')}/>
+                        <Image style={styles.image} source={{uri:`${httpsBaseUrl}${this.props.bookdata.cover}`}} />
                     </View>
                     <View style={styles.container2}>
-                        <Text>历史人物</Text>
-                        <Text>{rowID}</Text>
-                        <Text>100个国家400位领导人</Text>
+                        <Text>{this.props.bookdata.bookname}</Text>
+
+                        <Text>{this.props.bookdata.bookdescription}</Text>
                         <Button style={{fontSize: 16,color: 'green' ,width:38,height:24, overflow:'hidden', borderRadius:4, backgroundColor: 'red'}} onPress={() => this._handlePress()}>获取</Button>
                     </View>
                 </View>
@@ -136,7 +138,7 @@ class BookCover extends Component {
 }
 
 BookCover.PropTypes = {
-    rowID: PropTypes.number,
+    bookdata: PropTypes.object,
 };
 
 module.exports = BookCover;

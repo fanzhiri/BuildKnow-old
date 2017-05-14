@@ -47,18 +47,24 @@ class Market extends Component {
         const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
         this.state = {
             newbookdataSource:null,
-            dataSource: ds.cloneWithRows(Marketlistdata)
+            dataSource1: ds.cloneWithRows(Marketlistdata),
+            dataSource2: ds.cloneWithRows(Marketlistdata),
+            dataSource3: ds.cloneWithRows(Marketlistdata),
+            dataSource4: ds.cloneWithRows(Marketlistdata),
+            dataSource5: ds.cloneWithRows(Marketlistdata)
         };
-        this.renderRow = this.renderRow.bind(this);
-
+        this._renderRow = this.renderRow.bind(this);
+        //this._renderRow2 = this.renderRow2.bind(this);
     }
 
     renderRow(rowData, sectionID, rowID) {
         return (
             <MarketListItem
-                rowID={rowID}  cover={rowData.cover} name={rowData.bookname} />
+                rowID={rowID}  cover={rowData.cover} bookname={rowData.bookname} book={rowData}/>
         );
     }
+
+
 
     renderNewBookView(){
         if(this.state.newbookdataSource == null){
@@ -66,14 +72,14 @@ class Market extends Component {
 
         }else{
             return(
-                <view>
+                <View>
                     <Text style={styles.title} >最新审核</Text>
                     <ListView
                         enableEmptySections={true}
                         horizontal={true}
                         dataSource={DataStore.cloneWithRows(this.state.newbookdataSource)}
                         renderRow={this._renderRow} />
-                </view>
+                </View>
             );
         }
 
@@ -122,32 +128,18 @@ class Market extends Component {
                     </View>
                 </Swiper>
 
-                <Text  style={styles.title} onPress={()=>(Actions.bookcover())} >本周排行</Text>
-                <ListView
-                    horizontal={true}
-                    dataSource={this.state.dataSource}
-                    renderRow={this.renderRow} />
+                    {this.renderNewBookView()}
+
+                <Text style={styles.title} >本周排行</Text>
+
                 <Text style={styles.title} >本月排行</Text>
-                <ListView
-                    horizontal={true}
-                    dataSource={this.state.dataSource}
-                    renderRow={this.renderRow} />
+
                 <Text style={styles.title} >年度排行</Text>
-                <ListView
-                    horizontal={true}
-                    dataSource={this.state.dataSource}
-                    renderRow={this.renderRow} />
+
                 <Text style={styles.title} >收费排行</Text>
-                <ListView
-                    horizontal={true}
-                    dataSource={this.state.dataSource}
-                    renderRow={this.renderRow} />
+
                 <Text style={styles.title} >热门推荐</Text>
-                <ListView
-                    horizontal={true}
-                    dataSource={this.state.dataSource}
-                    renderRow={this.renderRow} />
-                 {this.renderNewBookView()}
+
                 </ScrollView>
             </View>
         );
