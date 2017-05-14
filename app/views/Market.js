@@ -86,6 +86,25 @@ class Market extends Component {
 
     }
 
+    renderRankBookView(name){
+        if(this.state.newbookdataSource == null){
+            this.fetchBookStorelist(1);
+
+        }else{
+            return(
+                <View>
+                    <Text style={styles.title} >{name}</Text>
+                    <ListView
+                        enableEmptySections={true}
+                        horizontal={true}
+                        dataSource={DataStore.cloneWithRows(this.state.newbookdataSource)}
+                        renderRow={this._renderRow} />
+                </View>
+            );
+        }
+
+    }
+
     fetchBookStorelist(type){
         let formData = new FormData();
         formData.append("auth",global.auth);
@@ -139,10 +158,10 @@ class Market extends Component {
 
                     {this.renderNewBookView()}
 
-                <Text style={styles.title} >本周排行</Text>
 
-                <Text style={styles.title} >本月排行</Text>
+                    {this.renderRankBookView("本周排行")}
 
+                    {this.renderRankBookView("本月排行")}
                 <Text style={styles.title} >年度排行</Text>
 
                 <Text style={styles.title} >收费排行</Text>
