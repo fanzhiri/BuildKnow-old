@@ -2,7 +2,7 @@
  * Created by slako on 17/2/18.
  */
 import React, { Component } from 'react';
-import {View, Text, StyleSheet, ListView, ScrollView, Image} from "react-native";
+import {View, Text, StyleSheet, ListView, ScrollView, Image,RefreshControl} from "react-native";
 import {Actions} from "react-native-router-flux";
 import Button from "react-native-button";
 import Swiper from 'react-native-swiper';
@@ -47,6 +47,7 @@ class Market extends Component {
         const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
         this.state = {
             newbookdataSource:null,
+            gorefreshing:false,
             dataSource1: ds.cloneWithRows(Marketlistdata),
             dataSource2: ds.cloneWithRows(Marketlistdata),
             dataSource3: ds.cloneWithRows(Marketlistdata),
@@ -114,7 +115,15 @@ class Market extends Component {
     render(){
         return (
             <View style={styles.container}>
-                <ScrollView >
+                <ScrollView
+                    refreshControl={
+                        <RefreshControl
+                            refreshing={this.state.gorefreshing}
+                            onRefresh={() => this.fetchBookStorelist()}
+                        />
+                    }
+
+                >
                 <Swiper height={200} loop={true} autoplay={true}>
                     <View style={styles.slide} >
                         <Image source={require('../image/market/carousel/1.jpg')} style={styles.imgCarousel}></Image>

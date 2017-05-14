@@ -239,7 +239,7 @@ class ReleaseReview extends Component {
                     });
                 }else if(responseData.code == 201){
                     alert("没有审核完");
-                    alert(responseData.data);
+                    //alert(responseData.data);
                 }else{
 
                 }
@@ -304,7 +304,7 @@ class ReleaseReview extends Component {
             <ListView
                 enableEmptySections={true}
                 dataSource={DataStore.cloneWithRows(this.state.book_list_data_source)}
-                renderRow={this.renderRow} />
+                renderRow={this._renderRow} />
 
         )
     }

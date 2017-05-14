@@ -150,7 +150,7 @@ class ReviewQuestion extends Component {
 
     passAudit(){
         this.fetchAudit(1);
-        Actions.pop;
+        Actions.pop();
     }
 
     rejectAudit(){
