@@ -89,7 +89,7 @@ export default class BuildKnow extends Component {
                     <Scene key="market" title="市场" component={Market} duration={0} icon={MainTabbarIcon}
                            iconName="ios-home-outline"
                            selectIconName="ios-home"
-                           leftTitle  ={"分类"}  onLeft  ={() => Actions.classcatalogue()}
+                           leftTitle  ={"分类"}  onLeft  ={() => Actions.classcatalogue({classifyid:0,title:"分类"})}
                            rightTitle ={"搜索"}  onRight ={() => Actions.searchbook()}
                     />
                     <Scene key="follow" title="关注" component={Follow} duration={0} icon={MainTabbarIcon}
@@ -119,7 +119,7 @@ export default class BuildKnow extends Component {
                 <Scene key="friendlist" title="友人" component={FriendList} duration={0} />
                 <Scene key="newonequestion" title="新建单个题目" component={NewOneQuestion} duration={0} />
                 <Scene key="newsomequestions" title="新建一列题目" component={NewSomeQuestions} duration={0} />
-                <Scene key="composebook" title="组建题本" component={ComposeBook} duration={0} rightTitle={"添加"} onRight={() => Actions.newonequestion()}/>
+                <Scene key="composebook" title="组建题本" component={ComposeBook} duration={0} />
                 <Scene key="personalcenter" title="个人信息" component={PersonalCenter} duration={0} />
                 <Scene key="setheadpic" title="上传头像" component={SetHeadPic} duration={0} />
                 <Scene key="sethomepagepic" title="上传主页背景" component={SetHomePagePic} duration={0} />

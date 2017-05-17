@@ -168,6 +168,7 @@ class Market extends Component {
 
                 <Text style={styles.title} >热门推荐</Text>
 
+                    <Text style={styles.title} >兴趣推荐</Text>
                 </ScrollView>
             </View>
         );

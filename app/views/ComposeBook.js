@@ -4,9 +4,9 @@
  */
 import React, { Component ,PropTypes} from 'react';
 
-import {View, Text, Image, StyleSheet, SegmentedControlIOS, ListView, TouchableOpacity,Alert} from "react-native";
+import {View, Text, Image, StyleSheet, SegmentedControlIOS, ListView, TouchableOpacity,Alert,ScrollView} from "react-native";
 
-import Button from "react-native-button";
+import Button from 'apsl-react-native-button'
 import {
     Scene,
     Reducer,
@@ -28,6 +28,8 @@ import Dialog from "react-native-dialog";
 
 import Toast, {DURATION} from 'react-native-easy-toast'
 
+
+
 const styles = StyleSheet.create({
     container: {
         flex: 1,
@@ -42,6 +44,9 @@ const styles = StyleSheet.create({
     container2: {
         flex: 3,
     },
+    segmentedcontrolcontainer: {
+        marginBottom:10,
+    },
 
     image:{
         flex:1,
@@ -55,7 +60,7 @@ const styles = StyleSheet.create({
         alignSelf:'center'
     },
     list:{
-        marginTop:20
+        marginTop:6
     },
     questionitemcontainer:{
 
@@ -110,18 +115,70 @@ const styles = StyleSheet.create({
     sharecontroltext:{
         fontSize: 14,
     },
+    imgcontainer:{
+        justifyContent: 'space-around',
+        flexDirection:'row',
+    },
+    leftImgStyle:{
+        width:100,
+        height:100,
+        marginTop:16,
+    },
+    rightImgStyle:{
+        width:190,
+        height:100,
+        marginTop:16,
+    },
+    infoedittext:{
+        marginTop:10,
+        fontSize: 16,
+    },
+    infocontainer:{
+        marginLeft:10,
+        marginRight:10,
+
+    },
+    edittext:{
+        marginTop:12,
+        fontSize: 16,
+        color:'#CD2626'
+    },
+    btncontainer:{
+        marginTop:10,
+        justifyContent: 'space-around',
+        flexDirection:'row',
+    },
+    addQuestionButton:{
+        width:60,height:24,
+        backgroundColor: '#00FF7F',
+    },
+    listItem: {
+        flex: 1,
+        height: 48,
+        backgroundColor: 'white',
+        flexDirection: 'row',
+        alignItems: 'center',
+        paddingLeft: 16,
+        paddingRight: 25,
+        borderBottomColor: '#c4c4c4',
+        borderBottomWidth: 1
+    },
 });
 
 var doGetMyBookQuestionUrl = "https://slako.applinzi.com/index.php?m=question&c=personal&a=getmybookquestion";
 
 var doDeleteQuestionUrl = "https://slako.applinzi.com/index.php?m=question&c=personal&a=deletequestion";
 
+var doGetMyComposeBookUrl = "https://slako.applinzi.com/index.php?m=question&c=personal&a=getmycomposebook";
+
+var httpsBaseUrl = "https://slako.applinzi.com/";
 
 class ComposeBook extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
+            composebookdata:null,
             bookquestion_data_source:null,
             selectedIndex:0,
             selectedQuestion:-1,
@@ -130,6 +187,33 @@ class ComposeBook extends Component {
         this._handlePress = this._handlePress.bind(this);
         this._renderQuestionItem = this.renderQuestionItem.bind(this);
 
+    }
+
+    dofetch_mycomposebook(){
+
+        let formData = new FormData();
+        formData.append("auth",global.auth);
+        formData.append("bookid",this.props.bookid);
+        formData.append("userid",global.userid);
+        var opts = {
+            method:"POST",
+            body:formData
+        }
+        fetch(doGetMyComposeBookUrl,opts)
+            .then((response) => response.json())
+            .then((responseData) => {
+                if(responseData.code == 100){
+                    this.setState({
+                        composebookdata:responseData.data
+                    })
+                }else{
+                    alert(responseData.message);
+                }
+
+            })
+            .catch((error) => {
+                alert(error)
+            })
     }
 
     dofetch_mybookquestion(){
@@ -205,32 +289,16 @@ class ComposeBook extends Component {
         return (
             <View style={GlobleStyles.withoutTitleContainer}>
 
-                <View>
-                    <Button onPress={() => Actions.newonequestion({bookid})}>添加题目</Button>
-                    <Button onPress={() => Actions.newsomequestions({bookid})}>批量添加</Button>
-                    <Button onPress={() => this.deletebook({bookid})}>删除题本</Button>
-                    <Button onPress={() => this.deletebook({bookid})}>修改题本{bookid}</Button>
-                    <View  style={styles.sharecontrolcontainer}>
-                        <Text style={styles.sharecontroltext} >分享方式</Text>
-                        <View style={styles.sharecontrolcontainer2}>
-                            {/*<Button onPress={() => Actions.sharecontrol({bookid})}>私密</Button>*/}
-                            <TouchableOpacity onPress={() => Actions.sharecontrol({bookid})}>
-                                <Text>私密</Text>
-                            </TouchableOpacity>
-                        </View>
-
-                    </View>
-
-                </View>
-                <View>
+                <View style={styles.segmentedcontrolcontainer}>
                     <SegmentedControlIOS
-                        values={['题目','发布','历史']}
+                        values={['简介','题目','分享','评论','建议']}
                         selectedIndex={this.state.selectedIndex}
                         style={styles.segmented}
                         onChange={this._onChange}
                     />
                 </View>
-                {this.renderSegmentedView()}
+                <View>{this.renderSegmentedView()}</View>
+
                 <Toast
                     ref="toastmsg"
                     style={{backgroundColor:'green'}}
@@ -248,17 +316,33 @@ class ComposeBook extends Component {
     renderSegmentedView() {
         if (this.state.selectedIndex === 0) {
             return (
-                this.renderQuestionView()
+                this.renderBaseView()
+                //this.renderQuestionView()
             )
         } else if (this.state.selectedIndex === 1) {
             return (
-                this.renderDiscussView()
+                this.renderQuestionView()
+                //this.renderBaseView()
             )
         } else if (this.state.selectedIndex === 2) {
+            return (
+                this.renderDiscussView()
+            )
+        } else if (this.state.selectedIndex === 3) {
             return (
                 this.renderHistoryView()
             )
         }
+    }
+
+    renderBaseView(){
+        if(this.state.composebookdata == null){
+            this.dofetch_mycomposebook();
+            return (this.renderLoading())
+        }else{
+            return (this.renderBaseInfoView())
+        }
+
     }
 
     renderQuestionView(){
@@ -318,9 +402,55 @@ class ComposeBook extends Component {
         )
     }
 
+    editbookinfo(){
+
+    }
+    editimginfo(){
+
+    }
+
+    renderBaseInfoView(){
+        return (
+            //注意!!!下面不能改为View，否则第一次查询不能显示
+            <ScrollView style={styles.infocontainer}>
+                <View style={styles.imgcontainer}>
+                    <Image source={{uri:`${httpsBaseUrl}${this.state.composebookdata.cover}`}} style={styles.leftImgStyle}/>
+                    <Image source={{uri:`${httpsBaseUrl}${this.state.composebookdata.cover}`}} style={styles.rightImgStyle}/>
+
+                </View>
+                <View style={styles.imgcontainer}>
+                    <TouchableOpacity  onPress={()=> this.editbookinfo()} >
+                        <Text style={styles.edittext} >(编辑 -> 图标)</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity  onPress={()=> this.editbookinfo()} >
+                        <Text style={styles.edittext} >(编辑 -> 推荐照片)  </Text>
+                    </TouchableOpacity>
+
+                </View>
+                <View>
+
+                    <Text style={styles.infoedittext}>名字：{this.state.composebookdata.bookname}</Text>
+                    <Text style={styles.infoedittext}>简介：{this.state.composebookdata.bookbrief}</Text>
+                    <Text style={styles.infoedittext}>描述：{this.state.composebookdata.bookdescription}</Text>
+                    <TouchableOpacity  onPress={()=> this.editbookinfo()} >
+                        <Text style={styles.edittext} >(编辑 -> 名字、简介、描述)</Text>
+                    </TouchableOpacity>
+                </View>
+
+            </ScrollView>
+            //注意!!!上面不能改为View，否则第一次查询不能显示
+        )
+    }
+
     renderQuestionListView(){
         return (
 
+            <ScrollView>
+                <View style={styles.btncontainer}>
+                    <Button style={styles.addQuestionButton} textStyle={{fontSize: 16}} onPress={() => Actions.newonequestion({bookid:this.props.bookid})} >添一个</Button>
+                    <Button style={styles.addQuestionButton} textStyle={{fontSize: 16}} onPress={() => Actions.newsomequestions({bookid:this.props.bookid})} >添多个</Button>
+                    <Button style={styles.addQuestionButton} textStyle={{fontSize: 16}}  >垃圾桶</Button>
+                </View>
 
                 <ListView
                     style={styles.list}
@@ -328,8 +458,7 @@ class ComposeBook extends Component {
                     renderRow={(rowData, sectionID, rowID) => this._renderQuestionItem(rowData, sectionID, rowID)}
                     enableEmptySections = {true}
                 />
-
-
+            </ScrollView>
 
         )
     }
@@ -355,17 +484,53 @@ class ComposeBook extends Component {
 {text:'是的',onPress:()=> this.refs.toastmsg.show('hello world!',DURATION.LENGTH_LONG)},
 {text:'不了',onPress:()=>this.refs.toastmsg.show('hello cancel!',DURATION.LENGTH_LONG)}
     */
+
+    renderShareWayText(){
+        var textway=null;
+        if(this.state.composebookdata.share == 0){
+            textway="私密";
+        }else if(this.state.composebookdata.share == 1){
+            textway="指定";
+        }else if(this.state.composebookdata.share == 2){
+            textway="公开";
+        }
+        return (
+            <Text style={{color: "#ccc"}}>{textway}</Text>
+        );
+    }
+
+    gocontrol(){
+
+    }
+
+    renderShareWay(){
+        return(
+            <TouchableOpacity onPress={() => Actions.sharecontrol({bookId:this.props.bookid})} activeOpacity={0.8}>
+                <View style={styles.listItem}>
+
+                    <Text style={{color: 'black', fontSize: 14, marginLeft: 10}}>分享方式：</Text>
+                    {this.renderShareWayText()}
+                    <View style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-end'}}>
+                        <Text style={{color: "#ccc"}}>更改</Text>
+                    </View>
+
+                </View>
+            </TouchableOpacity>
+        );
+    }
+
     renderDiscussView(){
         //const {bookid} = this.props;
         return (
-            <View>
+            <ScrollView>
+                {this.renderShareWay()}
                 <TouchableOpacity onPress={() => this.applyforrelease()}>
                     <Text>发布申请</Text>
                 </TouchableOpacity>
                 <TouchableOpacity onPress={() => this.cancelapplydialog()}>
                     <Text>撤销申请</Text>
                 </TouchableOpacity>
-            </View>
+            </ScrollView>
 
         )
     }

@@ -29,6 +29,7 @@ const styles = StyleSheet.create({
         borderBottomColor:'#e8e8e8',
         //主轴方向
         flexDirection:'row',
+        alignItems: 'center',
     },
     rightViewStyle:{
         //主轴对齐方式
@@ -45,6 +46,12 @@ const styles = StyleSheet.create({
         marginBottom:10
     },statusText: {
         fontSize: 14,
+        justifyContent: 'center',
+        color: 'red',
+    },
+    numText: {
+        fontSize: 20,
+        marginRight:10,
         justifyContent: 'center',
         color: 'red',
     },
@@ -115,23 +122,24 @@ class MyBookList extends Component {
         }
     }
 
-    renderBookItem(book){
-        var cover = (book.cover);
-        var bookid= (book.question_book_id);
+    renderBookItem(rowData, sectionID, rowID){
+        var cover = rowData.cover;
+        var bookid= rowData.question_book_id;
         return (
-            <TouchableOpacity onPress={() => Actions.composebook({bookid})}>
+            <TouchableOpacity onPress={() => Actions.composebook({bookid:bookid,title:rowData.bookname})}>
                 <View style={styles.listItem}>
+                    <Text style={styles.numText}>{rowID}</Text>
                     <Image source={{uri:`${httpsBaseUrl}${cover}`}} style={styles.leftImgStyle}/>
                     <View>
                         <Text style={styles.topTitleStyle}>
-                            {book.bookname}
+                            {rowData.bookname}
                         </Text>
-                        {this.renderReviewing(book.status)}
+                        {this.renderReviewing(rowData.status)}
                         <Text >
-                            {book.bookbrief}
+                            {rowData.bookbrief}
                         </Text>
                         <Text >
-                            题数:{book.q_count}  关注:{book.follow}  分享:{book.share}  评论:{10}
+                            题数:{rowData.q_count}  关注:{rowData.follow}  分享:{rowData.share}  评论:{10}
                         </Text>
                     </View>
                 </View>
@@ -144,7 +152,7 @@ class MyBookList extends Component {
             <ListView
                 style={styles.list}
                 dataSource={DataStore.cloneWithRows(this.state.books_data_source)}
-                renderRow={(rowData) => this._renderBookItem(rowData)}
+                renderRow={this._renderBookItem}
                 enableEmptySections = {true}
             />
         )

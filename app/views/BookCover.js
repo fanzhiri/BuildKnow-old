@@ -70,6 +70,9 @@ const styles = StyleSheet.create({
         marginTop:8,
         fontSize: 14,
     },
+    textmargin:{
+        marginTop:10,
+    }
 });
 
 var httpsBaseUrl = "https://slako.applinzi.com/";
@@ -244,7 +247,13 @@ class BookCover extends Component {
 
     renderIntroduceView(){
         return (
-            <Text>IntroduceView</Text>
+            <View>
+                <Text style={styles.textmargin}>题目数量 :{this.state.bookdata.questioncount}</Text>
+                <Text style={styles.textmargin}>题本简介 :{this.state.bookdata.bookbrief}</Text>
+                <Text style={styles.textmargin}>题本详情 :{this.state.bookdata.bookdescription}</Text>
+                <Text style={styles.textmargin}>题目编号 :{this.state.bookdata.qids}</Text>
+                <Text style={styles.textmargin}>关注人数 :{this.state.bookdata.follow}</Text>
+            </View>
         )
     }
 
