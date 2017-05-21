@@ -113,9 +113,10 @@ class ClassCatalogue extends Component {
             .then((response) => response.json())
             .then((responseData) => {
                 if(responseData.code == 100){
-                    alert("ok");
+                    //alert("ok");
                     this.setState({
-                        addclass:false
+                        addclass:false,
+                        classtext:""
                     })
                     this.dofetch_cataloguedata(this.props.classifyid);
                 }else{

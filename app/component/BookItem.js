@@ -83,7 +83,7 @@ class BookItem extends Component {
 }
 
 BookItem.PropTypes = {
-    bookid:PropTypes.menubar,
+    bookid:PropTypes.number,
     name: PropTypes.string.isRequired,
     cover: PropTypes.string.isRequired,
     bookbrief: PropTypes.string.isRequired,

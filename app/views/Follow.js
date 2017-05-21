@@ -211,12 +211,12 @@ class Follow extends Component {
         var userId = (people.userid);
         return (
 
-            <TouchableOpacity onPress={() => Actions.homepage({userId})}>
+            <TouchableOpacity onPress={() => Actions.homepage({userId:userId,title:people.nickname,peopledata:people})}>
                 <View style={styles.peopleItem}>
                     <Image source={{uri:`${httpsBaseUrl}${people.head}`}} style={styles.leftImgStyle}/>
                     <View>
                         <Text style={styles.topTitleStyle}>
-                            {people.username}
+                            {people.nickname}
                         </Text>
                         <Text >
                             粉丝:{people.follow}  在建:{people.buildingshare}  发布:{people.releaseshare}

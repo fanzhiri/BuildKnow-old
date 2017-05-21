@@ -71,6 +71,9 @@ import FeedBack from './views/FeedBack'
 import ReviewCheckList from './views/ReviewCheckList'
 import ReviewQuestion from './views/ReviewQuestion'
 import MyCollectBookList from './views/MyCollectBookList'
+import ChatList from './views/ChatList'
+//51
+
 
 import Icon from 'react-native-vector-icons/Ionicons';
 
@@ -118,7 +121,7 @@ export default class BuildKnow extends Component {
                 <Scene key="newbook" title="新建题本" component={NewBook} duration={0} />
                 <Scene key="friendlist" title="友人" component={FriendList} duration={0} />
                 <Scene key="newonequestion" title="新建单个题目" component={NewOneQuestion} duration={0} />
-                <Scene key="newsomequestions" title="新建一列题目" component={NewSomeQuestions} duration={0} />
+                <Scene key="newsomequestions" title="新建题目" component={NewSomeQuestions} duration={0} />
                 <Scene key="composebook" title="组建题本" component={ComposeBook} duration={0} />
                 <Scene key="personalcenter" title="个人信息" component={PersonalCenter} duration={0} />
                 <Scene key="setheadpic" title="上传头像" component={SetHeadPic} duration={0} />
@@ -143,6 +146,7 @@ export default class BuildKnow extends Component {
                 <Scene key="reviewchecklist" title="审核表" component={ReviewCheckList} duration={0} />
                 <Scene key="reviewquestion" title="审核题目" component={ReviewQuestion} duration={0} />
                 <Scene key="mycollectbooklist" title="收藏题本" component={MyCollectBookList} duration={0} />
+                <Scene key="chatlist" title="聊天" component={ChatList} duration={0} />
             </Router>
         );
     }

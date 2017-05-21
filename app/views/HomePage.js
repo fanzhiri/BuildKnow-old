@@ -176,7 +176,7 @@ class HomePage extends Component {
                             <View style={styles.topViewContainer}>
                                 <Image style={styles.topImgView} source={{uri:'https://slako.applinzi.com/statics/images/question/personalhomepage/1.jpg', width: window.width, height: 200 }} >
                                     <Image source={{uri:'https://slako.applinzi.com/statics/images/question/head/boy/4.jpg', width: 80, height: 80 }} />
-                                    <Text>昵称:abc</Text>
+                                    <Text>昵称:{this.props.peopledata.nickname}</Text>
                                     <Text>题本数:5</Text>
                                     <Text>粉丝:20  题本被收藏:60</Text>
                                     <TouchableOpacity  onPress={()=> Actions.complaint({userId})} >
@@ -213,7 +213,9 @@ class HomePage extends Component {
                 </ParallaxScrollView>
                 <View style={styles.bottomButtonViewContainer}>
                     {this.renderFollowControl()}
-                    <Text style={styles.bottomButtonText} >私信</Text>
+                    <TouchableOpacity  onPress={()=> Actions.chatlist({chattoid:this.props.peopledata.userid,title:this.props.peopledata.nickname})} >
+                        <Text style={styles.bottomButtonText} >私信</Text>
+                    </TouchableOpacity>
                     {this.renderFriendControl()}
                     <Text style={styles.bottomButtonText} >备注</Text>
                 </View>
@@ -362,6 +364,7 @@ class HomePage extends Component {
 
 HomePage.PropTypes = {
     userId: PropTypes.string.isRequired,
+    peopledata:PropTypes.object,
 };
 
 Array.prototype.contains = function (element) {
