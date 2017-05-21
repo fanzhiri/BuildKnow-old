@@ -490,12 +490,16 @@ class ComposeBook extends Component {
         if(this.state.composebookdata.share == 0){
             textway="私密";
         }else if(this.state.composebookdata.share == 1){
-            textway="指定";
+            textway="关注";
         }else if(this.state.composebookdata.share == 2){
-            textway="公开";
+            textway="所有";
+        }else if(this.state.composebookdata.share == 3){
+            textway="好友";
+        }else if(this.state.composebookdata.share == 4){
+            textway="指定";
         }
         return (
-            <Text style={{color: "#FF0000", fontSize: 16}}>{textway}</Text>
+            <Text style={{color: "#FF0FF0", fontSize: 16}}>{textway}</Text>
         );
     }
 
@@ -505,7 +509,7 @@ class ComposeBook extends Component {
 
     renderShareWay(){
         return(
-            <TouchableOpacity onPress={() => Actions.sharecontrol({bookId:this.props.bookid})} activeOpacity={0.8}>
+            <TouchableOpacity onPress={() => Actions.sharecontrol({bookId:this.props.bookid,sharetype:this.state.composebookdata.share})} activeOpacity={0.8}>
                 <View style={styles.listItem}>
 
                     <Text style={{color: '#FF0000', fontSize: 16}}>分享方式：</Text>

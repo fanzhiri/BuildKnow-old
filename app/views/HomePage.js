@@ -72,15 +72,18 @@ var followUrl = "https://slako.applinzi.com/index.php?m=question&c=personal&a=ad
 
 var friendUrl = "https://slako.applinzi.com/index.php?m=question&c=personal&a=friendchange";
 
+var prbUrl = "https://slako.applinzi.com/index.php?m=question&c=index&a=personalreleasebooks";
 
 var doGetHomePageBaseUrl = "https://slako.applinzi.com/api/1/homepage/";
+var doGetReleaseBooksUrl = "https://slako.applinzi.com/api/1/releasebooks/";
 
 class HomePage extends Component {
     constructor(props) {
         super(props);
         this.state = {
             netresult:'no',
-            homepage_data_source: null,
+            homepage_data_source: null,//内测本
+            homepage_releasebooks_source: null,//发布本
             selectedIndex:0,
             followhim:global.followperson.contains(this.props.userId),
             friendhim:global.friend.contains(this.props.userId),
@@ -103,6 +106,32 @@ class HomePage extends Component {
                 if(responseData.code == 100){
                     this.setState({
                         homepage_data_source:responseData.data
+                    })
+                }else{
+                    this.setState({
+                        netresult:responseData.code
+                    })
+                }
+
+            })
+            .catch((error) => {
+                alert(error)
+            })
+    }
+
+    fetchReleaseBooks(){
+
+
+        let url = `${doGetReleaseBooksUrl}${this.props.userId}`;
+        var opts = {
+            method:"GET"
+        }
+        fetch(url,opts)
+            .then((response) => response.json())
+            .then((responseData) => {
+                if(responseData.code == 100){
+                    this.setState({
+                        homepage_releasebooks_source:responseData.data
                     })
                 }else{
                     this.setState({
@@ -296,9 +325,15 @@ class HomePage extends Component {
                     this.renderTestingView()
                 )
             } else if (this.state.selectedIndex === 1) {
-                return (
-                    this.renderReleaseView()
-                )
+                if(this.state.homepage_releasebooks_source){
+                    return (
+                        this.renderReleaseView()
+                    )
+                }else{
+                    this.fetchReleaseBooks();
+                    return (this.renderLoading())
+                }
+
             } else if (this.state.selectedIndex === 2) {
                 return (
                     this.renderAboutView()
@@ -351,7 +386,10 @@ class HomePage extends Component {
 
     renderReleaseView(){
         return (
-            <Text>Discuss</Text>
+            <ListView
+            enableEmptySections={true}
+            dataSource={DataStore.cloneWithRows(this.state.homepage_releasebooks_source)}
+            renderRow={this._renderRow} />
         )
     }
 

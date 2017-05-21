@@ -104,13 +104,14 @@ class Me extends Component {
                                 <Text style={styles.bottomText}>昵称：{global.nickname}</Text>
                                 <Text style={styles.bottomText}>学术等级:10</Text>
                                 <Text style={styles.bottomText}>个人中心</Text>
-                                <Text style={styles.bottomText}>用户id:{global.userid}</Text>
+                                <Text style={styles.bottomText}>用户id:{global.userid}{global.mydata.nickname}</Text>
                             </View>
                         </View>
                     </TouchableOpacity>
                     <View style={styles.list}>
                         {this.renderAdmin()}
-                        <MeItem icon={"ios-medal"} text={"我的主页"} iconColor="#c88400" onPress={() => Actions.homepage({userId})} />
+                        <MeItem icon={"ios-medal"} text={"我的主页"} iconColor="#c88400"
+                                onPress={() => Actions.homepage({userId:global.userid,peopledata:global.mydata})} />
                         <MeItem icon={"md-build"} text={"我的题本"} iconColor="#FF0000"  onPress={() => Actions.mybooklist()} />
                         <MeItem icon={"md-cube"} text={"答案库"} iconColor="#D15FEE"  onPress={() => Actions.answerlib()} />
                         <MeItem icon={"md-link"} text={"分享管理"} onPress={() => Actions.sharemanager()} />

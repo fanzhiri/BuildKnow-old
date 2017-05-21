@@ -4,7 +4,7 @@
  */
 import React, { Component ,PropTypes} from 'react';
 
-import {View, Text, Image, StyleSheet, SegmentedControlIOS} from "react-native";
+import {View, Text, Image, StyleSheet, SegmentedControlIOS,TouchableOpacity} from "react-native";
 
 import Button from "react-native-button";
 
@@ -68,7 +68,20 @@ const styles = StyleSheet.create({
     },
     textmargin:{
         marginTop:10,
-    }
+    },
+    ButtonViewContainer:{
+        flex:1,
+        justifyContent: 'flex-end',
+    },
+    bottomButtonViewContainer:{
+        flexDirection:'row',
+        justifyContent: 'space-around',
+        height: 32,
+        alignItems: 'center',
+    },
+    bottomButtonText: {
+        fontSize: 16,
+    },
 });
 
 class BuildingBook extends Component {
@@ -223,7 +236,17 @@ class BuildingBook extends Component {
 
     renderDiscussView(){
         return (
-            <Text>Discuss</Text>
+        <View style={styles.ButtonViewContainer}>
+            <View style={styles.bottomButtonViewContainer}>
+
+                <TouchableOpacity  onPress={()=> Actions.chatlist()} >
+                    <Text style={styles.bottomButtonText} >评论</Text>
+                </TouchableOpacity>
+
+                <Text style={styles.bottomButtonText} >赞</Text>
+            </View>
+        </View>
+
         )
     }
 

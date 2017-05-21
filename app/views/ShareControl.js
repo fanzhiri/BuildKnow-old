@@ -4,7 +4,7 @@
 import React, { Component ,PropTypes} from 'react';
 import {View, Text, StyleSheet, ScrollView,TouchableOpacity} from "react-native";
 import {Actions} from "react-native-router-flux";
-import Button from "react-native-button";
+import Button from 'apsl-react-native-button'
 import GlobleStyles from '../styles/GlobleStyles';
 import {storageSave,storeageGet} from '../util/NativeStore';
 import SettingItem from '../component/SettingItem'
@@ -37,9 +37,22 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         width: 40,
+    },
+    buttonviewcontainer:{
+        flex: 1,
+        marginTop:20,
+        justifyContent: 'center',
+        alignItems: 'center',
+        height:60,
+    },
+    submitbutton:{
+        marginLeft:32,
+        marginRight:32,
+        height:40,
+        backgroundColor: '#00EE00'
     }
 });
-var dologoutpostUrl = "https://slako.applinzi.com/index.php?m=member&c=personal&a=sharecontrol";
+var sharecontrolUrl = "https://slako.applinzi.com/index.php?m=question&c=personal&a=sharecontrol";
 
 
 
@@ -51,40 +64,33 @@ class ShareControl extends Component {
         this.state = {
             controldata:null,
             code:0,
-            selectvalue:-1,
+            selectvalue:this.props.sharetype,
 
         };
-        this._dologout = this.dologout.bind(this);
+
     }
 
-    dologout(name,passwd){
-
+    dosubmitshare(){
+        if(this.state.selectvalue == this.props.sharetype){
+            return;
+        }
         let formData = new FormData();
-        formData.append("username",name);
-        formData.append("password",passwd);
-        formData.append("dosubmit","true");
-        formData.append("api","true");
         formData.append("auth",global.auth);
+        formData.append("userid",global.userid);
+        formData.append("bookid",this.props.bookId);
+        formData.append("sharewayid",this.state.selectvalue);
         var opts = {
             method:"POST",
             body:formData
         }
-        fetch(dologoutpostUrl,opts)
+        fetch(sharecontrolUrl,opts)
             .then((response) => response.json())
             .then((responseData) => {
-                this.setState({
-                    code:responseData.code
-                })
+
                 if(responseData.code == 100){
-                    this.setState({
-                        logoutresult:"ok"
-                    })
-                    Actions.login();
+                    alert("ok");
                 }else{
-                    this.setState({
-                        logoutresult:responseData.code
-                    })
-                    alert(responseData.code)
+
                 }
 
             })
@@ -93,20 +99,19 @@ class ShareControl extends Component {
             })
     }
 
-    submitcontrol(){
-
-
-    }
-
     showcontrol(){
 
         return (
             <ScrollView >
                 {this.showcontrolItem("私密不分享",0)}
                 {this.showcontrolItem("分享到关注",1)}
-                {this.showcontrolItem("分享到好友",2)}
-                {this.showcontrolItem("分享到指定",3)}
-                <Button onPress={() => this.submitcontrol()}>提交修改</Button>
+                {this.showcontrolItem("分享到所有",2)}
+                {this.showcontrolItem("分享到好友",3)}
+                {this.showcontrolItem("分享到指定",4)}
+                <View style={styles.buttonviewcontainer}>
+                    <Button style={styles.submitbutton} textStyle={{fontSize: 16}} onPress={() => this.dosubmitshare()}>提交修改</Button>
+                </View>
+
             </ScrollView>
         )
     }
@@ -118,15 +123,20 @@ class ShareControl extends Component {
     }
 
     rendertake(idx){
-        var iconColor ="#FF0000";
-        if(this.state.selectvalue==idx){
-            return(
-                <View style={styles.IconItem}>
-                    <Icon name={"md-checkmark-circle"} size={22} color={iconColor}/>
-                </View>
-            )
+
+        if(idx == this.props.sharetype){
+            iconColor ="#00FF00";
+        }else if(this.state.selectvalue == idx ){
+            iconColor ="#FF0000";
+        }else {
+            return;
         }
 
+        return(
+            <View style={styles.IconItem}>
+                <Icon name={"md-checkmark-circle"} size={22} color={iconColor}/>
+            </View>
+        )
     }
 
     showcontrolItem(text,idx){
@@ -178,6 +188,7 @@ class ShareControl extends Component {
 
 ShareControl.PropTypes = {
     bookId: PropTypes.string.isRequired,
+    sharetype: PropTypes.number.isRequired,
 };
 
 module.exports = ShareControl;

@@ -71,6 +71,7 @@ class Login extends Component {
                     global.nickname=responseData.data.nickname;
                     global.userhead=responseData.data.userhead;
                     global.adminid=responseData.data.adminid;
+                    global.mydata=responseData.data.mydata;
                     //注意看下面！！如果数据库中该字段为空，使用JSON.parse会出错！！在数据库操作的php中，应该检查空并置为[]
                     global.followperson=JSON.parse(responseData.data.followperson);
                     global.friend=JSON.parse(responseData.data.friend);
