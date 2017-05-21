@@ -2,14 +2,14 @@
  * Created by slako on 17/4/30.
  */
 import React, { Component ,PropTypes} from 'react';
-import {View, Text, StyleSheet, ScrollView} from "react-native";
+import {View, Text, StyleSheet, ScrollView,TouchableOpacity} from "react-native";
 import {Actions} from "react-native-router-flux";
 import Button from "react-native-button";
 import GlobleStyles from '../styles/GlobleStyles';
 import {storageSave,storeageGet} from '../util/NativeStore';
 import SettingItem from '../component/SettingItem'
 import RadioForm, {RadioButton, RadioButtonInput, RadioButtonLabel} from 'react-native-simple-radio-button';
-
+import Icon from 'react-native-vector-icons/Ionicons';
 
 const styles = StyleSheet.create({
     list:{
@@ -21,16 +21,27 @@ const styles = StyleSheet.create({
     labeltext:{
         fontSize:24
 
+    },
+    listItem: {
+        flex: 1,
+        height: 48,
+        backgroundColor: 'white',
+        flexDirection: 'row',
+        alignItems: 'center',
+        paddingLeft: 16,
+        paddingRight: 25,
+        borderBottomColor: '#c4c4c4',
+        borderBottomWidth: 1
+    },
+    IconItem:{
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: 40,
     }
 });
 var dologoutpostUrl = "https://slako.applinzi.com/index.php?m=member&c=personal&a=sharecontrol";
 
-var control_radio_props = [
-    {label: '私密不分享', value: 0 },
-    {label: '分享到关注', value: 1 },
-    {label: '分享到好友', value: 2 },
-    {label: '分享到指定', value: 3 }
-];
+
 
 class ShareControl extends Component {
 
@@ -90,16 +101,49 @@ class ShareControl extends Component {
     showcontrol(){
 
         return (
-            <View >
-                <RadioForm
-
-                    radio_props={control_radio_props}
-                    initial={-1}
-                    onPress={(value) => {this.setState({selectvalue:value})}}
-                />
+            <ScrollView >
+                {this.showcontrolItem("私密不分享",0)}
+                {this.showcontrolItem("分享到关注",1)}
+                {this.showcontrolItem("分享到好友",2)}
+                {this.showcontrolItem("分享到指定",3)}
                 <Button onPress={() => this.submitcontrol()}>提交修改</Button>
-            </View>
+            </ScrollView>
         )
+    }
+
+    onSelectChange(idx) {
+        this.setState({
+            selectvalue: idx,
+        });
+    }
+
+    rendertake(idx){
+        var iconColor ="#FF0000";
+        if(this.state.selectvalue==idx){
+            return(
+                <View style={styles.IconItem}>
+                    <Icon name={"md-checkmark-circle"} size={22} color={iconColor}/>
+                </View>
+            )
+        }
+
+    }
+
+    showcontrolItem(text,idx){
+
+        return(
+            <TouchableOpacity onPress={() => this.onSelectChange(idx)} activeOpacity={0.8}>
+                <View style={styles.listItem}>
+
+                    <Text style={{color: '#FF0000', fontSize: 16}}>{text}：</Text>
+
+                    <View style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-end'}}>
+                        {this.rendertake(idx)}
+                    </View>
+
+                </View>
+            </TouchableOpacity>
+        );
     }
 
     rendercontrol(){

@@ -68,6 +68,10 @@ const styles = StyleSheet.create({
 
 var peoplelistUrl = "https://slako.applinzi.com/index.php?m=question&c=index&a=peoplelist";
 
+var sendMsgUrl = "https://slako.applinzi.com/index.php?m=question&c=personal&a=sendmsg";
+
+var checkMsgListUrl = "https://slako.applinzi.com/index.php?m=question&c=personal&a=checkmsglist";
+
 var httpsBaseUrl = "https://slako.applinzi.com/";
 
 class ChatList extends Component {
@@ -80,7 +84,7 @@ class ChatList extends Component {
             netresult:'no',
             people_list_data_source: null,
             selectedIndex:0,
-            messageslist: []
+            messageslist: null
         };
         this._onChange = this.onChange.bind(this);
         this._peoplelist = this.peoplelist.bind(this);
@@ -103,9 +107,84 @@ class ChatList extends Component {
                         name: 'React Native',
                         avatar: 'https://facebook.github.io/react/img/logo_og.png',
                     },
+                    image: 'https://facebook.github.io/react/img/logo_og.png',
+                },
+                {
+                    _id: 2,
+                    text: '过奖了',
+                    //createdAt: new Date(Date.UTC(2017, 5, 19, 17, 20, 5)),
+                    createdAt: new Date(),
+                    user: {
+                        _id: 1,
+                        name: 'React Native',
+                        avatar: 'https://facebook.github.io/react/img/logo_og.png',
+                    },
+
+                },
+                {
+                    _id: 4,
+                    text: '过奖了11',
+                    //createdAt: new Date(Date.UTC(2017, 5, 19, 17, 20, 5)),
+                    createdAt: new Date(),
+                    user: {
+                        _id: 23,
+                    },
+
                 },
             ],
         });
+    }
+
+    dofetch_sendmsg(msg){
+        let formData = new FormData();
+        formData.append("auth",global.auth);
+        formData.append("userid",global.userid);
+        formData.append("chattoid",this.props.chattoid);
+        formData.append("msgtext",msg.text);
+        var opts = {
+            method:"POST",
+            body:formData
+        }
+        fetch(sendMsgUrl,opts)
+            .then((response) => response.json())
+            .then((responseData) => {
+                if(responseData.code == 100){
+                    //alert("ok");
+                }else{
+                    alert(responseData.message);
+                }
+
+            })
+            .catch((error) => {
+                alert(error)
+            })
+    }
+
+    dofetch_checkmsglist(){
+        let formData = new FormData();
+        formData.append("auth",global.auth);
+        formData.append("userid",global.userid);
+        formData.append("chattoid",this.props.chattoid);
+
+        var opts = {
+            method:"POST",
+            body:formData
+        }
+        fetch(checkMsgListUrl,opts)
+            .then((response) => response.json())
+            .then((responseData) => {
+                if(responseData.code == 100){
+                    this.setState({
+                        messageslist:responseData.data,
+                    });
+                }else{
+                    alert(responseData.message);
+                }
+
+            })
+            .catch((error) => {
+                alert(error)
+            })
     }
 
     peoplelist(){
@@ -159,13 +238,13 @@ class ChatList extends Component {
     renderSegmentedView() {
         if (this.state.selectedIndex === 0) {
 
-            //if(this.state.people_list_data_source){
+            if(this.state.messageslist){
 
                 return (this.renderIntroduceView())
-            //}else{
-            //    this._peoplelist();
-             //   return (this.renderLoading())
-            //}
+            }else{
+                this.dofetch_checkmsglist();
+                return (this.renderLoading())
+            }
 
         } else if (this.state.selectedIndex === 1) {
             return (
@@ -192,6 +271,7 @@ class ChatList extends Component {
     }
 
     onSend(messages = []) {
+        this.dofetch_sendmsg(messages[0]);
         this.setState((previousState) => {
             return {
                 messageslist: GiftedChat.append(previousState.messageslist, messages),
@@ -199,13 +279,15 @@ class ChatList extends Component {
         });
     }
 
+    /*
     renderSendButton(){
         return(
             <View style={styles.buttoncontainer}>
-                <Button style={styles.sendtoButton} textStyle={{fontSize: 16}} >发送</Button>
+                <Button style={styles.sendtoButton} textStyle={{fontSize: 16}} onPress={this.onSend()} >发送</Button>
             </View>
         )
     }
+    */
 
     renderComposer(){
         return(
@@ -216,16 +298,20 @@ class ChatList extends Component {
     }
 
     renderIntroduceView(){
+
+        var uid = global.userid;
         return (
+
             <GiftedChat
                 messages={this.state.messageslist}
                 onSend={this.onSend}
-
-                renderSend={this.renderSendButton}
+                //renderSend={this.renderSendButton}
                 user={{
-                    _id: 1,
+                    _id:uid,
                 }}
             />
+
+
         )
     }
 }

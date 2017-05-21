@@ -167,7 +167,7 @@ class Discover extends Component {
         var userId = (people.userid);
         return (
 
-            <TouchableOpacity onPress={() => Actions.homepage({userId})}>
+            <TouchableOpacity onPress={() => Actions.homepage({userId:userId,title:people.nickname,peopledata:people})}>
                 <View style={styles.peopleItem}>
                     <Image source={{uri:`${httpsBaseUrl}${people.head}`}} style={styles.leftImgStyle}/>
                     <View>

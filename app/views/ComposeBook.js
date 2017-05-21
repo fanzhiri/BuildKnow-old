@@ -495,7 +495,7 @@ class ComposeBook extends Component {
             textway="公开";
         }
         return (
-            <Text style={{color: "#ccc"}}>{textway}</Text>
+            <Text style={{color: "#FF0000", fontSize: 16}}>{textway}</Text>
         );
     }
 
@@ -508,7 +508,7 @@ class ComposeBook extends Component {
             <TouchableOpacity onPress={() => Actions.sharecontrol({bookId:this.props.bookid})} activeOpacity={0.8}>
                 <View style={styles.listItem}>
 
-                    <Text style={{color: 'black', fontSize: 14, marginLeft: 10}}>分享方式：</Text>
+                    <Text style={{color: '#FF0000', fontSize: 16}}>分享方式：</Text>
                     {this.renderShareWayText()}
                     <View style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-end'}}>
                         <Text style={{color: "#ccc"}}>更改</Text>

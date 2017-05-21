@@ -102,9 +102,9 @@ class Me extends Component {
                             <Image style={styles.headimage} resizeMode="cover" source={{uri:`${httpsBaseUrl}${global.userhead}`}}/>
                             <View style={styles.bottomTextContainer}>
                                 <Text style={styles.bottomText}>昵称：{global.nickname}</Text>
-                                <Text style={styles.bottomText}>学术等级：10</Text>
+                                <Text style={styles.bottomText}>学术等级:10</Text>
                                 <Text style={styles.bottomText}>个人中心</Text>
-                                <Text style={styles.bottomText}>{global.infonum}</Text>
+                                <Text style={styles.bottomText}>用户id:{global.userid}</Text>
                             </View>
                         </View>
                     </TouchableOpacity>
