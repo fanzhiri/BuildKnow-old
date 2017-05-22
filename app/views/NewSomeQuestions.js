@@ -1,10 +1,10 @@
 /**
  * Created by slako on 17/2/18.
  */
-import React, { Component } from 'react';
+import React, { Component ,PropTypes} from 'react';
 import {View, Text, StyleSheet, TextInput,SegmentedControlIOS,Image,ScrollView} from "react-native";
 import {Actions} from "react-native-router-flux";
-import Button from "react-native-button";
+import Button from 'apsl-react-native-button'
 import GlobleStyles from '../styles/GlobleStyles';
 
 const styles = StyleSheet.create({
@@ -299,4 +299,8 @@ class NewSomeQuestions extends Component {
     }
 }
 
+
+NewSomeQuestions.PropTypes = {
+    bookid: PropTypes.number,
+};
 module.exports = NewSomeQuestions;

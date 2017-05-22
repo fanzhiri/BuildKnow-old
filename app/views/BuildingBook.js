@@ -177,7 +177,7 @@ class BuildingBook extends Component {
                 </View>
                 <View>
                     <SegmentedControlIOS
-                        values={['介绍','评论','计划','历史']}
+                        values={['介绍','评论','推荐','计划','历史']}
                         selectedIndex={this.state.selectedIndex}
                         style={styles.segmented}
                         onChange={this._onChange}
@@ -212,18 +212,24 @@ class BuildingBook extends Component {
             )
         } else if (this.state.selectedIndex === 2) {
             return (
-                this.renderHistoryView()
+                this.renderIdeasView()
             )
         } else if (this.state.selectedIndex === 3) {
             return (
                 this.renderHistoryView()
             )
+        } else if (this.state.selectedIndex === 4) {
+            return (
+                this.renderHistoryView()
+            )
         }
+
     }
 
     renderIntroduceView(){
         return (
             <View>
+                <Text style={styles.textmargin}>题本名字 :{this.state.bookdata.bookname}</Text>
                 <Text style={styles.textmargin}>题目数量 :{this.state.bookdata.q_count}</Text>
                 <Text style={styles.textmargin}>题本简介 :{this.state.bookdata.bookbrief}</Text>
                 <Text style={styles.textmargin}>题本详情 :{this.state.bookdata.bookdescription}</Text>
@@ -246,6 +252,19 @@ class BuildingBook extends Component {
                 <Text style={styles.bottomButtonText} >赞</Text>
             </View>
         </View>
+
+        )
+    }
+
+    renderIdeasView(){
+        return (
+            <View style={styles.ButtonViewContainer}>
+                <View style={styles.bottomButtonViewContainer}>
+                    <TouchableOpacity  onPress={()=> Actions.newsomequestions({bookid:this.props.bookid,title:this.state.bookdata.bookname})} >
+                        <Text style={styles.bottomButtonText} >贡献</Text>
+                    </TouchableOpacity>
+                </View>
+            </View>
 
         )
     }
