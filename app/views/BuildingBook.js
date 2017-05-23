@@ -153,7 +153,7 @@ class BuildingBook extends Component {
     }
 
     handleBeginTest() {
-        Actions.begintest();
+        Actions.begintest({bookdata:this.state.bookdata});
     }
 
     renderBook(){

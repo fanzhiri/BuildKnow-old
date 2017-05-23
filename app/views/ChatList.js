@@ -72,10 +72,17 @@ const styles = StyleSheet.create({
         borderWidth: 1,
     },
     bottomInputViewContainer:{
-        padding:4,
+        padding:0,
         flexDirection:'row',
-        height: 42,
+        height: 38,
         alignItems: 'center',
+    },
+    bottomAttachmentViewContainer:{
+        padding:0,
+        flexDirection:'row',
+        height: 80,
+        alignItems: 'center',
+        justifyContent: 'space-around',
     },
     chatinput:{
         flex:1,
@@ -83,7 +90,8 @@ const styles = StyleSheet.create({
         borderColor: 'gray',
         borderWidth: 2,
         paddingLeft:10,
-        paddingRight:10
+        paddingRight:10,
+        marginRight:6
     },
     msgcontent:{
         fontSize:18,
@@ -108,7 +116,8 @@ const styles = StyleSheet.create({
 
     },cvscontainer:{
         justifyContent: 'flex-end',
-        marginBottom:24,
+        marginBottom:6,
+        flex:1
     },
     IconItem:{
         justifyContent: 'center',
@@ -138,7 +147,8 @@ class ChatList extends Component {
             people_list_data_source: null,
             selectedIndex:0,
             messageslist: null,
-            inputtextstring:""
+            inputtextstring:"",
+            showattach:false
         };
         this._onChange = this.onChange.bind(this);
         this._peoplelist = this.peoplelist.bind(this);
@@ -180,6 +190,7 @@ class ChatList extends Component {
         let formData = new FormData();
         formData.append("auth",global.auth);
         formData.append("userid",global.userid);
+        formData.append("cvstid",this.props.cvstid);
         formData.append("chattoid",this.props.chattoid);
 
         var opts = {
@@ -333,6 +344,32 @@ class ChatList extends Component {
         )
     }
 
+    renderAttachView() {
+        if(this.state.showattach){
+            return (
+                <View style={styles.bottomAttachmentViewContainer}>
+                    <View>
+                        <Icon name={"md-contact"} size={64} color={"#11FF00"}/>
+                    </View>
+                    <View>
+                        <Icon name={"md-bookmarks"} size={64} color={"#11FF00"}/>
+                    </View>
+                    <View>
+                        <Icon name={"md-paper"} size={64} color={"#11FF00"}/>
+                    </View>
+                </View>
+            );
+        }
+
+    }
+
+    changeshowattach(now){
+        this.setState({
+            showattach:now ? false:true,
+        })
+
+    }
+
     renderIntroduceView(){
         return (
             <View style={styles.cvscontainer}>
@@ -348,10 +385,11 @@ class ChatList extends Component {
                     />
                 </ScrollView>
                 <View style={styles.bottomInputViewContainer}>
-
-                    <View style={styles.IconItem}>
-                        <Icon name={"md-add-circle"} size={28} color={"#FF0000"}/>
-                    </View>
+                    <TouchableOpacity onPress={()=>this.changeshowattach(this.state.showattach)} >
+                        <View style={styles.IconItem}>
+                            <Icon name={"md-add-circle"} size={32} color={"#11FF00"}/>
+                        </View>
+                    </TouchableOpacity>
                     <TextInput
                         style={styles.chatinput}
                         onChangeText={(text) => this.setState({inputtextstring:text})}
@@ -360,8 +398,12 @@ class ChatList extends Component {
                         maxLength={60}
                         multiline={true}
                     />
-                    <Button style={styles.sendbutton} textStyle={{fontSize: 20}} onPress={() => this.dofetch_sendmsg()} >发送</Button>
+
+                    <Button style={styles.sendbutton} textStyle={{fontSize: 16}} onPress={() => this.dofetch_sendmsg()} >发送</Button>
+
+
                 </View>
+                {this.renderAttachView()}
             </View>
         )
     }
@@ -369,6 +411,7 @@ class ChatList extends Component {
 
 ChatList.PropTypes = {
     chattoid:PropTypes.number,
+    cvstid:PropTypes.number,
 };
 
 module.exports = ChatList;

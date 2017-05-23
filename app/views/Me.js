@@ -104,7 +104,7 @@ class Me extends Component {
                                 <Text style={styles.bottomText}>昵称：{global.nickname}</Text>
                                 <Text style={styles.bottomText}>学术等级:10</Text>
                                 <Text style={styles.bottomText}>个人中心</Text>
-                                <Text style={styles.bottomText}>用户id:{global.userid}{global.mydata.nickname}</Text>
+                                <Text style={styles.bottomText}>用户id:{global.userid}</Text>
                             </View>
                         </View>
                     </TouchableOpacity>

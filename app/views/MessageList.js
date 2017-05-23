@@ -44,16 +44,21 @@ const styles = StyleSheet.create({
         marginRight:15
     },
     topTitleStyle:{
-        fontSize:15,
-        marginBottom:10
+        fontSize:16,
+        marginBottom:4
     },
     bottomTitleStyle:{
         color:'blue'
     },
     list:{
         marginBottom:0
-    }
-
+    },
+    lastcontent:{
+        fontSize:14,
+    },
+    msgtime:{
+        fontSize:10,
+    },
 });
 
 
@@ -169,15 +174,24 @@ class MessageList extends Component {
 
 
     renderPeople(rowData, sectionID, rowID){
+
+
         return (
 
-            <TouchableOpacity onPress={() => Actions.chatlist({chattoid:rowData.id})}>
+            <TouchableOpacity onPress={() => Actions.chatlist({cvstid:rowData.id})}>
                 <View style={styles.peopleItem}>
                     <Image source={{uri:`${httpsBaseUrl}${rowData.head}`}} style={styles.leftImgStyle}/>
                     <View>
                         <Text style={styles.topTitleStyle}>
                             {rowData.nickname}
                         </Text>
+                        <Text style={styles.lastcontent}>
+                            {rowData.lastmsgcontent} {rowData.lastmsgtime}
+                        </Text>
+                        <Text style={styles.msgtime}>
+                            {rowData.lastmsgtime}
+                        </Text>
+
                     </View>
                 </View>
             </TouchableOpacity>

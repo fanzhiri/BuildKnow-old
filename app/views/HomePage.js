@@ -5,7 +5,7 @@
 import React, { Component ,PropTypes} from 'react';
 import {View, Text, StyleSheet, Image, SegmentedControlIOS, Dimensions, TouchableOpacity,ListView} from "react-native";
 import {Actions} from "react-native-router-flux";
-import Button from "react-native-button";
+import Button from 'apsl-react-native-button'
 import ParallaxScrollView from 'react-native-parallax-scroll-view';
 import GlobleStyles from '../styles/GlobleStyles';
 import TestingItem from '../component/TestingItem';
@@ -63,6 +63,11 @@ const styles = StyleSheet.create({
         //position:'absolute',
         justifyContent: 'center',
         alignItems: 'center',
+    },
+    somebutton:{
+        width:32,height:24,
+        backgroundColor: '#00FF7F',
+        marginLeft:10
     },
 });
 
@@ -207,10 +212,11 @@ class HomePage extends Component {
                                     <Image source={{uri:'https://slako.applinzi.com/statics/images/question/head/boy/4.jpg', width: 80, height: 80 }} />
                                     <Text>昵称:{this.props.peopledata.nickname}</Text>
                                     <Text>题本数:5</Text>
-                                    <Text>粉丝:20  题本被收藏:60</Text>
-                                    <TouchableOpacity  onPress={()=> Actions.complaint({userId})} >
-                                        <Text style={styles.bottomButtonText} >投诉</Text>
-                                    </TouchableOpacity>
+                                    <Text>粉丝:20  题本： 被收藏:60</Text>
+
+                                    <Button style={styles.somebutton} textStyle={{fontSize: 14}} onPress={()=> Actions.complaint({userId})} >投诉</Button>
+                                    <Button style={styles.somebutton} textStyle={{fontSize: 14}}  >分享</Button>
+
                                 </Image>
                             </View>
 

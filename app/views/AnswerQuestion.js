@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     nextperbutton:{
-        width:120,
+        width:80,
         height:30,
 
         backgroundColor: '#00EE00'
@@ -150,8 +150,9 @@ class AnswerQuestion extends Component {
                     onPress={(value) => {this.setState({selectone:value})}}
                 />
                 <View style={styles.nextperbuttoncontainer}>
-                    <Button style={styles.nextperbutton} textStyle={{fontSize: 16}} onPress={() => this.onPressPre() }>上一个</Button>
-                    <Button style={styles.nextperbutton} textStyle={{fontSize: 16}} onPress={() => this.onPressNext()}>下一个</Button>
+                    <Button style={styles.nextperbutton} textStyle={{fontSize: 16}} onPress={() => this.onPressPre() }>上个</Button>
+                    <Button style={styles.nextperbutton} textStyle={{fontSize: 16}} onPress={() => this.onPressNext()}>下个</Button>
+                    <Button style={styles.nextperbutton} textStyle={{fontSize: 16}} onPress={() => this.onPressNext()}>不懂</Button>
 
                 </View>
 
