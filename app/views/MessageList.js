@@ -51,7 +51,7 @@ const styles = StyleSheet.create({
         color:'blue'
     },
     list:{
-        marginBottom:48
+        marginBottom:0
     }
 
 });
@@ -60,6 +60,8 @@ const styles = StyleSheet.create({
 var peoplelistUrl = "https://slako.applinzi.com/index.php?m=question&c=index&a=peoplelist";
 
 var httpsBaseUrl = "https://slako.applinzi.com/";
+
+var cvstlistUrl = "https://slako.applinzi.com/index.php?m=question&c=personal&a=checkconversationlist";
 
 class MessageList extends Component {
 
@@ -71,28 +73,29 @@ class MessageList extends Component {
             netresult:'no',
             people_list_data_source: null,
             selectedIndex:0,
-
+            cvst_list_data_source: null,
         };
         this._onChange = this.onChange.bind(this);
-        this._peoplelist = this.peoplelist.bind(this);
+
         this._renderPeople = this.renderPeople.bind(this);
         this._doOnPress = this.doOnPress.bind(this);
 
     }
 
-    peoplelist(){
+    fetch_cvstlist(){
         let formData = new FormData();
-        formData.append("api","true");
+        formData.append("auth",global.auth);
+        formData.append("userid",global.userid);
         var opts = {
             method:"POST",
             body:formData
         }
-        fetch(peoplelistUrl,opts)
+        fetch(cvstlistUrl,opts)
             .then((response) => response.json())
             .then((responseData) => {
                 if(responseData.code == 100){
                     this.setState({
-                        people_list_data_source:responseData.data
+                        cvst_list_data_source:responseData.data
                     })
                 }else{
                     this.setState({
@@ -117,7 +120,7 @@ class MessageList extends Component {
             <View style={GlobleStyles.withoutTitleContainer}>
                 <View>
                     <SegmentedControlIOS
-                        values={['广场','大咖','需求']}
+                        values={['好友','收藏','需求']}
                         selectedIndex={this.state.selectedIndex}
                         style={styles.segmented}
                         onChange={this._onChange}
@@ -131,11 +134,11 @@ class MessageList extends Component {
     renderSegmentedView() {
         if (this.state.selectedIndex === 0) {
 
-            if(this.state.people_list_data_source){
+            if(this.state.cvst_list_data_source){
 
                 return (this.renderIntroduceView())
             }else{
-                this._peoplelist();
+                this.fetch_cvstlist();
                 return (this.renderLoading())
             }
 
@@ -163,19 +166,17 @@ class MessageList extends Component {
         Actions.homepage({userid});
     }
 
-    renderPeople(people){
-        var userId = (people.userid);
+
+
+    renderPeople(rowData, sectionID, rowID){
         return (
 
-            <TouchableOpacity onPress={() => Actions.homepage({userId})}>
+            <TouchableOpacity onPress={() => Actions.chatlist({chattoid:rowData.id})}>
                 <View style={styles.peopleItem}>
-                    <Image source={{uri:`${httpsBaseUrl}${people.head}`}} style={styles.leftImgStyle}/>
+                    <Image source={{uri:`${httpsBaseUrl}${rowData.head}`}} style={styles.leftImgStyle}/>
                     <View>
                         <Text style={styles.topTitleStyle}>
-                            {people.username}
-                        </Text>
-                        <Text >
-                            粉丝:{people.follow}  在建:{people.buildingshare}  发布:{people.releaseshare}
+                            {rowData.nickname}
                         </Text>
                     </View>
                 </View>
@@ -187,8 +188,8 @@ class MessageList extends Component {
         return (
             <ListView
                 style={styles.list}
-                dataSource={DataStore.cloneWithRows(this.state.people_list_data_source)}
-                renderRow={(rowData) => this._renderPeople(rowData)}
+                dataSource={DataStore.cloneWithRows(this.state.cvst_list_data_source)}
+                renderRow={this._renderPeople}
                 enableEmptySections = {true}
             />
         )
