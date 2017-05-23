@@ -8,21 +8,24 @@ import {
     Text,
     StyleSheet,
     SegmentedControlIOS,
-    ListView,Image
+    ListView,
+    ScrollView,
+    TextInput,
+    Image
 } from "react-native";
 import {Actions} from "react-native-router-flux";
 import Button from 'apsl-react-native-button'
 import GlobleStyles from '../styles/GlobleStyles';
 import { GiftedChat } from 'react-native-gifted-chat';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 import DataStore from '../util/DataStore';
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: '#F5FCFF',
+        marginLeft:10,
+        marginRight:10,
+        marginBottom:6
     },
     peopleItem:{
 
@@ -51,17 +54,67 @@ const styles = StyleSheet.create({
         color:'blue'
     },
     list:{
-        marginBottom:48
+        marginBottom:4,
+
     },
     buttoncontainer:{
         width:60,
         justifyContent: 'flex-end',
         alignItems: 'center',
     },
-    sendtoButton:{
+    sendbutton:{
         width:48,height:28,
         backgroundColor: '#00FF7F',
     },
+    msgitem:{
+        marginTop:4,
+        borderColor: '#0000FF',
+        borderWidth: 1,
+    },
+    bottomInputViewContainer:{
+        padding:4,
+        flexDirection:'row',
+        height: 42,
+        alignItems: 'center',
+    },
+    chatinput:{
+        flex:1,
+        fontSize:16,
+        borderColor: 'gray',
+        borderWidth: 2,
+        paddingLeft:10,
+        paddingRight:10
+    },
+    msgcontent:{
+        fontSize:18,
+    },
+    msgtime:{
+        fontSize:12,
+    },
+    msgleft:{
+        flexDirection: 'row',
+        alignItems: 'flex-end',
+        justifyContent: 'flex-start',
+        marginLeft: 8,
+        marginRight: 0,
+    },
+    msgRight:{
+        flexDirection: 'row',
+        alignItems: 'flex-end',
+        justifyContent: 'flex-end',
+        marginLeft: 0,
+        marginRight: 8,
+    },scrlist:{
+
+    },cvscontainer:{
+        justifyContent: 'flex-end',
+        marginBottom:24,
+    },
+    IconItem:{
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: 40,
+    }
 
 });
 
@@ -84,7 +137,8 @@ class ChatList extends Component {
             netresult:'no',
             people_list_data_source: null,
             selectedIndex:0,
-            messageslist: null
+            messageslist: null,
+            inputtextstring:""
         };
         this._onChange = this.onChange.bind(this);
         this._peoplelist = this.peoplelist.bind(this);
@@ -94,53 +148,15 @@ class ChatList extends Component {
 
     }
 
-    componentWillMount() {
-        this.setState({
-            messageslist: [
-                {
-                    _id: 1,
-                    text: '你的软件做得不错呀',
-                    //createdAt: new Date(Date.UTC(2017, 5, 19, 17, 20, 5)),
-                    createdAt: new Date(),
-                    user: {
-                        _id: 2,
-                        name: 'React Native',
-                        avatar: 'https://facebook.github.io/react/img/logo_og.png',
-                    },
-                    image: 'https://facebook.github.io/react/img/logo_og.png',
-                },
-                {
-                    _id: 2,
-                    text: '过奖了',
-                    //createdAt: new Date(Date.UTC(2017, 5, 19, 17, 20, 5)),
-                    createdAt: new Date(),
-                    user: {
-                        _id: 1,
-                        name: 'React Native',
-                        avatar: 'https://facebook.github.io/react/img/logo_og.png',
-                    },
-
-                },
-                {
-                    _id: 4,
-                    text: '过奖了11',
-                    //createdAt: new Date(Date.UTC(2017, 5, 19, 17, 20, 5)),
-                    createdAt: new Date(),
-                    user: {
-                        _id: 23,
-                    },
-
-                },
-            ],
-        });
-    }
-
-    dofetch_sendmsg(msg){
+    dofetch_sendmsg(){
+        if(this.state.inputtextstring === ""){
+            return;
+        }
         let formData = new FormData();
         formData.append("auth",global.auth);
         formData.append("userid",global.userid);
         formData.append("chattoid",this.props.chattoid);
-        formData.append("msgtext",msg.text);
+        formData.append("msgtext",this.state.inputtextstring);
         var opts = {
             method:"POST",
             body:formData
@@ -149,7 +165,7 @@ class ChatList extends Component {
             .then((response) => response.json())
             .then((responseData) => {
                 if(responseData.code == 100){
-                    //alert("ok");
+                    this.dofetch_checkmsglist()
                 }else{
                     alert(responseData.message);
                 }
@@ -177,6 +193,7 @@ class ChatList extends Component {
                     this.setState({
                         messageslist:responseData.data,
                     });
+                    this.refs.scrview.scrollToEnd();
                 }else{
                     alert(responseData.message);
                 }
@@ -221,7 +238,7 @@ class ChatList extends Component {
 
     render(){
         return (
-            <View style={GlobleStyles.withoutTitleContainer}>
+            <View style={[GlobleStyles.withoutTitleContainer,styles.container]}>
                 <View>
                     <SegmentedControlIOS
                         values={['全部','照片','推荐']}
@@ -297,21 +314,55 @@ class ChatList extends Component {
         )
     }
 
+    renderMsgItem(rowData){
+        var d = new Date();
+        d.setTime(rowData.message_time);
+        var msglr = styles.msgleft ;
+        if(rowData.send_from_userid == global.userid){
+            msglr = styles.msgRight ;
+        }
+
+        return(
+            <View style={[styles.msgitem,msglr]}>
+                <View>
+                    <Text style={styles.msgcontent}>{rowData.content}</Text>
+                    <Text style={styles.msgtime}>{d.toDateString()}</Text>
+                </View>
+
+            </View>
+        )
+    }
+
     renderIntroduceView(){
-
-        var uid = global.userid;
         return (
+            <View style={styles.cvscontainer}>
+                <ScrollView
 
-            <GiftedChat
-                messages={this.state.messageslist}
-                onSend={this.onSend}
-                //renderSend={this.renderSendButton}
-                user={{
-                    _id:uid,
-                }}
-            />
+                    style={styles.scrlist}>
+                    <ListView
+                        ref="scrview"
+                        style={styles.list}
+                        dataSource={DataStore.cloneWithRows(this.state.messageslist)}
+                        renderRow={this.renderMsgItem}
+                        enableEmptySections = {true}
+                    />
+                </ScrollView>
+                <View style={styles.bottomInputViewContainer}>
 
-
+                    <View style={styles.IconItem}>
+                        <Icon name={"md-add-circle"} size={28} color={"#FF0000"}/>
+                    </View>
+                    <TextInput
+                        style={styles.chatinput}
+                        onChangeText={(text) => this.setState({inputtextstring:text})}
+                        value={this.state.inputtextstring}
+                        placeholder={""}
+                        maxLength={60}
+                        multiline={true}
+                    />
+                    <Button style={styles.sendbutton} textStyle={{fontSize: 20}} onPress={() => this.dofetch_sendmsg()} >发送</Button>
+                </View>
+            </View>
         )
     }
 }
