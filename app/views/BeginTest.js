@@ -73,7 +73,8 @@ class BeginTest extends Component {
 
                 <Text style={styles.textdesc}>名字：{this.props.bookdata.bookname}</Text>
                 <Text style={styles.textdesc}>题数：{this.props.bookdata.q_count}</Text>
-                <Text style={styles.textdesc}>时间：60分钟</Text>
+                <Text style={styles.textdesc}>限定题数：</Text>
+                <Text style={styles.textdesc}>限定时间：</Text>
                 <View style={styles.buttonContainer}>
                     <Button style={styles.beginButton} textStyle={{fontSize: 18}} onPress={ () => Actions.answerquestion()}>
                         开始测验

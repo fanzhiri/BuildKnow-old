@@ -180,6 +180,7 @@ class AnswerQuestion extends Component {
 }
 
 AnswerQuestion.PropTypes = {
+    intype:PropTypes.number,          //0正在建的题本测试 1已经发布的
     questiontype: PropTypes.string.isRequired,//random随机；order顺序
     questioncount:PropTypes.number,
     // bookid:PropTypes.string.isRequired,
