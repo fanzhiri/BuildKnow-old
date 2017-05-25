@@ -2,7 +2,7 @@
  * Created by slako on 17/4/28.
  */
 import React, { Component,PropTypes } from 'react';
-import {View, Text, StyleSheet, ScrollView,ListView,TouchableOpacity,TextInput} from "react-native";
+import {Alert,View, Text, StyleSheet, ScrollView,ListView,TouchableOpacity,TextInput} from "react-native";
 import {Actions} from "react-native-router-flux";
 import Button from 'apsl-react-native-button'
 import GlobleStyles from '../styles/GlobleStyles';
@@ -47,11 +47,29 @@ const styles = StyleSheet.create({
         width:38,height:24,
         backgroundColor: '#00FF7F',
     },
+    listItem: {
+        flex: 1,
+        height: 48,
+        backgroundColor: 'white',
+        flexDirection: 'row',
+        alignItems: 'center',
+        paddingLeft: 25,
+        paddingRight: 25,
+        borderBottomColor: '#c4c4c4',
+        borderBottomWidth: 1
+    },
+    button:{
+        width:80,
+        height:30,
+
+        backgroundColor: '#00EE00'
+    }
 });
 
 var dologoutpostUrl = "https://slako.applinzi.com/index.php?m=question&c=index&a=getcatalogue";
 var doaddclassUrl = "https://slako.applinzi.com/index.php?m=question&c=personal&a=addclassify";
 
+var setClassifyUrl = "https://slako.applinzi.com/index.php?m=question&c=personal&a=getcatalogue";
 
 class ClassCatalogue extends Component {
 
@@ -64,6 +82,7 @@ class ClassCatalogue extends Component {
             addclass:false,
             classtext:""
         };
+        this._renderClassifyItem = this.renderClassifyItem.bind(this);
 
     }
 
@@ -140,6 +159,9 @@ class ClassCatalogue extends Component {
 
 
     renderAdmin(){
+        if(this.props.intype == 1){
+            return;
+        }
         if(global.adminid != 0){
             if(this.state.addclass){
                 return(
@@ -186,7 +208,7 @@ class ClassCatalogue extends Component {
                 <ListView
                     style={styles.list}
                     dataSource={DataStore.cloneWithRows(this.state.cataloguedata)}
-                    renderRow={this.renderClassifyItem}
+                    renderRow={this._renderClassifyItem}
                     enableEmptySections = {true}
                 />
                 {this.renderAdmin()}
@@ -196,9 +218,42 @@ class ClassCatalogue extends Component {
         );
     }
 
+    confirmSelect(idx){
+        Actions.pop({popNum:this.props.deep})
+    }
+
+
+    onItemClickIt(rowData){
+        if(rowData.num == 0){
+            if(this.props.intype == 1){
+                Alert.alert('类型选定',rowData.name,[
+                    {text:'是的',onPress:()=> this.confirmSelect(rowData.id)},
+                    {text:'不了'}
+                ]);
+                return;
+            }else{
+
+            }
+        }
+        let deepnum = this.props.deep + 1;
+        Actions.classcatalogue({classifyid:rowData.id,title:rowData.name,intype:this.props.intype,deep:deepnum});
+    }
+
+
     renderClassifyItem(rowData, sectionID, rowID){
         return (
-            <SettingItem text={rowData.name} subText={rowData.num} onPress={() => Actions.classcatalogue({classifyid:rowData.id,title:rowData.name})}/>
+
+            <TouchableOpacity
+                onPress={() => (this.onItemClickIt(rowData))}
+                activeOpacity={0.8}
+                >
+                <View style={styles.listItem}>
+                    <Text style={{color:"#0000FF", fontSize: 14}}>{rowData.name}</Text>
+                    <View style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-end', alignItems:'center'}}>
+                        <Text style={{color: "#ccc"}}>{rowData.num}</Text>
+                    </View>
+                </View>
+            </TouchableOpacity>
         )
     }
 
@@ -206,6 +261,7 @@ class ClassCatalogue extends Component {
         return (
             <View style={GlobleStyles.withoutTitleContainer}>
                 {this.renderclassifyView()}
+
             </View>
         );
     }
@@ -222,6 +278,8 @@ class ClassCatalogue extends Component {
 
 ClassCatalogue.PropTypes = {
     classifyid: PropTypes.number.isRequired,
+    intype:PropTypes.number,//0从分类进入 1选题本类型
+    deep:PropTypes.number.isRequired
 };
 
 module.exports = ClassCatalogue;

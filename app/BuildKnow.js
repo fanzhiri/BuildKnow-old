@@ -97,7 +97,7 @@ export default class BuildKnow extends Component {
                     <Scene key="market" title="市场" component={Market} duration={0} icon={MainTabbarIcon}
                            iconName="ios-home-outline"
                            selectIconName="ios-home"
-                           leftTitle  ={"分类"}  onLeft  ={() => Actions.classcatalogue({classifyid:0,title:"分类"})}
+                           leftTitle  ={"分类"}  onLeft  ={() => Actions.classcatalogue({classifyid:0,title:"分类",deep:1})}
                            rightTitle ={"搜索"}  onRight ={() => Actions.searchbook()}
                     />
                     <Scene key="follow" title="关注" component={Follow} duration={0} icon={MainTabbarIcon}

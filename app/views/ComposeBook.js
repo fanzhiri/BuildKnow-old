@@ -144,6 +144,7 @@ const styles = StyleSheet.create({
         color:'#CD2626'
     },
     btncontainer:{
+        height: 48,
         marginTop:10,
         justifyContent: 'space-around',
         flexDirection:'row',
@@ -162,6 +163,10 @@ const styles = StyleSheet.create({
         paddingRight: 25,
         borderBottomColor: '#c4c4c4',
         borderBottomWidth: 1
+    },
+    btnFlexEndContainer:{
+
+        justifyContent: 'flex-end',
     },
 });
 
@@ -409,6 +414,24 @@ class ComposeBook extends Component {
 
     }
 
+    renderClassSelect(){
+        return(
+            <TouchableOpacity
+                onPress={() => Actions.classcatalogue({intype:1,deep:1})}
+                activeOpacity={0.8}>
+                <View style={[styles.listItem,style={marginTop:10}]}>
+
+                    <Text style={{color: '#FF0000', fontSize: 16}}>类型选择：</Text>
+                    <Text style={{color: "#FF0FF0", fontSize: 16}}>{this.state.composebookdata.classifyname}</Text>
+                    <View style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-end'}}>
+                        <Text style={{color: "#ccc"}}>更改</Text>
+                    </View>
+
+                </View>
+            </TouchableOpacity>
+        );
+    }
+
     renderBaseInfoView(){
         return (
             //注意!!!下面不能改为View，否则第一次查询不能显示
@@ -436,7 +459,7 @@ class ComposeBook extends Component {
                         <Text style={styles.edittext} >(编辑 -> 名字、简介、描述)</Text>
                     </TouchableOpacity>
                 </View>
-
+                {this.renderClassSelect()}
             </ScrollView>
             //注意!!!上面不能改为View，否则第一次查询不能显示
         )
@@ -444,21 +467,22 @@ class ComposeBook extends Component {
 
     renderQuestionListView(){
         return (
-
-            <ScrollView>
+            <View style={styles.btnFlexEndContainer} >
+                <ScrollView>
+                    <ListView
+                        style={styles.list}
+                        dataSource={DataStore.cloneWithRows(this.state.bookquestion_data_source)}
+                        renderRow={(rowData, sectionID, rowID) => this._renderQuestionItem(rowData, sectionID, rowID)}
+                        enableEmptySections = {true}
+                    />
+                </ScrollView>
                 <View style={styles.btncontainer}>
                     <Button style={styles.addQuestionButton} textStyle={{fontSize: 16}} onPress={() => Actions.newonequestion({bookid:this.props.bookid})} >添一个</Button>
                     <Button style={styles.addQuestionButton} textStyle={{fontSize: 16}} onPress={() => Actions.newsomequestions({bookid:this.props.bookid})} >添多个</Button>
                     <Button style={styles.addQuestionButton} textStyle={{fontSize: 16}}  >垃圾桶</Button>
                 </View>
+            </View>
 
-                <ListView
-                    style={styles.list}
-                    dataSource={DataStore.cloneWithRows(this.state.bookquestion_data_source)}
-                    renderRow={(rowData, sectionID, rowID) => this._renderQuestionItem(rowData, sectionID, rowID)}
-                    enableEmptySections = {true}
-                />
-            </ScrollView>
 
         )
     }
