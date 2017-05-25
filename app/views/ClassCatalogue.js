@@ -69,7 +69,7 @@ const styles = StyleSheet.create({
 var dologoutpostUrl = "https://slako.applinzi.com/index.php?m=question&c=index&a=getcatalogue";
 var doaddclassUrl = "https://slako.applinzi.com/index.php?m=question&c=personal&a=addclassify";
 
-var setClassifyUrl = "https://slako.applinzi.com/index.php?m=question&c=personal&a=getcatalogue";
+var setClassifyUrl = "https://slako.applinzi.com/index.php?m=question&c=personal&a=setbookclassify";
 
 class ClassCatalogue extends Component {
 
@@ -149,6 +149,34 @@ class ClassCatalogue extends Component {
             })
     }
 
+    dofetch_setClassify(selectclassify){
+
+        let formData = new FormData();
+        formData.append("auth",global.auth);
+        formData.append("userid",global.userid);
+        formData.append("bookid",this.props.bookid);
+        formData.append("classify",selectclassify);
+        var opts = {
+            method:"POST",
+            body:formData
+        }
+        fetch(setClassifyUrl,opts)
+            .then((response) => response.json())
+            .then((responseData) => {
+                if(responseData.code == 100){
+                    Actions.pop({popNum:this.props.deep})
+
+                }else{
+
+                    alert(responseData.message)
+                }
+
+            })
+            .catch((error) => {
+                alert(error)
+            })
+    }
+
     adminaddclass(edit){
 
         this.setState({
@@ -219,7 +247,8 @@ class ClassCatalogue extends Component {
     }
 
     confirmSelect(idx){
-        Actions.pop({popNum:this.props.deep})
+        this.dofetch_setClassify(idx);
+
     }
 
 
@@ -236,7 +265,7 @@ class ClassCatalogue extends Component {
             }
         }
         let deepnum = this.props.deep + 1;
-        Actions.classcatalogue({classifyid:rowData.id,title:rowData.name,intype:this.props.intype,deep:deepnum});
+        Actions.classcatalogue({classifyid:rowData.id,title:rowData.name,intype:this.props.intype,deep:deepnum,bookid:this.props.bookid});
     }
 
 
@@ -279,7 +308,8 @@ class ClassCatalogue extends Component {
 ClassCatalogue.PropTypes = {
     classifyid: PropTypes.number.isRequired,
     intype:PropTypes.number,//0从分类进入 1选题本类型
-    deep:PropTypes.number.isRequired
+    deep:PropTypes.number.isRequired,
+    bookid:PropTypes.number,
 };
 
 module.exports = ClassCatalogue;

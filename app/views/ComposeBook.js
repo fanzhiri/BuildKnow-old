@@ -417,7 +417,7 @@ class ComposeBook extends Component {
     renderClassSelect(){
         return(
             <TouchableOpacity
-                onPress={() => Actions.classcatalogue({intype:1,deep:1})}
+                onPress={() => Actions.classcatalogue({intype:1,deep:1,bookid:this.props.bookid})}
                 activeOpacity={0.8}>
                 <View style={[styles.listItem,style={marginTop:10}]}>
 
@@ -458,6 +458,7 @@ class ComposeBook extends Component {
                     <TouchableOpacity  onPress={()=> this.editbookinfo()} >
                         <Text style={styles.edittext} >(编辑 -> 名字、简介、描述)</Text>
                     </TouchableOpacity>
+                    <Text style={styles.infoedittext}>类型路径：{this.state.composebookdata.classifypath}</Text>
                 </View>
                 {this.renderClassSelect()}
             </ScrollView>
