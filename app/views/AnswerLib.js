@@ -70,7 +70,7 @@ class AnswerLib extends Component {
             .then((responseData) => {
                 if(responseData.code == 100){
                     if(where == 0){
-                        alert(responseData.message);
+                        //alert(responseData.message);
                         this.setState({
                             myanswerlib_list_data_source:responseData.data,
                         })

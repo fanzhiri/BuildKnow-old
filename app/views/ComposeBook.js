@@ -553,8 +553,15 @@ class ComposeBook extends Component {
         return (
             <ScrollView>
                 {this.renderShareWay()}
-                <TouchableOpacity onPress={() => this.applyforrelease()}>
-                    <Text>发布申请</Text>
+
+                <TouchableOpacity
+                    onPress={() => this.applyforrelease()}
+                    activeOpacity={0.8}>
+                    <View style={[styles.listItem,style={marginTop:10}]}>
+
+                        <Text style={{color: '#FF0000', fontSize: 16}}>发布申请</Text>
+
+                    </View>
                 </TouchableOpacity>
                 <TouchableOpacity onPress={() => this.cancelapplydialog()}>
                     <Text>撤销申请</Text>

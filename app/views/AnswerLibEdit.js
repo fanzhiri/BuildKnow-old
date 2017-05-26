@@ -94,7 +94,7 @@ const styles = StyleSheet.create({
         marginRight:6
     },
     itemcontent:{
-        fontSize:16,
+        fontSize:14,
     },
     msgtime:{
         fontSize:12,
@@ -123,14 +123,25 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         width: 40,
-    }
+    },
+    listItem: {
+        flex: 1,
+        height: 36,
+        backgroundColor: 'white',
+        flexDirection: 'row',
+        alignItems: 'center',
+        paddingLeft: 25,
+        paddingRight: 25,
+        borderBottomColor: '#c4c4c4',
+        borderBottomWidth: 1
+    },
 
 });
 
 
-var peoplelistUrl = "https://slako.applinzi.com/index.php?m=question&c=index&a=peoplelist";
 
-var sendMsgUrl = "https://slako.applinzi.com/index.php?m=question&c=personal&a=sendmsg";
+
+var addAnswerUrl = "https://slako.applinzi.com/index.php?m=question&c=personal&a=addanswer";
 
 var checkAnswerItemListUrl = "https://slako.applinzi.com/index.php?m=question&c=personal&a=checkansweritemlist";
 
@@ -145,30 +156,34 @@ class AnswerLibEdit extends Component {
         this.state = {
             answerlib_subject_list: null,
             inputtextstring:"",
+            fetchtime:0
         };
 
         this._renderAnswerItem = this.renderAnswerItem.bind(this);
 
     }
 
-    dofetch_sendmsg(){
+    dofetch_addanswer(){
         if(this.state.inputtextstring === ""){
             return;
         }
         let formData = new FormData();
         formData.append("auth",global.auth);
         formData.append("userid",global.userid);
-        formData.append("chattoid",this.props.chattoid);
-        formData.append("msgtext",this.state.inputtextstring);
+        formData.append("answerlibid",this.props.answerlibid);
+        formData.append("answertext",this.state.inputtextstring);
         var opts = {
             method:"POST",
             body:formData
         }
-        fetch(sendMsgUrl,opts)
+        fetch(addAnswerUrl,opts)
             .then((response) => response.json())
             .then((responseData) => {
                 if(responseData.code == 100){
-                    this.dofetch_checkmsglist()
+                    this.setState({
+                        answerlib_subject_list:responseData.data,
+                        fetchtime:1
+                    });
                 }else{
                     alert(responseData.message);
                 }
@@ -193,10 +208,11 @@ class AnswerLibEdit extends Component {
             .then((response) => response.json())
             .then((responseData) => {
                 if(responseData.code == 100){
-                    //this.setState({
-                    //   answerlib_subject_list:responseData.data,
-                    //});
-                    alert(responseData.message);
+                    this.setState({
+                       answerlib_subject_list:responseData.data,
+                       fetchtime:1
+                    });
+                    //alert(responseData.message);
                 }else{
                     alert(responseData.message);
                 }
@@ -207,31 +223,7 @@ class AnswerLibEdit extends Component {
             })
     }
 
-    peoplelist(){
-        let formData = new FormData();
-        formData.append("api","true");
-        var opts = {
-            method:"POST",
-            body:formData
-        }
-        fetch(peoplelistUrl,opts)
-            .then((response) => response.json())
-            .then((responseData) => {
-                if(responseData.code == 100){
-                    this.setState({
-                        people_list_data_source:responseData.data
-                    })
-                }else{
-                    this.setState({
-                        netresult:responseData.code
-                    })
-                }
 
-            })
-            .catch((error) => {
-                alert(error)
-            })
-    }
 
     render(){
         return (
@@ -243,7 +235,7 @@ class AnswerLibEdit extends Component {
     }
 
     renderSubjectView() {
-        if(this.state.messageslist){
+        if((this.state.answerlib_subject_list != null) || (this.state.fetchtime != 0)){
             return (this.renderEditListView())
         }else{
             this.dofetch_checksubjectlist();
@@ -261,18 +253,26 @@ class AnswerLibEdit extends Component {
         )
     }
 
+    renderNodata(){
+        return (
+            <View style={styles.container}>
+                <Text>Nodata...</Text>
+            </View>
+
+        )
+    }
+
     renderAnswerItem(rowData){
         return(
-            <View>
+            <View style={styles.listItem}>
                 <Text style={styles.itemcontent}>{rowData}</Text>
             </View>
         )
     }
 
-
-    renderEditListView(){
-        return (
-            <View style={styles.cvscontainer}>
+    renderDataList(){
+        if(this.state.answerlib_subject_list){
+            return(
                 <ScrollView
                     style={styles.scrlist}>
                     <ListView
@@ -283,16 +283,29 @@ class AnswerLibEdit extends Component {
                         enableEmptySections = {true}
                     />
                 </ScrollView>
+            )
+        }else{
+            return(
+                (this.renderNodata())
+            )
+        }
+
+    }
+
+    renderEditListView(){
+        return (
+            <View style={styles.cvscontainer}>
+                {this.renderDataList()}
                 <View style={styles.bottomInputViewContainer}>
                     <TextInput
                         style={styles.chatinput}
                         onChangeText={(text) => this.setState({inputtextstring:text})}
                         value={this.state.inputtextstring}
                         placeholder={""}
-                        maxLength={16}
+                        maxLength={20}
                         multiline={true}
                     />
-                    <Button style={styles.sendbutton} textStyle={{fontSize: 16}} onPress={() => this.dofetch_sendmsg()} >添加</Button>
+                    <Button style={styles.sendbutton} textStyle={{fontSize: 16}} onPress={() => this.dofetch_addanswer()} >添加</Button>
                 </View>
             </View>
         )
