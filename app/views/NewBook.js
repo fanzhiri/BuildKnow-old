@@ -71,7 +71,7 @@ const styles = StyleSheet.create({
 
 var doCommitNewBookPostUrl = "https://slako.applinzi.com/index.php?m=question&c=personal&a=addbook";
 
-
+var doCommitPicPostUrl = "https://slako.applinzi.com/index.php?m=attachment&c=attachment&a=upload";
 
 class NewBook extends Component {
 
@@ -83,10 +83,42 @@ class NewBook extends Component {
             coverSource: addcoveruri,
             name:"",
             brief:"",
-            description:""
+            description:"",
+            bookcover8080_id:null,
+            bookcover18080_id:null,
         };
 
         this._onSelectCoverPress = this.onSelectCoverPress.bind(this)
+    }
+
+    commitpic(){
+        let formData = new FormData();
+        let file = {uri: this.state.coverSource, type: 'multipart/form-data', name: 'bookcover8080.jpg'};
+        formData.append("auth",global.auth);
+        formData.append("userid",global.userid);
+        formData.append("upload",file);
+        var opts = {
+            method:"POST",
+            headers:{
+                'Content-Type':'multipart/form-data',
+            },
+            body:formData
+        }
+        fetch(doCommitPicPostUrl,opts)
+            .then((response) => response.json())
+            .then((responseData) => {
+                if(responseData.code == 100){
+                    this.setState({
+                        bookcover8080_id:responseData.data,
+                    })
+                }else{
+
+                }
+
+            })
+            .catch((error) => {
+                alert(error)
+            })
     }
 
     docommit(){
