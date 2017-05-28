@@ -25,8 +25,8 @@ const styles = StyleSheet.create({
     },
 });
 
-var docommitpostUrl = "https://slako.applinzi.com/index.php?m=question&c=personal&a=headpic";
-
+//var docommitpostUrl = "https://slako.applinzi.com/index.php?m=question&c=personal&a=headpic";
+var docommitpostUrl = "https://slako.applinzi.com/index.php?m=attachment&c=attachments&a=upload";
 var addimguri ={uri:"https://slako.applinzi.com/statics/images/question/util/addimg.jpg" , width: 200, height: 200};
 
 
@@ -45,13 +45,14 @@ class SetHeadPic extends Component {
     docommit(){
 
         let formData = new FormData();
-        let file = {uri: this.state.imgSource, type: 'multipart/form-data', name: 'pic.jpg'};
+        let file = {uri: this.state.imgSource, type: 'multipart/form-data', name: 'head'};
         formData.append("auth",global.auth);
         formData.append("userid",global.userid);
-
+        formData.append("module","question");
+        formData.append("what","head");
         var opts =null;
 
-        formData.append("headpic",file);
+        formData.append("upload",file);
         opts = {
             method:"POST",
             headers:{
@@ -68,7 +69,7 @@ class SetHeadPic extends Component {
                     Actions.pop();
                 }else{
                     //alert(global.auth);
-                    //alert(responseData.message)
+                    alert(responseData.message)
                 }
 
             })

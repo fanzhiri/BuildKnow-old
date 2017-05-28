@@ -31,10 +31,16 @@ const styles = StyleSheet.create({
 
         width:240,
     },
+    answerinattcontainer: {
+        height: 40,
+        justifyContent: 'center',
+
+        width:160,
+    },
     descriptioninput:{
         fontSize:16,
         marginTop:6,
-        height: 120,
+        height: 100,
         borderColor: 'gray',
         borderWidth: 2,
         paddingLeft:10,
@@ -52,7 +58,7 @@ const styles = StyleSheet.create({
     explaininput:{
         fontSize:16,
         marginTop:6,
-        height: 100,
+        height: 80,
         borderColor: 'gray',
         borderWidth: 2,
         paddingLeft:10,
@@ -105,7 +111,7 @@ class NewSomeQuestions extends Component {
             textabc:["","","","",""],
             fillingtext:"",
             rightwrongselectedIndex:0,//对或错选择标志
-
+            fillorselect:0 //0:fill 1:select
         };
 
     }
@@ -138,6 +144,12 @@ class NewSomeQuestions extends Component {
         });
     }
 
+    onFillNotChange(event) {
+        this.setState({
+            fillorselect: event.nativeEvent.selectedSegmentIndex,
+        });
+    }
+
     answertextchange(text) {
         var alltext = this.state.answertext;
         alltext[this.state.sgmctlselectedIndex] = text;
@@ -159,14 +171,19 @@ class NewSomeQuestions extends Component {
         var extext=this.state.explaintext[this.state.sgmctlselectedIndex];
         return(
         <View>
-            <TextInput
-                onChangeText={(text) => {this.answertextchange(text)}}
-                style={styles.answerinput}
-                value={astext}
-                placeholder={"答案：请添写，最多20字"}
-                maxLength={20}
-                multiline={true}
-            />
+            {this.state.fillorselect == 0 ?
+                <TextInput
+                    onChangeText={(text) => {this.answertextchange(text)}}
+                    style={styles.answerinput}
+                    value={astext}
+                    placeholder={"答案：请添写，最多20字"}
+                    maxLength={20}
+                    multiline={true}
+                />
+                :
+                null
+            }
+
             <TextInput
                 style={styles.explaininput}
                 onChangeText={(text) => {this.explaintextchange(text)}}
@@ -240,10 +257,19 @@ class NewSomeQuestions extends Component {
     }
 
     renderOneSelectView(which) {
+        var enumString = null;
         var SegmentedControlValues=null;
+
+
+        enumString = "答案枚举：";
         if(which == 0){
             //单选题
-            SegmentedControlValues=['正', '误1', '误2', '误3', '误4', '误5', '误6', '误7'];
+            if(this.state.fillorselect == 0){
+                SegmentedControlValues=['正', '误1', '误2', '误3', '误4', '误5', '误6', '误7'];
+            }else{
+                enumString = "答案枚举：";
+                SegmentedControlValues=['A', 'B', 'C', 'D'];
+            }
         }else if(which == 1){
             //多选题
             SegmentedControlValues=['正1', '正2', '正3', '正4', '误1', '误2', '误3', '误4'];
@@ -252,10 +278,13 @@ class NewSomeQuestions extends Component {
             SegmentedControlValues=['答1', '答2', '答3', '答4', '答5', '答6', '答7', '答8'];
         }
 
+
+
+
         return (
             <View>
                 <View style={styles.typeContainer}>
-                    <Text style={styles.typetext}>答案类型：</Text>
+                    <Text style={styles.typetext}>{enumString}</Text>
                     <View style={styles.answertypecontainer}>
                         <SegmentedControlIOS
                             values={SegmentedControlValues}
@@ -283,6 +312,27 @@ class NewSomeQuestions extends Component {
                 multiline={true}
             />
         );
+    }
+
+    renderFillAnswerView(){
+        if(this.state.questiontypeIndex != 0){
+            return;
+        }
+        return(
+            <View style={styles.typeContainer}>
+                <Text style={styles.typetext}>答案在附件中？：</Text>
+                <View style={styles.answerinattcontainer}>
+                    <SegmentedControlIOS
+                        values={['否', '是']}
+                        selectedIndex={this.state.fillorselect}
+                        style={styles.segmented}
+                        onChange={(event) => {
+                            this.onFillNotChange(event)
+                        }}
+                    />
+                </View>
+            </View>
+        )
     }
 
     renderRightWrongView(){
@@ -361,6 +411,7 @@ class NewSomeQuestions extends Component {
                     </View>
                 </View>
                 {this.renderAttachmentView()}
+                {this.renderFillAnswerView()}
                 {this.renderQuestionTypeView()}
             </View>
         )

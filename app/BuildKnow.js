@@ -75,6 +75,7 @@ import ChatList from './views/ChatList'
 //51
 import TestResult from './views/TestResult'
 import AnswerLibEdit from './views/AnswerLibEdit'
+import TestCard from './views/TestCard'
 
 import Icon from 'react-native-vector-icons/Ionicons';
 
@@ -155,6 +156,7 @@ export default class BuildKnow extends Component {
                 <Scene key="chatlist" title="聊天" component={ChatList} duration={0} />
                 <Scene key="testresult" title="测试结果" component={TestResult} duration={0}  />
                 <Scene key="answerlibedit" title="答案库编辑" component={AnswerLibEdit} duration={0}  />
+                <Scene key="testcard" title="题卡" component={TestCard} duration={0}  />
             </Router>
         );
     }
