@@ -164,6 +164,7 @@ class AnswerQuestion extends Component {
     invote(idx){
         switch (idx){
             case 0:
+                Actions.answersetting();
                 break;
             case 1:
                 break;

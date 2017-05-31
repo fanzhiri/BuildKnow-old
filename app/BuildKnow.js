@@ -76,6 +76,12 @@ import ChatList from './views/ChatList'
 import TestResult from './views/TestResult'
 import AnswerLibEdit from './views/AnswerLibEdit'
 import TestCard from './views/TestCard'
+//未完成
+import AnswerSetting from './views/AnswerSetting'
+//未完成
+import PublicBook from './views/PublicBook'
+
+
 
 import Icon from 'react-native-vector-icons/Ionicons';
 
@@ -157,6 +163,8 @@ export default class BuildKnow extends Component {
                 <Scene key="testresult" title="测试结果" component={TestResult} duration={0}  />
                 <Scene key="answerlibedit" title="答案库编辑" component={AnswerLibEdit} duration={0}  />
                 <Scene key="testcard" title="题卡" component={TestCard} duration={0}  />
+                <Scene key="answersetting" title="答题设置" component={AnswerSetting} duration={0}  />
+                <Scene key="publicbook" title="出版题本" component={PublicBook} duration={0}  />
             </Router>
         );
     }

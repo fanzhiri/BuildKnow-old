@@ -3,7 +3,7 @@
  */
 import React, { Component ,PropTypes} from 'react';
 
-import {View, Text, Image, StyleSheet, SegmentedControlIOS} from "react-native";
+import {View, Text, Image, StyleSheet,Alert, SegmentedControlIOS} from "react-native";
 
 import Button from 'apsl-react-native-button'
 
@@ -156,12 +156,19 @@ class BookCover extends Component {
             })
     }
 
+    godropbook(){
+        Alert.alert('慎重操作','真的要丢弃这本书吗?',[
+            {text:'是的',onPress:()=> this.docollect(0)},
+            {text:'不了'}
+        ]);
+    }
+
     rendercollectbutton(){
 
         if(global.bookcollect.contains(this.state.bookdata.reviewid)){
             return(
                 <View style={styles.container3}>
-                    <Button style={styles.dropButton} textStyle={{fontSize: 12}}  onPress={() => this.docollect(0)}>丢弃</Button>
+                    <Button style={styles.dropButton} textStyle={{fontSize: 12}}  onPress={() => this.godropbook()}>丢弃</Button>
                     <Button style={styles.dropButton} textStyle={{fontSize: 12}}  onPress={() => Actions.buildingbook({bookid:this.state.bookdata.bookid})}>进入</Button>
                 </View>
             );
