@@ -169,7 +169,7 @@ class BookCover extends Component {
             return(
                 <View style={styles.container3}>
                     <Button style={styles.dropButton} textStyle={{fontSize: 12}}  onPress={() => this.godropbook()}>丢弃</Button>
-                    <Button style={styles.dropButton} textStyle={{fontSize: 12}}  onPress={() => Actions.buildingbook({bookid:this.state.bookdata.bookid})}>进入</Button>
+                    <Button style={styles.dropButton} textStyle={{fontSize: 12}}  onPress={() => Actions.publicbook({bookid:this.state.bookdata.reviewid})}>进入</Button>
                 </View>
             );
         }else{
@@ -224,7 +224,7 @@ class BookCover extends Component {
 
                 <View>
                     <SegmentedControlIOS
-                        values={['介绍','评论','历史']}
+                        values={['介绍','评论','排行']}
                         selectedIndex={this.state.selectedIndex}
                         style={styles.segmented}
                         onChange={this._onChange}

@@ -4,7 +4,7 @@
  */
 import React, { Component ,PropTypes} from 'react';
 
-import {View, Text, Image, StyleSheet, SegmentedControlIOS,TouchableOpacity} from "react-native";
+import {View, Text, Image, StyleSheet, SegmentedControlIOS,TouchableOpacity,ScrollView} from "react-native";
 
 import Button from "react-native-button";
 
@@ -18,17 +18,15 @@ import {
     ActionConst,
 } from 'react-native-router-flux';
 
+import Icon from 'react-native-vector-icons/Ionicons';
+
 import {Menu,MenuOptions,MenuOption,MenuTrigger,renderers} from 'react-native-popup-menu'
 
 const {SlideInMenu}=renderers;
 
-import BookIntroduce from './BookIntroduce'
-import BookDiscuss from './BookDiscuss'
-import BookHistory from './BookHistory'
-
 import GlobleStyles from '../styles/GlobleStyles';
 
-var doGetBookBaseUrl = "https://slako.applinzi.com/api/1/book/";
+var doGetBookBaseUrl = "https://slako.applinzi.com/api/1/publicbook/";
 var httpsBaseUrl = "https://slako.applinzi.com/";
 
 const styles = StyleSheet.create({
@@ -51,36 +49,30 @@ const styles = StyleSheet.create({
         justifyContent: 'space-around',
         alignItems: 'center',
     },
-
-    image:{
-        flex:1,
-        width:160,
-        height:160,
-        borderRadius:16,
+    datacontainer:{
+        padding:10,
+        flexDirection:'row',
+        alignItems: 'center',
+        height:100,
+    },
+    dataitemcontainer:{
+        flex: 1,
+    },
+    topButtoncontainer:{
+        flexDirection:'row',
+        justifyContent: 'flex-start',
+        alignItems: 'center',
+        height:60,
+    },
+    topButtonitemcontainer:{
+        width:40,
+        justifyContent: 'center',
+        alignItems: 'center',
     },
     segmented:{
         marginTop:10,
         width:240,
         alignSelf:'center'
-    },
-    button:{
-        fontSize: 16,color: 'green' ,width:38,height:24, overflow:'hidden', borderRadius:4, backgroundColor: 'red'
-    },
-    textmargin:{
-        marginTop:10,
-    },
-    ButtonViewContainer:{
-        flex:1,
-        justifyContent: 'flex-end',
-    },
-    bottomButtonViewContainer:{
-        flexDirection:'row',
-        justifyContent: 'space-around',
-        height: 32,
-        alignItems: 'center',
-    },
-    bottomButtonText: {
-        fontSize: 16,
     },
 });
 
@@ -89,17 +81,11 @@ class PublicBook extends Component {
         super(props);
 
         this.state = {
-            selectedIndex:0,
+            readortest:0,//0看题 1测试
             bookdata:null,
             bookCover:null,
         };
-        this._onChange = this._onChange.bind(this);
-        this._handleRandom = this.handleRandom.bind(this);
-        this._handleOrder = this.handleOrder.bind(this);
-        this._handleSection = this.handleSection.bind(this);
-        this._renderBook = this.renderBook.bind(this);
-        this._renderLoading = this.renderLoading.bind(this);
-        this._doFetchBook = this.doFetchBook.bind(this);
+
     }
 
     doFetchBook(bookid){
@@ -130,150 +116,126 @@ class PublicBook extends Component {
             })
     }
 
-    _onChange(event) {
+    rendertopbutton(iconname,name,onpressfunc){
+        var iconColor="#FF0000";
+        return(
+            <TouchableOpacity onPress={onpressfunc} activeOpacity={0.8}>
+                <View style={styles.topButtonitemcontainer}>
+                    <View style={styles.IconItem}>
+                        <Icon name={iconname} size={22} color={iconColor}/>
+                    </View>
+                    <Text>{name}</Text>
+                </View>
+            </TouchableOpacity>
+        )
+    }
+
+    invote(idx){
+        switch (idx){
+            case 0:
+                Actions.answersetting();
+                break;
+            case 1:
+                break;
+            case 2:
+                break;
+            case 3:
+                break;
+            case 4:
+                break;
+            case 5:
+                Actions.testcard();
+                break;
+            case 6:
+                break;
+            case 7:
+                break;
+        }
+    }
+
+    onSegmentChange(event) {
         this.setState({
-            selectedIndex: event.nativeEvent.selectedSegmentIndex,
+            readortest: event.nativeEvent.selectedSegmentIndex,
         });
     }
 
-    handleRandom() {
-        var type = 'random';
-        global.bookqids=JSON.parse(this.state.bookdata.qids);
-        Actions.answerquestion(type);
-    }
-    handleOrder() {
-        var type = 'order';
-        global.bookqids=JSON.parse(this.state.bookdata.qids);
-        Actions.answerquestion(type);
-    }
-    handleSection() {
-        var type = 'section';
-        global.bookqids=JSON.parse(this.state.bookdata.qids);
-        Actions.answerquestion(type);
+    renderreadortest(){
+        if(this.state.readortest == 0){
+            return(
+                <View style={styles.topButtoncontainer}>
+                    {this.rendertopbutton("md-eye",     "顺序",   () => this.invote(0))}
+                    {this.rendertopbutton("md-locate",  "章节",   () => this.invote(1))}
+                    {this.rendertopbutton("md-medal",   "已看",   () => this.invote(1))}
+                    {this.rendertopbutton("md-medkit",  "未看",   () => this.invote(2))}
+                    {this.rendertopbutton("md-flower",  "随机",   () => this.invote(3))}
+                    {this.rendertopbutton("md-flower",  "收藏",   () => this.invote(3))}
+                </View>
+            )
+        }else{
+            return(
+                <View>
+                    <View style={styles.topButtoncontainer}>
+                        {this.rendertopbutton("md-eye",     "顺序",   () => this.invote(0))}
+                        {this.rendertopbutton("md-locate",  "章节",   () => this.invote(1))}
+                        {this.rendertopbutton("md-medal",   "已看",   () => this.invote(1))}
+                        {this.rendertopbutton("md-medkit",  "未看",   () => this.invote(2))}
+                        {this.rendertopbutton("md-flower",  "随机",   () => this.invote(3))}
+                        {this.rendertopbutton("md-flower",  "收藏",   () => this.invote(3))}
+                    </View>
+                    <View style={styles.topButtoncontainer}>
+                        {this.rendertopbutton("md-medal",   "比拼",   () => this.invote(1))}
+                        {this.rendertopbutton("md-medkit",  "错题",   () => this.invote(2))}
+                        {this.rendertopbutton("md-medkit",  "记录",   () => this.invote(2))}
+                        {this.rendertopbutton("md-medkit",  "排行",   () => this.invote(2))}
+                    </View>
+                </View>
+
+            )
+        }
     }
 
-    handleBeginTest() {
-        Actions.begintest({bookdata:this.state.bookdata});
-    }
-
-    renderBook(){
+    render(){
         return (
             <View style={GlobleStyles.withoutTitleContainer}>
-
-                <View marginTop={10} style={styles.container1}>
-                    <View>
-                        <Image style={styles.image} source={{uri:this.state.bookCover}}/>
-                    </View>
-                    <View style={styles.container2}>
-                        <Button style={styles.button} onPress={() => this._handleRandom()} >随机</Button>
-                        <Button style={styles.button} onPress={() => this._handleOrder()}>顺序</Button>
-                        <Button style={styles.button} onPress={() => this._handleSection()}>章节</Button>
-                    </View>
-                    <View style={styles.container2}>
-                        <Button style={styles.button} >错题</Button>
-                        <Button style={styles.button} >收藏</Button>
-                        <Button style={styles.button} onPress={() => this.handleBeginTest()} >测试</Button>
-                    </View>
+                <View  style={styles.datacontainer}>
+                    <ScrollView style={styles.dataitemcontainer}>
+                        <Text>熟练程度：</Text>
+                        <Text>做题数：</Text>
+                        <Text>未看题数：</Text>
+                        <Text>测试次数：</Text>
+                        <Text>最近均分：</Text>
+                        <Text>错题数：</Text>
+                    </ScrollView>
+                    <ScrollView style={styles.dataitemcontainer}>
+                        <Text>熟练程度：</Text>
+                        <Text>做题数：</Text>
+                        <Text>未看题数：</Text>
+                        <Text>测试次数：</Text>
+                        <Text>最近均分：</Text>
+                        <Text>错题数：</Text>
+                    </ScrollView>
                 </View>
-                <View>
+
+                <View style={styles.segmentcontainer}>
                     <SegmentedControlIOS
-                        values={['介绍','评论','推荐','计划','历史']}
-                        selectedIndex={this.state.selectedIndex}
+                        values={['看题', '做题']}
+                        selectedIndex={this.state.readortest}
                         style={styles.segmented}
-                        onChange={this._onChange}
+                        onChange={(event) => {
+                            this.onSegmentChange(event)
+                        }}
                     />
                 </View>
-                {this.renderSegmentedView()}
-
+                {this.renderreadortest()}
+                <View style={styles.topButtoncontainer}>
+                    {this.rendertopbutton("md-eye","熟练计划",   () => this.invote(0))}
+                    {this.rendertopbutton("md-eye","前后版本",   () => this.invote(0))}
+                    {this.rendertopbutton("md-locate","在建地址",() => this.invote(1))}
+                </View>
             </View>
         );
     }
 
-    render(){
-        if(this.state.bookdata == null){
-            const {bookid} = this.props;
-            this._doFetchBook(bookid);
-            return this._renderLoading();
-        }else{
-            return this._renderBook();
-        }
-
-
-    }
-
-    renderSegmentedView() {
-        if (this.state.selectedIndex === 0) {
-            return (
-                this.renderIntroduceView()
-            )
-        } else if (this.state.selectedIndex === 1) {
-            return (
-                this.renderDiscussView()
-            )
-        } else if (this.state.selectedIndex === 2) {
-            return (
-                this.renderIdeasView()
-            )
-        } else if (this.state.selectedIndex === 3) {
-            return (
-                this.renderHistoryView()
-            )
-        } else if (this.state.selectedIndex === 4) {
-            return (
-                this.renderHistoryView()
-            )
-        }
-
-    }
-
-    renderIntroduceView(){
-        return (
-            <View>
-                <Text style={styles.textmargin}>题本名字 :{this.state.bookdata.bookname}</Text>
-                <Text style={styles.textmargin}>题目数量 :{this.state.bookdata.q_count}</Text>
-                <Text style={styles.textmargin}>题本简介 :{this.state.bookdata.bookbrief}</Text>
-                <Text style={styles.textmargin}>题本详情 :{this.state.bookdata.bookdescription}</Text>
-                <Text style={styles.textmargin}>题目编号 :{this.state.bookdata.qids}</Text>
-                <Text style={styles.textmargin}>关注人数 :{this.state.bookdata.follow}</Text>
-            </View>
-
-        )
-    }
-
-    renderDiscussView(){
-        return (
-        <View style={styles.ButtonViewContainer}>
-            <View style={styles.bottomButtonViewContainer}>
-
-                <TouchableOpacity  onPress={()=> Actions.chatlist()} >
-                    <Text style={styles.bottomButtonText} >评论</Text>
-                </TouchableOpacity>
-
-                <Text style={styles.bottomButtonText} >赞</Text>
-            </View>
-        </View>
-
-        )
-    }
-
-    renderIdeasView(){
-        return (
-            <View style={styles.ButtonViewContainer}>
-                <View style={styles.bottomButtonViewContainer}>
-                    <TouchableOpacity  onPress={()=> Actions.newsomequestions({bookid:this.props.bookid,title:this.state.bookdata.bookname})} >
-                        <Text style={styles.bottomButtonText} >贡献</Text>
-                    </TouchableOpacity>
-                </View>
-            </View>
-
-        )
-    }
-
-    renderHistoryView(){
-        return (
-            <Text>History</Text>
-        )
-    }
 
     renderLoading(){
         return (
@@ -281,6 +243,9 @@ class PublicBook extends Component {
         )
     }
 }
+
+//界面关键点
+//看题（随机、章节、），测验，发起考试，日程安排，好友等级排行，考试记录，熟练计划，前后版本，该本的在建地址
 
 PublicBook.PropTypes = {
     bookid: PropTypes.number,
