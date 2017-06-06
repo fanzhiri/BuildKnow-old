@@ -29,6 +29,9 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#F5FCFF',
     },
+    thiscontainer: {
+        padding:10
+    },
     container1: {
         margin:10,
         flexDirection:'row',
@@ -210,7 +213,7 @@ class BookCover extends Component {
     renderBook(){
 
         return (
-            <View style={GlobleStyles.withoutTitleContainer}>
+            <View style={[GlobleStyles.withoutTitleContainer,styles.thiscontainer]}>
                 <View marginTop={10} style={styles.container1}>
                     <View>
                         <Image style={styles.image} source={{uri:`${httpsBaseUrl}${this.state.bookdata.cover}`}} />
@@ -260,6 +263,8 @@ class BookCover extends Component {
                 <Text style={styles.textmargin}>题本详情 :{this.state.bookdata.bookdescription}</Text>
                 <Text style={styles.textmargin}>题目编号 :{this.state.bookdata.qids}</Text>
                 <Text style={styles.textmargin}>关注人数 :{this.state.bookdata.follow}</Text>
+                <Text style={styles.textmargin}>测试人数 :{this.state.bookdata.follow}</Text>
+                <Text style={styles.textmargin}>测试次数 :{this.state.bookdata.follow}</Text>
             </View>
         )
     }

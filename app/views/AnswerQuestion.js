@@ -262,7 +262,6 @@ class AnswerQuestion extends Component {
         return (
             <View style={GlobleStyles.withoutTitleContainer}>
                 {this._renderquestion()}
-                {/*<Text>abc</Text>*/}
             </View>
         )
     }
@@ -274,6 +273,7 @@ AnswerQuestion.PropTypes = {
     questioncount:PropTypes.number,
     // bookid:PropTypes.string.isRequired,
     // qids:PropTypes.array.isRequired,
+    publicbookdata:PropTypes.object
 };
 
 module.exports = AnswerQuestion;

@@ -83,7 +83,7 @@ class PublicBook extends Component {
         this.state = {
             readortest:0,//0看题 1测试
             bookdata:null,
-            bookCover:null,
+
         };
 
     }
@@ -101,7 +101,6 @@ class PublicBook extends Component {
 
                     this.setState({
                         bookdata:responseData.data,
-                        bookCover:`${httpsBaseUrl}${responseData.data.cover}`,
                         fetchresult:"ok",
 
                     })
@@ -133,7 +132,7 @@ class PublicBook extends Component {
     invote(idx){
         switch (idx){
             case 0:
-                Actions.answersetting();
+                Actions.AnswerQuestion({intype:1,publicbookdata:bookdata});
                 break;
             case 1:
                 break;
