@@ -128,7 +128,7 @@ class MyBookList extends Component {
         return (
             <TouchableOpacity onPress={() => Actions.composebook({bookid:bookid,title:rowData.bookname})}>
                 <View style={styles.listItem}>
-                    <Text style={styles.numText}>{rowID}</Text>
+                    <Text style={styles.numText}>{parseInt(rowID)+1}</Text>
                     <Image source={{uri:`${httpsBaseUrl}${cover}`}} style={styles.leftImgStyle}/>
                     <View>
                         <Text style={styles.topTitleStyle}>

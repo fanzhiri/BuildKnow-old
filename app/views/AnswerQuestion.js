@@ -56,7 +56,15 @@ const styles = StyleSheet.create({
         paddingRight: 25,
         borderBottomColor: '#c4c4c4',
         borderBottomWidth: 1
-    },
+    },circle:{
+        borderRadius:16,
+        height:32,
+        width:32,
+        margin:4,
+        backgroundColor: '#F2FF50',
+        justifyContent: 'center',
+        alignItems: 'center',
+    }
 });
 var init_radio_props = [
     {label: 'loading 1', value: 0 },
@@ -108,6 +116,9 @@ class AnswerQuestion extends Component {
     renderwrongright(idx){
         var iconname=null;
         var iconColor=null;
+        if(this.props.answermode == 2){
+            return;
+        }
         if(idx == this.state.rightidx){
             iconColor ="#00FF00";
             iconname="md-checkmark-circle";
@@ -117,8 +128,10 @@ class AnswerQuestion extends Component {
         }
         if(this.state.selectone == idx){
             return(
-                <View style={styles.IconItem}>
-                    <Icon name={iconname} size={22} color={iconColor}/>
+                <View style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-end'}}>
+                    <View style={styles.IconItem}>
+                        <Icon name={iconname} size={22} color={iconColor}/>
+                    </View>
                 </View>
             )
         }
@@ -132,17 +145,20 @@ class AnswerQuestion extends Component {
     }
 
 
+
+
     showAnswerItem(text,idx){
 
         return(
             <TouchableOpacity onPress={() => this.onSelectAnswer(idx)} activeOpacity={0.8}>
                 <View style={styles.listItem}>
-
+                    <View style={styles.circle}>
+                        <Text>{idx}</Text>
+                    </View>
                     <Text style={styles.answerfont}> {text} </Text>
 
-                    <View style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-end'}}>
-                        {this.renderwrongright(idx)}
-                    </View>
+                    {this.renderwrongright(idx)}
+
 
                 </View>
             </TouchableOpacity>
@@ -384,7 +400,7 @@ AnswerQuestion.PropTypes = {
     asktype:PropTypes.number,          //0顺序 1随机
     questiontype: PropTypes.string.isRequired,//random随机；order顺序
     questioncount:PropTypes.number,
-    // bookid:PropTypes.string.isRequired,
+    answermode:PropTypes.number,//0看题，1随便考 2真考
     // qids:PropTypes.array.isRequired,
     publicbookdata:PropTypes.object
 };

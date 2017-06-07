@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
     },
 });
 
-var doGetMyBooksUrl = "https://slako.applinzi.com/index.php?m=question&c=personal&a=getmybooks";
+var doGetMyReviewPlanUrl = "https://slako.applinzi.com/index.php?m=question&c=personal&a=getmyreviewplan";
 var httpsBaseUrl = "https://slako.applinzi.com/";
 
 class ReviewPlan extends Component {
@@ -67,13 +67,14 @@ class ReviewPlan extends Component {
         super(props);
 
         this.state = {
-            books_data_source: null,
+            reviewplan_data_source: null,
+            getdata:null
         };
 
-        this._renderBookItem = this.renderBookItem.bind(this)
+        this._renderPlanItem = this.renderPlanItem.bind(this)
     }
 
-    dofetch_mybooks(){
+    dofetch_myReviewPlan(){
 
         let formData = new FormData();
         formData.append("auth",global.auth);
@@ -83,12 +84,13 @@ class ReviewPlan extends Component {
             method:"POST",
             body:formData
         }
-        fetch(doGetMyBooksUrl,opts)
+        fetch(doGetMyReviewPlanUrl,opts)
             .then((response) => response.json())
             .then((responseData) => {
                 if(responseData.code == 100){
                     this.setState({
-                        books_data_source:responseData.data
+                        reviewplan_data_source:responseData.data,
+                        getdata:1
                     })
                 }else{
                     alert(responseData.message);
@@ -101,45 +103,34 @@ class ReviewPlan extends Component {
     }
 
     renderMyBooksView(){
-        if(this.state.books_data_source ==null){
-            this.dofetch_mybooks();
+        if(this.state.getdata == null){
+            this.dofetch_myReviewPlan();
             return (this.renderLoading())
         }else{
-            return (this.renderMyBooks())
+            return (this.renderMyPlans())
         }
     }
 
-    renderReviewing(status){
 
-        if(status == 1){
-            return(
-                <View >
-                    <Text style={styles.statusText}>等待审核中</Text>
-                </View>
-            )
-        }else{
-            return null;
-        }
-    }
 
-    renderBookItem(rowData, sectionID, rowID){
+    renderPlanItem(rowData, sectionID, rowID){
         var cover = rowData.cover;
         var bookid= rowData.question_book_id;
         return (
-            <TouchableOpacity onPress={() => Actions.composebook({bookid:bookid,title:rowData.bookname})}>
+            <TouchableOpacity onPress={() => Actions.newreviewplan()}>
                 <View style={styles.listItem}>
                     <Text style={styles.numText}>{rowID}</Text>
-                    <Image source={{uri:`${httpsBaseUrl}${cover}`}} style={styles.leftImgStyle}/>
+
                     <View>
                         <Text style={styles.topTitleStyle}>
-                            {rowData.bookname}
+                            {rowData.name}
                         </Text>
-                        {this.renderReviewing(rowData.status)}
+
                         <Text >
-                            {rowData.bookbrief}
+                            {rowData.brief}
                         </Text>
                         <Text >
-                            题数:{rowData.q_count}  关注:{rowData.follow}  分享:{rowData.share}  评论:{10}
+                            次数:{rowData.count}
                         </Text>
                     </View>
                 </View>
@@ -147,12 +138,12 @@ class ReviewPlan extends Component {
         )
     }
 
-    renderMyBooks(){
+    renderMyPlans(){
         return (
             <ListView
                 style={styles.list}
-                dataSource={DataStore.cloneWithRows(this.state.books_data_source)}
-                renderRow={this._renderBookItem}
+                dataSource={DataStore.cloneWithRows(this.state.reviewplan_data_source)}
+                renderRow={this._renderPlanItem}
                 enableEmptySections = {true}
             />
         )

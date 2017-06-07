@@ -160,6 +160,15 @@ class PublicBook extends Component {
                 break;
             case 7:
                 break;
+            case 10:
+                Actions.answerquestion({
+                    intype:1,
+                    publicbookdata:this.state.bookdata,
+                    questioncount:10,
+                    asktype:0,
+                    answermode:2
+                });
+                break;
         }
     }
 
@@ -185,7 +194,7 @@ class PublicBook extends Component {
             return(
                 <View>
                     <View style={styles.topButtoncontainer}>
-                        {this.rendertopbutton("md-eye",     "顺序",   () => this.invote(0))}
+                        {this.rendertopbutton("md-eye",     "顺序",   () => this.invote(10))}
                         {this.rendertopbutton("md-locate",  "章节",   () => this.invote(1))}
                         {this.rendertopbutton("md-medal",   "已看",   () => this.invote(1))}
                         {this.rendertopbutton("md-medkit",  "未看",   () => this.invote(2))}
