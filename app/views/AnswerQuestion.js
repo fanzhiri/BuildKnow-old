@@ -78,6 +78,9 @@ class AnswerQuestion extends Component {
     constructor(props) {
         super(props);
         t_questiondataarr=JSON.parse(this.props.publicbookdata.qidtext);
+        if(this.props.asktype == 1){
+            t_questiondataarr=t_questiondataarr.reverse();
+        }
         this.state = {
             count:0,
             fetchresult:null,
@@ -99,7 +102,7 @@ class AnswerQuestion extends Component {
     }
     componentWillMount(){
 
-        this.nextquestion();
+        this.anotherquestion(1);
     }
 
     renderwrongright(idx){
@@ -210,7 +213,8 @@ class AnswerQuestion extends Component {
             questiondata:t_questiondata,
             rightidx:rightindex,
             answer:answerarr,
-            questionidx:t_questionidx
+            questionidx:t_questionidx,
+            selectone:-1
         })
     }
 

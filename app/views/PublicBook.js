@@ -132,9 +132,20 @@ class PublicBook extends Component {
     invote(idx){
         switch (idx){
             case 0:
-                Actions.answerquestion({intype:1,publicbookdata:this.state.bookdata,questioncount:10});
+                Actions.answerquestion({
+                    intype:1,
+                    publicbookdata:this.state.bookdata,
+                    questioncount:10,
+                    asktype:0
+                });
                 break;
             case 1:
+                Actions.answerquestion({
+                    intype:1,
+                    publicbookdata:this.state.bookdata,
+                    questioncount:10,
+                    asktype:1
+                });
                 break;
             case 2:
                 break;
@@ -166,7 +177,7 @@ class PublicBook extends Component {
                     {this.rendertopbutton("md-locate",  "章节",   () => this.invote(1))}
                     {this.rendertopbutton("md-medal",   "已看",   () => this.invote(1))}
                     {this.rendertopbutton("md-medkit",  "未看",   () => this.invote(2))}
-                    {this.rendertopbutton("md-flower",  "随机",   () => this.invote(3))}
+                    {this.rendertopbutton("md-flower",  "随机",   () => this.invote(1))}
                     {this.rendertopbutton("md-flower",  "收藏",   () => this.invote(3))}
                 </View>
             )
@@ -178,7 +189,7 @@ class PublicBook extends Component {
                         {this.rendertopbutton("md-locate",  "章节",   () => this.invote(1))}
                         {this.rendertopbutton("md-medal",   "已看",   () => this.invote(1))}
                         {this.rendertopbutton("md-medkit",  "未看",   () => this.invote(2))}
-                        {this.rendertopbutton("md-flower",  "随机",   () => this.invote(3))}
+                        {this.rendertopbutton("md-flower",  "随机",   () => this.invote(1))}
                         {this.rendertopbutton("md-flower",  "收藏",   () => this.invote(3))}
                     </View>
                     <View style={styles.topButtoncontainer}>

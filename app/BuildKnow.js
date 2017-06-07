@@ -80,7 +80,10 @@ import TestCard from './views/TestCard'
 import AnswerSetting from './views/AnswerSetting'
 //未完成
 import PublicBook from './views/PublicBook'
-
+//未完成
+import ReviewPlan from './views/ReviewPlan'
+//未完成
+import NewReviewPlan from './views/NewReviewPlan'
 
 
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -165,6 +168,8 @@ export default class BuildKnow extends Component {
                 <Scene key="testcard" title="题卡" component={TestCard} duration={0}  />
                 <Scene key="answersetting" title="答题设置" component={AnswerSetting} duration={0}  />
                 <Scene key="publicbook" title="出版题本" component={PublicBook} duration={0}  />
+                <Scene key="reviewplan" title="复习管理" component={ReviewPlan} duration={0} rightTitle={"添加"} onRight={() => Actions.newreviewplan()} />
+                <Scene key="newreviewplan" title="新建复习路线" component={NewReviewPlan} duration={0}  />
             </Router>
         );
     }
