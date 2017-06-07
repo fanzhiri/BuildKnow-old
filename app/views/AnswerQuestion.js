@@ -2,7 +2,7 @@
  * Created by slako on 17/2/18.
  */
 import React, { Component,PropTypes } from 'react';
-import {View, Text, StyleSheet, Image, Dimensions,TouchableOpacity} from "react-native";
+import {View, Text, StyleSheet, Image, Dimensions,ScrollView,TouchableOpacity} from "react-native";
 import {Actions} from "react-native-router-flux";
 import Button from 'apsl-react-native-button'
 import GlobleStyles from '../styles/GlobleStyles';
@@ -15,7 +15,10 @@ const styles = StyleSheet.create({
         backgroundColor: '#F5FCFF',
     },
     question:{
-        fontSize:24
+        fontSize:20
+    },
+    answerfont:{
+        fontSize:20
     },
     nextperbuttoncontainer:{
         flexDirection:'row',
@@ -43,7 +46,17 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         width: 40,
-    }
+    },listItem: {
+        flex: 1,
+        height: 48,
+        backgroundColor: 'white',
+        flexDirection: 'row',
+        alignItems: 'center',
+        paddingLeft: 16,
+        paddingRight: 25,
+        borderBottomColor: '#c4c4c4',
+        borderBottomWidth: 1
+    },
 });
 var init_radio_props = [
     {label: 'loading 1', value: 0 },
@@ -59,24 +72,78 @@ var doGetQuestionGetBaseUrl = "https://slako.applinzi.com/api/1/question/";
 var httpsBaseUrl = "https://slako.applinzi.com";
 
 
-var question_number=0;
+
 
 class AnswerQuestion extends Component {
     constructor(props) {
         super(props);
-        question_number=global.bookqids.length;
+        t_questiondataarr=JSON.parse(this.props.publicbookdata.qidtext);
         this.state = {
             count:0,
             fetchresult:null,
             questiondata:null,
             radio:init_radio_props,
             ask:null,
-            selectone:-1
+            selectone:-1,
+            answer:null,
+            questionidx:-1,
+            rightidx:-1,
+            allcount:t_questiondataarr.length,
+            questiondataarr:t_questiondataarr,
         };
+
         this._dofetchquestion = this.dofetchquestion.bind(this);
         this._renderloading = this.renderloading.bind(this);
         this._renderquestion = this.renderquestion.bind(this);
         this._showquestion = this.showquestion.bind(this);
+    }
+    componentWillMount(){
+
+        this.nextquestion();
+    }
+
+    renderwrongright(idx){
+        var iconname=null;
+        var iconColor=null;
+        if(idx == this.state.rightidx){
+            iconColor ="#00FF00";
+            iconname="md-checkmark-circle";
+        }else{
+            iconColor ="#FF0000";
+            iconname="md-close-circle";
+        }
+        if(this.state.selectone == idx){
+            return(
+                <View style={styles.IconItem}>
+                    <Icon name={iconname} size={22} color={iconColor}/>
+                </View>
+            )
+        }
+
+    }
+
+    onSelectAnswer(idx){
+        this.setState({
+            selectone:idx,
+        })
+    }
+
+
+    showAnswerItem(text,idx){
+
+        return(
+            <TouchableOpacity onPress={() => this.onSelectAnswer(idx)} activeOpacity={0.8}>
+                <View style={styles.listItem}>
+
+                    <Text style={styles.answerfont}> {text} </Text>
+
+                    <View style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-end'}}>
+                        {this.renderwrongright(idx)}
+                    </View>
+
+                </View>
+            </TouchableOpacity>
+        );
     }
 
     dofetchquestion(questionid){
@@ -94,7 +161,7 @@ class AnswerQuestion extends Component {
                     let answer=JSON.parse(responseData.data.wrong_answer);
                     let rightanswer=responseData.data.right_answer;
                     answer.splice(rightindex,0,rightanswer);
-
+                    //找出正确答案的位置
                     let radio_props = [
                         {label: answer[0], value: 0 },
                         {label: answer[1], value: 1 },
@@ -118,12 +185,41 @@ class AnswerQuestion extends Component {
             })
     }
 
+    anotherquestion(what){
+        let t_questionidx=0;
+        if(what == 0){
+            t_questionidx=this.state.questionidx-1;
+            if(t_questionidx == -1){
+                t_questionidx = this.state.allcount-1;
+            }
+        }else if(what == 1){
+            t_questionidx=this.state.questionidx+1;
+
+            if(t_questionidx == this.state.allcount){
+                t_questionidx = 0;
+            }
+        }
+
+        let t_questiondata = this.state.questiondataarr[parseInt(t_questionidx)];
+
+        let rightindex = Math.floor(Math.random() * 4);
+        let answerarr=JSON.parse(t_questiondata.wrong_answer);
+        let rightanswer=t_questiondata.right_answer;
+        answerarr.splice(rightindex,0,rightanswer);
+        this.setState({
+            questiondata:t_questiondata,
+            rightidx:rightindex,
+            answer:answerarr,
+            questionidx:t_questionidx
+        })
+    }
+
     renderquestion(){
         if(this.state.questiondata == null){
 
-            var qid=global.bookqids.shift();
+            //var qid=global.bookqids.shift();
 
-            this._dofetchquestion(qid);
+            //this._dofetchquestion(qid);
 
             return this._renderloading();
         }else{
@@ -132,6 +228,10 @@ class AnswerQuestion extends Component {
     }
 
     onPressNext(){
+        if(this.props.intype == 1){
+            this.anotherquestion(1);
+            return;
+        }
         this.setState({selectone:-1})
         this.setState({count:this.state.count+1})
         var qid=global.bookqids.shift();
@@ -141,6 +241,11 @@ class AnswerQuestion extends Component {
     }
 
     onPressPre(){
+        if(this.props.intype == 1){
+            this.anotherquestion(0);
+            return;
+        }
+
         this.setState({selectone:-1})
         var qid=global.bookqids.shift();
 
@@ -223,7 +328,8 @@ class AnswerQuestion extends Component {
                     {this.rendertopbutton("md-stats",   "统计",   () => this.invote(1))}
                     {this.rendertopbutton("md-settings","设置",   () => this.invote(0))}
                 </View>
-                <Text style={styles.question}>完成进度 {this.state.count}:{question_number}</Text>
+                <Text style={styles.question}>完成进度 {this.state.count}:{this.state.allcount}</Text>
+                <Text style={styles.question}>题号 {this.state.questionidx}</Text>
                 {
                     this.state.questiondata.img?
                         <Image resizeMode="cover" source={{uri:`${httpsBaseUrl}${this.state.questiondata.img}`, width: window.width, height: 200 }} ></Image>
@@ -232,12 +338,14 @@ class AnswerQuestion extends Component {
                 }
                 {this.renderqtype(this.state.questiondata.qtype)}
                 <Text style={styles.question}>{this.state.questiondata.ask}</Text>
-                <RadioForm
 
-                    radio_props={this.state.radio}
-                    initial={this.state.selectone}
-                    onPress={(value) => {this.setState({selectone:value})}}
-                />
+                <ScrollView>
+                    {this.showAnswerItem(this.state.answer[0],0)}
+                    {this.showAnswerItem(this.state.answer[1],1)}
+                    {this.showAnswerItem(this.state.answer[2],2)}
+                    {this.showAnswerItem(this.state.answer[3],3)}
+                </ScrollView>
+
                 <View style={styles.nextperbuttoncontainer}>
                     <Button style={styles.nextperbutton} textStyle={{fontSize: 16}} onPress={() => this.onPressPre() }>上个</Button>
                     <Button style={styles.nextperbutton} textStyle={{fontSize: 16}} onPress={() => this.onPressNext()}>下个</Button>
@@ -269,6 +377,7 @@ class AnswerQuestion extends Component {
 
 AnswerQuestion.PropTypes = {
     intype:PropTypes.number,          //0正在建的题本测试 1已经发布的
+    asktype:PropTypes.number,          //0顺序 1随机
     questiontype: PropTypes.string.isRequired,//random随机；order顺序
     questioncount:PropTypes.number,
     // bookid:PropTypes.string.isRequired,

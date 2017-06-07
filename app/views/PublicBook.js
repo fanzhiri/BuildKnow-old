@@ -83,7 +83,7 @@ class PublicBook extends Component {
         this.state = {
             readortest:0,//0看题 1测试
             bookdata:null,
-
+            getdata:null,
         };
 
     }
@@ -102,7 +102,7 @@ class PublicBook extends Component {
                     this.setState({
                         bookdata:responseData.data,
                         fetchresult:"ok",
-
+                        getdata:1
                     })
 
                 }else{
@@ -132,7 +132,7 @@ class PublicBook extends Component {
     invote(idx){
         switch (idx){
             case 0:
-                Actions.AnswerQuestion({intype:1,publicbookdata:bookdata});
+                Actions.answerquestion({intype:1,publicbookdata:this.state.bookdata,questioncount:10});
                 break;
             case 1:
                 break;
@@ -193,9 +193,9 @@ class PublicBook extends Component {
         }
     }
 
-    render(){
-        return (
-            <View style={GlobleStyles.withoutTitleContainer}>
+    renderbook(){
+        return(
+            <View >
                 <View  style={styles.datacontainer}>
                     <ScrollView style={styles.dataitemcontainer}>
                         <Text>熟练程度：</Text>
@@ -231,6 +231,23 @@ class PublicBook extends Component {
                     {this.rendertopbutton("md-eye","前后版本",   () => this.invote(0))}
                     {this.rendertopbutton("md-locate","在建地址",() => this.invote(1))}
                 </View>
+            </View>
+        )
+    }
+
+    renderswitch(){
+        if(this.state.getdata==null){
+            this.doFetchBook(this.props.bookid)
+            return this.renderLoading()
+        }else{
+            return this.renderbook();
+        }
+    }
+
+    render(){
+        return (
+            <View style={GlobleStyles.withoutTitleContainer}>
+                {this.renderswitch()}
             </View>
         );
     }
