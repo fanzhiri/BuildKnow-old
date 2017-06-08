@@ -68,7 +68,7 @@ class ReviewPlan extends Component {
 
         this.state = {
             reviewplan_data_source: null,
-            getdata:null
+            getdata:0
         };
 
         this._renderPlanItem = this.renderPlanItem.bind(this)
@@ -93,7 +93,9 @@ class ReviewPlan extends Component {
                         getdata:1
                     })
                 }else{
-                    alert(responseData.message);
+                    this.setState({
+                        getdata:1
+                    })
                 }
 
             })
@@ -103,11 +105,16 @@ class ReviewPlan extends Component {
     }
 
     renderMyBooksView(){
-        if(this.state.getdata == null){
+        if(this.state.getdata == 0){
             this.dofetch_myReviewPlan();
             return (this.renderLoading())
         }else{
-            return (this.renderMyPlans())
+            if(this.state.reviewplan_data_source == null){
+                return(this.rendernodata())
+            }else{
+                return (this.renderMyPlans())
+            }
+
         }
     }
 
@@ -161,11 +168,20 @@ class ReviewPlan extends Component {
     renderLoading(){
         return (
             <View style={styles.container}>
-                <Text>Loading...</Text>
+                <Text>加载中...</Text>
             </View>
 
         )
     }
+
+    rendernodata(){
+        return (
+            <View style={styles.container}>
+                <Text>没有数据</Text>
+            </View>
+        )
+    }
+
 }
 
 module.exports = ReviewPlan;

@@ -1,7 +1,7 @@
 /**
  * Created by slako on 17/06/07.
  */
-import React, { Component } from 'react';
+import React, { Component ,PropTypes} from 'react';
 import {View, Text, StyleSheet,Image,TouchableOpacity,TextInput,ScrollView,ListView} from "react-native";
 import {Actions} from "react-native-router-flux";
 import Button from 'apsl-react-native-button'
@@ -10,13 +10,14 @@ import GlobleStyles from '../styles/GlobleStyles';
 import ImagePicker from "react-native-image-picker";
 import TcombForm from "tcomb-form-native";
 import DataStore from '../util/DataStore';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 var Tform = TcombForm.form.Form;
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#BCEE68',
+        backgroundColor: '#BCEEE8',
         margin:10
     },
     nameinput:{
@@ -51,22 +52,39 @@ const styles = StyleSheet.create({
         margin:10,
         justifyContent: 'space-around',
         flexDirection:'row',
+    },sumcontainer:{
+        margin:10,
+        height:30,
+        justifyContent: 'space-around',
+        alignItems: 'center',
+        flexDirection:'row',
+        backgroundColor: '#AEEEEE'
     },
-    addbutton:{
-        marginTop:10,
-        height:48,
-        backgroundColor: '#FFEE00'
-    },
-    leftImgStyle:{
-        width:80,
-        height:80,
-
-    },
-    rightImgStyle:{
+    editcontainer:{
+        flexDirection:'row',
+        justifyContent: 'space-around',
         width:180,
-        height:80,
-
     },
+    timestringcontainer:{
+        justifyContent: 'center',
+        alignItems: 'center',
+        width:40,
+    },
+    submitbutton:{
+
+        height:30,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#AEE00E'
+    },
+    twobutton:{
+        flex:1
+    },
+    namecontainer:{
+        margin:10,
+        justifyContent: 'center',
+        alignItems: 'center',
+    }
 });
 
 var doCommitNewBookPostUrl = "https://slako.applinzi.com/index.php?m=question&c=personal&a=addbook";
@@ -89,11 +107,15 @@ class NewReviewPlan extends Component {
         for(var i=0;i<aibinhaoshi.length;i++){
             sum+=aibinhaoshi[i];
         }
+
+        //let t_mode = 0;
         this.state = {
             plan_data_source:aibinhaoshi,
-            datesum:sum
+            datesum:sum,
+            modetype:0,
+            name:"未编辑"
         };
-
+        //0查看 1编辑
         this._renderPlanItem = this.renderPlanItem.bind(this)
     }
 
@@ -132,6 +154,30 @@ class NewReviewPlan extends Component {
                 alert(error)
             })
     }
+
+    rendertimeajust(time,timestring){
+        if(this.state.modetype == 1){
+            return(
+                <View style={styles.editcontainer}>
+                    <Icon name={"md-arrow-dropleft"} size={22} color={"#FF0000"}/>
+                    <Icon name={"md-arrow-dropleft"} size={22} color={"#FF0000"}/>
+                    <Text style={styles.timestringcontainer}>{time} {timestring}</Text>
+                    <Icon name={"md-arrow-dropright"} size={22} color={"#FF0000"}/>
+                    <Icon name={"md-arrow-dropright"} size={22} color={"#FF0000"}/>
+                    <Icon name={"md-download"} size={22} color={"#FF0000"}/>
+                    <Icon name={"md-close-circle"} size={22} color={"#FF0000"}/>
+                </View>
+            )
+        }else{
+            return(
+                <View>
+                    <Text>{time} {timestring}</Text>
+                </View>
+            )
+        }
+
+    }
+
     renderPlanItem(rowData, sectionID, rowID){
         let time = 0;
         let timestring=null;
@@ -151,16 +197,68 @@ class NewReviewPlan extends Component {
         return(
             <View style={styles.titlecontainer}>
                 <Text>{parseInt(rowID)+1}</Text>
-                <Text>{time} {timestring}</Text>
+                {this.rendertimeajust(time,timestring)}
             </View>
         )
+    }
+
+    onpressfunc(dowhat){
+        switch (this.state.modetype){
+            case 0:
+                this.setState({
+                    modetype:1
+                })
+                break;
+            case 1:
+                this.setState({
+                    modetype:0
+                })
+                break;
+        }
+    }
+
+    rendereditorsubmit(){
+
+        if(this.state.modetype == 0){
+
+            return(
+                    <TouchableOpacity onPress={() => this.onpressfunc(0)} activeOpacity={0.8}>
+                        <View  style={styles.submitbutton}>
+                            <Text>编辑</Text>
+                        </View>
+                    </TouchableOpacity>
+                )
+
+        }else if(this.state.modetype == 1){
+
+            return(
+            <View style={{flexDirection:'row',height:30,justifyContent: 'space-around',}}>
+                <TouchableOpacity onPress={() => this.onpressfunc(1)} activeOpacity={0.8}>
+                    <View  style={[styles.submitbutton,styles.twobutton]}>
+                        <Text>撤销修改</Text>
+                    </View>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => this.onpressfunc(2)} activeOpacity={0.8}>
+                    <View  style={[styles.submitbutton,styles.twobutton]}>
+                        <Text>提交</Text>
+                    </View>
+                </TouchableOpacity>
+            </View>
+
+
+            )
+        }
+
     }
 
     render(){
         return (
             <View style={[GlobleStyles.withoutTitleContainer,styles.container]}>
+                <View style={styles.namecontainer}>
+                    <Text style={{fontSize: 24}}>名字：{this.state.name}</Text>
+                </View>
                 <View style={styles.titlecontainer}>
-                    <Text>次数</Text>
+                    <Text>次数号</Text>
                     <Text>离上次时间</Text>
                 </View>
                 <ScrollView>
@@ -171,13 +269,19 @@ class NewReviewPlan extends Component {
                         enableEmptySections = {true}
                     />
                 </ScrollView>
-                <View style={styles.titlecontainer}>
-                    <Text>次数</Text>
+                <View style={styles.sumcontainer}>
+                    <Text>共 {this.state.plan_data_source.length} 次</Text>
                     <Text>持续 {Math.floor(this.state.datesum/24)} 天</Text>
                 </View>
+                {this.rendereditorsubmit()}
             </View>
         );
     }
 }
+//0查看 1编辑 2新建
+NewReviewPlan.PropTypes = {
+    modetype:PropTypes.number,
+
+};
 
 module.exports = NewReviewPlan;

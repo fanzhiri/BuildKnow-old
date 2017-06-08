@@ -66,12 +66,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     }
 });
-var init_radio_props = [
-    {label: 'loading 1', value: 0 },
-    {label: 'loading 2', value: 1 },
-    {label: 'loading 3', value: 2 },
-    {label: 'loading 4', value: 3 }
-];
 
 const window = Dimensions.get('window');
 
@@ -93,7 +87,6 @@ class AnswerQuestion extends Component {
             count:0,
             fetchresult:null,
             questiondata:null,
-            radio:init_radio_props,
             ask:null,
             selectone:-1,
             answer:null,
@@ -181,12 +174,7 @@ class AnswerQuestion extends Component {
                     let rightanswer=responseData.data.right_answer;
                     answer.splice(rightindex,0,rightanswer);
                     //找出正确答案的位置
-                    let radio_props = [
-                        {label: answer[0], value: 0 },
-                        {label: answer[1], value: 1 },
-                        {label: answer[2], value: 2 },
-                        {label: answer[3], value: 3 }
-                    ];
+
                     this.setState({
                         questiondata:responseData.data,
                         fetchresult:"ok",
@@ -380,11 +368,10 @@ class AnswerQuestion extends Component {
     renderloading(){
         return (
             <View style={styles.container}>
-                <Text>Loading question...</Text>
+                <Text>Loading ...</Text>
             </View>
         )
     }
-
 
     render(){
         return (

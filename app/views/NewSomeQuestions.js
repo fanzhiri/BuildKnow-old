@@ -2,7 +2,7 @@
  * Created by slako on 17/2/18.
  */
 import React, { Component ,PropTypes} from 'react';
-import {View, Text, StyleSheet, TextInput,SegmentedControlIOS,Image,ScrollView} from "react-native";
+import {View, Text, StyleSheet, TextInput,SegmentedControlIOS,Image,ScrollView,TouchableOpacity,Alert} from "react-native";
 import {Actions} from "react-native-router-flux";
 import Button from 'apsl-react-native-button'
 import GlobleStyles from '../styles/GlobleStyles';
@@ -71,9 +71,21 @@ const styles = StyleSheet.create({
         height: 600,
     },
     submitbutton:{
-        marginTop:12,
-        height:32,
         backgroundColor: '#00EE00'
+    },bottomcontainer: {
+        marginTop:10,
+        backgroundColor: '#F5FCFF',
+        alignItems:'center',
+        flexDirection:'row',
+        height:32,
+    },buttoncontainer:{
+        height:32,
+        flex:1,
+        alignItems:'center',
+        justifyContent: 'center',
+    },
+    clearbutton:{
+        backgroundColor: '#FF1011'
     }
 });
 
@@ -89,7 +101,7 @@ class NewSomeQuestions extends Component {
 
         this.state = {
             imgSource: addimguri,
-            questiontext:"问题",
+            questiontext:"",
             answertext:"答案",
             explaintext:"解释",
             addwayIndex:0,
@@ -100,14 +112,7 @@ class NewSomeQuestions extends Component {
             //rightexplaintext:"",
             answertext:["","","","","","","",""],
             explaintext:["","","","","","","",""],
-            wronganswertext2:"",
-            wrongexplaintext2:"",
-            wronganswertext3:"",
-            wrongexplaintext3:"",
-            wronganswertext4:"",
-            wrongexplaintext4:"",
-            wronganswertext5:"",
-            wrongexplaintext6:"",
+
             textabc:["","","","",""],
             fillingtext:"",
             rightwrongselectedIndex:0,//对或错选择标志
@@ -210,17 +215,28 @@ class NewSomeQuestions extends Component {
 
 
     docommit(){
+        if(this.state.addwayIndex == 1){
+            //批量添加，未开发
+            return;
+        }
+        if(this.state.questiontext === "" ){
+            Alert.alert('必需填的没填完','请填入问题',[
+                {text:'知了'}
+            ]);
+            return;
+        }
 
         let formData = new FormData();
         let file = {uri: this.state.imgSource, type: 'multipart/form-data', name: 'pic.jpg'};
         formData.append("auth",global.auth);
         formData.append("userid",global.userid);
         formData.append("bookid",this.props.bookid);
-        formData.append("ask",newquestion.ask);
-        formData.append("right_answer",newquestion.rightanswer);
-        formData.append("wrong_answer_1",newquestion.wronganswier1);
-        formData.append("wrong_answer_2",newquestion.wronganswier2);
-        formData.append("wrong_answer_3",newquestion.wronganswier3);
+        formData.append("qtype",this.state.questiontypeIndex);
+        formData.append("ask",this.state.questiontext);
+        formData.append("answerinattach",this.state.fillorselect);
+        formData.append("answer",JSON.stringify(this.state.answertext));
+        formData.append("explain",JSON.stringify(this.state.explaintext));
+
         var opts =null;
         if(this.state.imgSource == addimguri){
             //formData.append("pic320240",file);
@@ -437,6 +453,27 @@ class NewSomeQuestions extends Component {
         this.docommit();
     }
 
+    clearall(){
+        this.setState({
+            imgSource: addimguri,
+            questiontext:"考试时间",
+            answertext:"答案",
+            explaintext:"解释",
+            addwayIndex:0,
+            sgmctlselectedIndex:0,
+            questiontypeIndex:0,
+            attachmentIndex:0,
+            //rightanswertext:"",
+            //rightexplaintext:"",
+            answertext:["0601","0602","0603","0604","0605","0606","0607","0608"],
+            explaintext:["a","b","c","d","e","f","g","h"],
+            textabc:["","","","",""],
+            fillingtext:"",
+            rightwrongselectedIndex:0,//对或错选择标志
+            fillorselect:0 //0:fill 1:select
+        })
+    }
+
     render(){
         return (
             <View style={[GlobleStyles.withoutTitleContainer,styles.container]}>
@@ -451,7 +488,19 @@ class NewSomeQuestions extends Component {
 
                 </View>
                 {this.renderOneOrMultView()}
-                <Button style={styles.submitbutton} textStyle={{fontSize: 16}} onPress={() => this.submitquestion()}>提交</Button>
+                <View style={styles.bottomcontainer}>
+                    <TouchableOpacity style={[styles.buttoncontainer,styles.clearbutton]}  onPress={() => this.clearall()} >
+                        <View >
+                            <Text style={{fontSize: 16}}>清除</Text>
+                        </View>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={[styles.buttoncontainer,styles.submitbutton]} onPress={() => this.submitquestion()} >
+                        <View >
+                            <Text style={{fontSize: 16}}>提交</Text>
+                        </View>
+                    </TouchableOpacity>
+                </View>
+
             </View>
         );
     }
