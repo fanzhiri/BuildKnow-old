@@ -93,6 +93,9 @@ var addimguri ={uri:"https://slako.applinzi.com/statics/images/question/util/add
 var addvideouri ={uri:"https://slako.applinzi.com/statics/images/question/util/addimg.jpg", width: 100, height: 68 };
 
 var docommitpostUrl = "https://slako.applinzi.com/index.php?m=question&c=personal&a=addquestion";
+//var docommitpostUrl = "https://slako.applinzi.com/index.php?m=question&c=index&a=testquestion";
+
+
 
 class NewSomeQuestions extends Component {
 
@@ -102,14 +105,11 @@ class NewSomeQuestions extends Component {
         this.state = {
             imgSource: addimguri,
             questiontext:"",
-            answertext:"答案",
-            explaintext:"解释",
+
             addwayIndex:0,
             sgmctlselectedIndex:0,
             questiontypeIndex:0,
             attachmentIndex:0,
-            //rightanswertext:"",
-            //rightexplaintext:"",
             answertext:["","","","","","","",""],
             explaintext:["","","","","","","",""],
 
@@ -260,7 +260,7 @@ class NewSomeQuestions extends Component {
             .then((responseData) => {
                 if(responseData.code == 100){
 
-                    Actions.pop();
+                    //Actions.pop();
                 }else{
                     alert(global.auth);
                     alert(responseData.message)
@@ -457,8 +457,6 @@ class NewSomeQuestions extends Component {
         this.setState({
             imgSource: addimguri,
             questiontext:"考试时间",
-            answertext:"答案",
-            explaintext:"解释",
             addwayIndex:0,
             sgmctlselectedIndex:0,
             questiontypeIndex:0,
