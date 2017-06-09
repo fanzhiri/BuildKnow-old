@@ -79,7 +79,15 @@ var httpsBaseUrl = "https://slako.applinzi.com";
 class AnswerQuestion extends Component {
     constructor(props) {
         super(props);
-        t_questiondataarr=JSON.parse(this.props.publicbookdata.qidtext);
+
+        let t_questiondataarr = null;
+        if(this.props.intype == 0){
+            t_questiondataarr = this.props.buildingbookdata;
+        }else if(this.props.intype == 1){
+            t_questiondataarr = JSON.parse(this.props.publicbookdata.qidtext);
+        }
+
+
         if(this.props.asktype == 1){
             t_questiondataarr=t_questiondataarr.reverse();
         }
@@ -389,7 +397,8 @@ AnswerQuestion.PropTypes = {
     questioncount:PropTypes.number,
     answermode:PropTypes.number,//0看题，1随便考 2真考
     // qids:PropTypes.array.isRequired,
-    publicbookdata:PropTypes.object
+    publicbookdata:PropTypes.object,
+    buildingbookdata:PropTypes.object
 };
 
 module.exports = AnswerQuestion;

@@ -107,11 +107,11 @@ class NewSomeQuestions extends Component {
             questiontext:"",
 
             addwayIndex:0,
-            sgmctlselectedIndex:0,
+            sgmctlselectedIndex:0,//如果答案是的附件中，选中的就是正确答案
             questiontypeIndex:0,
             attachmentIndex:0,
-            answertext:["","","","","","","",""],
-            explaintext:["","","","","","","",""],
+            answertext:['','','','','','','',''],
+            explaintext:['','','','','','','',''],
 
             textabc:["","","","",""],
             fillingtext:"",
@@ -236,6 +236,7 @@ class NewSomeQuestions extends Component {
         formData.append("answerinattach",this.state.fillorselect);
         formData.append("answer",JSON.stringify(this.state.answertext));
         formData.append("explain",JSON.stringify(this.state.explaintext));
+        formData.append("answerwhere",JSON.stringify(this.state.sgmctlselectedIndex));//答案在附件中时，标志哪个是正确答案
 
         var opts =null;
         if(this.state.imgSource == addimguri){
@@ -262,7 +263,7 @@ class NewSomeQuestions extends Component {
 
                     //Actions.pop();
                 }else{
-                    alert(global.auth);
+                    //alert(global.auth);
                     alert(responseData.message)
                 }
 
@@ -270,6 +271,15 @@ class NewSomeQuestions extends Component {
             .catch((error) => {
                 alert(error)
             })
+    }
+
+    renderselectright(){
+        if(this.state.fillorselect == 1){
+            return(
+                <Text style={styles.typetext}>如下选中项为正确答案</Text>
+            )
+        }
+
     }
 
     renderOneSelectView(which) {
@@ -284,7 +294,7 @@ class NewSomeQuestions extends Component {
                 SegmentedControlValues=['正', '误1', '误2', '误3', '误4', '误5', '误6', '误7'];
             }else{
                 enumString = "答案枚举：";
-                SegmentedControlValues=['A', 'B', 'C', 'D'];
+                SegmentedControlValues=['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
             }
         }else if(which == 1){
             //多选题
@@ -299,8 +309,10 @@ class NewSomeQuestions extends Component {
 
         return (
             <View>
+                {this.renderselectright()}
                 <View style={styles.typeContainer}>
                     <Text style={styles.typetext}>{enumString}</Text>
+
                     <View style={styles.answertypecontainer}>
                         <SegmentedControlIOS
                             values={SegmentedControlValues}
