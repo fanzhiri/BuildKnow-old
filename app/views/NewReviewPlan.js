@@ -21,8 +21,7 @@ const styles = StyleSheet.create({
         margin:10
     },
     nameinput:{
-        fontSize:16,
-        marginTop:10,
+        fontSize:22,
         height: 32,
         borderColor: 'gray',
         borderWidth: 2,
@@ -30,8 +29,7 @@ const styles = StyleSheet.create({
         paddingRight:10
     },
     briefinput:{
-        fontSize:16,
-        marginTop:10,
+        fontSize:18,
         height: 64,
         borderColor: 'gray',
         borderWidth: 2,
@@ -87,16 +85,15 @@ const styles = StyleSheet.create({
     }
 });
 
-var doCommitNewBookPostUrl = "https://slako.applinzi.com/index.php?m=question&c=personal&a=addbook";
+var doCommitNewPlanPostUrl = "https://slako.applinzi.com/index.php?m=question&c=personal&a=addreviewplan";
 
-var doCommitPicPostUrl = "https://slako.applinzi.com/index.php?m=attachment&c=attachment&a=upload";
 
 class NewReviewPlan extends Component {
 
-    constructor() {
+    constructor(props) {
 
-        super();
-        let addcoveruri ={uri:"https://slako.applinzi.com/statics/images/question/util/addcover.png", width: 80, height: 80 };
+        super(props);
+
         let aibinhaoshi=[
             1,24,24,24*2,24*3,24*5,24*8,24*15,
             24*30,24*30*2,24*30*4,24*30*6,24*30*8,24*30*10,24*30*12,
@@ -108,12 +105,25 @@ class NewReviewPlan extends Component {
             sum+=aibinhaoshi[i];
         }
 
-        //let t_mode = 0;
+        let init_name = null;
+        let init_brief = null;
+        let init_planid = 0;
+        if(this.props.modetype == 0){
+            init_name = this.props.plandata.name;
+            init_brief = this.props.plandata.brief;
+            init_planid = this.props.plandata.id;
+        }else{
+            init_name = "";
+            init_brief = "";
+        }
+
         this.state = {
             plan_data_source:aibinhaoshi,
             datesum:sum,
-            modetype:0,
-            name:"未编辑"
+            modetype:this.props.modetype,
+            name:init_name,
+            brief:init_brief,
+            planid:init_planid
         };
         //0查看 1编辑
         this._renderPlanItem = this.renderPlanItem.bind(this)
@@ -121,31 +131,36 @@ class NewReviewPlan extends Component {
 
 
 
-    docommit(){
+    dosubmit(){
 
+
+        if(this.state.name == ""){
+            return;
+        }
+        if(this.state.brief == ""){
+            return;
+        }
         let formData = new FormData();
-        let file = {uri: this.state.coverSource, type: 'multipart/form-data', name: 'bookcover8080.jpg'};
+
         formData.append("auth",global.auth);
         formData.append("userid",global.userid);
-        formData.append("bookname",this.state.name);
-        formData.append("bookbrief",this.state.brief);
-        formData.append("bookdescription",this.state.description);
-        formData.append("bookcover8080",file);
+        formData.append("planid",this.state.planid);
+        formData.append("name",this.state.name);
+        formData.append("brief",this.state.brief);
+        formData.append("remaininterval",JSON.stringify(this.state.plan_data_source));
+
         var opts = {
             method:"POST",
-            headers:{
-                'Content-Type':'multipart/form-data',
-            },
             body:formData
         }
-        fetch(doCommitNewBookPostUrl,opts)
+
+        fetch(doCommitNewPlanPostUrl,opts)
             .then((response) => response.json())
             .then((responseData) => {
                 if(responseData.code == 100){
 
                     Actions.pop();
                 }else{
-                    alert(global.auth);
                     alert(responseData.message)
                 }
 
@@ -203,16 +218,19 @@ class NewReviewPlan extends Component {
     }
 
     onpressfunc(dowhat){
-        switch (this.state.modetype){
-            case 0:
+        switch (dowhat){
+            case 0://进入编辑
                 this.setState({
                     modetype:1
                 })
                 break;
-            case 1:
+            case 1://取消编辑
                 this.setState({
                     modetype:0
                 })
+                break;
+            case 2://提交
+                this.dosubmit();
                 break;
         }
     }
@@ -251,12 +269,67 @@ class NewReviewPlan extends Component {
 
     }
 
+    rendername(){
+        if(this.state.modetype == 1){
+            return(
+                <View style={styles.namecontainer}>
+                    <TextInput
+                        style={styles.nameinput}
+                        onChangeText={(text) => this.setState({name:text})}
+                        value={this.state.name}
+                        placeholder={"名字：请添写最多10字"}
+                        maxLength={10}
+                        multiline={false}
+                    />
+                </View>
+            )
+        }else{
+            let showname=this.state.name;
+            if(showname ==""){
+                showname="未编辑";
+            }
+            return(
+                <View style={styles.namecontainer}>
+                    <Text style={{fontSize: 24}}>名字：{showname}</Text>
+                </View>
+            )
+
+        }
+    }
+
+    renderbrief(){
+        if(this.state.modetype == 1){
+            return(
+                <View style={styles.namecontainer}>
+                    <TextInput
+                        style={styles.briefinput}
+                        onChangeText={(text) => this.setState({brief:text})}
+                        value={this.state.brief}
+                        placeholder={"简介：请添写最多20字"}
+                        maxLength={20}
+                        multiline={true}
+                    />
+                </View>
+            )
+        }else{
+            let showbrief=this.state.brief;
+            if(showbrief ==""){
+                showbrief="未编辑";
+            }
+            return(
+                <View style={styles.namecontainer}>
+                    <Text style={{fontSize: 20}}>描述：{showbrief}</Text>
+                </View>
+            )
+
+        }
+    }
+
     render(){
         return (
             <View style={[GlobleStyles.withoutTitleContainer,styles.container]}>
-                <View style={styles.namecontainer}>
-                    <Text style={{fontSize: 24}}>名字：{this.state.name}</Text>
-                </View>
+                {this.rendername()}
+                {this.renderbrief()}
                 <View style={styles.titlecontainer}>
                     <Text>次数号</Text>
                     <Text>离上次时间</Text>
@@ -281,7 +354,7 @@ class NewReviewPlan extends Component {
 //0查看 1编辑 2新建
 NewReviewPlan.PropTypes = {
     modetype:PropTypes.number,
-
+    plandata:PropTypes.object
 };
 
 module.exports = NewReviewPlan;

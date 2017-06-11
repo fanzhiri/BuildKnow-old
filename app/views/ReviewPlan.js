@@ -121,23 +121,25 @@ class ReviewPlan extends Component {
 
 
     renderPlanItem(rowData, sectionID, rowID){
-        var cover = rowData.cover;
-        var bookid= rowData.question_book_id;
+
         return (
-            <TouchableOpacity onPress={() => Actions.newreviewplan()}>
+            <TouchableOpacity onPress={() => Actions.newreviewplan({modetype:0,plandata:rowData})}>
                 <View style={styles.listItem}>
-                    <Text style={styles.numText}>{rowID}</Text>
+                    <Text style={styles.numText}>{parseInt(rowID)+1}</Text>
 
                     <View>
                         <Text style={styles.topTitleStyle}>
-                            {rowData.name}
+                            名字：{rowData.name}
                         </Text>
 
                         <Text >
-                            {rowData.brief}
+                            简介：{rowData.brief}
                         </Text>
                         <Text >
-                            次数:{rowData.count}
+                            复习次数：{rowData.count}
+                        </Text>
+                        <Text >
+                            持续时间：{rowData.alltime}
                         </Text>
                     </View>
                 </View>

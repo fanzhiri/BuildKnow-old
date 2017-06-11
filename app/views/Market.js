@@ -138,7 +138,7 @@ class Market extends Component {
                     refreshControl={
                         <RefreshControl
                             refreshing={this.state.gorefreshing}
-                            onRefresh={() => this.fetchBookStorelist()}
+                            onRefresh={() => this.fetchBookStorelist(1)}
                         />
                     }
 

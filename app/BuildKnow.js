@@ -168,8 +168,8 @@ export default class BuildKnow extends Component {
                 <Scene key="testcard" title="题卡" component={TestCard} duration={0}  />
                 <Scene key="answersetting" title="答题设置" component={AnswerSetting} duration={0}  />
                 <Scene key="publicbook" title="出版题本" component={PublicBook} duration={0}  />
-                <Scene key="reviewplan" title="复习管理" component={ReviewPlan} duration={0} rightTitle={"添加"} onRight={() => Actions.newreviewplan({modetype:1})} />
-                <Scene key="newreviewplan" title="新建复习路线" component={NewReviewPlan} duration={0}  />
+                <Scene key="reviewplan" title="复习管理" component={ReviewPlan} duration={0} rightTitle={"添加"} onRight={() => Actions.newreviewplan({title:"新建路线",modetype:1})} />
+                <Scene key="newreviewplan" title="复习路线" component={NewReviewPlan} duration={0}  />
             </Router>
         );
     }
