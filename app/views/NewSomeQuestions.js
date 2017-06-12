@@ -217,6 +217,9 @@ class NewSomeQuestions extends Component {
     docommit(){
         if(this.state.addwayIndex == 1){
             //批量添加，未开发
+            Alert.alert('未开发','等通知',[
+                {text:'知了'}
+            ]);
             return;
         }
         if(this.state.questiontext === "" ){

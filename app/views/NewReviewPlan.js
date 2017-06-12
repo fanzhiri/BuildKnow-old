@@ -135,9 +135,15 @@ class NewReviewPlan extends Component {
 
 
         if(this.state.name == ""){
+            Alert.alert('未填完','填写一下名字',[
+                {text:'知了'}
+            ]);
             return;
         }
         if(this.state.brief == ""){
+            Alert.alert('未填完','填写一下简介',[
+                {text:'知了'}
+            ]);
             return;
         }
         let formData = new FormData();
@@ -170,23 +176,84 @@ class NewReviewPlan extends Component {
             })
     }
 
-    rendertimeajust(time,timestring){
+    adjusttime(where,what){
+        let thetime_idx = this.state.plan_data_source[where];
+        let adjustsize = ( thetime_idx >= 24 )?1:0
+        switch (what){
+            case 1:
+                thetime_idx = thetime_idx - (30*(24*adjustsize));
+                break;
+            case 2:
+                let removesize = (adjustsize == 1)?24:1
+                thetime_idx = thetime_idx - (removesize);
+                break;
+            case 3:
+                let addsize = (adjustsize == 1)?24:1
+                thetime_idx = thetime_idx + (addsize);
+                break;
+            case 4:
+                thetime_idx = thetime_idx + (30*(24*adjustsize));
+                break;
+        }
+        let thetime_arr = this.state.plan_data_source;
+        if(thetime_idx < 1){
+            thetime_idx =1 ;
+        }
+        thetime_arr[where] = thetime_idx;
+        this.setState({
+            plan_data_source:thetime_arr,
+        });
+    }
+
+    addorremove(where,what){
+        let thetime_arr = this.state.plan_data_source;
+        switch (what){
+            case 1:
+                thetime_arr.splice(where,0,thetime_arr[where]);
+                break;
+            case 2:
+                thetime_arr.splice(where,1);
+                break;
+        }
+        this.setState({
+            plan_data_source:thetime_arr,
+        });
+    }
+
+    rendertimeajust(idx,time1,timestring1,time2,timestring2){
         if(this.state.modetype == 1){
             return(
                 <View style={styles.editcontainer}>
-                    <Icon name={"md-arrow-dropleft"} size={22} color={"#FF0000"}/>
-                    <Icon name={"md-arrow-dropleft"} size={22} color={"#FF0000"}/>
-                    <Text style={styles.timestringcontainer}>{time} {timestring}</Text>
-                    <Icon name={"md-arrow-dropright"} size={22} color={"#FF0000"}/>
-                    <Icon name={"md-arrow-dropright"} size={22} color={"#FF0000"}/>
-                    <Icon name={"md-download"} size={22} color={"#FF0000"}/>
-                    <Icon name={"md-close-circle"} size={22} color={"#FF0000"}/>
+                    <TouchableOpacity onPress={()=> this.adjusttime(idx,1)} activeOpacity={0.8}>
+                        <Icon name={"md-arrow-dropleft"} size={22} color={"#FF0000"}/>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={()=> this.adjusttime(idx,2)} activeOpacity={0.8}>
+                        <Icon name={"md-arrow-dropleft"} size={22} color={"#FF0000"}/>
+                    </TouchableOpacity>
+
+                    <Text style={styles.timestringcontainer}>{time1} {timestring1}</Text>
+                    <Text style={styles.timestringcontainer}>{time2} {timestring2}</Text>
+
+                    <TouchableOpacity onPress={()=> this.adjusttime(idx,3)} activeOpacity={0.8}>
+                        <Icon name={"md-arrow-dropright"} size={22} color={"#FF0000"}/>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={()=> this.adjusttime(idx,4)} activeOpacity={0.8}>
+                        <Icon name={"md-arrow-dropright"} size={22} color={"#FF0000"}/>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={()=> this.addorremove(idx,1)} activeOpacity={0.8}>
+                        <Icon name={"md-download"} size={22} color={"#FF0000"}/>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={()=> this.addorremove(idx,2)} activeOpacity={0.8}>
+                        <Icon name={"md-close-circle"} size={22} color={"#FF0000"}/>
+                    </TouchableOpacity>
+
                 </View>
             )
         }else{
             return(
-                <View>
-                    <Text>{time} {timestring}</Text>
+                <View >
+                    <Text>{time1} {timestring1}</Text>
+                    <Text>{time2} {timestring2}</Text>
                 </View>
             )
         }
@@ -194,25 +261,33 @@ class NewReviewPlan extends Component {
     }
 
     renderPlanItem(rowData, sectionID, rowID){
-        let time = 0;
-        let timestring=null;
+        let time1 = 0;
+        let timestring1=null;
+        let time2 = null;
+        let timestring2=null;
         if(rowData >= (24*30*12)){
-            time=Math.floor(rowData/(24*30*12));
-            timestring="年";
+            time1=Math.floor(rowData/(24*30*12));
+            timestring1="年";
+            time2=Math.floor((rowData%(24*30*12))/(24*30));
+            timestring2="月";
         }else if(rowData >= (24*30)){
-            time=Math.floor(rowData/(24*30));
-            timestring="月";
+            time1=Math.floor(rowData/(24*30));
+            timestring1="月";
+            time2=Math.floor((rowData%(24*30))/(24));
+            timestring2="日";
         }else if(rowData >= (24)){
-            time=Math.floor(rowData/24);
-            timestring="日";
+            time1=Math.floor(rowData/24);
+            timestring1="日";
+            time2=Math.floor(rowData%24);
+            timestring2="时";
         }else{
-            time=rowData;
-            timestring="时";
+            time1=rowData;
+            timestring1="时";
         }
         return(
             <View style={styles.titlecontainer}>
                 <Text>{parseInt(rowID)+1}</Text>
-                {this.rendertimeajust(time,timestring)}
+                {this.rendertimeajust(rowID,time1,timestring1,time2,timestring2)}
             </View>
         )
     }
@@ -222,12 +297,12 @@ class NewReviewPlan extends Component {
             case 0://进入编辑
                 this.setState({
                     modetype:1
-                })
+                });
                 break;
             case 1://取消编辑
                 this.setState({
                     modetype:0
-                })
+                });
                 break;
             case 2://提交
                 this.dosubmit();
