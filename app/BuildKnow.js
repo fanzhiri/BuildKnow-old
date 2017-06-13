@@ -77,13 +77,15 @@ import TestResult from './views/TestResult'
 import AnswerLibEdit from './views/AnswerLibEdit'
 import TestCard from './views/TestCard'
 //未完成
-import AnswerSetting from './views/AnswerSetting'
+import AnswerSetting from './views/AnswerSetting';
 //未完成
-import PublicBook from './views/PublicBook'
+import PublicBook from './views/PublicBook';
 //未完成
-import ReviewPlan from './views/ReviewPlan'
+import ReviewPlan from './views/ReviewPlan';
 //未完成
-import NewReviewPlan from './views/NewReviewPlan'
+import NewReviewPlan from './views/NewReviewPlan';
+//未完成
+import NewCompetition from './views/NewCompetition';
 
 
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -163,13 +165,14 @@ export default class BuildKnow extends Component {
                 <Scene key="reviewquestion" title="审核题目" component={ReviewQuestion} duration={0} />
                 <Scene key="mycollectbooklist" title="收藏题本" component={MyCollectBookList} duration={0} />
                 <Scene key="chatlist" title="聊天" component={ChatList} duration={0} />
-                <Scene key="testresult" title="测试结果" component={TestResult} duration={0}  />
+                <Scene key="testresult" title="测试结果" component={TestResult} duration={0} backTitle={"继续答题"} />
                 <Scene key="answerlibedit" title="答案库编辑" component={AnswerLibEdit} duration={0}  />
                 <Scene key="testcard" title="题卡" component={TestCard} duration={0}  />
                 <Scene key="answersetting" title="答题设置" component={AnswerSetting} duration={0}  />
                 <Scene key="publicbook" title="出版题本" component={PublicBook} duration={0}  />
                 <Scene key="reviewplan" title="复习管理" component={ReviewPlan} duration={0} rightTitle={"添加"} onRight={() => Actions.newreviewplan({title:"新建路线",modetype:1})} />
                 <Scene key="newreviewplan" title="复习路线" component={NewReviewPlan} duration={0}  />
+                <Scene key="newcompetition" title="对战" component={NewCompetition} duration={0}  />
             </Router>
         );
     }
