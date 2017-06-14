@@ -1,7 +1,7 @@
 /**
  * Created by slako on 17/2/18.
  */
-import React, { Component } from 'react';
+import React, { Component,PropTypes } from 'react';
 import {View, Text, StyleSheet, ListView, ScrollView} from "react-native";
 import {Actions} from "react-native-router-flux";
 import Button from "react-native-button";
@@ -40,7 +40,7 @@ class FriendList extends Component {
     }
 }
 
-ClassCatalogue.PropTypes = {
+FriendList.PropTypes = {
     inmode: PropTypes.number.isRequired,//0查看，1选择
 
 };
