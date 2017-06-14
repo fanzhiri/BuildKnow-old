@@ -136,7 +136,8 @@ class PublicBook extends Component {
                     intype:1,
                     publicbookdata:this.state.bookdata,
                     questioncount:10,
-                    asktype:0
+                    asktype:0,
+                    answermode:0
                 });
                 break;
             case 1:
@@ -144,7 +145,8 @@ class PublicBook extends Component {
                     intype:1,
                     publicbookdata:this.state.bookdata,
                     questioncount:10,
-                    asktype:1
+                    asktype:1,
+                    answermode:0
                 });
                 break;
             case 2:

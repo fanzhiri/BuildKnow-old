@@ -4,13 +4,11 @@
 import React, { Component } from 'react';
 import {View, Text, StyleSheet,Image,TouchableOpacity,TextInput,ScrollView} from "react-native";
 import {Actions} from "react-native-router-flux";
-import Button from 'apsl-react-native-button'
+
 import GlobleStyles from '../styles/GlobleStyles';
+import DataStore from '../util/DataStore';
+import Icon from 'react-native-vector-icons/Ionicons';
 
-import ImagePicker from "react-native-image-picker";
-import TcombForm from "tcomb-form-native";
-
-var Tform = TcombForm.form.Form;
 
 const styles = StyleSheet.create({
     container: {
@@ -66,6 +64,25 @@ const styles = StyleSheet.create({
         width:180,
         height:80,
 
+    },listItem: {
+        flex: 1,
+        height: 48,
+        backgroundColor: 'white',
+        flexDirection: 'row',
+        alignItems: 'center',
+        paddingLeft: 16,
+        paddingRight: 25,
+        borderBottomColor: '#c4c4c4',
+        borderBottomWidth: 1
+    },
+    peopleItem:{
+
+        padding:10,
+        backgroundColor:'white',
+        borderBottomWidth:0.5,
+        borderBottomColor:'#e8e8e8',
+        //主轴方向
+        flexDirection:'row',
     },
 });
 
@@ -80,46 +97,13 @@ class NewCompetition extends Component {
         super();
         let addcoveruri ={uri:"https://slako.applinzi.com/statics/images/question/util/addcover.png", width: 80, height: 80 };
         this.state = {
-            coverSource: addcoveruri,
-            name:"",
-            brief:"",
-            description:"",
-            bookcover8080_id:null,
-            bookcover18080_id:null,
+            competitionpeople_data_source: null,
         };
 
-        this._onSelectCoverPress = this.onSelectCoverPress.bind(this)
+        this._renderPeopleItem = this.renderPeopleItem.bind(this)
     }
 
-    commitpic(){
-        let formData = new FormData();
-        let file = {uri: this.state.coverSource, type: 'multipart/form-data', name: 'bookcover8080.jpg'};
-        formData.append("auth",global.auth);
-        formData.append("userid",global.userid);
-        formData.append("upload",file);
-        var opts = {
-            method:"POST",
-            headers:{
-                'Content-Type':'multipart/form-data',
-            },
-            body:formData
-        }
-        fetch(doCommitPicPostUrl,opts)
-            .then((response) => response.json())
-            .then((responseData) => {
-                if(responseData.code == 100){
-                    this.setState({
-                        bookcover8080_id:responseData.data,
-                    })
-                }else{
 
-                }
-
-            })
-            .catch((error) => {
-                alert(error)
-            })
-    }
 
     docommit(){
 
@@ -205,44 +189,47 @@ class NewCompetition extends Component {
 
     }
 
+    renderPeopleItem(rowData, sectionID, rowID){
+        return(
+            <View style={styles.peopleItem}>
+                <Image source={{uri:`${httpsBaseUrl}${rowData.head}`}} style={styles.leftImgStyle}/>
+                <View>
+                    <Text style={styles.topTitleStyle}>
+                        {rowData.nickname}
+                    </Text>
+                </View>
+            </View>
+        )
+    }
+
+    renderAllPeoples(){
+        if(this.state.competitionpeople_data_source){
+            return (
+                <ListView
+                    style={styles.list}
+                    dataSource={DataStore.cloneWithRows(this.state.competitionpeople_data_source)}
+                    renderRow={this._renderPeopleItem}
+                    enableEmptySections = {true}
+                />
+            )
+        }
+
+    }
+
+    addPeople(){
+        Actions.friendlist();
+    }
+
     render(){
         return (
             <View style={[GlobleStyles.withoutTitleContainer,styles.container]}>
-                <TextInput
-                    style={styles.nameinput}
-                    onChangeText={(text) => this.setState({name:text})}
-                    value={this.state.name}
-                    placeholder={"名字：请添写最多12字"}
-                    maxLength={12}
-                    multiline={false}
-                />
-                <TextInput
-                    style={styles.briefinput}
-                    onChangeText={(text) => this.setState({brief:text})}
-                    value={this.state.brief}
-                    placeholder={"简介：请添写最多32字"}
-                    maxLength={32}
-                    multiline={true}
-                />
-                <TextInput
-                    style={styles.descriptioninput}
-                    onChangeText={(text) => this.setState({description:text})}
-                    value={this.state.description}
-                    placeholder={"描述：请添写最多100字"}
-                    maxLength={100}
-                    multiline={true}
-                />
-                <View  style={styles.imgcontainer}>
-                    <TouchableOpacity onPress={()=>this._onSelectCoverPress()} >
-                        <Image source={this.state.coverSource} style={styles.leftImgStyle} />
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={()=>this._onSelectCoverPress()} >
-                        <Image source={this.state.coverSource} style={styles.rightImgStyle} />
-                    </TouchableOpacity>
-                </View>
-
-
-                <Button style={styles.addbutton} textStyle={{fontSize: 20}} onPress={() => this.onPress()} >添加题本</Button>
+                {this.renderAllPeoples()}
+                <TouchableOpacity style={styles.listItem} onPress={() => this.addPeople()} activeOpacity={0.8}>
+                    <View >
+                        <Icon name={"md-add-circle"} size={22} color="#008B00"/>
+                        <Text>添加</Text>
+                    </View>
+                </TouchableOpacity>
             </View>
         );
     }

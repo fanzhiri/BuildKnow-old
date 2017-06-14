@@ -65,6 +65,10 @@ class TestCard extends Component {
     }
 
 
+    getresult(){
+        Actions.pop({popNum:2});
+    }
+
     render(){
         const {idNumber} = this.props;
         return (

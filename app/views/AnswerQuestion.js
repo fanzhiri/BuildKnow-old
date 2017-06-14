@@ -91,6 +91,9 @@ class AnswerQuestion extends Component {
         if(this.props.asktype == 1){
             t_questiondataarr=t_questiondataarr.reverse();
         }
+
+        let choose_arr = new Array([t_questiondataarr.length]);
+
         this.state = {
             count:0,
             fetchresult:null,
@@ -102,6 +105,7 @@ class AnswerQuestion extends Component {
             rightidx:-1,
             allcount:t_questiondataarr.length,
             questiondataarr:t_questiondataarr,
+            choose:choose_arr
         };
 
         this._dofetchquestion = this.dofetchquestion.bind(this);

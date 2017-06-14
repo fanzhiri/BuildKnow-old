@@ -40,4 +40,9 @@ class FriendList extends Component {
     }
 }
 
+ClassCatalogue.PropTypes = {
+    inmode: PropTypes.number.isRequired,//0查看，1选择
+
+};
+
 module.exports = FriendList;
