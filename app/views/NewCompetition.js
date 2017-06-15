@@ -1,8 +1,8 @@
 /**
  * Created by slako on 17/06/13.
  */
-import React, { Component } from 'react';
-import {View, Text, StyleSheet,Image,TouchableOpacity,TextInput,ScrollView} from "react-native";
+import React, { Component,PropTypes } from 'react';
+import {View, Text, StyleSheet,Image,TouchableOpacity,TextInput,ScrollView,ListView} from "react-native";
 import {Actions} from "react-native-router-flux";
 
 import GlobleStyles from '../styles/GlobleStyles';
@@ -83,6 +83,7 @@ const styles = StyleSheet.create({
         borderBottomColor:'#e8e8e8',
         //主轴方向
         flexDirection:'row',
+        alignItems: 'center',
     },okbutton:{
 
         height:30,
@@ -92,13 +93,27 @@ const styles = StyleSheet.create({
     },twobutton:{
         flex:1
     },
+    selectbutton:{
+        flex:1,
+        flexDirection:'row',
+        justifyContent: 'flex-end',
+    },
+    submitbutton:{
+
+        height:30,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#AEE00E'
+    },
 });
 
 var doCommitNewBookPostUrl = "https://slako.applinzi.com/index.php?m=question&c=personal&a=addbook";
 
-var doCommitPicPostUrl = "https://slako.applinzi.com/index.php?m=attachment&c=attachment&a=upload";
+var doNewPkUrl = "https://slako.applinzi.com/index.php?m=question&c=personal&a=newpk";
 
 var getFriendUrl = "https://slako.applinzi.com/index.php?m=question&c=personal&a=getfriendlist";
+
+var httpsBaseUrl = "https://slako.applinzi.com/";
 
 class NewCompetition extends Component {
 
@@ -111,7 +126,8 @@ class NewCompetition extends Component {
             friend_data_source: null,
             selectpeople:0,
             whoinselect:null,
-            getdata:0
+            getdata:0,
+            friendsize:0
         };
 
         this._renderPeopleItem = this.renderPeopleItem.bind(this)
@@ -132,9 +148,18 @@ class NewCompetition extends Component {
             .then((response) => response.json())
             .then((responseData) => {
                 if(responseData.code == 100){
+                    let whoinselect_arr = null;
+                    if(responseData.data == null){
+
+                    }else{
+                        whoinselect_arr= new Array([responseData.data.length]);
+                    }
+
                     this.setState({
                         friend_data_source:responseData.data,
                         getdata:1,
+                        whoinselect:whoinselect_arr,
+                        friendsize:responseData.data.length
                     })
                 }else{
                     alert(responseData.message)
@@ -148,21 +173,24 @@ class NewCompetition extends Component {
 
 
     rendertake(where){
-        if(this.state.whoinselect[where] == 1){
-            return(
-                <Icon name={"md-checkbox-outline"}  size={22} color="#008B00"/>
-            )
-        }else{
-            return(
-                <Icon name={"md-expand"}            size={22} color="#008B00"/>
-            )
+        if(this.state.selectpeople == 1){
+            if(this.state.whoinselect[where] == 1){
+                return(
+                    <Icon name={"md-checkbox-outline"}  size={22} color="#008B00"/>
+                )
+            }else{
+                return(
+                    <Icon name={"md-expand"}            size={22} color="#008B00"/>
+                )
+            }
         }
+
 
     }
 
     changeselect(where){
         let t_whoinselect = this.state.whoinselect;
-        t_whoinselect[where] = (t_whoinselect[where]== 1)?0:1;
+        t_whoinselect[where] = (t_whoinselect[where] == 1)?0:1;
         this.setState({
             whoinselect:t_whoinselect,
         })
@@ -170,15 +198,18 @@ class NewCompetition extends Component {
 
     renderPeopleItem(rowData, sectionID, rowID){
         return(
-            <TouchableOpacity style={styles.peopleItem} onPress={() => this.changeselect(rowID)}>
+            <View style={styles.peopleItem} >
                 <Image source={{uri:`${httpsBaseUrl}${rowData.head}`}} style={styles.leftImgStyle}/>
                 <View>
                     <Text style={styles.topTitleStyle}>
                         {rowData.nickname}
                     </Text>
                 </View>
-                {this.rendertake(rowID)}
-            </TouchableOpacity>
+                <TouchableOpacity style={styles.selectbutton} onPress={() => this.changeselect(rowID)}>
+                    {this.rendertake(rowID)}
+                </TouchableOpacity>
+
+            </View>
         )
     }
 
@@ -187,7 +218,7 @@ class NewCompetition extends Component {
             return (
                 <ListView
                     style={styles.list}
-                    dataSource={DataStore.cloneWithRows(this.state.friend_data_source)}
+                    dataSource={DataStore.cloneWithRows(this.state.competitionpeople_data_source)}
                     renderRow={this._renderPeopleItem}
                     enableEmptySections = {true}
                 />
@@ -202,16 +233,39 @@ class NewCompetition extends Component {
         })
     }
 
+    endSelectPeople(what){
+        if(what == 2){
+            let t_selectfriend = new Array();
+            for(let i=0;i<this.state.friendsize;i++){
+                if(this.state.whoinselect[i]== 1){
+                    t_selectfriend.push(this.state.friend_data_source[i]);
+                }
+            }
+            this.setState({
+                competitionpeople_data_source:t_selectfriend,
+                selectpeople:0,
+            })
+        }else (
+            this.setState({
+                selectpeople:0,
+            })
+        )
+
+    }
+
     renderselectpeople(){
         return(
             <View>
+                <View style={{flexDirection:'row',height:32,justifyContent: 'center',}}>
+                    <Text>添加对战人员</Text>
+                </View>
                 <View style={{flexDirection:'row',height:32,justifyContent: 'space-around',}}>
-                    <TouchableOpacity onPress={() => this.onpressfunc(1)} activeOpacity={0.8}>
+                    <TouchableOpacity onPress={() => this.endSelectPeople(1)} activeOpacity={0.8}>
                         <View  style={[styles.okbutton,styles.twobutton]}>
                             <Text>取消</Text>
                         </View>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => this.onpressfunc(2)} activeOpacity={0.8}>
+                    <TouchableOpacity onPress={() => this.endSelectPeople(2)} activeOpacity={0.8}>
                         <View  style={[styles.okbutton,styles.twobutton]}>
                             <Text>确定</Text>
                         </View>
@@ -219,7 +273,7 @@ class NewCompetition extends Component {
                 </View>
                 <ListView
                     style={styles.list}
-                    dataSource={DataStore.cloneWithRows(this.state.competitionpeople_data_source)}
+                    dataSource={DataStore.cloneWithRows(this.state.friend_data_source)}
                     renderRow={this._renderPeopleItem}
                     enableEmptySections = {true}
                 />
@@ -229,16 +283,13 @@ class NewCompetition extends Component {
 
     renderinpos(){
         return(
-            <View>
+            <ScrollView>
                 {this.renderAllPeoples()}
-
                 <TouchableOpacity style={styles.listItem} onPress={() => this.addPeople()} activeOpacity={0.8}>
-                    <View >
                         <Icon name={"md-add-circle"} size={22} color="#008B00"/>
                         <Text>添加</Text>
-                    </View>
                 </TouchableOpacity>
-            </View>
+            </ScrollView>
         )
     }
 
@@ -260,10 +311,51 @@ class NewCompetition extends Component {
         }
     }
 
+    applypk(){
+        let formData = new FormData();
+        formData.append("auth",global.auth);
+        formData.append("userid",global.userid);
+        formData.append("bookid",this.props.bookid);
+        var opts = {
+            method:"POST",
+            body:formData
+        }
+        fetch(doNewPkUrl,opts)
+            .then((response) => response.json())
+            .then((responseData) => {
+                if(responseData.code == 100){
+                    alert("ok")
+                }else{
+                    alert(responseData.message)
+                }
+
+            })
+            .catch((error) => {
+                alert(error)
+            })
+    }
+
+    renderpkbutton(){
+        if(this.state.selectpeople == 1){
+
+        }else{
+            return(
+                <TouchableOpacity onPress={() => this.applypk()} activeOpacity={0.8}>
+                    <View  style={styles.submitbutton}>
+                        <Text>申请pk</Text>
+                    </View>
+                </TouchableOpacity>
+            )
+        }
+    }
+
     render(){
         return (
-            <View style={[GlobleStyles.withoutTitleContainer,styles.container]}>
+            <View style={GlobleStyles.withoutTitleContainer}>
                 {this.renderinselect()}
+                <View style={{justifyContent: 'flex-end'}}>
+                    {this.renderpkbutton()}
+                </View>
             </View>
         );
     }
@@ -280,10 +372,14 @@ class NewCompetition extends Component {
     rendernodata(){
         return (
             <View style={styles.container}>
-                <Text>没有数据</Text>
+                <Text>没有朋友</Text>
             </View>
         )
     }
 }
+
+NewCompetition.PropTypes = {
+    bookid:PropTypes.number,
+};
 
 module.exports = NewCompetition;

@@ -188,7 +188,7 @@ class HomePage extends Component {
 
         }else{
             return(
-                <TouchableOpacity  onPress={()=> Actions.friendverify(this.props.userId)} >
+                <TouchableOpacity  onPress={()=> Actions.friendverify({userId:this.props.userId})} >
                     <Text style={styles.bottomButtonText} >交友申请</Text>
                 </TouchableOpacity>
             )

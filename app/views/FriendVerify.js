@@ -64,12 +64,11 @@ class FriendVerify extends Component {
     }
 
     askforfriend(){
-        const {userId} = this.props;
 
         let formData = new FormData();
         formData.append("auth",global.auth);
         formData.append("userid",global.userid);
-        formData.append("askforfriendid",userId);
+        formData.append("askforfriendid",this.props.userId);
         formData.append("msg",this.state.descriptiontext);
         var opts = {
             method:"POST",

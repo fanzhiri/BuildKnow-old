@@ -171,6 +171,9 @@ class PublicBook extends Component {
                     answermode:2
                 });
                 break;
+            case 17:
+                Actions.newcompetition({bookid:this.props.bookid});
+                break;
         }
     }
 
@@ -204,7 +207,7 @@ class PublicBook extends Component {
                         {this.rendertopbutton("md-flower",  "收藏",   () => this.invote(3))}
                     </View>
                     <View style={styles.topButtoncontainer}>
-                        {this.rendertopbutton("md-medal",   "比拼",   () => this.invote(1))}
+                        {this.rendertopbutton("md-medal",   "比拼",   () => this.invote(17))}
                         {this.rendertopbutton("md-medkit",  "错题",   () => this.invote(2))}
                         {this.rendertopbutton("md-medkit",  "记录",   () => this.invote(2))}
                         {this.rendertopbutton("md-medkit",  "排行",   () => this.invote(2))}

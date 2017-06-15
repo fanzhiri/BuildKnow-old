@@ -172,7 +172,7 @@ class Discover extends Component {
                     <Image source={{uri:`${httpsBaseUrl}${people.head}`}} style={styles.leftImgStyle}/>
                     <View>
                         <Text style={styles.topTitleStyle}>
-                            {people.username}
+                            {people.nickname}
                         </Text>
                         <Text >
                             粉丝:{people.follow}  在建:{people.buildingshare}  发布:{people.releaseshare}
