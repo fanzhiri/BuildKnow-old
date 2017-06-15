@@ -125,7 +125,7 @@ class MessageList extends Component {
             <View style={GlobleStyles.withoutTitleContainer}>
                 <View>
                     <SegmentedControlIOS
-                        values={['好友','收藏','需求']}
+                        values={['好友','做题邀请','需求']}
                         selectedIndex={this.state.selectedIndex}
                         style={styles.segmented}
                         onChange={this._onChange}

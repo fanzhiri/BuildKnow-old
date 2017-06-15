@@ -316,6 +316,11 @@ class NewCompetition extends Component {
         formData.append("auth",global.auth);
         formData.append("userid",global.userid);
         formData.append("bookid",this.props.bookid);
+        let userids = new Array();
+        this.state.competitionpeople_data_source.forEach(function(item){
+            userids.push(item.userid);
+        });
+        formData.append("competitionlist",JSON.stringify(userids));
         var opts = {
             method:"POST",
             body:formData
