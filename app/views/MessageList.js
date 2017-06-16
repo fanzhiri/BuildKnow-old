@@ -59,6 +59,22 @@ const styles = StyleSheet.create({
     msgtime:{
         fontSize:10,
     },
+    listItem:{
+
+        padding:10,
+        backgroundColor:'white',
+        borderBottomWidth:1,
+        borderBottomColor:'#e8e8e8',
+        //主轴方向
+        flexDirection:'row',
+        alignItems: 'center',
+    },
+    numText: {
+        fontSize: 20,
+        marginRight:10,
+        justifyContent: 'center',
+        color: 'red',
+    },
 });
 
 
@@ -67,6 +83,8 @@ var peoplelistUrl = "https://slako.applinzi.com/index.php?m=question&c=index&a=p
 var httpsBaseUrl = "https://slako.applinzi.com/";
 
 var cvstlistUrl = "https://slako.applinzi.com/index.php?m=question&c=personal&a=checkconversationlist";
+
+var pklistUrl = "https://slako.applinzi.com/index.php?m=question&c=personal&a=mypklist";
 
 class MessageList extends Component {
 
@@ -78,12 +96,15 @@ class MessageList extends Component {
             netresult:'no',
             people_list_data_source: null,
             selectedIndex:0,
-            cvst_list_data_source: null,
+            cvst_list_data_source: null,//会话列表
+            pk_list_data_source: null,//pk列表
+            get_pk_list:0
+
         };
         this._onChange = this.onChange.bind(this);
 
         this._renderPeople = this.renderPeople.bind(this);
-        this._doOnPress = this.doOnPress.bind(this);
+        this._renderPkItem = this.renderPkItem.bind(this);
 
     }
 
@@ -103,9 +124,33 @@ class MessageList extends Component {
                         cvst_list_data_source:responseData.data
                     })
                 }else{
+                    alert(responseData.message)
+                }
+
+            })
+            .catch((error) => {
+                alert(error)
+            })
+    }
+
+    fetch_pklist(){
+        let formData = new FormData();
+        formData.append("auth",global.auth);
+        formData.append("userid",global.userid);
+        var opts = {
+            method:"POST",
+            body:formData
+        }
+        fetch(pklistUrl,opts)
+            .then((response) => response.json())
+            .then((responseData) => {
+                if(responseData.code == 100){
                     this.setState({
-                        netresult:responseData.code
+                        pk_list_data_source:responseData.data,
+                        get_pk_list:1
                     })
+                }else{
+                    alert(responseData.message)
                 }
 
             })
@@ -136,6 +181,41 @@ class MessageList extends Component {
         );
     }
 
+
+
+    renderPkItem(rowData, sectionID, rowID){
+        return(
+            <TouchableOpacity onPress={() => Actions.pop()}>
+                <View style={styles.listItem}>
+                    <Text style={styles.numText}>{parseInt(rowID)+1}</Text>
+                    <Image source={{uri:`${httpsBaseUrl}${rowData.cover}`}} style={styles.leftImgStyle}/>
+                    <View>
+                        <Text style={styles.topTitleStyle}>
+                            {rowData.bookname}
+                        </Text>
+                        <Text >
+                            {rowData.bookbrief}
+                        </Text>
+                        {/*<Text >*/}
+                            {/*邀请人:{rowData.invitername}  参与人数:{rowData.pknum} 创建时间:{rowData.time} 题目数量:{rowData.questionnum}*/}
+                        {/*</Text>*/}
+                    </View>
+                </View>
+            </TouchableOpacity>
+        )
+    }
+
+    renderpklist(){
+        return (
+            <ListView
+                style={styles.list}
+                dataSource={DataStore.cloneWithRows(this.state.pk_list_data_source)}
+                renderRow={this._renderPkItem}
+                enableEmptySections = {true}
+            />
+        )
+    }
+
     renderSegmentedView() {
         if (this.state.selectedIndex === 0) {
 
@@ -148,9 +228,17 @@ class MessageList extends Component {
             }
 
         } else if (this.state.selectedIndex === 1) {
-            return (
-                this.renderLoading()
-            )
+            if(this.state.get_pk_list == 0){
+                this.fetch_pklist()
+                return (this.renderLoading())
+            }else{
+                if(this.state.pk_list_data_source){
+                    return(this.renderpklist())
+                }else{
+                    return(this.rendernodata())
+                }
+            }
+
         } else if (this.state.selectedIndex === 2) {
             return (
                 this.renderLoading()
@@ -206,6 +294,14 @@ class MessageList extends Component {
                 renderRow={this._renderPeople}
                 enableEmptySections = {true}
             />
+        )
+    }
+
+    rendernodata(){
+        return (
+            <View style={styles.container}>
+                <Text>没有朋友</Text>
+            </View>
         )
     }
 }
