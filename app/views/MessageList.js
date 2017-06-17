@@ -184,8 +184,9 @@ class MessageList extends Component {
 
 
     renderPkItem(rowData, sectionID, rowID){
+        let pkpeople = JSON.parse(rowData.people);
         return(
-            <TouchableOpacity onPress={() => Actions.pop()}>
+            <TouchableOpacity onPress={() => Actions.begintest({pkid:rowData.id})}>
                 <View style={styles.listItem}>
                     <Text style={styles.numText}>{parseInt(rowID)+1}</Text>
                     <Image source={{uri:`${httpsBaseUrl}${rowData.cover}`}} style={styles.leftImgStyle}/>
@@ -193,12 +194,13 @@ class MessageList extends Component {
                         <Text style={styles.topTitleStyle}>
                             {rowData.bookname}
                         </Text>
+
                         <Text >
-                            {rowData.bookbrief}
+                            邀请人:{rowData.inviter} 参与人数:{pkpeople.length}
                         </Text>
-                        {/*<Text >*/}
-                            {/*邀请人:{rowData.invitername}  参与人数:{rowData.pknum} 创建时间:{rowData.time} 题目数量:{rowData.questionnum}*/}
-                        {/*</Text>*/}
+                        <Text >
+                            创建时间:{rowData.time} 题目数量:{rowData.testnum}
+                        </Text>
                     </View>
                 </View>
             </TouchableOpacity>

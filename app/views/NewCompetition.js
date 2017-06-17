@@ -105,6 +105,20 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: '#AEE00E'
     },
+    timestringcontainer:{
+        fontSize:20
+    },
+    testnumcontainer:{
+        height: 48,
+        backgroundColor: 'white',
+        flexDirection:'row',
+        alignItems: 'center'
+    },
+    editcontainer:{
+        flexDirection:'row',
+        justifyContent: 'space-around',
+        width:200,
+    },
 });
 
 var doCommitNewBookPostUrl = "https://slako.applinzi.com/index.php?m=question&c=personal&a=addbook";
@@ -127,7 +141,8 @@ class NewCompetition extends Component {
             selectpeople:0,
             whoinselect:null,
             getdata:0,
-            friendsize:0
+            friendsize:0,
+            testnum:1,//出题数
         };
 
         this._renderPeopleItem = this.renderPeopleItem.bind(this)
@@ -315,7 +330,8 @@ class NewCompetition extends Component {
         let formData = new FormData();
         formData.append("auth",global.auth);
         formData.append("userid",global.userid);
-        formData.append("bookid",this.props.bookid);
+        formData.append("bookid",this.props.book.reviewid);
+        formData.append("testnum",this.state.testnum);
         let userids = new Array();
         this.state.competitionpeople_data_source.forEach(function(item){
             userids.push(item.userid);
@@ -354,9 +370,51 @@ class NewCompetition extends Component {
         }
     }
 
+    adjust(how){
+        let adjustnum = this.state.testnum;
+        adjustnum = adjustnum + how ;
+
+        if(adjustnum < 1){
+            adjustnum = 1;
+        }else if(adjustnum > this.props.book.questioncount){
+            adjustnum = parseInt(this.props.book.questioncount);
+        }
+
+        this.setState({
+            testnum:adjustnum,
+        });
+    }
+
     render(){
         return (
             <View style={GlobleStyles.withoutTitleContainer}>
+                <View style={styles.testnumcontainer}>
+                    <Text style={{fontSize: 20}}>出题数：(最大为{this.props.book.questioncount})</Text>
+                    <View style={styles.editcontainer}>
+                        <TouchableOpacity onPress={()=> this.adjust(-100)} activeOpacity={0.8}>
+                            <Icon name={"md-arrow-dropleft"} size={26} color={"#FF0000"}/>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={()=> this.adjust(-10)} activeOpacity={0.8}>
+                            <Icon name={"md-arrow-dropleft"} size={26} color={"#FF0000"}/>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={()=> this.adjust(-1)} activeOpacity={0.8}>
+                            <Icon name={"md-arrow-dropleft"} size={26} color={"#FF0000"}/>
+                        </TouchableOpacity>
+                        <Text style={styles.timestringcontainer}>{this.state.testnum}</Text>
+                        <TouchableOpacity onPress={()=> this.adjust(1)} activeOpacity={0.8}>
+                            <Icon name={"md-arrow-dropright"} size={26} color={"#FF0000"}/>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={()=> this.adjust(10)} activeOpacity={0.8}>
+                            <Icon name={"md-arrow-dropright"} size={26} color={"#FF0000"}/>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={()=> this.adjust(100)} activeOpacity={0.8}>
+                            <Icon name={"md-arrow-dropright"} size={26} color={"#FF0000"}/>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+                <View style={{height: 40,flexDirection:'row',justifyContent: 'center',alignItems: 'center',backgroundColor: '#A0FFFE',marginTop:10,}}>
+                    <Text style={{fontSize: 18}}>对战人</Text>
+                </View>
                 {this.renderinselect()}
                 <View style={{justifyContent: 'flex-end'}}>
                     {this.renderpkbutton()}
@@ -384,7 +442,7 @@ class NewCompetition extends Component {
 }
 
 NewCompetition.PropTypes = {
-    bookid:PropTypes.number,
+    book:PropTypes.object,
 };
 
 module.exports = NewCompetition;

@@ -120,7 +120,7 @@ class Me extends Component {
                         <MeItem icon={"md-mail"} text={"消息"}  subText={"10条"} iconColor="#1e90ff" onPress={() => Actions.messagelist()} />
                         <MeItem icon={"md-podium"} text={"数据"} iconColor="#7fff00" onPress={() => Actions.statistics()} />
                         <MeItem icon={"md-time"} text={"日程"} iconColor="#912CEE" onPress={() => Actions.schedule()} />
-                        <MeItem icon={"md-wifi"} text={"复习管理"} iconColor="#CD0000" onPress={() => Actions.reviewplan()} />
+                        <MeItem icon={"md-wifi"} text={"复习路线管理"} iconColor="#CD0000" onPress={() => Actions.reviewplan()} />
                         <MeItem icon={"md-notifications"} text={"通知"} iconColor="#1C86EE" onPress={() => Actions.notificationlist()} />
                         <MeItem icon={"md-people"} text={"朋友"} iconColor="#EE9A00" onPress={() => Actions.friendlist()} />
                         <MeItem icon={"md-settings"} text={"设置"} iconColor="#ea66a6" onPress={() => Actions.setting()} />

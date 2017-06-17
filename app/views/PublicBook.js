@@ -172,7 +172,7 @@ class PublicBook extends Component {
                 });
                 break;
             case 17:
-                Actions.newcompetition({bookid:this.props.bookid});
+                Actions.newcompetition({book:this.state.bookdata});
                 break;
         }
     }

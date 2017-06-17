@@ -88,6 +88,7 @@ class BeginTest extends Component {
 
 BeginTest.PropTypes = {
     bookdata: PropTypes.object,
+    pkid:PropTypes.number
 };
 
 module.exports = BeginTest;
