@@ -174,6 +174,14 @@ class PublicBook extends Component {
             case 17:
                 Actions.newcompetition({book:this.state.bookdata});
                 break;
+            case 21:
+                //题本在建地址
+                Actions.buildingbook({bookid:this.state.bookdata.bookid});
+                break;
+            case 22:
+                //熟练计划
+                Actions.schedule();
+                break;
         }
     }
 
@@ -252,9 +260,9 @@ class PublicBook extends Component {
                 </View>
                 {this.renderreadortest()}
                 <View style={styles.topButtoncontainer}>
-                    {this.rendertopbutton("md-eye","熟练计划",   () => this.invote(0))}
+                    {this.rendertopbutton("md-eye","熟练计划",   () => this.invote(22))}
                     {this.rendertopbutton("md-eye","前后版本",   () => this.invote(0))}
-                    {this.rendertopbutton("md-locate","在建地址",() => this.invote(1))}
+                    {this.rendertopbutton("md-locate","在建地址",() => this.invote(21))}
                 </View>
             </View>
         )

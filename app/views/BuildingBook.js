@@ -28,7 +28,7 @@ import BookHistory from './BookHistory'
 
 import GlobleStyles from '../styles/GlobleStyles';
 
-var doGetBookBaseUrl = "https://slako.applinzi.com/api/1/book/";
+var doGetBookUrl = "https://slako.applinzi.com/index.php?m=question&c=personal&a=getbook";
 var httpsBaseUrl = "https://slako.applinzi.com/";
 
 const styles = StyleSheet.create({
@@ -92,6 +92,7 @@ class BuildingBook extends Component {
             selectedIndex:0,
             bookdata:null,
             bookCover:null,
+            getdata:0
         };
         this._onChange = this._onChange.bind(this);
         this._handleRandom = this.handleRandom.bind(this);
@@ -102,26 +103,29 @@ class BuildingBook extends Component {
         this._doFetchBook = this.doFetchBook.bind(this);
     }
 
-    doFetchBook(bookid){
-        let url = `${doGetBookBaseUrl}${bookid}`;
+
+    doFetchBook(){
+        let formData = new FormData();
+        formData.append("auth",global.auth);
+        formData.append("userid",global.userid);
+        formData.append("bookid",this.props.bookid);
+
         var opts = {
-            method:"GET"
+            method:"POST",
+            body:formData
         }
-        fetch(url,opts)
+        fetch(doGetBookUrl,opts)
             .then((response) => response.json())
             .then((responseData) => {
-
                 if(responseData.code == 100){
 
                     this.setState({
                         bookdata:responseData.data,
                         bookCover:`${httpsBaseUrl}${responseData.data.cover}`,
-                        fetchresult:"ok",
-
+                        getdata:1
                     })
-
                 }else{
-
+                    alert(responseData.message)
                 }
 
             })
@@ -190,15 +194,16 @@ class BuildingBook extends Component {
     }
 
     render(){
-        if(this.state.bookdata == null){
-            const {bookid} = this.props;
-            this._doFetchBook(bookid);
+        if(this.state.getdata == 0){
+            this._doFetchBook();
             return this._renderLoading();
         }else{
-            return this._renderBook();
+            if(this.state.bookdata == null){
+                return this.rendernodata()
+            }else{
+                return this._renderBook();
+            }
         }
-
-
     }
 
     renderSegmentedView() {
@@ -280,10 +285,18 @@ class BuildingBook extends Component {
             <Text>Loading ...</Text>
         )
     }
+
+    rendernodata(){
+        return (
+
+                <Text>没有数据</Text>
+
+        )
+    }
 }
 
 BuildingBook.PropTypes = {
-    bookid: PropTypes.number,
+    bookid:PropTypes.number,
 };
 
 module.exports = BuildingBook;
