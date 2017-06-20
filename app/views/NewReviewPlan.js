@@ -112,6 +112,8 @@ class NewReviewPlan extends Component {
             init_name = this.props.plandata.name;
             init_brief = this.props.plandata.brief;
             init_planid = this.props.plandata.id;
+            aibinhaoshi = JSON.parse(this.props.plandata.remaininterval);
+            sum = this.props.plandata.alltime;
         }else{
             init_name = "";
             init_brief = "";
@@ -426,9 +428,9 @@ class NewReviewPlan extends Component {
         );
     }
 }
-//0查看 1编辑 2新建
+
 NewReviewPlan.PropTypes = {
-    modetype:PropTypes.number,
+    modetype:PropTypes.number,//0查看 1编辑 2新建
     plandata:PropTypes.object
 };
 

@@ -50,7 +50,8 @@ class Schedule extends Component {
     }
     componentWillMount(){
         if(this.props.intype == 1){
-            for (let i = -1; i < 5; i++) {
+            let selectplan =JSON.parse(this.props.plan.remaininterval);
+            for (let i = 0; i < selectplan.length; i++) {
                 const time = day.timestamp + i * 24 * 60 * 60 * 1000;
                 const strTime = this.timeToString(time);
                 if (!this.state.items[strTime]) {
@@ -75,13 +76,30 @@ class Schedule extends Component {
 
     }
 
+    renderselectplan(){
+
+        if(this.props.plan ==null){
+            return(
+                <Text style={styles.selectbuttontext} >选择路线</Text>
+            )
+        }else{
+            return(
+                <Text style={styles.selectbuttontext} >路线:{this.props.plan.name}</Text>
+            )
+        }
+
+    }
+
     renderaddbutton(){
+        if(this.props.intype == 0){
+            return ;
+        }
         return(
             <View style={{flexDirection:'row',height:46}}>
                 <TouchableOpacity
                     style={{justifyContent: 'center',alignItems: 'center',flex:3,backgroundColor: '#FFB6C1'}}
                     onPress={() => this.selectplantoschedule()}>
-                    <Text style={styles.selectbuttontext} >选择路线</Text>
+                    {this.renderselectplan()}
                 </TouchableOpacity>
                 <TouchableOpacity
                     style={{justifyContent: 'center',alignItems: 'center',flex:1,backgroundColor: '#0066cc'}}
@@ -171,6 +189,7 @@ class Schedule extends Component {
 
 Schedule.PropTypes = {
     intype:PropTypes.number,//0在设置中查看 1添加熟悉计划
+    plan:PropTypes.object
 };
 
 module.exports = Schedule;

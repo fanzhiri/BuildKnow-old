@@ -1,7 +1,7 @@
 /**
  * Created by slako on 17/06/07.
  */
-import React, { Component } from 'react';
+import React, { Component ,PropTypes} from 'react';
 import {View, Text, StyleSheet, ListView, Image,TouchableOpacity} from "react-native";
 import {Actions} from "react-native-router-flux";
 import Button from "react-native-button";
@@ -119,7 +119,8 @@ class ReviewPlan extends Component {
     }
 
     selectplantoglobal(rowData){
-        Actions.pop();
+
+        Actions.pop({refresh:{intype:1,plan:rowData}});
     }
 
     renderSelect(rowData){
@@ -157,7 +158,7 @@ class ReviewPlan extends Component {
                             持续时间：{rowData.alltime}
                         </Text>
                     </View>
-                    <View style={{justifyContent: 'flex-end'}}>
+                    <View style={{flex:1,flexDirection:'row',justifyContent: 'flex-end'}}>
                         {this.renderSelect(rowData)}
                     </View>
                 </View>
