@@ -118,6 +118,20 @@ class ReviewPlan extends Component {
         }
     }
 
+    selectplantoglobal(rowData){
+        Actions.pop();
+    }
+
+    renderSelect(rowData){
+        if(this.props.intype == 1){
+            return(
+                <TouchableOpacity onPress={() => this.selectplantoglobal(rowData)}>
+                        <Text>选中</Text>
+                </TouchableOpacity>
+            )
+        }
+
+    }
 
 
     renderPlanItem(rowData, sectionID, rowID){
@@ -125,6 +139,7 @@ class ReviewPlan extends Component {
         return (
             <TouchableOpacity onPress={() => Actions.newreviewplan({modetype:0,plandata:rowData})}>
                 <View style={styles.listItem}>
+
                     <Text style={styles.numText}>{parseInt(rowID)+1}</Text>
 
                     <View>
@@ -141,6 +156,9 @@ class ReviewPlan extends Component {
                         <Text >
                             持续时间：{rowData.alltime}
                         </Text>
+                    </View>
+                    <View style={{justifyContent: 'flex-end'}}>
+                        {this.renderSelect(rowData)}
                     </View>
                 </View>
             </TouchableOpacity>
@@ -185,5 +203,9 @@ class ReviewPlan extends Component {
     }
 
 }
+
+ReviewPlan.PropTypes = {
+    intype:PropTypes.number,//0在设置中查看 1从添加熟悉计划
+};
 
 module.exports = ReviewPlan;

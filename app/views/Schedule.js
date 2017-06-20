@@ -1,8 +1,8 @@
 /**
  * Created by slako on 17/2/18.
  */
-import React, { Component } from 'react';
-import {View, Text, StyleSheet} from "react-native";
+import React, { Component ,PropTypes} from 'react';
+import {View, Text, StyleSheet,TouchableOpacity} from "react-native";
 import {Actions} from "react-native-router-flux";
 import Button from "react-native-button";
 import GlobleStyles from '../styles/GlobleStyles';
@@ -27,6 +27,13 @@ const styles = StyleSheet.create({
         height: 15,
         flex:1,
         paddingTop: 30
+    },selectbuttontext:{
+
+        fontSize:18,
+    },
+    addbuttontext:{
+
+        fontSize:18,
     }
 
 });
@@ -42,7 +49,47 @@ class Schedule extends Component {
 
     }
     componentWillMount(){
+        if(this.props.intype == 1){
+            for (let i = -1; i < 5; i++) {
+                const time = day.timestamp + i * 24 * 60 * 60 * 1000;
+                const strTime = this.timeToString(time);
+                if (!this.state.items[strTime]) {
+                    this.state.items[strTime] = [];
+                    const numItems = 2;
+                    for (let j = 0; j < numItems; j++) {
+                        this.state.items[strTime].push({
+                            name: 'Item for ' + strTime,
+                            height: 50
+                        });
+                    }
+                }
+            }
+        }
+    }
 
+    selectplantoschedule(){
+        Actions.reviewplan({intype:1});
+    }
+
+    addplantoschedule(){
+
+    }
+
+    renderaddbutton(){
+        return(
+            <View style={{flexDirection:'row',height:46}}>
+                <TouchableOpacity
+                    style={{justifyContent: 'center',alignItems: 'center',flex:3,backgroundColor: '#FFB6C1'}}
+                    onPress={() => this.selectplantoschedule()}>
+                    <Text style={styles.selectbuttontext} >选择路线</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                    style={{justifyContent: 'center',alignItems: 'center',flex:1,backgroundColor: '#0066cc'}}
+                    onPress={() => this.addplantoschedule()}>
+                    <Text style={styles.addbuttontext} >添加</Text>
+                </TouchableOpacity>
+            </View>
+        )
     }
 
     render() {
@@ -60,6 +107,9 @@ class Schedule extends Component {
                     //theme={{calendarBackground: 'red'}}
                     //renderDay={(day, item) => (<Text>{day ? day.day: 'item'}</Text>)}
                 />
+                <View style={{justifyContent: 'flex-end'}}>
+                    {this.renderaddbutton()}
+                </View>
             </View>
         );
     }
@@ -118,5 +168,9 @@ class Schedule extends Component {
     }
 
 }
+
+Schedule.PropTypes = {
+    intype:PropTypes.number,//0在设置中查看 1添加熟悉计划
+};
 
 module.exports = Schedule;
