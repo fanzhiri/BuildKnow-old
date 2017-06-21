@@ -2,11 +2,12 @@
  * Created by slako on 17/2/18.
  */
 import React, { Component ,PropTypes} from 'react';
-import {View, Text, StyleSheet,TouchableOpacity} from "react-native";
+import {View, Text, StyleSheet,TouchableOpacity,XDate} from "react-native";
 import {Actions} from "react-native-router-flux";
 import Button from "react-native-button";
 import GlobleStyles from '../styles/GlobleStyles';
 import { Calendar, CalendarList, Agenda } from 'react-native-calendars';
+//import XDate from 'xdate';
 
 const styles = StyleSheet.create({
     container: {
@@ -42,37 +43,70 @@ class Schedule extends Component {
 
     constructor(props) {
         super(props);
+        let newItems = {};
+        //if(this.props.intype == 1){
+        const time = new Date().getTime();
+        const strTime = this.timeToString(time);
+        newItems[strTime] = [];
+        newItems[strTime].push({
+            name: '从这天开始吗？点击下面的添加',
+            height: 38
+        });
+
+
+        //}
         this.state = {
-            items: {},
-            initTime :this.nowTimeToString()
+            items: newItems,
+            initTime:this.nowTimeToString(),
+            adddone:0,
+            planitems:newItems,
+            afteradd:newItems,
+            selectdaystring:this.nowTimeToString()
         };
 
     }
     componentWillMount(){
-        if(this.props.intype == 1){
-            let selectplan =JSON.parse(this.props.plan.remaininterval);
-            for (let i = 0; i < selectplan.length; i++) {
-                const time = day.timestamp + i * 24 * 60 * 60 * 1000;
-                const strTime = this.timeToString(time);
-                if (!this.state.items[strTime]) {
-                    this.state.items[strTime] = [];
-                    const numItems = 2;
-                    for (let j = 0; j < numItems; j++) {
-                        this.state.items[strTime].push({
-                            name: 'Item for ' + strTime,
-                            height: 50
-                        });
-                    }
-                }
-            }
-        }
+
     }
 
     selectplantoschedule(){
         Actions.reviewplan({intype:1});
     }
 
-    addplantoschedule(){
+    addplantoschedule(what){
+        if(what == 1){
+            if(this.props.plan != null){
+                let newItems = {};
+                let selectplan = JSON.parse(this.props.plan.remaininterval);
+                //let nowtimestamp = new Date().getTime();
+                //alert(this.state.selectdaystring)
+                let sd=new XDate(this.state.selectdaystring);
+                let nowtimestamp = sd.getTime();
+                for (let i = 0; i < selectplan.length; i++) {
+                    const time = nowtimestamp + selectplan[i] * 60 * 60 * 1000;
+                    const strTime = this.timeToString(time);
+                    if (!newItems[strTime]) {
+                        newItems[strTime] = [];
+                        const numItems = 2;
+                        for (let j = 0; j < numItems; j++) {
+                            newItems[strTime].push({
+                                name: 'abc Item for ' + strTime,
+                                height: 50
+                            });
+                        }
+                    }
+                }
+                this.setState({
+                    items:newItems,
+                    adddone:1
+                })
+            }
+        }else{
+            this.setState({
+                items:newItems,
+                adddone:0
+            })
+        }
 
     }
 
@@ -90,24 +124,65 @@ class Schedule extends Component {
 
     }
 
+    addplanfinish(){
+
+    }
+
     renderaddbutton(){
         if(this.props.intype == 0){
             return ;
         }
-        return(
-            <View style={{flexDirection:'row',height:46}}>
-                <TouchableOpacity
-                    style={{justifyContent: 'center',alignItems: 'center',flex:3,backgroundColor: '#FFB6C1'}}
-                    onPress={() => this.selectplantoschedule()}>
-                    {this.renderselectplan()}
-                </TouchableOpacity>
-                <TouchableOpacity
-                    style={{justifyContent: 'center',alignItems: 'center',flex:1,backgroundColor: '#0066cc'}}
-                    onPress={() => this.addplantoschedule()}>
-                    <Text style={styles.addbuttontext} >添加</Text>
-                </TouchableOpacity>
-            </View>
-        )
+        if(this.state.adddone == 0){
+            return(
+                <View style={{flexDirection:'row',height:46}}>
+                    <TouchableOpacity
+                        style={{justifyContent: 'center',alignItems: 'center',flex:3,backgroundColor: '#FFB6C1'}}
+                        onPress={() => this.selectplantoschedule()}>
+                        {this.renderselectplan()}
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        style={{justifyContent: 'center',alignItems: 'center',flex:1,backgroundColor: '#0066cc'}}
+                        onPress={() => this.addplantoschedule(1)}>
+                        <Text style={styles.addbuttontext} >添加后预览</Text>
+                    </TouchableOpacity>
+                </View>
+            )
+        }else{
+            return(
+                <View style={{flexDirection:'row',height:46}}>
+                    <TouchableOpacity
+                        style={{justifyContent: 'center',alignItems: 'center',flex:3,backgroundColor: '#0066cc'}}
+                        onPress={() => this.addplantoschedule(0)}>
+                        <Text style={styles.addbuttontext} >取消添加</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        style={{justifyContent: 'center',alignItems: 'center',flex:1,backgroundColor: '#0066cc'}}
+                        onPress={() => this.addplanfinish()}>
+                        <Text style={styles.addbuttontext} >确定添加</Text>
+                    </TouchableOpacity>
+                </View>
+            )
+        }
+
+    }
+
+    onWhenDayPress(day){
+
+        let newItems = {};
+        let ds = this.timeToString(day.timestamp);
+
+        //alert(ds);
+        if(newItems[ds] == null){
+            newItems[ds] = [];
+            newItems[ds].push({
+                name: '从这天开始吗？点击下面的添加',
+                height: 38
+            });
+            this.setState({
+                items:newItems,
+                selectdaystring:ds
+            })
+        }
     }
 
     render() {
@@ -124,6 +199,7 @@ class Schedule extends Component {
                     // monthFormat={'yyyy'}
                     //theme={{calendarBackground: 'red'}}
                     //renderDay={(day, item) => (<Text>{day ? day.day: 'item'}</Text>)}
+                    onDayPress={(day) => this.onWhenDayPress(day)}
                 />
                 <View style={{justifyContent: 'flex-end'}}>
                     {this.renderaddbutton()}
@@ -133,28 +209,7 @@ class Schedule extends Component {
     }
 
     loadItems(day) {
-        setTimeout(() => {
-            for (let i = -1; i < 5; i++) {
-                const time = day.timestamp + i * 24 * 60 * 60 * 1000;
-                const strTime = this.timeToString(time);
-                if (!this.state.items[strTime]) {
-                    this.state.items[strTime] = [];
-                    const numItems = 2;
-                    for (let j = 0; j < numItems; j++) {
-                        this.state.items[strTime].push({
-                            name: 'Item for ' + strTime,
-                            height: 50
-                        });
-                    }
-                }
-            }
-            //console.log(this.state.items);
-            const newItems = {};
-            Object.keys(this.state.items).forEach(key => {newItems[key] = this.state.items[key];});
-            this.setState({
-                items: newItems
-            });
-        }, 1000);
+
     }
 
     renderItem(item) {
