@@ -180,7 +180,7 @@ class PublicBook extends Component {
                 break;
             case 22:
                 //熟练计划
-                Actions.schedule();
+                Actions.schedule({intype:1,book:this.state.bookdata});
                 break;
         }
     }
