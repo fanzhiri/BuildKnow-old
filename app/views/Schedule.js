@@ -68,7 +68,9 @@ class Schedule extends Component {
             afteradd:newItems,
             selectdaystring:this.nowTimeToString(),
             book:this.props.book,
-            act:0 //0添加 1修改
+            act:0, //0添加 1修改,
+            allcollectbooks:null,
+            getdata:null
         };
 
     }
@@ -85,7 +87,7 @@ class Schedule extends Component {
 
         formData.append("auth",global.auth);
         formData.append("userid",global.userid);
-        formData.append("bookid",this.state.book.bookid);
+
         var opts = {
             method:"POST",
             body:formData
@@ -95,8 +97,24 @@ class Schedule extends Component {
             .then((response) => response.json())
             .then((responseData) => {
                 if(responseData.code == 100){
+
+                    let planarr=responseData.data;
+                    //alert(planarr.length)
+                    let allplanarr = new Array();
+                    let hehe =null;
+                    for(let i in planarr){
+                        //alert(planarr[i].plan)
+                        let acbs=planarr[i].plan;
+                        //hehe = JSON.parse(acbs);
+                        hehe = planarr[i].plan;
+                        //alert(acbs);
+                        //allplanarr.concat(JSON.parse(planarr[i].plan));
+                    }
+
                     this.setState({
-                        items:JSON.parse(responseData.data.schedule)
+                        getdata:1,
+                        items:hehe,
+                        allcollectbooks:responseData.data
                     })
                 }else{
                     alert(responseData.message)
@@ -115,7 +133,7 @@ class Schedule extends Component {
         formData.append("auth",global.auth);
         formData.append("userid",global.userid);
         formData.append("act",this.state.act);
-        formData.append("bookid",this.state.book.bookid);
+        formData.append("bookid",this.state.book.reviewid);
         formData.append("schedule",JSON.stringify(this.state.items));
 
         var opts = {
@@ -201,7 +219,7 @@ class Schedule extends Component {
     }
 
     addplanfinish(){
-
+        this.dosubmit();
     }
 
     renderaddandview(){
@@ -272,10 +290,52 @@ class Schedule extends Component {
         }
     }
 
-    render() {
+    renderswitch(){
+        if(this.props.intype == 0){
+            if(this.state.getdata == null){
+                this.fetchschedule();
+                return(this.renderLoading())
+            }else{
+                if(this.state.allcollectbooks == null){
+                    return(this.rendernodata())
+                }else{
+                    return(this.renderAgenda())
+                }
+            }
+        }else{
+            return(this.renderAgenda())
+        }
+    }
+
+    renderLoading(){
+        return (
+            <View style={styles.container}>
+                <Text>加载中...</Text>
+            </View>
+
+        )
+    }
+
+    rendernodata(){
+        return (
+            <View style={styles.container}>
+                <Text>没有数据</Text>
+            </View>
+        )
+    }
+
+    render(){
+        return(
+            <View style={GlobleStyles.withoutTitleContainer}>
+                {this.renderswitch()}
+            </View>
+        );
+    }
+
+    renderAgenda() {
 
         return (
-            <View style={GlobleStyles.withoutTitleContainer}>
+            <View>
                 <Agenda
                     items={this.state.items}
                     loadItemsForMonth={this.loadItems.bind(this)}
