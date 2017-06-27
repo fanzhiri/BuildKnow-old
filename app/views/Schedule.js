@@ -42,6 +42,7 @@ const styles = StyleSheet.create({
 var newScheduleUrl = "https://slako.applinzi.com/index.php?m=question&c=personal&a=addschedule";
 var getScheduleUrl = "https://slako.applinzi.com/index.php?m=question&c=personal&a=getschedule";
 
+var getOneScheduleUrl = "https://slako.applinzi.com/index.php?m=question&c=personal&a=getoneschedule";
 
 class Schedule extends Component {
 
@@ -99,21 +100,43 @@ class Schedule extends Component {
                 if(responseData.code == 100){
 
                     let planarr=responseData.data;
-                    //alert(planarr.length)
-                    let allplanarr = new Array();
-                    let hehe =null;
-                    for(let i in planarr){
-                        //alert(planarr[i].plan)
-                        let acbs=planarr[i].plan;
-                        //hehe = JSON.parse(acbs);
-                        hehe = planarr[i].plan;
-                        //alert(acbs);
-                        //allplanarr.concat(JSON.parse(planarr[i].plan));
-                    }
 
                     this.setState({
                         getdata:1,
-                        items:hehe,
+                        items:planarr,
+                        allcollectbooks:responseData.data
+                    })
+                }else{
+                    alert(responseData.message)
+                }
+
+            })
+            .catch((error) => {
+                alert(error)
+            })
+    }
+
+    fetchoneschedule(){
+        let formData = new FormData();
+
+        formData.append("auth",global.auth);
+        formData.append("userid",global.userid);
+
+        var opts = {
+            method:"POST",
+            body:formData
+        }
+
+        fetch(getOneScheduleUrl,opts)
+            .then((response) => response.json())
+            .then((responseData) => {
+                if(responseData.code == 100){
+
+                    let planarr=responseData.data;
+
+                    this.setState({
+                        getdata:1,
+                        items:planarr,
                         allcollectbooks:responseData.data
                     })
                 }else{
@@ -271,21 +294,25 @@ class Schedule extends Component {
     }
 
     onWhenDayPress(day){
-        if(this.state.adddone == 0){
-            let newItems = {};
-            let ds = this.timeToString(day.timestamp);
+        if(this.props.intype == 0) {
 
-            //alert(ds);
-            if(newItems[ds] == null){
-                newItems[ds] = [];
-                newItems[ds].push({
-                    name: '从这天开始吗？点击下面的添加',
-                    height: 38
-                });
-                this.setState({
-                    items:newItems,
-                    selectdaystring:ds
-                })
+        }else{
+            if (this.state.adddone == 0) {
+                let newItems = {};
+                let ds = this.timeToString(day.timestamp);
+
+                //alert(ds);
+                if (newItems[ds] == null) {
+                    newItems[ds] = [];
+                    newItems[ds].push({
+                        name: '从这天开始吗？点击下面的添加',
+                        height: 38
+                    });
+                    this.setState({
+                        items: newItems,
+                        selectdaystring: ds
+                    })
+                }
             }
         }
     }
@@ -335,7 +362,7 @@ class Schedule extends Component {
     renderAgenda() {
 
         return (
-            <View>
+            <View style={{flex:1}}>
                 <Agenda
                     items={this.state.items}
                     loadItemsForMonth={this.loadItems.bind(this)}
@@ -391,7 +418,7 @@ class Schedule extends Component {
 }
 
 Schedule.PropTypes = {
-    intype:PropTypes.number,//0在设置中查看 1添加熟悉计划
+    intype:PropTypes.number,//0在设置中查看 1添加熟悉计划 2单独看某个收藏书目的计划
     plan:PropTypes.object,
     book:PropTypes.object
 };
