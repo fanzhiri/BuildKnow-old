@@ -71,7 +71,8 @@ class Schedule extends Component {
             book:this.props.book,
             act:0, //0添加 1修改,
             allcollectbooks:null,
-            getdata:null
+            getdata:null,
+            getonedata:null
         };
 
     }
@@ -108,6 +109,9 @@ class Schedule extends Component {
                     })
                 }else{
                     alert(responseData.message)
+                    this.setState({
+                        getdata:2,
+                    })
                 }
 
             })
@@ -121,7 +125,7 @@ class Schedule extends Component {
 
         formData.append("auth",global.auth);
         formData.append("userid",global.userid);
-
+        formData.append("bookid",this.state.book.reviewid);
         var opts = {
             method:"POST",
             body:formData
@@ -132,15 +136,17 @@ class Schedule extends Component {
             .then((responseData) => {
                 if(responseData.code == 100){
 
-                    let planarr=responseData.data;
+                    let plan=responseData.data;
 
                     this.setState({
-                        getdata:1,
-                        items:planarr,
-                        allcollectbooks:responseData.data
+                        getonedata:1,
+                        items:plan,
                     })
                 }else{
                     alert(responseData.message)
+                    this.setState({
+                        getonedata:2,
+                    })
                 }
 
             })
@@ -297,23 +303,28 @@ class Schedule extends Component {
         if(this.props.intype == 0) {
 
         }else{
-            if (this.state.adddone == 0) {
-                let newItems = {};
-                let ds = this.timeToString(day.timestamp);
+            if(this.state.getonedata ==1){
+                if (this.state.adddone == 0) {
+                    let newItems = {};
+                    let ds = this.timeToString(day.timestamp);
 
-                //alert(ds);
-                if (newItems[ds] == null) {
-                    newItems[ds] = [];
-                    newItems[ds].push({
-                        name: '从这天开始吗？点击下面的添加',
-                        height: 38
-                    });
-                    this.setState({
-                        items: newItems,
-                        selectdaystring: ds
-                    })
+                    //alert(ds);
+                    if (newItems[ds] == null) {
+                        newItems[ds] = [];
+                        newItems[ds].push({
+                            name: '从这天开始吗？点击下面的添加',
+                            height: 38
+                        });
+                        this.setState({
+                            items: newItems,
+                            selectdaystring: ds
+                        })
+                    }
                 }
             }
+
+            }
+
         }
     }
 
@@ -330,7 +341,13 @@ class Schedule extends Component {
                 }
             }
         }else{
-            return(this.renderAgenda())
+            if(this.state.getonedata == null){
+                this.fetchoneschedule();
+                return(this.renderLoading())
+            }else{
+                return(this.renderAgenda())
+            }
+
         }
     }
 
@@ -418,7 +435,7 @@ class Schedule extends Component {
 }
 
 Schedule.PropTypes = {
-    intype:PropTypes.number,//0在设置中查看 1添加熟悉计划 2单独看某个收藏书目的计划
+    intype:PropTypes.number,//0在设置中查看 1添加熟悉计划
     plan:PropTypes.object,
     book:PropTypes.object
 };
