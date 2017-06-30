@@ -142,8 +142,8 @@ class Schedule extends Component {
                         getonedata:1,
                         items:plan,
                     })
-                }else{
-                    alert(responseData.message)
+                }else if(responseData.code == 200){
+
                     this.setState({
                         getonedata:2,
                     })
@@ -233,9 +233,20 @@ class Schedule extends Component {
 
     }
 
-    renderselectplan(){
+    renderselectplan() {
+        if(this.state.getonedata == 2) {
+            return (
+                <TouchableOpacity
+                    style={{justifyContent: 'center', alignItems: 'center', flex: 3, backgroundColor: '#FFB6C1'}}
+                    onPress={() => this.selectplantoschedule()}>
+                    {this.renderselectplantext()}
+                </TouchableOpacity>
+            )
+        }
+    }
+    renderselectplantext(){
 
-        if(this.props.plan ==null){
+        if(this.props.plan == null){
             return(
                 <Text style={styles.selectbuttontext} >选择路线</Text>
             )
@@ -244,7 +255,6 @@ class Schedule extends Component {
                 <Text style={styles.selectbuttontext} >路线:{this.props.plan.name}</Text>
             )
         }
-
     }
 
     addplanfinish(){
@@ -272,11 +282,7 @@ class Schedule extends Component {
         if(this.state.adddone == 0){
             return(
                 <View style={{flexDirection:'row',height:46}}>
-                    <TouchableOpacity
-                        style={{justifyContent: 'center',alignItems: 'center',flex:3,backgroundColor: '#FFB6C1'}}
-                        onPress={() => this.selectplantoschedule()}>
-                        {this.renderselectplan()}
-                    </TouchableOpacity>
+                    {this.renderselectplan()}
                     {this.renderaddandview()}
                 </View>
             )
@@ -303,7 +309,7 @@ class Schedule extends Component {
         if(this.props.intype == 0) {
 
         }else{
-            if(this.state.getonedata ==1){
+            if(this.state.getonedata == 2){
                 if (this.state.adddone == 0) {
                     let newItems = {};
                     let ds = this.timeToString(day.timestamp);
@@ -323,9 +329,9 @@ class Schedule extends Component {
                 }
             }
 
-            }
-
         }
+
+
     }
 
     renderswitch(){
