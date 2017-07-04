@@ -168,7 +168,7 @@ class PublicBook extends Component {
                     publicbookdata:this.state.bookdata,
                     questioncount:10,
                     asktype:0,
-                    answermode:2
+                    answermode:1
                 });
                 break;
             case 17:
@@ -193,6 +193,7 @@ class PublicBook extends Component {
 
     renderreadortest(){
         if(this.state.readortest == 0){
+            //看题
             return(
                 <View style={styles.topButtoncontainer}>
                     {this.rendertopbutton("md-eye",     "顺序",   () => this.invote(0))}
@@ -204,6 +205,7 @@ class PublicBook extends Component {
                 </View>
             )
         }else{
+            //做题
             return(
                 <View>
                     <View style={styles.topButtoncontainer}>

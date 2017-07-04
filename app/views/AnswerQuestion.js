@@ -81,10 +81,12 @@ class AnswerQuestion extends Component {
         super(props);
 
         let t_questiondataarr = null;
+        let choose_arr = null;
         if(this.props.intype == 0){
             t_questiondataarr = this.props.buildingbookdata;
         }else if(this.props.intype == 1){
             t_questiondataarr = JSON.parse(this.props.publicbookdata.qidtext);
+            choose_arr = new Array([t_questiondataarr.length]);
         }
 
 
@@ -92,7 +94,7 @@ class AnswerQuestion extends Component {
             t_questiondataarr=t_questiondataarr.reverse();
         }
 
-        let choose_arr = new Array([t_questiondataarr.length]);
+
 
         this.state = {
             count:0,
@@ -101,7 +103,7 @@ class AnswerQuestion extends Component {
             ask:null,
             selectone:-1,
             answer:null,
-            questionidx:-1,
+            questionidx:-1,//当前题目的指向
             rightidx:-1,
             allcount:t_questiondataarr.length,
             questiondataarr:t_questiondataarr,
@@ -121,16 +123,28 @@ class AnswerQuestion extends Component {
     renderwrongright(idx){
         var iconname=null;
         var iconColor=null;
-        if(this.props.answermode == 2){
-            return;
-        }
-        if(idx == this.state.rightidx){
-            iconColor ="#00FF00";
+        if(this.props.answermode != 0){
+            iconColor ="#15FFF5";
             iconname="md-checkmark-circle";
+            if(this.state.choose[this.state.questionidx] == idx){
+                return(
+                    <View style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-end'}}>
+                        <View style={styles.IconItem}>
+                            <Icon name={iconname} size={22} color={iconColor}/>
+                        </View>
+                    </View>
+                )
+            }
         }else{
-            iconColor ="#FF0000";
-            iconname="md-close-circle";
+            if(idx == this.state.rightidx){
+                iconColor ="#00FF00";
+                iconname="md-checkmark-circle";
+            }else{
+                iconColor ="#FF0000";
+                iconname="md-close-circle";
+            }
         }
+
         if(this.state.selectone == idx){
             return(
                 <View style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-end'}}>
@@ -144,8 +158,11 @@ class AnswerQuestion extends Component {
     }
 
     onSelectAnswer(idx){
+        let t_choose=this.state.choose;
+        t_choose[this.state.questionidx]=idx;
         this.setState({
             selectone:idx,
+            choose:t_choose
         })
     }
 
@@ -161,10 +178,7 @@ class AnswerQuestion extends Component {
                         <Text>{idx}</Text>
                     </View>
                     <Text style={styles.answerfont}> {text} </Text>
-
                     {this.renderwrongright(idx)}
-
-
                 </View>
             </TouchableOpacity>
         );
