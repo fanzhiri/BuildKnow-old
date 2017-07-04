@@ -207,7 +207,8 @@ class Schedule extends Component {
                             newItems[strTime].push({
                                 name:this.state.book.bookname+'['+i+']',
                                 time:strTime,
-                                height: 50
+                                height: 50,
+                                pbid:this.state.book.reviewid
                             });
                         }
                     }
@@ -409,12 +410,23 @@ class Schedule extends Component {
 
     }
 
+    itemclick(pbid){
+        if(pbid != null){
+            Actions.publicbook({bookid:pbid});
+        }
+
+    }
+
     renderItem(item) {
         return (
+        <TouchableOpacity
+            onPress={() => this.itemclick(item.pbid)}>
             <View style={[styles.item, {height: item.height}]}>
                 <Text>{item.name}</Text>
                 <Text>{item.time}</Text>
             </View>
+        </TouchableOpacity>
+
         );
     }
 
