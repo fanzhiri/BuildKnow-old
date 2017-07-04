@@ -81,6 +81,7 @@ var prbUrl = "https://slako.applinzi.com/index.php?m=question&c=index&a=personal
 
 var doGetHomePageBaseUrl = "https://slako.applinzi.com/api/1/homepage/";
 var doGetReleaseBooksUrl = "https://slako.applinzi.com/api/1/releasebooks/";
+var httpsBaseUrl = "https://slako.applinzi.com/";
 
 class HomePage extends Component {
     constructor(props) {
@@ -209,7 +210,7 @@ class HomePage extends Component {
                         <View>
                             <View style={styles.topViewContainer}>
                                 <Image style={styles.topImgView} source={{uri:'https://slako.applinzi.com/statics/images/question/personalhomepage/1.jpg', width: window.width, height: 200 }} >
-                                    <Image source={{uri:'https://slako.applinzi.com/statics/images/question/head/boy/4.jpg', width: 80, height: 80 }} />
+                                    <Image source={{uri:`${httpsBaseUrl}${this.props.peopledata.head}`, width: 80, height: 80}} />
                                     <Text>昵称:{this.props.peopledata.nickname}</Text>
                                     <Text>题本数:5</Text>
                                     <Text>粉丝:20  题本： 被收藏:60</Text>
