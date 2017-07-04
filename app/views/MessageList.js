@@ -186,7 +186,7 @@ class MessageList extends Component {
     renderPkItem(rowData, sectionID, rowID){
         let pkpeople = JSON.parse(rowData.people);
         return(
-            <TouchableOpacity onPress={() => Actions.begintest({pkid:rowData.id})}>
+            <TouchableOpacity onPress={() => Actions.begintest({pkdata:rowData,intype:1})}>
                 <View style={styles.listItem}>
                     <Text style={styles.numText}>{parseInt(rowID)+1}</Text>
                     <Image source={{uri:`${httpsBaseUrl}${rowData.cover}`}} style={styles.leftImgStyle}/>

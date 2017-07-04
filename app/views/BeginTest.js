@@ -2,7 +2,7 @@
  * Created by slako on 17/4/30.
  */
 import React, { Component,PropTypes } from 'react';
-import {View, Text, StyleSheet,Dimensions} from "react-native";
+import {View, Text, StyleSheet,Dimensions,ScrollView} from "react-native";
 import {Actions} from "react-native-router-flux";
 
 import GlobleStyles from '../styles/GlobleStyles';
@@ -67,10 +67,9 @@ class BeginTest extends Component {
             })
     }
 
-    render(){
-        return (
-            <View style={GlobleStyles.withoutTitleContainer}>
-
+    rendercommontest(){
+        return(
+            <ScrollView>
                 <Text style={styles.textdesc}>名字：{this.props.bookdata.bookname}</Text>
                 <Text style={styles.textdesc}>题数：{this.props.bookdata.q_count}</Text>
                 <Text style={styles.textdesc}>限定题数：</Text>
@@ -80,15 +79,52 @@ class BeginTest extends Component {
                         开始测验
                     </Button>
                 </View>
+            </ScrollView>
+        )
+    }
 
+    renderpktest(){
+        return(
+            <ScrollView>
+                <Text style={styles.textdesc}>名字：{this.props.pkdata.bookid}</Text>
+                <Text style={styles.textdesc}>题数：{this.props.pkdata.testnum}</Text>
+                <Text style={styles.textdesc}>限定题数：</Text>
+                <Text style={styles.textdesc}>限定时间：</Text>
+                <View style={styles.buttonContainer}>
+                    <Button style={styles.beginButton} textStyle={{fontSize: 18}} onPress={ () => Actions.answerquestion()}>
+                        开始测验
+                    </Button>
+                </View>
+            </ScrollView>
+        )
+    }
+
+    renderbegin(){
+        switch (parseInt(this.props.intype)){
+            case 0:
+                return this.rendercommontest();
+                break;
+            case 1:
+                return this.renderpktest();
+                break;
+            default:
+                break;
+        }
+    }
+
+    render(){
+        return (
+            <View style={GlobleStyles.withoutTitleContainer}>
+                {this.renderbegin()}
             </View>
         );
     }
 }
 
 BeginTest.PropTypes = {
+    intype:PropTypes.number,// 0普通测试 1:pk邀请
     bookdata: PropTypes.object,
-    pkid:PropTypes.number
+    pkdata:PropTypes.object
 };
 
 module.exports = BeginTest;
