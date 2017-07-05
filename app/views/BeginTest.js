@@ -83,15 +83,28 @@ class BeginTest extends Component {
         )
     }
 
+    goingtopktest(){
+        let t_questiondataarr = JSON.parse(this.props.pkdata.questionsready);
+        for(let i=0;i < this.props.pkdata.testnum;i++){
+            let rightindex = Math.floor(Math.random() * 4);
+
+        }
+
+        Actions.answerquestion();
+    }
+
     renderpktest(){
+        let pkpeople = JSON.parse(this.props.pkdata.people);
         return(
             <ScrollView>
-                <Text style={styles.textdesc}>名字：{this.props.pkdata.bookid}</Text>
+                <Text style={styles.textdesc}>名字：{this.props.pkdata.bookname}</Text>
                 <Text style={styles.textdesc}>题数：{this.props.pkdata.testnum}</Text>
-                <Text style={styles.textdesc}>限定题数：</Text>
-                <Text style={styles.textdesc}>限定时间：</Text>
+
+                <Text style={styles.textdesc}>限定时长：</Text>
+                <Text style={styles.textdesc}>参与人数：{pkpeople.length}</Text>
+                <Text style={styles.textdesc}>截止时间：{this.props.pkdata.overdue}</Text>
                 <View style={styles.buttonContainer}>
-                    <Button style={styles.beginButton} textStyle={{fontSize: 18}} onPress={ () => Actions.answerquestion()}>
+                    <Button style={styles.beginButton} textStyle={{fontSize: 18}} onPress={ () =>this.goingtopktest()}>
                         开始测验
                     </Button>
                 </View>
