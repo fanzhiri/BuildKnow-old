@@ -85,12 +85,18 @@ class BeginTest extends Component {
 
     goingtopktest(){
         let t_questiondataarr = JSON.parse(this.props.pkdata.questionsready);
+        let answerarr = new Array();
         for(let i=0;i < this.props.pkdata.testnum;i++){
             let rightindex = Math.floor(Math.random() * 4);
 
+            let t_questiondata = t_questiondataarr[i];
+            let answerarr=JSON.parse(t_questiondata.wrong_answer);
+            let rightanswer=t_questiondata.right_answer;
+            answerarr.splice(rightindex,0,rightanswer);
+            answerarr.push({ri:rightindex,randomanswer:answerarr});
         }
-
-        Actions.answerquestion();
+        
+        //Actions.answerquestion();
     }
 
     renderpktest(){
