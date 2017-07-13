@@ -86,9 +86,11 @@ class AnswerQuestion extends Component {
             t_questiondataarr = this.props.buildingbookdata;
         }else if(this.props.intype == 1){
             t_questiondataarr = JSON.parse(this.props.publicbookdata.qidtext);
-            choose_arr = new Array([t_questiondataarr.length]);
+        }else if(this.props.intype == 2){
+            t_questiondataarr = this.props.readyquestion_arr;
         }
-
+        //choose_arr = new Array([t_questiondataarr.length]); 这是错误的写法
+        choose_arr = new Array(t_questiondataarr.length);
 
         if(this.props.asktype == 1){
             t_questiondataarr=t_questiondataarr.reverse();
@@ -107,6 +109,7 @@ class AnswerQuestion extends Component {
             rightidx:-1,
             allcount:t_questiondataarr.length,
             questiondataarr:t_questiondataarr,
+            readyquestionarr:this.props.readyquestion_arr,
             choose:choose_arr
         };
 
@@ -235,10 +238,19 @@ class AnswerQuestion extends Component {
 
         let t_questiondata = this.state.questiondataarr[parseInt(t_questionidx)];
 
-        let rightindex = Math.floor(Math.random() * 4);
-        let answerarr=JSON.parse(t_questiondata.wrong_answer);
-        let rightanswer=t_questiondata.right_answer;
-        answerarr.splice(rightindex,0,rightanswer);
+        let rightindex = null;
+        let answerarr = null;
+
+        if(this.props.intype == 2){
+            answerarr=this.props.answer_arr[parseInt(t_questionidx)].randomanswer;
+        }else{
+            rightindex = Math.floor(Math.random() * 4);
+            answerarr=JSON.parse(t_questiondata.wrong_answer);
+            let rightanswer=t_questiondata.right_answer;
+            answerarr.splice(rightindex,0,rightanswer);
+        }
+
+
         this.setState({
             questiondata:t_questiondata,
             rightidx:rightindex,
@@ -262,7 +274,7 @@ class AnswerQuestion extends Component {
     }
 
     onPressNext(){
-        if(this.props.intype == 1){
+        if(this.props.intype != 0){
             this.anotherquestion(1);
             return;
         }
@@ -275,7 +287,7 @@ class AnswerQuestion extends Component {
     }
 
     onPressPre(){
-        if(this.props.intype == 1){
+        if(this.props.intype != 0){
             this.anotherquestion(0);
             return;
         }
@@ -314,7 +326,7 @@ class AnswerQuestion extends Component {
             case 4:
                 break;
             case 5:
-                Actions.testcard();
+                Actions.testcard({answerselect_arr:this.state.choose});
                 break;
             case 6:
                 break;
@@ -409,14 +421,16 @@ class AnswerQuestion extends Component {
 }
 
 AnswerQuestion.PropTypes = {
-    intype:PropTypes.number,          //0正在建的题本测试 1已经发布的
+    intype:PropTypes.number,          //0正在建的题本测试 1已经发布的 2已经整理好的题目
     asktype:PropTypes.number,          //0顺序 1随机
     questiontype: PropTypes.string.isRequired,//random随机；order顺序
     questioncount:PropTypes.number,
     answermode:PropTypes.number,//0看题，1随便考 2真考
     // qids:PropTypes.array.isRequired,
     publicbookdata:PropTypes.object,
-    buildingbookdata:PropTypes.object
+    buildingbookdata:PropTypes.object,
+    readyquestion_arr:PropTypes.object,
+    answer_arr:PropTypes.object
 };
 
 module.exports = AnswerQuestion;

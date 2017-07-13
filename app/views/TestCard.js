@@ -46,12 +46,17 @@ class TestCard extends Component {
 
     constructor(props) {
         super(props);
+        /*
         this.state = {
             answeritem:[{"id":0,"status":1},{"id":1,"status":1},{"id":2,"status":1},{"id":3,"status":1},
                         {"id":4,"status":1},{"id":5,"status":1},{"id":6,"status":1},{"id":7,"status":1},
                 {"id":0,"status":1},{"id":1,"status":1},{"id":2,"status":1},{"id":3,"status":1},
                 {"id":4,"status":1},{"id":5,"status":1},{"id":6,"status":1},{"id":7,"status":1},],
+        };*/
+        this.state = {
+            answeritem:this.props.answerselect_arr,
         };
+
         this._renderarrstatus = this.renderarrstatus.bind(this);
     }
 
@@ -88,7 +93,7 @@ class TestCard extends Component {
 }
 
 TestCard.PropTypes = {
-    answerarr:PropTypes.object
+    answerselect_arr:PropTypes.object
 };
 
 module.exports = TestCard;
