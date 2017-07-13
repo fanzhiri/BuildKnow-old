@@ -170,7 +170,7 @@ class AnswerLibEdit extends Component {
         let formData = new FormData();
         formData.append("auth",global.auth);
         formData.append("userid",global.userid);
-        formData.append("answerlibid",this.props.answerlibid);
+        formData.append("answerlibid",this.props.answerlibdata.id);
         formData.append("answertext",this.state.inputtextstring);
         var opts = {
             method:"POST",
@@ -198,7 +198,7 @@ class AnswerLibEdit extends Component {
         let formData = new FormData();
         formData.append("auth",global.auth);
         formData.append("userid",global.userid);
-        formData.append("answerlibid",this.props.answerlibid);
+        formData.append("answerlibid",this.props.answerlibdata.id);
 
         var opts = {
             method:"POST",
@@ -292,28 +292,39 @@ class AnswerLibEdit extends Component {
 
     }
 
+    renderaddbutton(){
+        if(this.props.answerlibdata.userid != global.userid){
+            return;
+        }
+        return(
+            <View style={styles.bottomInputViewContainer}>
+                <TextInput
+                    style={styles.chatinput}
+                    onChangeText={(text) => this.setState({inputtextstring:text})}
+                    value={this.state.inputtextstring}
+                    placeholder={""}
+                    maxLength={20}
+                    multiline={true}
+                />
+                <Button style={styles.sendbutton} textStyle={{fontSize: 16}} onPress={() => this.dofetch_addanswer()} >添加</Button>
+            </View>
+        )
+    }
+
     renderEditListView(){
         return (
             <View style={styles.cvscontainer}>
                 {this.renderDataList()}
-                <View style={styles.bottomInputViewContainer}>
-                    <TextInput
-                        style={styles.chatinput}
-                        onChangeText={(text) => this.setState({inputtextstring:text})}
-                        value={this.state.inputtextstring}
-                        placeholder={""}
-                        maxLength={20}
-                        multiline={true}
-                    />
-                    <Button style={styles.sendbutton} textStyle={{fontSize: 16}} onPress={() => this.dofetch_addanswer()} >添加</Button>
-                </View>
+
+                {this.renderaddbutton()}
+
             </View>
         )
     }
 }
 
 AnswerLibEdit.PropTypes = {
-    answerlibid:PropTypes.number,
+    answerlibdata:PropTypes.object,
 };
 
 module.exports = AnswerLibEdit;

@@ -89,7 +89,7 @@ class AnswerLib extends Component {
     }
 
     onItemClickIt(rowData){
-        Actions.answerlibedit({answerlibid:rowData.id});
+        Actions.answerlibedit({answerlibdata:rowData});
     }
 
     renderItem(rowData){
