@@ -274,28 +274,11 @@ class AnswerQuestion extends Component {
     }
 
     onPressNext(){
-        if(this.props.intype != 0){
-            this.anotherquestion(1);
-            return;
-        }
-        this.setState({selectone:-1})
-        this.setState({count:this.state.count+1})
-        var qid=global.bookqids.shift();
-        //global.bookqids
-        global.bookqids
-        this._dofetchquestion(qid);
+        this.anotherquestion(1);
     }
 
     onPressPre(){
-        if(this.props.intype != 0){
-            this.anotherquestion(0);
-            return;
-        }
-
-        this.setState({selectone:-1})
-        var qid=global.bookqids.shift();
-
-        this._dofetchquestion(qid);
+        this.anotherquestion(0);
     }
 
     rendertopbutton(iconname,name,onpressfunc){

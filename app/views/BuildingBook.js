@@ -31,6 +31,8 @@ import GlobleStyles from '../styles/GlobleStyles';
 var doGetBookUrl = "https://slako.applinzi.com/index.php?m=question&c=personal&a=getbook";
 var httpsBaseUrl = "https://slako.applinzi.com/";
 
+var doGetBookQuestionUrl = "https://slako.applinzi.com/index.php?m=question&c=personal&a=getbookquestion";
+
 const styles = StyleSheet.create({
     container: {
         flex: 1,
@@ -92,7 +94,8 @@ class BuildingBook extends Component {
             selectedIndex:0,
             bookdata:null,
             bookCover:null,
-            getdata:0
+            getdata:0,
+            question_arr:null
         };
         this._onChange = this._onChange.bind(this);
         this._handleRandom = this.handleRandom.bind(this);
@@ -134,6 +137,37 @@ class BuildingBook extends Component {
             })
     }
 
+    dofetchquestions(){
+        let formData = new FormData();
+        formData.append("auth",global.auth);
+        formData.append("userid",global.userid);
+        formData.append("bookid",this.props.bookid);
+
+        var opts = {
+            method:"POST",
+            body:formData
+        }
+        fetch(doGetBookQuestionUrl,opts)
+            .then((response) => response.json())
+            .then((responseData) => {
+
+                if(responseData.code == 100){
+                    /*
+                    this.setState({
+                        question_arr:responseData.data,
+                    })
+                    */
+                    Actions.answerquestion({intype:0,asktype:1,buildingbookdata:responseData.data});
+                }else{
+
+                }
+
+            })
+            .catch((error) => {
+                alert(error)
+            })
+    }
+
     _onChange(event) {
         this.setState({
             selectedIndex: event.nativeEvent.selectedSegmentIndex,
@@ -142,8 +176,9 @@ class BuildingBook extends Component {
 
     handleRandom() {
         var type = 'random';
-        global.bookqids=JSON.parse(this.state.bookdata.qids);
-        Actions.answerquestion(type);
+        let bookqids=JSON.parse(this.state.bookdata.qids);
+        this.dofetchquestions();
+
     }
     handleOrder() {
         var type = 'order';
