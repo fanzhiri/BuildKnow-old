@@ -200,6 +200,15 @@ class HomePage extends Component {
 
     render(){
         const {userId} = this.props;
+
+        let titleselect ;
+
+        if(this.state.friendhim){
+            titleselect=['内测','发布','关于','详细'];
+        }else{
+            titleselect=['内测','发布','关于'];
+        }
+
         return (
             <View style={GlobleStyles.withoutTitleContainer}>
                 <ParallaxScrollView
@@ -223,7 +232,7 @@ class HomePage extends Component {
 
 
                             <SegmentedControlIOS
-                                values={['内测','发布','关于']}
+                                values={titleselect}
                                 selectedIndex={this.state.selectedIndex}
                                 style={styles.segmented}
                                 onChange={this._onChange}
@@ -235,7 +244,7 @@ class HomePage extends Component {
                         <View key="sticky-header" style={styles.stickySection}>
                             {/*<Text style={styles.stickySectionText}>hello</Text>*/}
                             <SegmentedControlIOS
-                                values={['内测','发布','关于']}
+                                values={titleselect}
                                 selectedIndex={this.state.selectedIndex}
                                 style={styles.segmented}
                                 onChange={this._onChange}
@@ -277,9 +286,17 @@ class HomePage extends Component {
             .then((responseData) => {
                 if(responseData.code == 100){
                     global.friend=JSON.parse(responseData.data);
-                    this.setState({
-                        friendhim:global.friend.contains(this.props.userId)
-                    })
+                    if(friend == 0){
+                        this.setState({
+                            selectedIndex:0,
+                            friendhim:global.friend.contains(this.props.userId)
+                        })
+                    }else{
+                        this.setState({
+                            friendhim:global.friend.contains(this.props.userId)
+                        })
+                    }
+
                 }else{
                     this.setState({
                         netresult:responseData.code
@@ -345,6 +362,10 @@ class HomePage extends Component {
                 return (
                     this.renderAboutView()
                 )
+            } else if (this.state.selectedIndex === 3) {
+                return (
+                    this.renderDetailView()
+                )
             }
 
         }else{
@@ -403,6 +424,12 @@ class HomePage extends Component {
     renderAboutView(){
         return (
             <Text>History</Text>
+        )
+    }
+
+    renderDetailView(){
+        return (
+            <Text>标签</Text>
         )
     }
 }
