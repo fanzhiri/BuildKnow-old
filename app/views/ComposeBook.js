@@ -47,7 +47,10 @@ const styles = StyleSheet.create({
     segmentedcontrolcontainer: {
         marginBottom:10,
     },
-
+    fullscreen: {
+        justifyContent: 'flex-end',
+        flex:1,
+    },
     image:{
         flex:1,
         width:80,
@@ -187,6 +190,7 @@ class ComposeBook extends Component {
             bookquestion_data_source:null,
             selectedIndex:0,
             selectedQuestion:-1,
+            get_questiondata:null
         };
         this._onChange = this._onChange.bind(this);
         this._handlePress = this._handlePress.bind(this);
@@ -236,10 +240,14 @@ class ComposeBook extends Component {
             .then((responseData) => {
                 if(responseData.code == 100){
                     this.setState({
-                        bookquestion_data_source:responseData.data
+                        bookquestion_data_source:responseData.data,
+                        get_questiondata:1
                     })
                 }else{
-                    alert(responseData.message);
+                    this.setState({
+                        get_questiondata:2
+                    })
+
                 }
 
             })
@@ -302,7 +310,7 @@ class ComposeBook extends Component {
                         onChange={this._onChange}
                     />
                 </View>
-                <View>{this.renderSegmentedView()}</View>
+                <View style={styles.fullscreen}>{this.renderSegmentedView()}</View>
 
                 <Toast
                     ref="toastmsg"
@@ -351,11 +359,15 @@ class ComposeBook extends Component {
     }
 
     renderQuestionView(){
-        if(this.state.bookquestion_data_source == null){
+        if(this.state.get_questiondata == null ){
             this.dofetch_mybookquestion();
-            return (this.renderLoading())
+            return (this.renderLoading());
         }else{
-            return (this.renderQuestionListView())
+            if(this.state.bookquestion_data_source == null){
+                return(this.rendernodata());
+            }else{
+                return(this.renderQuestionListView());
+            }
         }
 
     }
@@ -583,6 +595,21 @@ class ComposeBook extends Component {
                 <Text>Loading...</Text>
             </View>
 
+        )
+    }
+
+    rendernodata(){
+        return (
+            <View style={styles.btnFlexEndContainer} >
+
+                <View style={{flexDirection:'row',height:38}}>
+                    <TouchableOpacity
+                        style={{justifyContent: 'center',alignItems: 'center',flex:1,backgroundColor: '#0066cc'}}
+                        onPress={() => Actions.newsomequestions({bookid:this.props.bookid})} >
+                        <Text style={styles.addbuttontext} >添题</Text>
+                    </TouchableOpacity>
+                </View>
+            </View>
         )
     }
 }

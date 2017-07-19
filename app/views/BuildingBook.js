@@ -84,6 +84,9 @@ const styles = StyleSheet.create({
     bottomButtonText: {
         fontSize: 16,
     },
+    addbuttontext:{
+        fontSize:18,
+    }
 });
 
 class BuildingBook extends Component {
