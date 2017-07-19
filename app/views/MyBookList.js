@@ -2,7 +2,7 @@
  * Created by slako on 17/2/18.
  */
 import React, { Component } from 'react';
-import {View, Text, StyleSheet, ListView, Image,TouchableOpacity} from "react-native";
+import {View, Text, StyleSheet, ListView, Image,TouchableOpacity,RefreshControl} from "react-native";
 import {Actions} from "react-native-router-flux";
 import Button from "react-native-button";
 import GlobleStyles from '../styles/GlobleStyles';
@@ -68,6 +68,7 @@ class MyBookList extends Component {
 
         this.state = {
             books_data_source: null,
+            gorefreshing:false,
         };
 
         this._renderBookItem = this.renderBookItem.bind(this)
@@ -150,6 +151,12 @@ class MyBookList extends Component {
     renderMyBooks(){
         return (
             <ListView
+                refreshControl={
+                    <RefreshControl
+                        refreshing={this.state.gorefreshing}
+                        onRefresh={() => this.dofetch_mybooks()}
+                    />
+                }
                 style={styles.list}
                 dataSource={DataStore.cloneWithRows(this.state.books_data_source)}
                 renderRow={this._renderBookItem}

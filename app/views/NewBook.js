@@ -80,7 +80,8 @@ class NewBook extends Component {
         super();
         let addcoveruri ={uri:"https://slako.applinzi.com/statics/images/question/util/addcover.png", width: 80, height: 80 };
         this.state = {
-            coverSource: addcoveruri,
+            coverSource8080: addcoveruri,
+            coverSource18080: addcoveruri,
             name:"",
             brief:"",
             description:"",
@@ -93,10 +94,11 @@ class NewBook extends Component {
 
     commitpic(){
         let formData = new FormData();
-        let file = {uri: this.state.coverSource, type: 'multipart/form-data', name: 'bookcover8080.jpg'};
+        let file_8080 = {uri: this.state.coverSource8080, type: 'multipart/form-data', name: 'bookcover8080.jpg'};
+        let file_18080 = {uri: this.state.coverSource18080, type: 'multipart/form-data', name: 'bookcover18080.jpg'};
         formData.append("auth",global.auth);
         formData.append("userid",global.userid);
-        formData.append("upload",file);
+        formData.append("upload",file_8080);
         var opts = {
             method:"POST",
             headers:{
@@ -124,13 +126,15 @@ class NewBook extends Component {
     docommit(){
 
         let formData = new FormData();
-        let file = {uri: this.state.coverSource, type: 'multipart/form-data', name: 'bookcover8080.jpg'};
+        let file_8080 = {uri: this.state.coverSource8080, type: 'multipart/form-data', name: 'bookcover8080.jpg'};
+        let file_18080 = {uri: this.state.coverSource18080, type: 'multipart/form-data', name: 'bookcover18080.jpg'};
         formData.append("auth",global.auth);
         formData.append("userid",global.userid);
         formData.append("bookname",this.state.name);
         formData.append("bookbrief",this.state.brief);
         formData.append("bookdescription",this.state.description);
-        formData.append("bookcover8080",file);
+        formData.append("bookcover8080",file_8080);
+        formData.append("bookcover18080",file_18080);
         var opts = {
             method:"POST",
             headers:{
@@ -155,7 +159,7 @@ class NewBook extends Component {
             })
     }
 
-    onSelectCoverPress(){
+    onSelectCoverPress(what){
         var options = {
             title: 'Select Cover',
 
@@ -178,14 +182,22 @@ class NewBook extends Component {
                 console.log('User tapped custom button: ', response.customButton);
             }
             else {
-                let source = { uri: response.uri , width: 80, height: 80 };
+
                 //alert(response.uri);
                 // You can also display the image using data:
                 // let source = { uri: 'data:image/jpeg;base64,' + response.data };
+                if(what == 1 ){
+                    let source = { uri: response.uri , width: 80, height: 80 };
+                    this.setState({
+                        coverSource8080: source
+                    });
+                }else{
+                    let source = { uri: response.uri , width: 180, height: 80 };
+                    this.setState({
+                        coverSource18080: source
+                    });
+                }
 
-                this.setState({
-                    coverSource: source
-                });
             }
         });
 
@@ -233,11 +245,11 @@ class NewBook extends Component {
                     multiline={true}
                 />
                 <View  style={styles.imgcontainer}>
-                    <TouchableOpacity onPress={()=>this._onSelectCoverPress()} >
-                        <Image source={this.state.coverSource} style={styles.leftImgStyle} />
+                    <TouchableOpacity onPress={()=>this._onSelectCoverPress(1)} >
+                        <Image source={this.state.coverSource8080} style={styles.leftImgStyle} />
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={()=>this._onSelectCoverPress()} >
-                        <Image source={this.state.coverSource} style={styles.rightImgStyle} />
+                    <TouchableOpacity onPress={()=>this._onSelectCoverPress(2)} >
+                        <Image source={this.state.coverSource18080} style={styles.rightImgStyle} />
                     </TouchableOpacity>
                 </View>
 
