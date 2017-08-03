@@ -4,7 +4,7 @@
  */
 import React, { Component ,PropTypes} from 'react';
 
-import {View, Text, Image, StyleSheet, SegmentedControlIOS,TouchableOpacity} from "react-native";
+import {View, Text, Image, StyleSheet, SegmentedControlIOS,TouchableOpacity,ListView,RefreshControl} from "react-native";
 
 import Button from "react-native-button";
 
@@ -26,12 +26,16 @@ import BookIntroduce from './BookIntroduce'
 import BookDiscuss from './BookDiscuss'
 import BookHistory from './BookHistory'
 
+import DataStore from '../util/DataStore';
 import GlobleStyles from '../styles/GlobleStyles';
 
 var doGetBookUrl = "https://slako.applinzi.com/index.php?m=question&c=personal&a=getbook";
 var httpsBaseUrl = "https://slako.applinzi.com/";
 
 var doGetBookQuestionUrl = "https://slako.applinzi.com/index.php?m=question&c=personal&a=getbookquestion";
+
+var doGetRecommendQuestionUrl = "https://slako.applinzi.com/index.php?m=question&c=personal&a=getrecommendquestion";
+
 
 const styles = StyleSheet.create({
     container: {
@@ -86,7 +90,15 @@ const styles = StyleSheet.create({
     },
     addbuttontext:{
         fontSize:18,
-    }
+    },
+    list:{
+        marginTop:6
+    },questionitemcontainer:{
+        padding:5,
+        backgroundColor:'white',
+        borderBottomWidth:1,
+        borderBottomColor:'#ab82ff',
+    },
 });
 
 class BuildingBook extends Component {
@@ -98,7 +110,10 @@ class BuildingBook extends Component {
             bookdata:null,
             bookCover:null,
             getdata:0,
-            question_arr:null
+            question_arr:null,
+            idea_recommend_data_source:null,
+            get_recommenddata:null,
+            gorefreshing:false
         };
         this._onChange = this._onChange.bind(this);
         this._handleRandom = this.handleRandom.bind(this);
@@ -107,6 +122,7 @@ class BuildingBook extends Component {
         this._renderBook = this.renderBook.bind(this);
         this._renderLoading = this.renderLoading.bind(this);
         this._doFetchBook = this.doFetchBook.bind(this);
+        this._renderQuestionItem = this.renderQuestionItem.bind(this);
     }
 
 
@@ -132,6 +148,37 @@ class BuildingBook extends Component {
                     })
                 }else{
                     alert(responseData.message)
+                }
+
+            })
+            .catch((error) => {
+                alert(error)
+            })
+    }
+
+    dofetch_ideaquestion(){
+
+        let formData = new FormData();
+        formData.append("auth",global.auth);
+        formData.append("bookid",this.props.bookid);
+        formData.append("userid",global.userid);
+        var opts = {
+            method:"POST",
+            body:formData
+        }
+        fetch(doGetRecommendQuestionUrl,opts)
+            .then((response) => response.json())
+            .then((responseData) => {
+                if(responseData.code == 100){
+                    this.setState({
+                        idea_recommend_data_source:responseData.data,
+                        get_recommenddata:1
+                    })
+                }else{
+                    this.setState({
+                        get_recommenddata:2
+                    })
+
                 }
 
             })
@@ -254,9 +301,20 @@ class BuildingBook extends Component {
                 this.renderDiscussView()
             )
         } else if (this.state.selectedIndex === 2) {
-            return (
-                this.renderIdeasView()
-            )
+            if(this.state.get_recommenddata == null){
+                this.dofetch_ideaquestion();
+                return(this._renderLoading())
+            }else{
+                if(this.state.idea_recommend_data_source == null){
+                    return(this.rendernodata())
+                }else{
+                    return (
+                        this.renderIdeasView()
+                    )
+                }
+
+            }
+
         } else if (this.state.selectedIndex === 3) {
             return (
                 this.renderHistoryView()
@@ -299,9 +357,45 @@ class BuildingBook extends Component {
         )
     }
 
+    renderQuestionItem(rowData,sectionID, rowID){
+        var ask = (rowData.ask);
+        var qId = (rowData.questionid);
+        return (
+            <View  style={styles.questionitemcontainer}>
+                <Text style={styles.questionitem}>
+                    {parseInt(rowID)+1} : {ask.substring(0,20)}
+                </Text>
+            </View>
+        )
+    }
+
+    renderrecommend(){
+        if(this.state.idea_recommend_data_source == null){
+            return(
+                this.rendernodata()
+            )
+        }else{
+            return(
+                <ListView
+                    refreshControl={
+                        <RefreshControl
+                            refreshing={this.state.gorefreshing}
+                            onRefresh={() => this.dofetch_ideaquestion()}
+                        />
+                    }
+                    style={styles.list}
+                    dataSource={DataStore.cloneWithRows(this.state.idea_recommend_data_source)}
+                    renderRow={this._renderQuestionItem}
+                    enableEmptySections = {true}
+                />
+            )
+        }
+    }
+
     renderIdeasView(){
         return (
             <View style={styles.ButtonViewContainer}>
+                {this.renderrecommend()}
                 <View style={styles.bottomButtonViewContainer}>
                     <TouchableOpacity  onPress={()=> Actions.newsomequestions({bookid:this.props.bookid,title:this.state.bookdata.bookname})} >
                         <Text style={styles.bottomButtonText} >贡献</Text>
@@ -326,9 +420,7 @@ class BuildingBook extends Component {
 
     rendernodata(){
         return (
-
-                <Text>没有数据</Text>
-
+            <Text>没有数据</Text>
         )
     }
 }

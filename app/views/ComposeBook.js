@@ -4,7 +4,7 @@
  */
 import React, { Component ,PropTypes} from 'react';
 
-import {View, Text, Image, StyleSheet, SegmentedControlIOS, ListView, TouchableOpacity,Alert,ScrollView} from "react-native";
+import {View, Text, Image, StyleSheet, SegmentedControlIOS, ListView, TouchableOpacity,Alert,ScrollView,RefreshControl} from "react-native";
 
 import Button from 'apsl-react-native-button'
 import {
@@ -179,6 +179,10 @@ var doDeleteQuestionUrl = "https://slako.applinzi.com/index.php?m=question&c=per
 
 var doGetMyComposeBookUrl = "https://slako.applinzi.com/index.php?m=question&c=personal&a=getmycomposebook";
 
+var doGetRecommendQuestionUrl = "https://slako.applinzi.com/index.php?m=question&c=personal&a=getrecommendquestion";
+
+var doAcceptRecommendQuestionUrl = "https://slako.applinzi.com/index.php?m=question&c=personal&a=acceptrecommendquestion";
+
 var httpsBaseUrl = "https://slako.applinzi.com/";
 
 class ComposeBook extends Component {
@@ -190,12 +194,43 @@ class ComposeBook extends Component {
             bookquestion_data_source:null,
             selectedIndex:0,
             selectedQuestion:-1,
-            get_questiondata:null
+            get_questiondata:null,
+            idea_recommend_data_source:null,
+            gorefreshing:false,
+            get_recommenddata:null
         };
         this._onChange = this._onChange.bind(this);
         this._handlePress = this._handlePress.bind(this);
         this._renderQuestionItem = this.renderQuestionItem.bind(this);
 
+    }
+
+    do_operate_recommendquestion(what,qid){
+
+        let formData = new FormData();
+        formData.append("auth",global.auth);
+        formData.append("questionid",qid);
+        formData.append("userid",global.userid);
+        formData.append("what",what);
+        var opts = {
+            method:"POST",
+            body:formData
+        }
+        fetch(doAcceptRecommendQuestionUrl,opts)
+            .then((response) => response.json())
+            .then((responseData) => {
+                if(responseData.code == 100){
+                    this.setState({
+                        composebookdata:responseData.data
+                    })
+                }else{
+                    alert(responseData.message);
+                }
+
+            })
+            .catch((error) => {
+                alert(error)
+            })
     }
 
     dofetch_mycomposebook(){
@@ -217,6 +252,37 @@ class ComposeBook extends Component {
                     })
                 }else{
                     alert(responseData.message);
+                }
+
+            })
+            .catch((error) => {
+                alert(error)
+            })
+    }
+
+    dofetch_ideaquestion(){
+
+        let formData = new FormData();
+        formData.append("auth",global.auth);
+        formData.append("bookid",this.props.bookid);
+        formData.append("userid",global.userid);
+        var opts = {
+            method:"POST",
+            body:formData
+        }
+        fetch(doGetRecommendQuestionUrl,opts)
+            .then((response) => response.json())
+            .then((responseData) => {
+                if(responseData.code == 100){
+                    this.setState({
+                        idea_recommend_data_source:responseData.data,
+                        get_recommenddata:1
+                    })
+                }else{
+                    this.setState({
+                        get_recommenddata:2
+                    })
+
                 }
 
             })
@@ -335,7 +401,6 @@ class ComposeBook extends Component {
         } else if (this.state.selectedIndex === 1) {
             return (
                 this.renderQuestionView()
-                //this.renderBaseView()
             )
         } else if (this.state.selectedIndex === 2) {
             return (
@@ -344,6 +409,10 @@ class ComposeBook extends Component {
         } else if (this.state.selectedIndex === 3) {
             return (
                 this.renderHistoryView()
+            )
+        } else if (this.state.selectedIndex === 4) {
+            return (
+                this.renderRecommendView()
             )
         }
     }
@@ -371,6 +440,39 @@ class ComposeBook extends Component {
         }
 
     }
+
+    renderRecommendView(){
+        if(this.state.get_recommenddata == null ){
+            this.dofetch_ideaquestion();
+            return (this.renderLoading());
+        }else{
+            if(this.state.idea_recommend_data_source == null){
+                return(this.rendernodata())
+            }else{
+                return(this.renderIdeasView());
+            }
+
+        }
+
+    }
+
+    renderIdeasView(){
+        return(
+            <ListView
+                refreshControl={
+                    <RefreshControl
+                        refreshing={this.state.gorefreshing}
+                        onRefresh={() => this.dofetch_ideaquestion()}
+                    />
+                }
+                style={styles.list}
+                dataSource={DataStore.cloneWithRows(this.state.idea_recommend_data_source)}
+                renderRow={this._renderQuestionItem}
+                enableEmptySections = {true}
+            />
+        )
+    }
+
     selectquestion(index){
         this.setState({
             selectedQuestion:index
@@ -385,6 +487,21 @@ class ComposeBook extends Component {
         //this.dofetch_deletequestion(id);
     }
 
+    acceptquestion(id){
+        this.do_operate_recommendquestion(id);
+    }
+
+    renderEditRecommendView(qId) {
+        if(this.state.selectedIndex === 4){
+            return (
+                <TouchableOpacity  onPress={()=> this.acceptquestion(qId)} >
+                    <Text style={styles.questionedittext} >收录</Text>
+                </TouchableOpacity>
+            )
+        }
+
+    }
+
     renderEditView(index,qId){
         if(index == this.state.selectedQuestion){
             return (
@@ -397,6 +514,7 @@ class ComposeBook extends Component {
                     <TouchableOpacity  onPress={()=> this.deletequestion(qId)} >
                         <Text style={styles.questionedittext} >删除</Text>
                     </TouchableOpacity>
+                    {this.renderEditRecommendView(qId)}
                 </View>
 
             )
