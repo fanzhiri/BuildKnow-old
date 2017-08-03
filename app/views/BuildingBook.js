@@ -189,7 +189,7 @@ class BuildingBook extends Component {
             })
     }
 
-    dofetchquestions(){
+    dofetchquestions(jump = 0){
         let formData = new FormData();
         formData.append("auth",global.auth);
         formData.append("userid",global.userid);
@@ -210,6 +210,9 @@ class BuildingBook extends Component {
                         get_qslist_data:1
                     })
 
+                    if(jump == 1){
+                        Actions.answerquestion({intype:0,asktype:1,buildingbookdata:responseData.data});
+                    }
 
                 }else{
                     this.setState({
@@ -234,12 +237,11 @@ class BuildingBook extends Component {
         let bookqids=JSON.parse(this.state.bookdata.qids);
 
         if(this.state.questionlist_data_source == null){
-            this.dofetchquestions();
-        }
-
-        if(this.state.questionlist_data_source != null){
+            this.dofetchquestions(1);
+        }else{
             Actions.answerquestion({intype:0,asktype:1,buildingbookdata:this.state.questionlist_data_source});
         }
+        
     }
     handleOrder() {
         var type = 'order';
