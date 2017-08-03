@@ -110,7 +110,9 @@ class BuildingBook extends Component {
             bookdata:null,
             bookCover:null,
             getdata:0,
-            question_arr:null,
+
+            questionlist_data_source:null,
+            get_qslist_data:null,
             idea_recommend_data_source:null,
             get_recommenddata:null,
             gorefreshing:false
@@ -202,14 +204,17 @@ class BuildingBook extends Component {
             .then((responseData) => {
 
                 if(responseData.code == 100){
-                    /*
-                    this.setState({
-                        question_arr:responseData.data,
-                    })
-                    */
-                    Actions.answerquestion({intype:0,asktype:1,buildingbookdata:responseData.data});
-                }else{
 
+                    this.setState({
+                        questionlist_data_source:responseData.data,
+                        get_qslist_data:1
+                    })
+
+
+                }else{
+                    this.setState({
+                        get_qslist_data:2
+                    })
                 }
 
             })
@@ -227,8 +232,14 @@ class BuildingBook extends Component {
     handleRandom() {
         var type = 'random';
         let bookqids=JSON.parse(this.state.bookdata.qids);
-        this.dofetchquestions();
 
+        if(this.state.questionlist_data_source == null){
+            this.dofetchquestions();
+        }
+
+        if(this.state.questionlist_data_source != null){
+            Actions.answerquestion({intype:0,asktype:1,buildingbookdata:this.state.questionlist_data_source});
+        }
     }
     handleOrder() {
         var type = 'order';
@@ -266,7 +277,7 @@ class BuildingBook extends Component {
                 </View>
                 <View>
                     <SegmentedControlIOS
-                        values={['介绍','评论','推荐','计划','历史']}
+                        values={['介绍','评论','题目','推荐','计划','历史']}
                         selectedIndex={this.state.selectedIndex}
                         style={styles.segmented}
                         onChange={this._onChange}
@@ -301,25 +312,34 @@ class BuildingBook extends Component {
                 this.renderDiscussView()
             )
         } else if (this.state.selectedIndex === 2) {
+            if(this.state.get_qslist_data == null){
+                this.dofetchquestions();
+                return(this._renderLoading())
+            }else{
+                if(this.state.questionlist_data_source == null){
+                    return(this.rendernodata())
+                }else{
+                    return (
+                        this.renderQsListView()
+                    )
+                }
+            }
+
+        }else if (this.state.selectedIndex === 3) {
             if(this.state.get_recommenddata == null){
                 this.dofetch_ideaquestion();
                 return(this._renderLoading())
             }else{
-                if(this.state.idea_recommend_data_source == null){
-                    return(this.rendernodata())
-                }else{
-                    return (
-                        this.renderIdeasView()
-                    )
-                }
-
+                return (
+                    this.renderIdeasView()
+                )
             }
 
-        } else if (this.state.selectedIndex === 3) {
+        } else if (this.state.selectedIndex === 4) {
             return (
                 this.renderHistoryView()
             )
-        } else if (this.state.selectedIndex === 4) {
+        } else if (this.state.selectedIndex === 5) {
             return (
                 this.renderHistoryView()
             )
@@ -401,6 +421,26 @@ class BuildingBook extends Component {
                         <Text style={styles.bottomButtonText} >贡献</Text>
                     </TouchableOpacity>
                 </View>
+            </View>
+
+        )
+    }
+
+    renderQsListView(){
+        return (
+            <View style={styles.ButtonViewContainer}>
+                <ListView
+                    refreshControl={
+                        <RefreshControl
+                            refreshing={this.state.gorefreshing}
+                            onRefresh={() => this.dofetchquestions()}
+                        />
+                    }
+                    style={styles.list}
+                    dataSource={DataStore.cloneWithRows(this.state.questionlist_data_source)}
+                    renderRow={this._renderQuestionItem}
+                    enableEmptySections = {true}
+                />
             </View>
 
         )
