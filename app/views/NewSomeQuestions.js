@@ -102,9 +102,19 @@ class NewSomeQuestions extends Component {
     constructor(props) {
         super(props);
         let t_questiontext = "";
+        let t_questiontypeIndex = 0;
+        let t_answertext = ['','','','','','','',''];
+
         if(props.qstlist != null && props.index != null){
             let t_questiondata = props.qstlist[parseInt(props.index)];
             t_questiontext = t_questiondata.ask;
+            t_questiontypeIndex = parseInt(t_questiondata.qtype);
+
+            t_answertext[0] = t_questiondata.right_answer;
+            let  t_wrong_answer = JSON.parse(t_questiondata.wrong_answer);
+            for(let i=1;i<8;i++){
+                t_answertext[i] = t_wrong_answer[i-1];
+            }
         }
 
         this.state = {
@@ -114,9 +124,9 @@ class NewSomeQuestions extends Component {
 
             addwayIndex:0,
             sgmctlselectedIndex:0,//如果答案是的附件中，选中的就是正确答案
-            questiontypeIndex:0,
+            questiontypeIndex:t_questiontypeIndex,  //题目类型
             attachmentIndex:0,
-            answertext:['','','','','','','',''],
+            answertext:t_answertext,
             explaintext:['','','','','','','',''],
 
             textabc:["","","","",""],
@@ -132,9 +142,6 @@ class NewSomeQuestions extends Component {
     }
 
     onSCChange(event) {
-        if(this.state.intype != 0){
-            return;
-        }
         this.setState({
             sgmctlselectedIndex: event.nativeEvent.selectedSegmentIndex,
         });
@@ -196,36 +203,47 @@ class NewSomeQuestions extends Component {
     renderAnswerView(){
         var astext=this.state.answertext[this.state.sgmctlselectedIndex];
         var extext=this.state.explaintext[this.state.sgmctlselectedIndex];
+        let paceholder_answer = null;
+        let paceholder_explain = null;
+        if(this.state.intype == 0){
+            paceholder_answer = "答案：请添写，最多20字";
+            paceholder_explain = "解释：请添写10个字以上，最多160字";
+        }else if(this.state.intype == 1){
+            paceholder_answer  = "答案：这里是空的";
+            paceholder_explain = "解释：这里是空的";
+        }
+
         return(
-        <View>
-            {this.state.fillorselect == 0 ?
+            <View>
+                {this.state.fillorselect == 0 ?
+                    <TextInput
+                        onChangeText={(text) => {this.answertextchange(text)}}
+                        style={styles.answerinput}
+                        value={astext}
+                        placeholder={paceholder_answer}
+                        maxLength={20}
+                        multiline={true}
+                    />
+                    :
+                    null
+                }
+
                 <TextInput
-                    onChangeText={(text) => {this.answertextchange(text)}}
-                    style={styles.answerinput}
-                    value={astext}
-                    placeholder={"答案：请添写，最多20字"}
-                    maxLength={20}
+                    style={styles.explaininput}
+                    onChangeText={(text) => {this.explaintextchange(text)}}
+                    value={extext}
+                    placeholder={paceholder_explain}
+                    maxLength={160}
                     multiline={true}
                 />
-                :
-                null
-            }
-
-            <TextInput
-                style={styles.explaininput}
-                onChangeText={(text) => {this.explaintextchange(text)}}
-                value={extext}
-                placeholder={"解释：请添写10个字以上，最多160字"}
-                maxLength={160}
-                multiline={true}
-            />
-        </View>
-
-
+            </View>
         );
     }
 
     renderAttachmentView(){
+        if(this.state.intype !=0 ){
+            return;
+        }
         return(
             <Image source={this.state.imgSource}  />
         );
@@ -371,6 +389,9 @@ class NewSomeQuestions extends Component {
         if(this.state.questiontypeIndex != 0){
             return;
         }
+        if(this.state.intype !=0 ){
+            return;
+        }
         return(
             <View style={styles.typeContainer}>
                 <Text style={styles.typetext}>答案在附件中？：</Text>
@@ -428,20 +449,58 @@ class NewSomeQuestions extends Component {
         }
     }
 
+    renderQstType(){
+        if(this.state.intype == 0){
+            return(
+                <View style={styles.segmentedcontrolcontainer}>
+                    <SegmentedControlIOS
+                        values={['单选','多选','对错','顺序','填空']}
+                        selectedIndex={this.state.questiontypeIndex}
+                        style={styles.segmented}
+
+                        onChange={(event) => {this.onQTChange(event)}}
+                    />
+                </View>
+            )
+        }else{
+            let qsalltype=['单选','多选','对错','顺序','填空'];
+            return(
+                <View>
+                    <Text style={{color: '#FF0000',fontSize:16}}>
+                        {qsalltype[this.state.questiontypeIndex]}
+                    </Text>
+                </View>
+            )
+        }
+
+    }
+
+    renderAttachmentViewSelect(){
+        if(this.state.intype !=0 ){
+            return;
+        }
+        return(
+            <View style={styles.typeContainer}>
+                <Text style={styles.typetext}>附件类型：</Text>
+                <View style={styles.segmentedcontrolcontainer}>
+                    <SegmentedControlIOS
+                        values={['图片','视频','音频','录音']}
+                        selectedIndex={this.state.attachmentIndex}
+                        style={styles.segmented}
+
+                        onChange={(event) => {this.onATChange(event)}}
+                    />
+                </View>
+            </View>
+        )
+    }
+
     renderAddOneView(){
         return(
             <View >
                 <View style={styles.typeContainer}>
                     <Text style={styles.typetext}>问题类型：</Text>
-                    <View style={styles.segmentedcontrolcontainer}>
-                        <SegmentedControlIOS
-                            values={['单选','多选','对错','顺序','填空']}
-                            selectedIndex={this.state.questiontypeIndex}
-                            style={styles.segmented}
-
-                            onChange={(event) => {this.onQTChange(event)}}
-                        />
-                    </View>
+                    {this.renderQstType()}
                 </View>
                 <TextInput
                     style={styles.descriptioninput}
@@ -451,18 +510,7 @@ class NewSomeQuestions extends Component {
                     maxLength={60}
                     multiline={true}
                 />
-                <View style={styles.typeContainer}>
-                    <Text style={styles.typetext}>附件类型：</Text>
-                    <View style={styles.segmentedcontrolcontainer}>
-                        <SegmentedControlIOS
-                            values={['图片','视频','音频','录音']}
-                            selectedIndex={this.state.attachmentIndex}
-                            style={styles.segmented}
-
-                            onChange={(event) => {this.onATChange(event)}}
-                        />
-                    </View>
-                </View>
+                {this.renderAttachmentViewSelect()}
                 {this.renderAttachmentView()}
                 {this.renderFillAnswerView()}
                 {this.renderQuestionTypeView()}
@@ -473,7 +521,7 @@ class NewSomeQuestions extends Component {
     renderAddMultView(){
         return(
             <ScrollView>
-                <Text>未开发</Text>
+                <Text style={{color: '#FF0000',fontSize:16}}>未开发</Text>
             </ScrollView>
         );
     }
