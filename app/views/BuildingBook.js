@@ -241,7 +241,7 @@ class BuildingBook extends Component {
         }else{
             Actions.answerquestion({intype:0,asktype:1,buildingbookdata:this.state.questionlist_data_source});
         }
-        
+
     }
     handleOrder() {
         var type = 'order';
@@ -383,11 +383,13 @@ class BuildingBook extends Component {
         var ask = (rowData.ask);
         var qId = (rowData.questionid);
         return (
-            <View  style={styles.questionitemcontainer}>
-                <Text style={styles.questionitem}>
-                    {parseInt(rowID)+1} : {ask.substring(0,20)}
-                </Text>
-            </View>
+            <TouchableOpacity  onPress={()=> Actions.newsomequestions({title:"题目查看",intype:1,qstlist:this.state.questionlist_data_source,index:rowID})} >
+                <View  style={styles.questionitemcontainer}>
+                    <Text style={styles.questionitem}>
+                        {parseInt(rowID)+1} : {ask.substring(0,20)}
+                    </Text>
+                </View>
+            </TouchableOpacity>
         )
     }
 

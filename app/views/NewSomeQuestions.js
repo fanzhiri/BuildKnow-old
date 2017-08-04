@@ -101,10 +101,16 @@ class NewSomeQuestions extends Component {
 
     constructor(props) {
         super(props);
+        let t_questiontext = "";
+        if(props.qstlist != null && props.index != null){
+            let t_questiondata = props.qstlist[parseInt(props.index)];
+            t_questiontext = t_questiondata.ask;
+        }
 
         this.state = {
+            intype:props.intype,
             imgSource: addimguri,
-            questiontext:"",
+            questiontext:t_questiontext, //问题
 
             addwayIndex:0,
             sgmctlselectedIndex:0,//如果答案是的附件中，选中的就是正确答案
@@ -116,28 +122,44 @@ class NewSomeQuestions extends Component {
             textabc:["","","","",""],
             fillingtext:"",
             rightwrongselectedIndex:0,//对或错选择标志
-            fillorselect:0 //0:fill 1:select
+            fillorselect:0, //0:fill 1:select
+
+            //下面是查看的
+            qstlist:props.qstlist,
+            qidx:props.index
         };
 
     }
 
     onSCChange(event) {
+        if(this.state.intype != 0){
+            return;
+        }
         this.setState({
             sgmctlselectedIndex: event.nativeEvent.selectedSegmentIndex,
         });
     }
     onQTChange(event) {
+        if(this.state.intype != 0){
+            return;
+        }
         this.setState({
             questiontypeIndex: event.nativeEvent.selectedSegmentIndex,
         });
     }
     onATChange(event) {
+        if(this.state.intype != 0){
+            return;
+        }
         this.setState({
             attachmentIndex: event.nativeEvent.selectedSegmentIndex,
         });
     }
 
     onAddwayChange(event) {
+        if(this.state.intype != 0){
+            return;
+        }
         this.setState({
             addwayIndex: event.nativeEvent.selectedSegmentIndex,
         });
@@ -487,20 +509,29 @@ class NewSomeQuestions extends Component {
         })
     }
 
-    render(){
-        return (
-            <View style={[GlobleStyles.withoutTitleContainer,styles.container]}>
+    renderOneOrMultViewSelect(){
+        if(this.state.intype == 0){
+            return(
                 <View style={styles.addwayContainer}>
                     <SegmentedControlIOS
                         values={['单一添加','批量添加']}
                         selectedIndex={this.state.addwayIndex}
                         style={styles.segmented}
-
                         onChange={(event) => {this.onAddwayChange(event)}}
                     />
-
                 </View>
-                {this.renderOneOrMultView()}
+            )
+        }
+
+    }
+
+    nextqst(step){
+
+    }
+
+    renderNextstep(){
+        if(this.state.intype == 0){
+            return(
                 <View style={styles.bottomcontainer}>
                     <TouchableOpacity style={[styles.buttoncontainer,styles.clearbutton]}  onPress={() => this.clearall()} >
                         <View >
@@ -513,7 +544,32 @@ class NewSomeQuestions extends Component {
                         </View>
                     </TouchableOpacity>
                 </View>
+            )
+        }else if(this.state.intype == 1){
+            return(
+                <View style={styles.bottomcontainer}>
+                    <TouchableOpacity style={[styles.buttoncontainer,styles.clearbutton]}  onPress={() => this.nextqst(-1)} >
+                        <View >
+                            <Text style={{fontSize: 16}}>上题</Text>
+                        </View>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={[styles.buttoncontainer,styles.submitbutton]} onPress={() => this.nextqst(1)} >
+                        <View >
+                            <Text style={{fontSize: 16}}>下题</Text>
+                        </View>
+                    </TouchableOpacity>
+                </View>
+            )
+        }
 
+    }
+
+    render(){
+        return (
+            <View style={[GlobleStyles.withoutTitleContainer,styles.container]}>
+                {this.renderOneOrMultViewSelect()}
+                {this.renderOneOrMultView()}
+                {this.renderNextstep()}
             </View>
         );
     }
@@ -521,6 +577,9 @@ class NewSomeQuestions extends Component {
 
 
 NewSomeQuestions.PropTypes = {
+    intype: PropTypes.number, //0新建 1查看
+    qstlist: PropTypes.object,  //[查看]进入界面时 传进来的question list
+    index:  PropTypes.number, //[查看]进入界面时 传进来的index
     bookid: PropTypes.number,
 };
 module.exports = NewSomeQuestions;

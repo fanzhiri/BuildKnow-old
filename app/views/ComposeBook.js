@@ -609,7 +609,7 @@ class ComposeBook extends Component {
                 </ScrollView>
                 <View style={styles.btncontainer}>
                     <Button style={styles.addQuestionButton} textStyle={{fontSize: 16}} onPress={() => Actions.newonequestion({bookid:this.props.bookid})} >添一个</Button>
-                    <Button style={styles.addQuestionButton} textStyle={{fontSize: 16}} onPress={() => Actions.newsomequestions({bookid:this.props.bookid})} >添多个</Button>
+                    <Button style={styles.addQuestionButton} textStyle={{fontSize: 16}} onPress={() => Actions.newsomequestions({intype:0,bookid:this.props.bookid})} >添多个</Button>
                     <Button style={styles.addQuestionButton} textStyle={{fontSize: 16}}  >垃圾桶</Button>
                 </View>
             </View>

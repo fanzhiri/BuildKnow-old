@@ -175,7 +175,7 @@ class Discover extends Component {
                             {people.nickname}
                         </Text>
                         <Text >
-                            粉丝:{people.follow}  在建:{people.buildingshare}  发布:{people.releaseshare}
+                            粉丝:{people.follow} 内测:{people.buildingshare} 在建:{people.buildingshare}  发布:{people.releaseshare}
                         </Text>
                     </View>
                 </View>
