@@ -71,7 +71,7 @@ class Discover extends Component {
             netresult:'no',
             people_list_data_source: null,
             selectedIndex:0,
-
+            get_people_data:null,
         };
         this._onChange = this.onChange.bind(this);
         this._peoplelist = this.peoplelist.bind(this);
@@ -92,11 +92,13 @@ class Discover extends Component {
             .then((responseData) => {
                 if(responseData.code == 100){
                     this.setState({
-                        people_list_data_source:responseData.data
+                        people_list_data_source:responseData.data,
+                        get_people_data:1
                     })
                 }else{
                     this.setState({
-                        netresult:responseData.code
+                        netresult:responseData.code,
+                        get_people_data:2
                     })
                 }
 
@@ -135,17 +137,22 @@ class Discover extends Component {
 
                 return (this.renderIntroduceView())
             }else{
-                this._peoplelist();
-                return (this.renderLoading())
+                if(this.state.get_people_data == null){
+                    this._peoplelist();
+                    return (this.renderLoading())
+                }else{
+                    return (
+                        this.rendernodata()
+                    )
+                }
             }
-
         } else if (this.state.selectedIndex === 1) {
             return (
-                this.renderLoading()
+                this.rendernodata()
             )
         } else if (this.state.selectedIndex === 2) {
             return (
-                this.renderLoading()
+                this.rendernodata()
             )
         }
     }
@@ -191,6 +198,14 @@ class Discover extends Component {
                 renderRow={(rowData) => this._renderPeople(rowData)}
                 enableEmptySections = {true}
             />
+        )
+    }
+
+    rendernodata(){
+        return (
+            <View style={styles.container}>
+                <Text>没有数据</Text>
+            </View>
         )
     }
 }

@@ -76,6 +76,8 @@ class Follow extends Component {
             friend_list_data_source: null,
             selectedIndex:0,
             gorefreshing:false,
+            get_people_data:null,
+            get_friend_data:null,
         };
         this._onChange = this.onChange.bind(this);
         this._peoplelist = this.peoplelist.bind(this);
@@ -100,11 +102,13 @@ class Follow extends Component {
                     this.setState({
                         friend_list_data_source:responseData.data,
                         gorefreshing:false,
+                        get_friend_data:1
                     })
 
                 }else{
                     this.setState({
-                        netresult:responseData.code
+                        netresult:responseData.code,
+                        get_friend_data:2
                     })
                 }
 
@@ -130,10 +134,12 @@ class Follow extends Component {
                     this.setState({
                         people_list_data_source:responseData.data,
                         gorefreshing:false,
+                        get_people_data:1,
                     })
 
                 }else{
                     this.setState({
+                        get_people_data:2,
                         netresult:responseData.code
                     })
                 }
@@ -169,27 +175,34 @@ class Follow extends Component {
         if (this.state.selectedIndex === 1) {
 
             if(this.state.people_list_data_source){
-
                 return (this.renderIntroduceView())
             }else{
-                this._peoplelist();
-                return (this.renderLoading())
+                if(this.state.get_people_data == null ){
+                    this._peoplelist();
+                    return (this.renderLoading())
+                }else{
+                    return (this.rendernodata())
+                }
             }
 
         } else if (this.state.selectedIndex === 0) {
             if(this.state.friend_list_data_source){
                 return (this.renderFriendView())
             }else{
-                this.fetchfriendlist();
-                return (this.renderLoading())
+                if(this.state.get_friend_data == null ){
+                    this.fetchfriendlist();
+                    return (this.renderLoading())
+                }else{
+                    return (this.rendernodata())
+                }
             }
         } else if (this.state.selectedIndex === 2) {
             return (
-                this.renderLoading()
+                this.rendernodata()
             )
         } else if (this.state.selectedIndex === 3) {
             return (
-                this.renderLoading()
+                this.rendernodata()
             )
         }
     }
@@ -280,7 +293,13 @@ onRefresh={this._peoplelist()}
         )
     }
 
-
+    rendernodata(){
+        return (
+            <View style={styles.container}>
+                <Text>没有数据</Text>
+            </View>
+        )
+    }
 }
 
 module.exports = Follow;
