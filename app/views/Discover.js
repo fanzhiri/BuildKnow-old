@@ -8,7 +8,8 @@ import {
     Text,
     StyleSheet,
     SegmentedControlIOS,
-    ListView,Image
+    ListView,Image,WebView,
+    Dimensions
 } from "react-native";
 import {Actions} from "react-native-router-flux";
 import Button from "react-native-button";
@@ -55,7 +56,7 @@ const styles = StyleSheet.create({
     }
 
 });
-
+const {width, height} = Dimensions.get('window');
 
 var peoplelistUrl = "https://slako.applinzi.com/index.php?m=question&c=index&a=peoplelist";
 
@@ -72,6 +73,9 @@ class Discover extends Component {
             people_list_data_source: null,
             selectedIndex:0,
             get_people_data:null,
+            detialing:0,
+            knowledge_list_data_source:null,
+            get_knowledge_data:null
         };
         this._onChange = this.onChange.bind(this);
         this._peoplelist = this.peoplelist.bind(this);
@@ -147,15 +151,86 @@ class Discover extends Component {
                 }
             }
         } else if (this.state.selectedIndex === 1) {
-            return (
-                this.rendernodata()
-            )
+            if(this.state.detialing == 1){
+                return (
+                    this.renderNewItem()
+                )
+            }else{
+                if(this.state.knowledge_list_data_source != null){
+                    return(this.renderKnowledgeList())
+                }else{
+                    if(this.state.get_knowledge_data != null){
+                        return (
+                            this.rendernodata()
+                        )
+                    }else{
+
+                    }
+                }
+            }
+
         } else if (this.state.selectedIndex === 2) {
             return (
                 this.rendernodata()
             )
         }
     }
+
+    renderKnowledgeList(){
+        return(
+            <ListView
+                style={styles.list}
+                dataSource={DataStore.cloneWithRows(this.state.knowledge_list_data_source)}
+                renderRow={(rowData) => this._renderPeople(rowData)}
+                enableEmptySections = {true}
+            />
+        )
+    }
+
+    onBackPressFunc(){
+
+    }
+
+    renderBackButton(){
+        var iconColor="#0808FF";
+        return(
+            <TouchableOpacity onPress={()=> onBackPressFunc} activeOpacity={0.8}>
+                <View style={styles.topButtonitemcontainer}>
+                    <View style={styles.IconItem}>
+                        <Icon name={"ios-arrow-back"} size={22} color={iconColor}/>
+                    </View>
+                </View>
+            </TouchableOpacity>
+        )
+    }
+
+    renderBackBar(){
+        return(
+            <View style={{height:40,backgroundColor:'#00FF00',flexDirection:'row'}}>
+                {this.renderBackButton()}
+            </View>
+        )
+    }
+
+    renderNewItem(){
+        return(
+            <View style={{flex:1}}>
+                {this.renderBackBar()}
+                <WebView
+
+                    source={{
+                        width:width,height:height-80,
+                        uri: "http://www.360jk.com/article/4828.html",
+                        method: 'GET'
+                    }}
+                    domStorageEnabled={true}
+                    scalesPageToFit={false}
+                    javaScriptEnabled={true}
+                />
+            </View>
+        )
+    }
+
 
     renderLoading(){
         return (
