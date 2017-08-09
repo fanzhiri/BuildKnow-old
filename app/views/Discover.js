@@ -81,7 +81,7 @@ class Discover extends Component {
         this._peoplelist = this.peoplelist.bind(this);
         this._renderPeople = this.renderPeople.bind(this);
         this._doOnPress = this.doOnPress.bind(this);
-
+        this._renderknowledgeRow = this.renderknowledgeRow.bind(this);
     }
 
     peoplelist(){
@@ -176,12 +176,26 @@ class Discover extends Component {
         }
     }
 
+    onKnowledgeItemClick(){
+
+    }
+
+    renderknowledgeRow(rowData, sectionID, rowID) {
+        return(
+            <TouchableOpacity onPress={()=> this.onKnowledgeItemClick()} activeOpacity={0.8}>
+                <View style={{height:30}}>
+                    <Text>{rowData.title}</Text>
+                </View>
+            </TouchableOpacity>
+        )
+    }
+
     renderKnowledgeList(){
         return(
             <ListView
                 style={styles.list}
                 dataSource={DataStore.cloneWithRows(this.state.knowledge_list_data_source)}
-                renderRow={(rowData) => this._renderPeople(rowData)}
+                renderRow={this._renderknowledgeRow}
                 enableEmptySections = {true}
             />
         )
@@ -194,7 +208,7 @@ class Discover extends Component {
     renderBackButton(){
         var iconColor="#0808FF";
         return(
-            <TouchableOpacity onPress={()=> onBackPressFunc} activeOpacity={0.8}>
+            <TouchableOpacity onPress={()=> this.onBackPressFunc()} activeOpacity={0.8}>
                 <View style={styles.topButtonitemcontainer}>
                     <View style={styles.IconItem}>
                         <Icon name={"ios-arrow-back"} size={22} color={iconColor}/>
