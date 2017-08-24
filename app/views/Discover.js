@@ -14,7 +14,7 @@ import {
 import {Actions} from "react-native-router-flux";
 import Button from "react-native-button";
 import GlobleStyles from '../styles/GlobleStyles';
-
+import Icon from 'react-native-vector-icons/Ionicons';
 
 import DataStore from '../util/DataStore';
 
@@ -53,14 +53,27 @@ const styles = StyleSheet.create({
     },
     list:{
         marginBottom:48
+    },
+    topButtonitemcontainer:{
+        height:40,
+        justifyContent: 'center',
+        flexDirection:'row',
+        alignItems: 'center',
+    },
+    IconItem:{
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: 40,
+        backgroundColor: '#F5FCFF',
     }
-
 });
 const {width, height} = Dimensions.get('window');
 
 var peoplelistUrl = "https://slako.applinzi.com/index.php?m=question&c=index&a=peoplelist";
 
 var httpsBaseUrl = "https://slako.applinzi.com/";
+
+var knowledgeUrl = "https://slako.applinzi.com/index.php?m=question&c=index&a=knowledge";
 
 class Discover extends Component {
 
@@ -75,7 +88,8 @@ class Discover extends Component {
             get_people_data:null,
             detialing:0,
             knowledge_list_data_source:null,
-            get_knowledge_data:null
+            get_knowledge_data:null,
+            knowledgeItemUrl:null
         };
         this._onChange = this.onChange.bind(this);
         this._peoplelist = this.peoplelist.bind(this);
@@ -103,6 +117,33 @@ class Discover extends Component {
                     this.setState({
                         netresult:responseData.code,
                         get_people_data:2
+                    })
+                }
+
+            })
+            .catch((error) => {
+                alert(error)
+            })
+    }
+
+    fetch_knowledge(){
+        let formData = new FormData();
+        formData.append("api","true");
+        var opts = {
+            method:"POST",
+            body:formData
+        }
+        fetch(knowledgeUrl,opts)
+            .then((response) => response.json())
+            .then((responseData) => {
+                if(responseData.code == 100){
+                    this.setState({
+                        knowledge_list_data_source:responseData.data,
+                        get_knowledge_data:1
+                    })
+                }else{
+                    this.setState({
+                        get_knowledge_data:2
                     })
                 }
 
@@ -164,7 +205,8 @@ class Discover extends Component {
                             this.rendernodata()
                         )
                     }else{
-
+                        this.fetch_knowledge();
+                        return (this.renderLoading())
                     }
                 }
             }
@@ -176,15 +218,24 @@ class Discover extends Component {
         }
     }
 
-    onKnowledgeItemClick(){
-
+    onKnowledgeItemClick(rowData){
+        this.setState({
+            knowledgeItemUrl:rowData.url,
+            detialing:1,
+        })
     }
 
     renderknowledgeRow(rowData, sectionID, rowID) {
         return(
-            <TouchableOpacity onPress={()=> this.onKnowledgeItemClick()} activeOpacity={0.8}>
-                <View style={{height:30}}>
-                    <Text>{rowData.title}</Text>
+            <TouchableOpacity onPress={()=> this.onKnowledgeItemClick(rowData)} activeOpacity={0.8}>
+                <View style={{
+                    height:40,
+                    backgroundColor: 'white',
+                    borderColor: '#c4c4c4',
+                    borderWidth: 1
+                }}>
+                    <Text style={{fontSize:20}}>{rowData.title}</Text>
+                    <Text style={{fontSize:12}}>来源 100评论 时间</Text>
                 </View>
             </TouchableOpacity>
         )
@@ -202,19 +253,24 @@ class Discover extends Component {
     }
 
     onBackPressFunc(){
-
+        this.setState({
+            detialing:0,
+        })
     }
 
     renderBackButton(){
         var iconColor="#0808FF";
         return(
-            <TouchableOpacity onPress={()=> this.onBackPressFunc()} activeOpacity={0.8}>
-                <View style={styles.topButtonitemcontainer}>
+            <View style={styles.topButtonitemcontainer}>
+                <TouchableOpacity onPress={()=> this.onBackPressFunc()} activeOpacity={0.8}>
                     <View style={styles.IconItem}>
-                        <Icon name={"ios-arrow-back"} size={22} color={iconColor}/>
+                        <Icon name={"ios-arrow-back"} size={32} color={iconColor}/>
                     </View>
-                </View>
-            </TouchableOpacity>
+                </TouchableOpacity>
+                <View><Text style={{fontSize:16}}>来源  </Text></View>
+                <View><Text style={{fontSize:16}}>关注  </Text></View>
+                <View><Text style={{fontSize:16}}>题目  </Text></View>
+            </View>
         )
     }
 
@@ -234,7 +290,7 @@ class Discover extends Component {
 
                     source={{
                         width:width,height:height-80,
-                        uri: "http://www.360jk.com/article/4828.html",
+                        uri: this.state.knowledgeItemUrl,
                         method: 'GET'
                     }}
                     domStorageEnabled={true}
