@@ -76,6 +76,9 @@ var httpsBaseUrl = "https://slako.applinzi.com/";
 var knowledgeUrl = "https://slako.applinzi.com/index.php?m=question&c=index&a=knowledge";
 
 var categoryUrl  = "https://slako.applinzi.com/index.php?m=question&c=index&a=category";
+
+var knowledgeQstUrl  = "https://slako.applinzi.com/index.php?m=question&c=index&a=knowledgeqst";
+
 class Discover extends Component {
 
     constructor(props) {
@@ -93,7 +96,10 @@ class Discover extends Component {
             knowledgeItemUrl:null,
             cataloguebardata:null,
             get_category_data:null,
-            categorySelect:0
+
+            knowledgeqst_data_source:null,
+            categorySelect:0,
+            knowledgeItemData:null
         };
         this._onChange = this.onChange.bind(this);
         this._peoplelist = this.peoplelist.bind(this);
@@ -176,6 +182,34 @@ class Discover extends Component {
                 }else{
                     this.setState({
                         get_category_data:2
+                    })
+                }
+
+            })
+            .catch((error) => {
+                alert(error)
+            })
+    }
+
+    fetch_knowledgeqst(id){
+        let formData = new FormData();
+        formData.append("api","true");
+        formData.append("klid",id);
+        var opts = {
+            method:"POST",
+            body:formData
+        }
+        fetch(knowledgeQstUrl,opts)
+            .then((response) => response.json())
+            .then((responseData) => {
+                if(responseData.code == 100){
+                    this.setState({
+                        knowledgeqst_data_source:responseData.data,
+                        get_knowledgeqst_data:1
+                    })
+                }else{
+                    this.setState({
+                        get_knowledgeqst_data:2
                     })
                 }
 
@@ -296,6 +330,7 @@ class Discover extends Component {
         this.setState({
             knowledgeItemUrl:rowData.url,
             detialing:1,
+            knowledgeItemData:rowData
         })
     }
 
@@ -309,7 +344,7 @@ class Discover extends Component {
                     borderWidth: 1
                 }}>
                     <Text style={{fontSize:20}}>{rowData.title}</Text>
-                    <Text style={{fontSize:12}}>来源 100评论 时间</Text>
+                    <Text style={{fontSize:12}}>来源 100评论 时间 题目数:{rowData.qsnum}</Text>
                 </View>
             </TouchableOpacity>
         )
@@ -332,6 +367,21 @@ class Discover extends Component {
         })
     }
 
+    onQstPressFunc(){
+
+    }
+
+    renderGoQstButton(){
+        if(this.knowledgeItemData.qsnum != 0){
+            return(
+                <TouchableOpacity onPress={()=> this.onQstPressFunc()} activeOpacity={0.8}>
+                    <View><Text style={{fontSize:16}}>题目:{this.knowledgeItemData.qsnum}</Text></View>
+                </TouchableOpacity>
+            )
+        }
+
+    }
+
     renderBackButton(){
         var iconColor="#0808FF";
         return(
@@ -343,7 +393,7 @@ class Discover extends Component {
                 </TouchableOpacity>
                 <View><Text style={{fontSize:16}}>来源  </Text></View>
                 <View><Text style={{fontSize:16}}>关注  </Text></View>
-                <View><Text style={{fontSize:16}}>题目  </Text></View>
+                {this.renderGoQstButton()}
             </View>
         )
     }
