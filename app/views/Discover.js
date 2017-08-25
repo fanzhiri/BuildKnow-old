@@ -75,6 +75,7 @@ var httpsBaseUrl = "https://slako.applinzi.com/";
 
 var knowledgeUrl = "https://slako.applinzi.com/index.php?m=question&c=index&a=knowledge";
 
+var categoryUrl  = "https://slako.applinzi.com/index.php?m=question&c=index&a=category";
 class Discover extends Component {
 
     constructor(props) {
@@ -89,13 +90,17 @@ class Discover extends Component {
             detialing:0,
             knowledge_list_data_source:null,
             get_knowledge_data:null,
-            knowledgeItemUrl:null
+            knowledgeItemUrl:null,
+            cataloguebardata:null,
+            get_category_data:null,
+            categorySelect:0
         };
         this._onChange = this.onChange.bind(this);
         this._peoplelist = this.peoplelist.bind(this);
         this._renderPeople = this.renderPeople.bind(this);
         this._doOnPress = this.doOnPress.bind(this);
         this._renderknowledgeRow = this.renderknowledgeRow.bind(this);
+        this._renderCatalogueBarRow = this.renderCatalogueBarRow.bind(this);
     }
 
     peoplelist(){
@@ -153,6 +158,33 @@ class Discover extends Component {
             })
     }
 
+    fetch_category(){
+        let formData = new FormData();
+        formData.append("api","true");
+        var opts = {
+            method:"POST",
+            body:formData
+        }
+        fetch(categoryUrl,opts)
+            .then((response) => response.json())
+            .then((responseData) => {
+                if(responseData.code == 100){
+                    this.setState({
+                        cataloguebardata:responseData.data,
+                        get_category_data:1
+                    })
+                }else{
+                    this.setState({
+                        get_category_data:2
+                    })
+                }
+
+            })
+            .catch((error) => {
+                alert(error)
+            })
+    }
+
     onChange(event) {
         this.setState({
             selectedIndex: event.nativeEvent.selectedSegmentIndex,
@@ -170,9 +202,50 @@ class Discover extends Component {
                         onChange={this._onChange}
                     />
                 </View>
+                {this.renderCatalogueBar()}
                 {this.renderSegmentedView()}
             </View>
         );
+    }
+
+    onCateloguePressFunc(rowID){
+        this.setState({
+            categorySelect: rowID,
+        });
+    }
+
+    renderCatalogueBarRow(rowData, sectionID, rowID){
+        let cateColor ;
+        if(this.state.categorySelect == rowID){
+            cateColor="#FF0000";
+        }else{
+            cateColor="#000000";
+        }
+        return(
+            <TouchableOpacity onPress={()=> this.onCateloguePressFunc(rowID)} activeOpacity={0.8}>
+                <Text style={{marginRight:6,marginLeft:6,color:cateColor}}>{rowData.catname}</Text>
+            </TouchableOpacity>
+        )
+    }
+
+    renderCatalogueBar(){
+        if(this.state.selectedIndex === 1) {
+            if(this.state.get_category_data == null){
+                this.fetch_category();
+                return;
+            }else if(this.state.get_category_data == 2){
+                return;
+            }
+            return(
+                <View  style={{height:32,backgroundColor:'#F0FF00',flexDirection:'row',alignItems: 'center',}}>
+                    <ListView
+                        enableEmptySections={true}
+                        horizontal={true}
+                        dataSource={DataStore.cloneWithRows(this.state.cataloguebardata)}
+                        renderRow={this._renderCatalogueBarRow} />
+                </View>
+            )
+        }
     }
 
     renderSegmentedView() {
@@ -197,6 +270,7 @@ class Discover extends Component {
                     this.renderNewItem()
                 )
             }else{
+
                 if(this.state.knowledge_list_data_source != null){
                     return(this.renderKnowledgeList())
                 }else{
