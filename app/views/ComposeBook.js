@@ -467,7 +467,7 @@ class ComposeBook extends Component {
                 }
                 style={styles.list}
                 dataSource={DataStore.cloneWithRows(this.state.idea_recommend_data_source)}
-                renderRow={this._renderQuestionItem}
+                renderRow={this._renderQuestionItem}//这里的一定要加下划线杠，不然里面的this.state用不了
                 enableEmptySections = {true}
             />
         )
@@ -528,7 +528,7 @@ class ComposeBook extends Component {
             <TouchableOpacity onPress={() => this.selectquestion(rowID)}>
                 <View  style={styles.questionitemcontainer}>
                     <Text style={styles.questionitem}>
-                        {rowID} : {ask.substring(0,20)}
+                        {parseInt(rowID)+1} : {ask.substring(0,20)}
                     </Text>
                     {this.renderEditView(rowID,qId)}
                 </View>

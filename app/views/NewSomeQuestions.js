@@ -136,7 +136,8 @@ class NewSomeQuestions extends Component {
 
             //下面是查看的
             qstlist:props.qstlist,
-            qidx:props.index
+            qidx:props.index,
+            allcount:props.qstlist.length
         };
 
     }
@@ -575,6 +576,38 @@ class NewSomeQuestions extends Component {
 
     nextqst(step){
 
+        let t_qidx = this.state.qidx+step;
+
+        if(t_qidx >= this.state.allcount){
+            t_qidx = 0;
+        }else if(t_qidx <= -1){
+            t_qidx = this.state.allcount -1;
+        }
+
+        let t_questiontext = "";
+        let t_questiontypeIndex = 0;
+        let t_answertext = ['','','','','','','',''];
+
+        let t_questiondata = this.state.qstlist[t_qidx];
+        t_questiontext = t_questiondata.ask;
+        t_questiontypeIndex = parseInt(t_questiondata.qtype);
+
+        t_answertext[0] = t_questiondata.right_answer;
+        let  t_wrong_answer = JSON.parse(t_questiondata.wrong_answer);
+        for(let i=1;i<8;i++){
+            t_answertext[i] = t_wrong_answer[i-1];
+        }
+
+        this.setState({
+            qidx: t_qidx,
+            questiontext:t_questiontext, //问题
+            addwayIndex:0,
+            sgmctlselectedIndex:0,//如果答案是的附件中，选中的就是正确答案
+            questiontypeIndex:t_questiontypeIndex,  //题目类型
+            attachmentIndex:0,
+            answertext:t_answertext,
+            explaintext:['','','','','','','',''],
+        });
     }
 
     renderNextstep(){

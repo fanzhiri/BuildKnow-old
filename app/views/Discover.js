@@ -64,8 +64,16 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         width: 40,
+        height:40,
         backgroundColor: '#F5FCFF',
-    }
+    },
+    questionitemcontainer:{
+
+        padding:5,
+        backgroundColor:'white',
+        borderBottomWidth:1,
+        borderBottomColor:'#ab82ff',
+    },
 });
 const {width, height} = Dimensions.get('window');
 
@@ -77,7 +85,7 @@ var knowledgeUrl = "https://slako.applinzi.com/index.php?m=question&c=index&a=kn
 
 var categoryUrl  = "https://slako.applinzi.com/index.php?m=question&c=index&a=category";
 
-var knowledgeQstUrl  = "https://slako.applinzi.com/index.php?m=question&c=index&a=knowledgeqst";
+var knowledgeQstUrl  = "https://slako.applinzi.com/index.php?m=question&c=index&a=knowledgequestion";
 
 class Discover extends Component {
 
@@ -90,7 +98,7 @@ class Discover extends Component {
             people_list_data_source: null,
             selectedIndex:0,
             get_people_data:null,
-            detialing:0,
+            detialing:0,//0 list 1 indetial 2question
             knowledge_list_data_source:null,
             get_knowledge_data:null,
             knowledgeItemUrl:null,
@@ -107,6 +115,7 @@ class Discover extends Component {
         this._doOnPress = this.doOnPress.bind(this);
         this._renderknowledgeRow = this.renderknowledgeRow.bind(this);
         this._renderCatalogueBarRow = this.renderCatalogueBarRow.bind(this);
+        this._renderQuestionItem = this.renderQuestionItem.bind(this);
     }
 
     peoplelist(){
@@ -194,7 +203,7 @@ class Discover extends Component {
     fetch_knowledgeqst(id){
         let formData = new FormData();
         formData.append("api","true");
-        formData.append("klid",id);
+        formData.append("knowledgeid",id);
         var opts = {
             method:"POST",
             body:formData
@@ -203,11 +212,15 @@ class Discover extends Component {
             .then((response) => response.json())
             .then((responseData) => {
                 if(responseData.code == 100){
+
                     this.setState({
+                        detialing:2,//查看题目列表
                         knowledgeqst_data_source:responseData.data,
                         get_knowledgeqst_data:1
                     })
                 }else{
+                    alert(responseData.message)
+                    alert(id)
                     this.setState({
                         get_knowledgeqst_data:2
                     })
@@ -263,7 +276,7 @@ class Discover extends Component {
     }
 
     renderCatalogueBar(){
-        if(this.state.selectedIndex === 1) {
+        if(this.state.selectedIndex === 1 && this.state.detialing == 0) {
             if(this.state.get_category_data == null){
                 this.fetch_category();
                 return;
@@ -280,6 +293,41 @@ class Discover extends Component {
                 </View>
             )
         }
+    }
+
+    gocheckquestion(rowID){
+        Actions.newsomequestions({title:"题目查看",intype:1,qstlist:this.state.knowledgeqst_data_source,index:rowID});
+    }
+
+    renderQuestionItem(rowData,sectionID, rowID){
+        var ask = (rowData.ask);
+        var qId = (rowData.questionid);
+        return (
+            <TouchableOpacity  onPress={()=> this.gocheckquestion(rowID)}  >
+                <View  style={styles.questionitemcontainer}>
+                    <Text style={styles.questionitem}>
+                        {parseInt(rowID)+1} : {ask.substring(0,20)}
+                    </Text>
+
+                </View>
+            </TouchableOpacity>
+
+        )
+    }
+
+    renderklqst(){
+        return(
+            <View>
+                {this.renderBackBar()}
+                <ListView
+                    style={styles.list}
+                    dataSource={DataStore.cloneWithRows(this.state.knowledgeqst_data_source)}
+                    renderRow={this._renderQuestionItem}
+                    enableEmptySections = {true}
+                />
+            </View>
+
+        )
     }
 
     renderSegmentedView() {
@@ -303,7 +351,7 @@ class Discover extends Component {
                 return (
                     this.renderNewItem()
                 )
-            }else{
+            }else if(this.state.detialing == 0){
 
                 if(this.state.knowledge_list_data_source != null){
                     return(this.renderKnowledgeList())
@@ -316,6 +364,15 @@ class Discover extends Component {
                         this.fetch_knowledge();
                         return (this.renderLoading())
                     }
+                }
+            }else if(this.state.detialing == 2){
+                if(this.state.knowledgeqst_data_source != null){
+
+                    return (
+                        this.renderklqst()
+                    )
+                }else{
+                    return (this.renderLoading())
                 }
             }
 
@@ -338,13 +395,16 @@ class Discover extends Component {
         return(
             <TouchableOpacity onPress={()=> this.onKnowledgeItemClick(rowData)} activeOpacity={0.8}>
                 <View style={{
-                    height:40,
+
                     backgroundColor: 'white',
                     borderColor: '#c4c4c4',
-                    borderWidth: 1
+                    borderWidth: 1,
+                    paddingLeft:8,
+                    paddingRight:8
                 }}>
-                    <Text style={{fontSize:20}}>{rowData.title}</Text>
-                    <Text style={{fontSize:12}}>来源 100评论 时间 题目数:{rowData.qsnum}</Text>
+                    <Text style={{fontSize:16,marginBottom:4,color:"#E08020"}}>{rowData.title}</Text>
+                    <Text style={{fontSize:12,marginBottom:4}}>{rowData.description}</Text>
+                    <Text style={{fontSize:10}}>来源 100评论 时间 题目数:{rowData.qsnum}</Text>
                 </View>
             </TouchableOpacity>
         )
@@ -362,20 +422,23 @@ class Discover extends Component {
     }
 
     onBackPressFunc(){
+        let t_datialing=this.state.detialing;
+        t_datialing = t_datialing - 1;
+
         this.setState({
-            detialing:0,
+            detialing:t_datialing,
         })
     }
 
-    onQstPressFunc(){
-
+    onQstPressFunc(id){
+        this.fetch_knowledgeqst(id);
     }
 
     renderGoQstButton(){
-        if(this.knowledgeItemData.qsnum != 0){
+        if(this.state.knowledgeItemData.qsnum != 0 && this.state.detialing ==1){
             return(
-                <TouchableOpacity onPress={()=> this.onQstPressFunc()} activeOpacity={0.8}>
-                    <View><Text style={{fontSize:16}}>题目:{this.knowledgeItemData.qsnum}</Text></View>
+                <TouchableOpacity onPress={()=> this.onQstPressFunc(this.state.knowledgeItemData.id)} activeOpacity={0.8}>
+                    <View><Text style={{fontSize:16}}>题目:{this.state.knowledgeItemData.qsnum}</Text></View>
                 </TouchableOpacity>
             )
         }
@@ -385,23 +448,21 @@ class Discover extends Component {
     renderBackButton(){
         var iconColor="#0808FF";
         return(
-            <View style={styles.topButtonitemcontainer}>
-                <TouchableOpacity onPress={()=> this.onBackPressFunc()} activeOpacity={0.8}>
-                    <View style={styles.IconItem}>
-                        <Icon name={"ios-arrow-back"} size={32} color={iconColor}/>
-                    </View>
-                </TouchableOpacity>
-                <View><Text style={{fontSize:16}}>来源  </Text></View>
-                <View><Text style={{fontSize:16}}>关注  </Text></View>
-                {this.renderGoQstButton()}
-            </View>
+            <TouchableOpacity onPress={()=> this.onBackPressFunc()} activeOpacity={0.8}>
+                <View style={styles.IconItem}>
+                    <Icon name={"ios-arrow-back"} size={32} color={iconColor}/>
+                </View>
+            </TouchableOpacity>
         )
     }
 
     renderBackBar(){
         return(
-            <View style={{height:40,backgroundColor:'#00FF00',flexDirection:'row'}}>
+            <View style={{height:40,backgroundColor:'#00FF00',flexDirection:'row',alignItems: 'center',}}>
                 {this.renderBackButton()}
+                <View><Text style={{fontSize:16}}> 来源 </Text></View>
+                <View><Text style={{fontSize:16}}> 关注 </Text></View>
+                {this.renderGoQstButton()}
             </View>
         )
     }
