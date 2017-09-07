@@ -15,7 +15,7 @@ const styles = StyleSheet.create({
     typeContainer: {
         alignItems:'center',
         flexDirection:'row',
-        height: 40,
+        height: 32,
     },
     addwayContainer: {
         marginTop:6,
@@ -104,9 +104,9 @@ class NewSomeQuestions extends Component {
         let t_questiontext = "";
         let t_questiontypeIndex = 0;
         let t_answertext = ['','','','','','','',''];
-
+        let t_questiondata =null;
         if(props.qstlist != null && props.index != null){
-            let t_questiondata = props.qstlist[parseInt(props.index)];
+            t_questiondata = props.qstlist[parseInt(props.index)];
             t_questiontext = t_questiondata.ask;
             t_questiontypeIndex = parseInt(t_questiondata.qtype);
 
@@ -137,7 +137,8 @@ class NewSomeQuestions extends Component {
             //下面是查看的
             qstlist:props.qstlist,
             qidx:props.index,
-            allcount:props.qstlist.length
+            allcount:props.qstlist.length,
+            questiondata:t_questiondata
         };
 
     }
@@ -496,9 +497,25 @@ class NewSomeQuestions extends Component {
         )
     }
 
+    jumpToAuthor(){
+        Actions.homepage({userId:this.state.questiondata.userid});
+    }
+
+    renderAuthorName(){
+        return(
+            <View style={styles.typeContainer}>
+                <Text style={styles.typetext}>作者：</Text>
+                <TouchableOpacity  onPress={() => this.jumpToAuthor()} >
+                    <Text style={styles.typetext}>{this.state.questiondata.authorname}</Text>
+                </TouchableOpacity>
+            </View>
+        )
+    }
+
     renderAddOneView(){
         return(
             <View >
+                {this.renderAuthorName()}
                 <View style={styles.typeContainer}>
                     <Text style={styles.typetext}>问题类型：</Text>
                     {this.renderQstType()}
@@ -599,6 +616,7 @@ class NewSomeQuestions extends Component {
         }
 
         this.setState({
+            questiondata:t_questiondata,
             qidx: t_qidx,
             questiontext:t_questiontext, //问题
             addwayIndex:0,

@@ -83,16 +83,21 @@ var doGetHomePageBaseUrl = "https://slako.applinzi.com/api/1/homepage/";
 var doGetReleaseBooksUrl = "https://slako.applinzi.com/api/1/releasebooks/";
 var httpsBaseUrl = "https://slako.applinzi.com/";
 
+var doGetPersonBaseUrl = "https://slako.applinzi.com/api/1/person/";
+
 class HomePage extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            peopledata:props.peopledata,
             netresult:'no',
             homepage_data_source: null,//内测本
             homepage_releasebooks_source: null,//发布本
             selectedIndex:0,
             followhim:global.followperson.contains(this.props.userId),
             friendhim:global.friend.contains(this.props.userId),
+
+            get_people_data:null,
         };
         this._onChange = this.onChange.bind(this);
         this._renderRow = this.renderRow.bind(this);
@@ -116,6 +121,32 @@ class HomePage extends Component {
                 }else{
                     this.setState({
                         netresult:responseData.code
+                    })
+                }
+
+            })
+            .catch((error) => {
+                alert(error)
+            })
+    }
+
+    fetchPerson(){
+        const {userId} = this.props;
+        let url = `${doGetPersonBaseUrl}${userId}`;
+        var opts = {
+            method:"GET"
+        }
+        fetch(url,opts)
+            .then((response) => response.json())
+            .then((responseData) => {
+                if(responseData.code == 100){
+                    this.setState({
+                        peopledata:responseData.data,
+                        get_people_data:0
+                    })
+                }else{
+                    this.setState({
+                        get_people_data:responseData.code
                     })
                 }
 
@@ -208,65 +239,78 @@ class HomePage extends Component {
         }else{
             titleselect=['内测','发布','关于'];
         }
+        if(this.state.peopledata == null){
+            if(this.state.get_people_data == null){
+                this.fetchPerson();
+                return(
+                    this.renderLoading()
+                )
+            }else{
+                return(this.rendernodata())
+            }
 
-        return (
-            <View style={GlobleStyles.withoutTitleContainer}>
-                <ParallaxScrollView
-                    headerBackgroundColor="#330000"
-                    stickyHeaderHeight={ STICKY_HEADER_HEIGHT }
-                    parallaxHeaderHeight={240}
-                    renderForeground={() => (
-                        <View>
-                            <View style={styles.topViewContainer}>
-                                <Image style={styles.topImgView} source={{uri:'https://slako.applinzi.com/statics/images/question/personalhomepage/1.jpg', width: window.width, height: 200 }} >
-                                    <Image source={{uri:`${httpsBaseUrl}${this.props.peopledata.head}`, width: 80, height: 80}} />
-                                    <Text>昵称:{this.props.peopledata.nickname}</Text>
-                                    <Text>题本数:5</Text>
-                                    <Text>粉丝:20  题本： 被收藏:60</Text>
+        }else{
 
-                                    <Button style={styles.somebutton} textStyle={{fontSize: 14}} onPress={()=> Actions.complaint({userId})} >投诉</Button>
-                                    <Button style={styles.somebutton} textStyle={{fontSize: 14}}  >分享</Button>
+            return (
+                <View style={GlobleStyles.withoutTitleContainer}>
+                    <ParallaxScrollView
+                        headerBackgroundColor="#330000"
+                        stickyHeaderHeight={ STICKY_HEADER_HEIGHT }
+                        parallaxHeaderHeight={240}
+                        renderForeground={() => (
+                            <View>
+                                <View style={styles.topViewContainer}>
+                                    <Image style={styles.topImgView} source={{uri:'https://slako.applinzi.com/statics/images/question/personalhomepage/1.jpg', width: window.width, height: 200 }} >
+                                        <Image source={{uri:`${httpsBaseUrl}${this.state.peopledata.head}`, width: 80, height: 80}} />
+                                        <Text>昵称:{this.state.peopledata.nickname}</Text>
+                                        <Text>题本数:5</Text>
+                                        <Text>粉丝:20  题本： 被收藏:60</Text>
 
-                                </Image>
+                                        <Button style={styles.somebutton} textStyle={{fontSize: 14}} onPress={()=> Actions.complaint({userId})} >投诉</Button>
+                                        <Button style={styles.somebutton} textStyle={{fontSize: 14}}  >分享</Button>
+
+                                    </Image>
+                                </View>
+
+
+                                <SegmentedControlIOS
+                                    values={titleselect}
+                                    selectedIndex={this.state.selectedIndex}
+                                    style={styles.segmented}
+                                    onChange={this._onChange}
+                                />
                             </View>
 
+                        )}
+                        renderStickyHeader={() => (
+                            <View key="sticky-header" style={styles.stickySection}>
+                                {/*<Text style={styles.stickySectionText}>hello</Text>*/}
+                                <SegmentedControlIOS
+                                    values={titleselect}
+                                    selectedIndex={this.state.selectedIndex}
+                                    style={styles.segmented}
+                                    onChange={this._onChange}
+                                />
+                            </View>
 
-                            <SegmentedControlIOS
-                                values={titleselect}
-                                selectedIndex={this.state.selectedIndex}
-                                style={styles.segmented}
-                                onChange={this._onChange}
-                            />
-                        </View>
+                        )}
+                    >
 
-                    )}
-                    renderStickyHeader={() => (
-                        <View key="sticky-header" style={styles.stickySection}>
-                            {/*<Text style={styles.stickySectionText}>hello</Text>*/}
-                            <SegmentedControlIOS
-                                values={titleselect}
-                                selectedIndex={this.state.selectedIndex}
-                                style={styles.segmented}
-                                onChange={this._onChange}
-                            />
-                        </View>
-
-                    )}
-                >
-
-                {this.renderSegmentedView()}
-                </ParallaxScrollView>
-                <View style={styles.bottomButtonViewContainer}>
-                    {this.renderFollowControl()}
-                    <TouchableOpacity  onPress={()=> Actions.chatlist({chattoid:this.props.peopledata.userid,title:this.props.peopledata.nickname})} >
-                        <Text style={styles.bottomButtonText} >私信</Text>
-                    </TouchableOpacity>
-                    {this.renderFriendControl()}
-                    <Text style={styles.bottomButtonText} >备注</Text>
+                        {this.renderSegmentedView()}
+                    </ParallaxScrollView>
+                    <View style={styles.bottomButtonViewContainer}>
+                        {this.renderFollowControl()}
+                        <TouchableOpacity  onPress={()=> Actions.chatlist({chattoid:this.state.peopledata.userid,title:this.state.peopledata.nickname})} >
+                            <Text style={styles.bottomButtonText} >私信</Text>
+                        </TouchableOpacity>
+                        {this.renderFriendControl()}
+                        <Text style={styles.bottomButtonText} >备注</Text>
+                    </View>
                 </View>
-            </View>
 
-        );
+            );
+        }
+
     }
 
     dofriend(friend){
@@ -430,6 +474,14 @@ class HomePage extends Component {
     renderDetailView(){
         return (
             <Text>标签</Text>
+        )
+    }
+
+    rendernodata(){
+        return (
+            <View style={styles.container}>
+                <Text>没有数据</Text>
+            </View>
         )
     }
 }
