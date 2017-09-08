@@ -512,10 +512,22 @@ class NewSomeQuestions extends Component {
         )
     }
 
+    renderCommitTime(){
+        let date = new Date();
+        let time = date.setMilliseconds(this.state.questiondata.inputtime);
+        let date_str = date.toLocaleString();
+        return(
+            <View style={styles.typeContainer}>
+                <Text style={styles.typetext}>时间：{date_str}</Text>
+            </View>
+        )
+    }
+
     renderAddOneView(){
         return(
             <View >
                 {this.renderAuthorName()}
+                {this.renderCommitTime()}
                 <View style={styles.typeContainer}>
                     <Text style={styles.typetext}>问题类型：</Text>
                     {this.renderQstType()}
