@@ -2,13 +2,13 @@
  * Created by slako on 17/2/18.
  */
 import React, { Component,PropTypes } from 'react';
-import {View, Text, StyleSheet, Image, Dimensions,ScrollView,TouchableOpacity} from "react-native";
+import {View, Text, StyleSheet, Image, Dimensions,ScrollView,TouchableOpacity,ListView,SegmentedControlIOS} from "react-native";
 import {Actions} from "react-native-router-flux";
 import Button from 'apsl-react-native-button'
 import GlobleStyles from '../styles/GlobleStyles';
 import RadioForm, {RadioButton, RadioButtonInput, RadioButtonLabel} from 'react-native-simple-radio-button';
 import Icon from 'react-native-vector-icons/Ionicons';
-
+import DataStore from '../util/DataStore';
 const styles = StyleSheet.create({
     container: {
 
@@ -96,7 +96,11 @@ class AnswerQuestion extends Component {
             t_questiondataarr=t_questiondataarr.reverse();
         }
 
+        for(let i=0;i<t_questiondataarr.length;i++){
+            choose_arr[i] = -1;
+        }
 
+        this._timer=null;
 
         this.state = {
             count:0,
@@ -110,17 +114,57 @@ class AnswerQuestion extends Component {
             allcount:t_questiondataarr.length,
             questiondataarr:t_questiondataarr,
             readyquestionarr:this.props.readyquestion_arr,
-            choose:choose_arr
+            choose:choose_arr,
+
+            card:0,//1为查看题卡,
+            counttime:props.counttime?props.counttime:60,
+            up_min:0,
+            up_second:0,
+
+            tabSelectedIndex:0
+
         };
 
         this._dofetchquestion = this.dofetchquestion.bind(this);
         this._renderloading = this.renderloading.bind(this);
         this._renderquestion = this.renderquestion.bind(this);
         this._showquestion = this.showquestion.bind(this);
+        this._renderCardItem = this.renderCardItem.bind(this);
+        this._onCardChange = this.onCardChange.bind(this);
     }
+
+    changeTimeCount(){
+        let downtime = this.state.counttime - 1 ;
+        let t_second = this.state.up_second + 1 ;
+        let t_min = this.state.up_min;
+        if(t_second >= 60){
+            t_second = 0;
+            t_min = t_min + 1;
+        }
+
+
+
+        if(downtime == -1){
+            this._timer && clearInterval(this._timer);
+            return;
+        }
+        this.setState({
+            counttime:downtime,
+            second:t_second,
+            up_min:t_min,
+            up_second:t_second
+        })
+
+    }
+
     componentWillMount(){
 
         this.anotherquestion(1);
+        this._timer=setInterval(()=>this.changeTimeCount(),1000);
+    }
+
+    componentWillUnmount(){
+        this._timer && clearInterval(this._timer);
     }
 
     renderwrongright(idx){
@@ -309,7 +353,7 @@ class AnswerQuestion extends Component {
             case 4:
                 break;
             case 5:
-                Actions.testcard({answerselect_arr:this.state.choose});
+                this.setState({card:1})
                 break;
             case 6:
                 break;
@@ -348,17 +392,17 @@ class AnswerQuestion extends Component {
 
                 <View style={styles.topButtoncontainer}>
 
+                    {this.rendertopbutton("md-grid",    "题卡",   () => this.invote(5))}
                     {this.rendertopbutton("md-alarm",   "时间",   () => this.invote(7))}
                     {this.rendertopbutton("md-cafe",    "评论",   () => this.invote(6))}
-                    {this.rendertopbutton("md-grid",    "题卡",   () => this.invote(5))}
                     {this.rendertopbutton("md-thumbs-up","赞",    () => this.invote(4))}
                     {this.rendertopbutton("md-star",    "收藏",   () => this.invote(3))}
                     {this.rendertopbutton("md-share",   "分享",   () => this.invote(2))}
                     {this.rendertopbutton("md-stats",   "统计",   () => this.invote(1))}
                     {this.rendertopbutton("md-settings","设置",   () => this.invote(0))}
                 </View>
-                <Text style={styles.question}>完成进度 {this.state.count}:{this.state.allcount}</Text>
-                <Text style={styles.question}>题号 {this.state.questionidx}</Text>
+                <Text style={styles.question}>完成进度 {this.state.count+1}:{this.state.allcount}</Text>
+                <Text style={styles.question}>题号: {this.state.questionidx+1}</Text>
                 {
                     this.state.questiondata.img?
                         <Image resizeMode="cover" source={{uri:`${httpsBaseUrl}${this.state.questiondata.img}`, width: window.width, height: 200 }} ></Image>
@@ -394,10 +438,152 @@ class AnswerQuestion extends Component {
         )
     }
 
+    goToSelectQst(){
+        this.setState({
+            card:0,
+
+        })
+    }
+
+    renderCardItem(rowData, sectionID, rowID){
+
+        let notDoneColor = "#FFFFFF"
+        if(this.state.choose[rowID] != -1){
+            notDoneColor = "#A0FFA0"
+        }
+        if(this.state.tabSelectedIndex == 1){
+            if(this.state.choose[rowID] == -1){
+                return null;
+            }
+        }else if(this.state.tabSelectedIndex == 2){
+            if(this.state.choose[rowID] != -1){
+                return null;
+            }
+        }
+        return(
+            <TouchableOpacity onPress={()=> this.goToSelectQst(rowID)} activeOpacity={0.8}>
+                <View style={{
+                    height:32,
+                    backgroundColor:notDoneColor,
+                    borderBottomWidth:1,
+                    borderBottomColor:'#08e8e8',
+                    alignItems:"center",
+                    flexDirection:"row",
+                    paddingLeft:10
+                }}>
+                    <Text>{parseInt(rowID)+1}</Text>
+                </View>
+            </TouchableOpacity>
+        )
+    }
+    onBackPressFunc(){
+        this.setState({
+            card:0
+        })
+    }
+
+    renderBackButton(){
+        var iconColor="#0808FF";
+        return(
+            <TouchableOpacity onPress={()=> this.onBackPressFunc()} activeOpacity={0.8}>
+                <View style={styles.IconItem}>
+                    <Icon name={"ios-arrow-back"} size={32} color={iconColor}/>
+                </View>
+            </TouchableOpacity>
+        )
+    }
+
+    onEndPressFunc(){
+        Actions.pop();
+    }
+
+    renderEndButton(){
+        var iconColor="#00FF00";
+        return(
+            <TouchableOpacity onPress={()=> this.onEndPressFunc()} activeOpacity={0.8}>
+                <View style={styles.IconItem}>
+                    <Icon name={"ios-arrow-forward"} size={32} color={iconColor}/>
+                </View>
+            </TouchableOpacity>
+        )
+    }
+
+    renderBackBar(){
+        return(
+            <View style={{height:32,flexDirection:"row",alignItems:"center"}}>
+                {this.renderBackButton()}
+                <Text>继续答题</Text>
+                <View style={{height:32,flexDirection:"row",alignItems:"center",flex:1,justifyContent:"flex-end"}}>
+                    <Text>结束答题</Text>
+                    {this.renderEndButton()}
+                </View>
+            </View>
+        )
+    }
+
+    onCardChange(event){
+        this.setState({
+            tabSelectedIndex: event.nativeEvent.selectedSegmentIndex,
+        });
+    }
+
+    renderStatistics(){
+
+        let done =0;
+        for(let i=0;i<this.state.allcount;i++){
+            if(this.state.choose[i] != -1){
+                done+=1;
+            }
+        }
+
+        let allcountText ="总题:"+this.state.allcount;
+        let doneText = "已答:"+done;
+        let waitText = "未答:"+ (this.state.allcount - done);
+
+        return(
+            <View style={{paddingLeft:10}}>
+                <Text>耗费时间：{this.state.up_min}:{this.state.up_second}</Text>
+                <Text>剩余时间：{this.state.counttime}</Text>
+                <View>
+                    <SegmentedControlIOS
+                        values={[allcountText,doneText,waitText]}
+                        selectedIndex={this.state.tabSelectedIndex}
+                        style={styles.segmented}
+                        onChange={this._onCardChange}
+                    />
+                </View>
+            </View>
+        )
+    }
+
+    renderCard(){
+        return(
+            <View>
+                {this.renderBackBar()}
+                {this.renderStatistics()}
+                <ListView
+                    style={styles.list}
+                    dataSource={DataStore.cloneWithRows(this.state.choose)}
+                    renderRow={this._renderCardItem}
+                    enableEmptySections = {true}
+                />
+            </View>
+
+        )
+    }
+
+    renderFragment(){
+        if(this.state.card == 1){
+            return this.renderCard();
+        }else{
+            return this._renderquestion();
+        }
+    }
+
     render(){
         return (
             <View style={GlobleStyles.withoutTitleContainer}>
-                {this._renderquestion()}
+                {this.renderFragment()}
             </View>
         )
     }
@@ -413,7 +599,8 @@ AnswerQuestion.PropTypes = {
     publicbookdata:PropTypes.object,
     buildingbookdata:PropTypes.object,
     readyquestion_arr:PropTypes.object,
-    answer_arr:PropTypes.object
+    answer_arr:PropTypes.object,
+    counttime:PropTypes.number,
 };
 
 module.exports = AnswerQuestion;
