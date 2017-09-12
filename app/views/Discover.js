@@ -45,7 +45,7 @@ const styles = StyleSheet.create({
         marginRight:15
     },
     topTitleStyle:{
-        fontSize:15,
+        fontSize:20,
         marginBottom:10
     },
     bottomTitleStyle:{

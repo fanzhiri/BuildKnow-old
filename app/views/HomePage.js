@@ -69,6 +69,24 @@ const styles = StyleSheet.create({
         backgroundColor: '#00FF7F',
         marginLeft:10
     },
+    listItem:{
+        padding:10,
+        backgroundColor:'white',
+        borderBottomWidth:0.5,
+        borderBottomColor:'#48e8e8',
+
+        //主轴方向
+        flexDirection:'row',
+    },
+    bottomTextContainer: {
+        flex:1,
+        justifyContent: 'space-around',
+        marginLeft: 10,
+    },
+    image: {
+        width: 80,
+        height: 80,
+    },
 });
 
 var homepagetUrl = "https://slako.applinzi.com/index.php?m=question&c=index&a=personalhp";
@@ -102,7 +120,7 @@ class HomePage extends Component {
         this._onChange = this.onChange.bind(this);
         this._renderRow = this.renderRow.bind(this);
         this._fetchHomepage = this.fetchHomepage.bind(this);
-
+        this._renderReleaseRow = this.renderReleaseRow.bind(this);
     }
 
     fetchHomepage(){
@@ -456,12 +474,46 @@ class HomePage extends Component {
         )
     }
 
+    renderBottomText(rowData) {
+        var name =rowData.bookname;
+        var bookbrief =rowData.bookbrief;
+        var questionsnumber =rowData.q_count;
+        var follow =rowData.follow;
+        if (name) {
+            return (
+                <View style={styles.bottomTextContainer}>
+                    <Text style={{fontSize: 20}}>{name}</Text>
+                    <Text style={styles.bottomText}>简介：{bookbrief}</Text>
+                    <Text style={styles.bottomText}>题数：{questionsnumber}     关注：{follow}</Text>
+                </View>
+            );
+        } else {
+            return null;
+        }
+    }
+
+    renderReleaseRow(rowData, sectionID, rowID) {
+        var reviewid =rowData.reviewid;
+        var cover = rowData.cover;
+
+
+        return (
+            <TouchableOpacity  onPress={()=>(Actions.bookcover({bookpublicid:reviewid}))} >
+                <View style={styles.listItem}>
+                    <Image style={styles.image} resizeMode="cover" source={{uri:`${httpsBaseUrl}${cover}`}}/>
+                    {this.renderBottomText(rowData)}
+                </View>
+            </TouchableOpacity>
+        );
+
+    }
+
     renderReleaseView(){
         return (
             <ListView
             enableEmptySections={true}
             dataSource={DataStore.cloneWithRows(this.state.homepage_releasebooks_source)}
-            renderRow={this._renderRow} />
+            renderRow={this._renderReleaseRow} />
         )
     }
 

@@ -607,10 +607,12 @@ class ComposeBook extends Component {
                         enableEmptySections = {true}
                     />
                 </ScrollView>
-                <View style={styles.btncontainer}>
-                    <Button style={styles.addQuestionButton} textStyle={{fontSize: 16}} onPress={() => Actions.newonequestion({bookid:this.props.bookid})} >添一个</Button>
-                    <Button style={styles.addQuestionButton} textStyle={{fontSize: 16}} onPress={() => Actions.newsomequestions({intype:0,bookid:this.props.bookid})} >添多个</Button>
-                    <Button style={styles.addQuestionButton} textStyle={{fontSize: 16}}  >垃圾桶</Button>
+                <View style={{height:32}}>
+                    <TouchableOpacity
+                        style={{justifyContent: 'center',alignItems: 'center',flex:1,backgroundColor: '#3086cc'}}
+                        onPress={() => Actions.newsomequestions({bookid:this.props.bookid})} >
+                        <Text style={{fontSize:20}} >添题</Text>
+                    </TouchableOpacity>
                 </View>
             </View>
 
