@@ -2,7 +2,7 @@
  * Created by slako on 17/4/30.
  */
 import React, { Component,PropTypes } from 'react';
-import {View, Text, StyleSheet,Dimensions,ScrollView} from "react-native";
+import {View, Text, StyleSheet,Dimensions,ScrollView,TouchableOpacity} from "react-native";
 import {Actions} from "react-native-router-flux";
 
 import GlobleStyles from '../styles/GlobleStyles';
@@ -40,6 +40,7 @@ class BeginTest extends Component {
 
         this.state = {
             bookquestion_data_source:null,
+            modeselect_idx:0
         };
     }
 
@@ -74,32 +75,74 @@ class BeginTest extends Component {
         Actions.begintest({intype:0,bookdata:this.state.bookdata});
     }
 
-    renderModeItem(){
+    onModePressFunc(idx){
+        this.setState({
+            modeselect_idx:idx
+        });
+    }
+
+    onModeAdjustFunc(){
+
+    }
+
+    renderadjust(idx){
+        let adjusttext="";
+        let select_background_collor = "#FFFFFF";
+        if(this.state.modeselect_idx == idx){
+            adjusttext="调整";
+            select_background_collor="#FF8000";
+        }
+            return(
+                <View style={{flex:1,justifyContent:"center",alignItems:"center",backgroundColor:select_background_collor}}>
+                    <TouchableOpacity
+                        onPress={()=> this.onModeAdjustFunc(idx)}
+                        activeOpacity={0.8}>
+                    <Text>{adjusttext}</Text>
+                    </TouchableOpacity>
+                </View>
+            )
+
+    }
+
+    renderModeItem(idx){
+        let select_this=idx;
+        let select_background_collor = "#FFFF00";
+        if(this.state.modeselect_idx == idx){
+            select_this= "选中"+idx;
+            select_background_collor="#FF8000";
+        }
         return(
-            <View style={{flex:1}}>
-                <View style={{height:24}}></View>
-                <View style={{flex:1}}>
+            <View style={{flex:1,backgroundColor:select_background_collor}}>
+                <TouchableOpacity onPress={()=> this.onModePressFunc(idx)} activeOpacity={0.8}>
+                    <View style={{height:32,backgroundColor:"#F00FFF",justifyContent:"center",alignItems:"center"}}>
+                        <Text>{select_this}</Text>
+                    </View>
+                </TouchableOpacity>
+                <View style={{flex:1,justifyContent:"center",alignItems:"center"}}>
                     <Text>1</Text>
                 </View>
-                <View style={{flex:1}}>
+                <View style={{flex:1,justifyContent:"center",alignItems:"center"}}>
                     <Text>2</Text>
                 </View>
-                <View style={{flex:1}}>
+                <View style={{flex:1,justifyContent:"center",alignItems:"center"}}>
                     <Text>3</Text>
                 </View>
-                <View style={{flex:1}}>
+                <View style={{flex:1,justifyContent:"center",alignItems:"center"}}>
                     <Text>4</Text>
                 </View>
-                <View style={{flex:1}}>
+                <View style={{flex:1,justifyContent:"center",alignItems:"center"}}>
                     <Text>5</Text>
                 </View>
+
+                {this.renderadjust(idx)}
+
             </View>
         )
     }
     renderModeTitleItem(title){
         return(
-            <View style={{flex:1}}>
-                <Text>{title}</Text>
+            <View style={{flex:1,justifyContent:"center"}}>
+                <Text style={{fontSize:18}}>{title}</Text>
             </View>
         )
     }
@@ -108,22 +151,20 @@ class BeginTest extends Component {
             <View style={{flex:1}}>
                 <Text style={styles.textdesc}>名字：{this.props.bookdata.bookname}</Text>
                 <Text style={styles.textdesc}>总题数：{this.props.bookdata.questioncount}</Text>
-                <View style={{flexDirection:"row",height:180}}>
-                    <View style={{width:120}}>
-                        <View style={{height:24}}></View>
+                <View style={{flex:1,flexDirection:"row",height:108,margin:16,backgroundColor:"#FFFFFF"}}>
+                    <View style={{flex:2}}>
+                        <View style={{height:32}}></View>
                         {this.renderModeTitleItem("限定题数：")}
                         {this.renderModeTitleItem("总限定时间：")}
                         {this.renderModeTitleItem("每题限定时：")}
                         {this.renderModeTitleItem("错题量结束：")}
                         {this.renderModeTitleItem("反悔：")}
+                        {this.renderModeTitleItem("")}
                     </View>
-                    <View sytle={{flex:1,flexDirection:'row',justifyContent:"space-around"}}>
-                        {this.renderModeItem()}
-                        {this.renderModeItem()}
-                        {this.renderModeItem()}
-                        {this.renderModeItem()}
-                        {this.renderModeItem()}
-                    </View>
+                        {this.renderModeItem(0)}
+                        {this.renderModeItem(1)}
+                        {this.renderModeItem(2)}
+                        {this.renderModeItem(3)}
                 </View>
 
                 <View style={styles.buttonContainer}>
