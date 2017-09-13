@@ -17,7 +17,10 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: '#F5FCFF',
     },beginButton:{
-        width:window.width,
+        flexDirection:'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        height:32,
         backgroundColor: '#00EE00'
     },
     textdesc:{
@@ -67,19 +70,70 @@ class BeginTest extends Component {
             })
     }
 
+    handleBeginTest() {
+        Actions.begintest({intype:0,bookdata:this.state.bookdata});
+    }
+
+    renderModeItem(){
+        return(
+            <View style={{flex:1}}>
+                <View style={{height:24}}></View>
+                <View style={{flex:1}}>
+                    <Text>1</Text>
+                </View>
+                <View style={{flex:1}}>
+                    <Text>2</Text>
+                </View>
+                <View style={{flex:1}}>
+                    <Text>3</Text>
+                </View>
+                <View style={{flex:1}}>
+                    <Text>4</Text>
+                </View>
+                <View style={{flex:1}}>
+                    <Text>5</Text>
+                </View>
+            </View>
+        )
+    }
+    renderModeTitleItem(title){
+        return(
+            <View style={{flex:1}}>
+                <Text>{title}</Text>
+            </View>
+        )
+    }
     rendercommontest(){
         return(
-            <ScrollView>
+            <View style={{flex:1}}>
                 <Text style={styles.textdesc}>名字：{this.props.bookdata.bookname}</Text>
-                <Text style={styles.textdesc}>题数：{this.props.bookdata.q_count}</Text>
-                <Text style={styles.textdesc}>限定题数：</Text>
-                <Text style={styles.textdesc}>限定时间：</Text>
-                <View style={styles.buttonContainer}>
-                    <Button style={styles.beginButton} textStyle={{fontSize: 18}} onPress={ () => Actions.answerquestion()}>
-                        开始测验
-                    </Button>
+                <Text style={styles.textdesc}>总题数：{this.props.bookdata.questioncount}</Text>
+                <View style={{flexDirection:"row",height:180}}>
+                    <View style={{width:120}}>
+                        <View style={{height:24}}></View>
+                        {this.renderModeTitleItem("限定题数：")}
+                        {this.renderModeTitleItem("总限定时间：")}
+                        {this.renderModeTitleItem("每题限定时：")}
+                        {this.renderModeTitleItem("错题量结束：")}
+                        {this.renderModeTitleItem("反悔：")}
+                    </View>
+                    <View sytle={{flex:1,flexDirection:'row',justifyContent:"space-around"}}>
+                        {this.renderModeItem()}
+                        {this.renderModeItem()}
+                        {this.renderModeItem()}
+                        {this.renderModeItem()}
+                        {this.renderModeItem()}
+                    </View>
                 </View>
-            </ScrollView>
+
+                <View style={styles.buttonContainer}>
+                    <View style={styles.beginButton}  onPress={ () =>this.handleBeginTest()}>
+                        <Text style={{fontSize: 18}}>
+                            开始测验
+                        </Text>
+                    </View>
+                </View>
+            </View>
         )
     }
 
@@ -102,7 +156,7 @@ class BeginTest extends Component {
     renderpktest(){
         let pkpeople = JSON.parse(this.props.pkdata.people);
         return(
-            <ScrollView>
+            <View>
                 <Text style={styles.textdesc}>名字：{this.props.pkdata.bookname}</Text>
                 <Text style={styles.textdesc}>题数：{this.props.pkdata.testnum}</Text>
 
@@ -110,11 +164,13 @@ class BeginTest extends Component {
                 <Text style={styles.textdesc}>参与人数：{pkpeople.length}</Text>
                 <Text style={styles.textdesc}>截止时间：{this.props.pkdata.overdue}</Text>
                 <View style={styles.buttonContainer}>
-                    <Button style={styles.beginButton} textStyle={{fontSize: 18}} onPress={ () =>this.goingtopktest()}>
-                        开始测验
-                    </Button>
+                    <View style={styles.beginButton}  onPress={ () =>this.goingtopktest()}>
+                        <Text style={{fontSize: 18}}>
+                            开始测验
+                        </Text>
+                    </View>
                 </View>
-            </ScrollView>
+            </View>
         )
     }
 

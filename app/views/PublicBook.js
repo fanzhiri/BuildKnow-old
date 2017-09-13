@@ -135,6 +135,10 @@ class PublicBook extends Component {
         )
     }
 
+    handleBeginTest() {
+        Actions.begintest({intype:0,bookdata:this.state.bookdata});
+    }
+
     invote(idx){
         switch (idx){
             case 0:
@@ -169,13 +173,7 @@ class PublicBook extends Component {
             case 7:
                 break;
             case 10:
-                Actions.answerquestion({
-                    intype:1, // 已经发布的
-                    publicbookdata:this.state.bookdata,
-                    questioncount:10,
-                    asktype:0, // 0顺序
-                    answermode:1 // 1随便考
-                });
+                this.handleBeginTest();
                 break;
             case 17:
                 Actions.newcompetition({book:this.state.bookdata});
