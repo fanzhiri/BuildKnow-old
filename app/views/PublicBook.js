@@ -60,9 +60,11 @@ const styles = StyleSheet.create({
     },
     topButtoncontainer:{
         flexDirection:'row',
-        justifyContent: 'flex-start',
+        justifyContent: 'space-around',
         alignItems: 'center',
-        height:60,
+        height:68,
+        paddingLeft:10,
+        paddingRight:10
     },
     topButtonitemcontainer:{
         width:40,
@@ -116,14 +118,18 @@ class PublicBook extends Component {
     }
 
     rendertopbutton(iconname,name,onpressfunc){
-        var iconColor="#FF0000";
+
+        var iconColor="#00FF00";
+        if(this.state.readortest != 0){
+            iconColor = "#00E0F0";
+        }
         return(
             <TouchableOpacity onPress={onpressfunc} activeOpacity={0.8}>
                 <View style={styles.topButtonitemcontainer}>
                     <View style={styles.IconItem}>
-                        <Icon name={iconname} size={22} color={iconColor}/>
+                        <Icon name={iconname} size={32} color={iconColor}/>
                     </View>
-                    <Text>{name}</Text>
+                    <Text style={{fontSize:18}}>{name}</Text>
                 </View>
             </TouchableOpacity>
         )
@@ -164,11 +170,11 @@ class PublicBook extends Component {
                 break;
             case 10:
                 Actions.answerquestion({
-                    intype:1,
+                    intype:1, // 已经发布的
                     publicbookdata:this.state.bookdata,
                     questioncount:10,
-                    asktype:0,
-                    answermode:1
+                    asktype:0, // 0顺序
+                    answermode:1 // 1随便考
                 });
                 break;
             case 17:
@@ -216,16 +222,24 @@ class PublicBook extends Component {
                         {this.rendertopbutton("md-flower",  "随机",   () => this.invote(1))}
                         {this.rendertopbutton("md-flower",  "收藏",   () => this.invote(3))}
                     </View>
-                    <View style={styles.topButtoncontainer}>
-                        {this.rendertopbutton("md-medal",   "比拼",   () => this.invote(17))}
-                        {this.rendertopbutton("md-medkit",  "错题",   () => this.invote(2))}
-                        {this.rendertopbutton("md-medkit",  "记录",   () => this.invote(2))}
-                        {this.rendertopbutton("md-medkit",  "排行",   () => this.invote(2))}
-                    </View>
+
                 </View>
 
             )
         }
+    }
+
+    renderListItem(iconname,title,onpressfunc){
+        var iconColor="#90F000";
+        return(
+            <TouchableOpacity onPress={onpressfunc} activeOpacity={0.8}>
+                <View style={{height:32,flexDirection:"row",alignItems:"center",borderBottomWidth:0.5, borderColor:'#48e8e8',paddingLeft:10}}>
+                    <Text style={{fontSize:18}}>
+                        {title}
+                    </Text>
+                </View>
+            </TouchableOpacity>
+        )
     }
 
     renderbook(){
@@ -261,11 +275,16 @@ class PublicBook extends Component {
                     />
                 </View>
                 {this.renderreadortest()}
-                <View style={styles.topButtoncontainer}>
-                    {this.rendertopbutton("md-eye","熟练计划",   () => this.invote(22))}
-                    {this.rendertopbutton("md-eye","前后版本",   () => this.invote(0))}
-                    {this.rendertopbutton("md-locate","在建地址",() => this.invote(21))}
-                </View>
+
+                {this.renderListItem("md-medal",   "比拼",   () => this.invote(17))}
+                {this.renderListItem("md-medkit",  "错题",   () => this.invote(2))}
+                {this.renderListItem("md-medkit",  "记录",   () => this.invote(2))}
+                {this.renderListItem("md-medkit",  "排行",   () => this.invote(2))}
+
+                {this.renderListItem("md-eye","熟练计划",   () => this.invote(22))}
+                {this.renderListItem("md-eye","前后版本",   () => this.invote(0))}
+                {this.renderListItem("md-locate","在建地址",() => this.invote(21))}
+
             </View>
         )
     }
