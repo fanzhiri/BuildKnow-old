@@ -74,7 +74,7 @@ var doGetQuestionGetBaseUrl = "https://slako.applinzi.com/api/1/question/";
 var httpsBaseUrl = "https://slako.applinzi.com";
 
 
-
+var saveRecordUrl = "https://slako.applinzi.com/index.php?m=question&c=personal&a=saverecord";
 
 class AnswerQuestion extends Component {
     constructor(props) {
@@ -100,14 +100,15 @@ class AnswerQuestion extends Component {
             choose_arr[i] = -1;
         }
 
-        this._timer=null;
+        this._timer=null;//计时器
 
+        let startDate = new Date();
         this.state = {
             count:0,
             fetchresult:null,
             questiondata:null,
             ask:null,
-            selectone:-1,
+            selectone:-1,//用于显示
             answer:null,
             questionidx:-1,//当前题目的指向
             rightidx:-1,
@@ -116,13 +117,15 @@ class AnswerQuestion extends Component {
             readyquestionarr:this.props.readyquestion_arr,
             choose:choose_arr,
 
-            card:0,//1为查看题卡,
+            fragment:0,//1为查看题卡,
             counttime:props.counttime?props.counttime:60,
             up_min:0,
             up_second:0,
 
-            tabSelectedIndex:0
-
+            tabSelectedIndex:0,
+            answer_arr:props.answer_arr,//已经准备好的答案
+            showResult:0,
+            startTimeText:startDate.toLocaleString()
         };
 
         this._dofetchquestion = this.dofetchquestion.bind(this);
@@ -131,6 +134,42 @@ class AnswerQuestion extends Component {
         this._showquestion = this.showquestion.bind(this);
         this._renderCardItem = this.renderCardItem.bind(this);
         this._onCardChange = this.onCardChange.bind(this);
+    }
+
+    saveTestRecord(){
+
+        let formData = new FormData();
+        formData.append("auth",global.auth);
+        formData.append("bookid",this.props.bookdata.question_book_id);
+        formData.append("userid",global.userid);
+        var opts = {
+            method:"POST",
+            body:formData
+        }
+        fetch(doGetBookQuestionUrl,opts)
+            .then((response) => response.json())
+            .then((responseData) => {
+                if(responseData.code == 100){
+                    let t_bookquestion_data_source=this.state.bookquestion_data_source;
+                    t_bookquestion_data_source[this.state.modeselect_idx]=responseData.data;
+                    this.setState({
+                        bookquestion_data_source:t_bookquestion_data_source,
+                        fetching:0
+                    })
+                }else{
+                    alert(responseData.message);
+                    this.setState({
+                        fetching:0
+                    });
+                }
+
+            })
+            .catch((error) => {
+                alert(error);
+                this.setState({
+                    fetching:0
+                });
+            })
     }
 
     changeTimeCount(){
@@ -353,7 +392,7 @@ class AnswerQuestion extends Component {
             case 4:
                 break;
             case 5:
-                this.setState({card:1})
+                this.setState({fragment:1})
                 break;
             case 6:
                 break;
@@ -440,7 +479,7 @@ class AnswerQuestion extends Component {
 
     goToSelectQst(){
         this.setState({
-            card:0,
+            fragment:0,
 
         })
     }
@@ -478,7 +517,7 @@ class AnswerQuestion extends Component {
     }
     onBackPressFunc(){
         this.setState({
-            card:0
+            fragment:0
         })
     }
 
@@ -497,10 +536,53 @@ class AnswerQuestion extends Component {
         Actions.pop();
     }
 
+    onEndShowResult(){
+        this._timer && clearInterval(this._timer);
+        this.setState({
+            fragment:2
+        })
+    }
+
+    renderResult(){
+        let right_num = 0;
+        for(let i=0;i<this.state.answer_arr.length;i++){
+            if(this.state.answer_arr[i].ri == this.state.choose[i]){
+                right_num += 1;
+            }
+        }
+        let score = (100/this.state.answer_arr.length)*right_num;
+        let wrong_num = this.state.answer_arr.length-right_num;
+
+        let endTime = new Date();
+        let endTimeText = endTime.toLocaleString();
+        return(
+            <View style={{flex:1}}>
+                <Text>得分   :{score}</Text>
+                <Text>答对题数:{right_num}</Text>
+                <Text>答错题数:{wrong_num}</Text>
+                <Text>今天第几次:{1}</Text>
+                <Text>耗时:{1}</Text>
+                <Text>今天第几次:{1}</Text>
+                <Text>历史第几次:{1}</Text>
+                <Text>开始时间:{this.state.startTimeText}</Text>
+                <Text>结束时间:{endTimeText}</Text>
+                <View style={{flex: 1, justifyContent: 'flex-end',}}>
+                    <TouchableOpacity onPress={ () =>this.onEndPressFunc()} activeOpacity={0.8}>
+                        <View style={{justifyContent: 'center',alignItems: 'center', height:32, backgroundColor: '#00EE00'}}  >
+                            <Text style={{fontSize: 18}}>
+                                再接再厉
+                            </Text>
+                        </View>
+                    </TouchableOpacity>
+                </View>
+            </View>
+        )
+    }
+
     renderEndButton(){
         var iconColor="#00FF00";
         return(
-            <TouchableOpacity onPress={()=> this.onEndPressFunc()} activeOpacity={0.8}>
+            <TouchableOpacity onPress={()=> this.onEndShowResult()} activeOpacity={0.8}>
                 <View style={styles.IconItem}>
                     <Icon name={"ios-arrow-forward"} size={32} color={iconColor}/>
                 </View>
@@ -541,6 +623,7 @@ class AnswerQuestion extends Component {
         let waitText = "未答:"+ (this.state.allcount - done);
 
         return(
+            <View style={{paddingLeft:10,paddingRight:10}}>
                 <Text>耗费时间：{this.state.up_min}:{this.state.up_second}</Text>
                 <Text>剩余时间：{this.state.counttime}</Text>
                 <View>
@@ -572,10 +655,12 @@ class AnswerQuestion extends Component {
     }
 
     renderFragment(){
-        if(this.state.card == 1){
-            return this.renderCard();
-        }else{
+        if(this.state.fragment == 0){
             return this._renderquestion();
+        }else if(this.state.fragment == 1){
+            return this.renderCard();
+        }else if(this.state.fragment == 2){
+            return this.renderResult();
         }
     }
 

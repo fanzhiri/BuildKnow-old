@@ -220,6 +220,7 @@ class BeginTest extends Component {
 
         Actions.answerquestion({
             intype:2,
+            bookdata:this.props.bookdata,
             readyquestion_arr:t_questiondataarr,
             answer_arr:answer_arr,
             answermode:1});
