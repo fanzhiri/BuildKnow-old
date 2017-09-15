@@ -541,7 +541,6 @@ class AnswerQuestion extends Component {
         let waitText = "未答:"+ (this.state.allcount - done);
 
         return(
-            <View style={{paddingLeft:10}}>
                 <Text>耗费时间：{this.state.up_min}:{this.state.up_second}</Text>
                 <Text>剩余时间：{this.state.counttime}</Text>
                 <View>
