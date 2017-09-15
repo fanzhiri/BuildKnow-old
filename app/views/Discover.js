@@ -243,7 +243,7 @@ class Discover extends Component {
             <View style={GlobleStyles.withoutTitleContainer}>
                 <View>
                     <SegmentedControlIOS
-                        values={['用户','知识','需求']}
+                        values={['用户','知识','活动']}
                         selectedIndex={this.state.selectedIndex}
                         style={styles.segmented}
                         onChange={this._onChange}
@@ -330,6 +330,24 @@ class Discover extends Component {
         )
     }
 
+    renderWeekMonthYear(){
+        return(
+            <View style={{height:32,flexDirection:"row"}}>
+                <View style={{flex:4,justifyContent:"center",alignItems:"center",backgroundColor:"#6495ED"}}><Text>每周</Text></View>
+                <View style={{flex:2,justifyContent:"center",alignItems:"center",backgroundColor:"#BDB76B"}}><Text>每月</Text></View>
+                <View style={{flex:1,justifyContent:"center",alignItems:"center",backgroundColor:"#CD1076"}}><Text>每年</Text></View>
+            </View>
+        )
+    }
+
+    renderEvent(){
+        return(
+            <View style={{flex:1}}>
+                {this.renderWeekMonthYear()}
+            </View>
+        )
+    }
+
     renderSegmentedView() {
         if (this.state.selectedIndex === 0) {
 
@@ -347,6 +365,7 @@ class Discover extends Component {
                 }
             }
         } else if (this.state.selectedIndex === 1) {
+            //知识点列表栏
             if(this.state.detialing == 1){
                 return (
                     this.renderNewItem()
@@ -377,8 +396,9 @@ class Discover extends Component {
             }
 
         } else if (this.state.selectedIndex === 2) {
+            //活动专栏
             return (
-                this.rendernodata()
+                this.renderEvent()
             )
         }
     }
