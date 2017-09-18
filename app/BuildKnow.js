@@ -87,7 +87,8 @@ import NewReviewPlan from './views/NewReviewPlan';
 //未完成
 import NewCompetition from './views/NewCompetition';
 //未完成
-import Disscuss from './views/Disscuss';
+
+import Discuss from './views/Discuss';
 
 import Icon from 'react-native-vector-icons/Ionicons';
 
