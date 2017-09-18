@@ -86,7 +86,8 @@ import ReviewPlan from './views/ReviewPlan';
 import NewReviewPlan from './views/NewReviewPlan';
 //未完成
 import NewCompetition from './views/NewCompetition';
-
+//未完成
+import Disscuss from './views/Disscuss';
 
 import Icon from 'react-native-vector-icons/Ionicons';
 
@@ -174,7 +175,7 @@ export default class BuildKnow extends Component {
                 <Scene key="reviewquestion" title="审核题目" component={ReviewQuestion} duration={0} />
                 <Scene key="mycollectbooklist" title="收藏题本" component={MyCollectBookList} duration={0} />
                 <Scene key="chatlist" title="聊天" component={ChatList} duration={0} />
-                <Scene key="testresult" title="测试结果" component={TestResult} duration={0} backTitle={"继续答题"} />
+                <Scene key="testresult" title="测试结果" component={TestResult} duration={0}  />
                 <Scene key="answerlibedit" title="答案库编辑" component={AnswerLibEdit} duration={0}  />
                 <Scene key="testcard" title="题卡" component={TestCard} duration={0}  />
                 <Scene key="answersetting" title="答题设置" component={AnswerSetting} duration={0}  />
@@ -182,6 +183,7 @@ export default class BuildKnow extends Component {
                 <Scene key="reviewplan" title="复习管理" component={ReviewPlan} duration={0} rightTitle={"添加"} onRight={() => Actions.newreviewplan({title:"新建路线",modetype:1})} />
                 <Scene key="newreviewplan" title="复习路线" component={NewReviewPlan} duration={0}  />
                 <Scene key="newcompetition" title="对战" component={NewCompetition} duration={0}  />
+                <Scene key="discuss" title="评论" component={Discuss} duration={0}  />
             </Router>
         );
     }
