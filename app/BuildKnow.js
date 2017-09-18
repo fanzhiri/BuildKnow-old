@@ -134,57 +134,57 @@ export default class BuildKnow extends Component {
                            iconName="ios-body-outline"
                            selectIconName="ios-body"/>
                 </Scene>
-                <Scene key="setting" title="设置" component={Setting} duration={0} />
-                <Scene key="help" title="帮助" component={Help} duration={0} />
-                <Scene key="mybooklist" title="书架" component={MyBookList} duration={0} rightTitle={"添加"} onRight={() => Actions.newbook()}/>
-                <Scene key="homepage" title="主页" component={HomePage} duration={0} />
-                <Scene key="buildquestion" title="建题" component={BuildQuestion} duration={0} />
-                <Scene key="collect" title="收藏" component={Collect} duration={0} />
-                <Scene key="statistics" title="数据统计" component={Statistics} duration={0} />
-                <Scene key="bookcover" title="书面" component={BookCover} duration={0} />
-                <Scene key="buildingbook" title="题集" component={BuildingBook} duration={0} />
-                <Scene key="about" title="关于" component={About} duration={0} />
-                <Scene key="bookdetial" title="题本详情" component={BookDetial} duration={0} />
-                <Scene key="forgetpasswd" title="忘记密码" component={ForgetPasswd} duration={0} />
-                <Scene key="answerquestion" title="答题" component={AnswerQuestion} duration={0} hideBackImage={true}/>
-                <Scene key="newbook" title="新建题本" component={NewBook} duration={0} />
-                <Scene key="friendlist" title="友人" component={FriendList} duration={0} />
-                <Scene key="newonequestion" title="新建单个题目" component={NewOneQuestion} duration={0} />
-                <Scene key="newsomequestions" title="新建题目" component={NewSomeQuestions} duration={0} />
-                <Scene key="composebook" title="组建题本" component={ComposeBook} duration={0} />
-                <Scene key="personalcenter" title="个人信息" component={PersonalCenter} duration={0} />
-                <Scene key="setheadpic" title="上传头像" component={SetHeadPic} duration={0} />
-                <Scene key="sethomepagepic" title="上传主页背景" component={SetHomePagePic} duration={0} />
-                <Scene key="sharemanager" title="分享管理" component={ShareManager} duration={0} rightTitle={"添加"} onRight={() => Actions.newsharemode()}/>
-                <Scene key="newsharemode" title="新建分享方式" component={NewShareMode} duration={0} />
-                <Scene key="classcatalogue" title="分类目录" component={ClassCatalogue} duration={0} />
-                <Scene key="sharecontrol" title="分享控制" component={ShareControl} duration={0} />
-                <Scene key="messagelist" title="消息列表" component={MessageList} duration={0} />
-                <Scene key="notificationlist" title="通知列表" component={NotificationList} duration={0} />
-                <Scene key="schedule" title="日程" component={Schedule} duration={0} />
-                <Scene key="friendverify" title="朋友验证" component={FriendVerify} duration={0} />
-                <Scene key="complaint" title="投诉" component={Complaint} duration={0} />
-                <Scene key="searchbook" title="搜索" component={SearchBook} duration={0} />
-                <Scene key="answerlib" title="答案库" component={AnswerLib} duration={0} />
-                <Scene key="applyrelease" title="申请发布" component={ApplyRelease} duration={0} />
-                <Scene key="admin" title="管理事务" component={Admin} duration={0} />
-                <Scene key="releasereview" title="审核发布" component={ReleaseReview} duration={0} />
-                <Scene key="begintest" title="准备测试" component={BeginTest} duration={0} />
-                <Scene key="registerverify" title="审核注册" component={RegisterVerify} duration={0} />
-                <Scene key="feedback" title="意见反馈" component={FeedBack} duration={0} />
-                <Scene key="reviewchecklist" title="审核表" component={ReviewCheckList} duration={0} />
-                <Scene key="reviewquestion" title="审核题目" component={ReviewQuestion} duration={0} />
-                <Scene key="mycollectbooklist" title="收藏题本" component={MyCollectBookList} duration={0} />
-                <Scene key="chatlist" title="聊天" component={ChatList} duration={0} />
-                <Scene key="testresult" title="测试结果" component={TestResult} duration={0}  />
-                <Scene key="answerlibedit" title="答案库编辑" component={AnswerLibEdit} duration={0}  />
-                <Scene key="testcard" title="题卡" component={TestCard} duration={0}  />
-                <Scene key="answersetting" title="答题设置" component={AnswerSetting} duration={0}  />
-                <Scene key="publicbook" title="出版题本" component={PublicBook} duration={0}  />
-                <Scene key="reviewplan" title="复习管理" component={ReviewPlan} duration={0} rightTitle={"添加"} onRight={() => Actions.newreviewplan({title:"新建路线",modetype:1})} />
-                <Scene key="newreviewplan" title="复习路线" component={NewReviewPlan} duration={0}  />
-                <Scene key="newcompetition" title="对战" component={NewCompetition} duration={0}  />
-                <Scene key="discuss" title="评论" component={Discuss} duration={0}  />
+                <Scene key="setting"            title="设置"          component={Setting} duration={0} />
+                <Scene key="help"               title="帮助"          component={Help} duration={0} />
+                <Scene key="mybooklist"         title="书架"          component={MyBookList} duration={0} rightTitle={"添加"} onRight={() => Actions.newbook()}/>
+                <Scene key="homepage"           title="主页"          component={HomePage} duration={0} />
+                <Scene key="buildquestion"      title="建题"          component={BuildQuestion} duration={0} />
+                <Scene key="collect"            title="收藏"          component={Collect} duration={0} />
+                <Scene key="statistics"         title="数据统计"       component={Statistics} duration={0} />
+                <Scene key="bookcover"          title="书面"          component={BookCover} duration={0} />
+                <Scene key="buildingbook"       title="题集"          component={BuildingBook} duration={0} />
+                <Scene key="about"              title="关于"          component={About} duration={0} />
+                <Scene key="bookdetial"         title="题本详情"       component={BookDetial} duration={0} />
+                <Scene key="forgetpasswd"       title="忘记密码"       component={ForgetPasswd} duration={0} />
+                <Scene key="answerquestion"     title="答题"          component={AnswerQuestion} duration={0} hideBackImage={true}/>
+                <Scene key="newbook"            title="新建题本"       component={NewBook} duration={0} />
+                <Scene key="friendlist"         title="友人"          component={FriendList} duration={0} />
+                <Scene key="newonequestion"     title="新建单个题目"   component={NewOneQuestion} duration={0} />
+                <Scene key="newsomequestions"   title="新建题目"       component={NewSomeQuestions} duration={0} />
+                <Scene key="composebook"        title="组建题本"        component={ComposeBook} duration={0} />
+                <Scene key="personalcenter"     title="个人信息"        component={PersonalCenter} duration={0} />
+                <Scene key="setheadpic"         title="上传头像"        component={SetHeadPic} duration={0} />
+                <Scene key="sethomepagepic"     title="上传主页背景"    component={SetHomePagePic} duration={0} />
+                <Scene key="sharemanager"       title="分享管理" component={ShareManager} duration={0} rightTitle={"添加"} onRight={() => Actions.newsharemode()}/>
+                <Scene key="newsharemode"       title="新建分享方式" component={NewShareMode} duration={0} />
+                <Scene key="classcatalogue"     title="分类目录" component={ClassCatalogue} duration={0} />
+                <Scene key="sharecontrol"       title="分享控制" component={ShareControl} duration={0} />
+                <Scene key="messagelist"        title="消息列表" component={MessageList} duration={0} />
+                <Scene key="notificationlist"   title="通知列表" component={NotificationList} duration={0} />
+                <Scene key="schedule"           title="日程" component={Schedule} duration={0} />
+                <Scene key="friendverify"       title="朋友验证" component={FriendVerify} duration={0} />
+                <Scene key="complaint"          title="投诉" component={Complaint} duration={0} />
+                <Scene key="searchbook"         title="搜索" component={SearchBook} duration={0} />
+                <Scene key="answerlib"          title="答案库" component={AnswerLib} duration={0} />
+                <Scene key="applyrelease"       title="申请发布" component={ApplyRelease} duration={0} />
+                <Scene key="admin"              title="管理事务" component={Admin} duration={0} />
+                <Scene key="releasereview"      title="审核发布" component={ReleaseReview} duration={0} />
+                <Scene key="begintest"          title="准备测试" component={BeginTest} duration={0} />
+                <Scene key="registerverify"     title="审核注册" component={RegisterVerify} duration={0} />
+                <Scene key="feedback"           title="意见反馈" component={FeedBack} duration={0} />
+                <Scene key="reviewchecklist"    title="审核表" component={ReviewCheckList} duration={0} />
+                <Scene key="reviewquestion"     title="审核题目" component={ReviewQuestion} duration={0} />
+                <Scene key="mycollectbooklist"  title="收藏题本" component={MyCollectBookList} duration={0} />
+                <Scene key="chatlist"           title="聊天" component={ChatList} duration={0} />
+                <Scene key="testresult"         title="测试结果" component={TestResult} duration={0}  />
+                <Scene key="answerlibedit"      title="答案库编辑" component={AnswerLibEdit} duration={0}  />
+                <Scene key="testcard"           title="题卡" component={TestCard} duration={0}  />
+                <Scene key="answersetting"      title="答题设置" component={AnswerSetting} duration={0}  />
+                <Scene key="publicbook"         title="出版题本" component={PublicBook} duration={0}  />
+                <Scene key="reviewplan"         title="复习管理" component={ReviewPlan} duration={0} rightTitle={"添加"} onRight={() => Actions.newreviewplan({title:"新建路线",modetype:1})} />
+                <Scene key="newreviewplan"      title="复习路线" component={NewReviewPlan} duration={0}  />
+                <Scene key="newcompetition"     title="对战" component={NewCompetition} duration={0}  />
+                <Scene key="discuss"            title="评论" component={Discuss} duration={0}  />
             </Router>
         );
     }
