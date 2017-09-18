@@ -3,7 +3,7 @@
  */
 
 import React, { Component ,PropTypes} from 'react';
-import {View, Text, StyleSheet, Image, SegmentedControlIOS, Dimensions, TouchableOpacity,ListView} from "react-native";
+import {View, Text, StyleSheet, Image, SegmentedControlIOS, Dimensions, TouchableOpacity,ListView,Alert} from "react-native";
 import {Actions} from "react-native-router-flux";
 import Button from 'apsl-react-native-button'
 import ParallaxScrollView from 'react-native-parallax-scroll-view';
@@ -206,12 +206,19 @@ class HomePage extends Component {
         });
     }
 
+    notFollow(){
+        Alert.alert('谨慎操作', '真的要取消关注吗?', [
+            {text: '是的', onPress: () => this.dofollow(0)},
+            {text: '误操作'}
+        ]);
+    }
+
 
     renderFollowControl(){
 
         if(this.state.followhim){
             return(
-                <TouchableOpacity  onPress={()=> this.dofollow(0)} >
+                <TouchableOpacity  onPress={()=> this.notFollow()} >
                     <Text style={styles.bottomButtonText} >取消关注</Text>
                 </TouchableOpacity>
                 )
@@ -227,11 +234,18 @@ class HomePage extends Component {
 
     }
 
+    breakUp(){
+        Alert.alert('谨慎操作', '真的要取消断交吗?', [
+            {text: '是的', onPress: () => this.dofriend(0)},
+            {text: '误操作'}
+        ]);
+    }
+
     renderFriendControl(){
 
         if(this.state.friendhim){
             return(
-                <TouchableOpacity  onPress={()=> this.dofriend(0)} >
+                <TouchableOpacity  onPress={()=> this.breakUp()} >
                     <Text style={styles.bottomButtonText} >断交</Text>
                 </TouchableOpacity>
             )
