@@ -160,6 +160,7 @@ class PublicBook extends Component {
                 });
                 break;
             case 2:
+                Actions.testresult({bookid:this.props.bookid});
                 break;
             case 3:
                 break;

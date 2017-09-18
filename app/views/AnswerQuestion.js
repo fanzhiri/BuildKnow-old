@@ -74,7 +74,7 @@ var doGetQuestionGetBaseUrl = "https://slako.applinzi.com/api/1/question/";
 var httpsBaseUrl = "https://slako.applinzi.com";
 
 
-var saveRecordUrl = "https://slako.applinzi.com/index.php?m=question&c=personal&a=saverecord";
+var saveRecordUrl = "https://slako.applinzi.com/index.php?m=question&c=personal&a=uploadrecord";
 
 class AnswerQuestion extends Component {
     constructor(props) {
@@ -103,6 +103,7 @@ class AnswerQuestion extends Component {
         this._timer=null;//计时器
 
         let startDate = new Date();
+
         this.state = {
             count:0,
             fetchresult:null,
@@ -126,8 +127,8 @@ class AnswerQuestion extends Component {
             answer_arr:props.answer_arr,//已经准备好的答案
             showResult:0,
             startTimeText:startDate.toLocaleString(),
-            startTime:startDate.getMilliseconds(),
-            uploadRecord:0
+            startTime:startDate.getTime(),
+            uploadRecord:0//0没上传，1上传中，2上传完成
         };
 
         this._dofetchquestion = this.dofetchquestion.bind(this);
@@ -138,7 +139,7 @@ class AnswerQuestion extends Component {
         this._onCardChange = this.onCardChange.bind(this);
     }
 
-    saveTestRecord(uploadobj){
+    saveTestRecord(score,rightnum,taketime){
         if(this.state.uploadRecord != 0){
             return;
         }
@@ -147,39 +148,36 @@ class AnswerQuestion extends Component {
         })
         let formData = new FormData();
         formData.append("auth",global.auth);
-
-        formData.append("bookid",this.props.bookdata.question_book_id);
+        formData.append("userid",global.userid);
+        formData.append("bookid",this.props.bookdata.reviewid);
         formData.append("bookname",this.props.bookdata.bookname);
         formData.append("bookversion",this.props.bookdata.version);
+        formData.append("score",score);
         formData.append("participants",1);
         formData.append("qstnum",this.state.answer_arr.length);
-        formData.append("score",uploadobj.score);
+        formData.append("taketime",taketime);
+        formData.append("rightnum",rightnum);
         formData.append("begintime",this.state.startTime);
-        formData.append("taketime",20);
-        formData.append("rightnum",uploadobj.rightnum);
-        formData.append("qstasktext",this.props.readyquestion_arr);
-        formData.append("qstanswertext",this.state.answer);
-        formData.append("answerchoose",this.state.choose);
+        formData.append("qstasktext",JSON.stringify(this.props.readyquestion_arr));
+        formData.append("qstanswertext",JSON.stringify(this.props.answer_arr));
+        formData.append("answerchoose",JSON.stringify(this.state.choose));
 
         var opts = {
             method:"POST",
             body:formData
         }
-        fetch(doGetBookQuestionUrl,opts)
+        fetch(saveRecordUrl,opts)
             .then((response) => response.json())
             .then((responseData) => {
                 if(responseData.code == 100){
-                    let t_bookquestion_data_source=this.state.bookquestion_data_source;
-                    t_bookquestion_data_source[this.state.modeselect_idx]=responseData.data;
+
                     this.setState({
-                        bookquestion_data_source:t_bookquestion_data_source,
-                        fetching:0,
                         uploadRecord:2//上传完成
                     })
                 }else{
                     alert(responseData.message);
                     this.setState({
-                        fetching:0
+                        uploadRecord:0
                     });
                 }
 
@@ -187,7 +185,7 @@ class AnswerQuestion extends Component {
             .catch((error) => {
                 alert(error);
                 this.setState({
-                    fetching:0
+                    uploadRecord:0
                 });
             })
     }
@@ -560,6 +558,10 @@ class AnswerQuestion extends Component {
     }
 
     onEndShowResult(){
+        if(this.state.answermode ==0){
+            Actions.pop();
+            return;
+        }
         this._timer && clearInterval(this._timer);
         this.setState({
             fragment:2
@@ -580,11 +582,15 @@ class AnswerQuestion extends Component {
         let endTimeText = endTime.toLocaleString();
 
         let uploadText ;
-        let endButtonColor ='#00EE00';
+        let endButtonColor ='#CD00CD';
+        let saveButtonColor ='#EEB422';
         switch (this.state.uploadRecord){
             case 0:uploadText = "上传记录";break;
             case 1:uploadText = "上传中，请稍后";
-                    endButtonColor="#6E6E6E";break;
+                    endButtonColor="#6E6E6E";
+                    saveButtonColor="#6E6E6E";
+                    break;
+
             case 2:uploadText = "已经上传";break;
         }
         
@@ -593,28 +599,30 @@ class AnswerQuestion extends Component {
             taketime:123,
             rightnum:right_num,
 
-        }
+        };
+        let endTimeSecond=endTime.getTime();
+        let takeTime = endTimeSecond-this.state.startTime;
         return(
             <View style={{flex:1}}>
                 <Text>得分   :{score}</Text>
                 <Text>答对题数:{right_num}</Text>
                 <Text>答错题数:{wrong_num}</Text>
                 <Text>今天第几次:{1}</Text>
-                <Text>耗时:{1}</Text>
+                <Text>耗时:{takeTime}</Text>
                 <Text>今天第几次:{1}</Text>
                 <Text>历史第几次:{1}</Text>
                 <Text>开始时间:{this.state.startTimeText}</Text>
                 <Text>结束时间:{endTimeText}</Text>
                 <View style={{flex: 1, justifyContent: 'flex-end',}}>
-                    <View style={{flexDirection:"row"}}>
-                        <TouchableOpacity onPress={ () =>this.saveTestRecord(uploadobj)} activeOpacity={0.8}>
-                            <View style={{flex:1,justifyContent: 'center',alignItems: 'center', height:32, backgroundColor: '#00EE00'}}  >
+                    <View style={{flexDirection:"row", height:32}}>
+                        <TouchableOpacity style={{flex:1}} onPress={ () =>this.saveTestRecord(score,right_num,takeTime)} activeOpacity={0.8}>
+                            <View style={{flex:1,justifyContent: 'center',alignItems: 'center', height:32, backgroundColor:saveButtonColor}}  >
                                 <Text style={{fontSize: 18}}>
                                     {uploadText}
                                 </Text>
                             </View>
                         </TouchableOpacity>
-                        <TouchableOpacity onPress={ () =>this.onEndPressFunc()} activeOpacity={0.8}>
+                        <TouchableOpacity style={{flex:1}} onPress={ () =>this.onEndPressFunc()} activeOpacity={0.8}>
                             <View style={{flex:1,justifyContent: 'center',alignItems: 'center', height:32, backgroundColor:endButtonColor }}  >
                                 <Text style={{fontSize: 18}}>
                                     再接再厉

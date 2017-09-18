@@ -263,8 +263,8 @@ class BookCover extends Component {
                 <Text style={styles.textmargin}>题本详情 :{this.state.bookdata.bookdescription}</Text>
                 <Text style={styles.textmargin}>题目编号 :{this.state.bookdata.qids}</Text>
                 <Text style={styles.textmargin}>关注人数 :{this.state.bookdata.follow}</Text>
-                <Text style={styles.textmargin}>测试人数 :{this.state.bookdata.follow}</Text>
-                <Text style={styles.textmargin}>测试次数 :{this.state.bookdata.follow}</Text>
+                <Text style={styles.textmargin}>测试人数 :{this.state.bookdata.testtime}</Text>
+                <Text style={styles.textmargin}>测试次数 :{this.state.bookdata.testtime}</Text>
             </View>
         )
     }
