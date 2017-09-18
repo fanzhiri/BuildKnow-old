@@ -2,7 +2,7 @@
  * Created by slako on 17/2/18.
  */
 import React, { Component,PropTypes } from 'react';
-import {View, Text, StyleSheet, Image, Dimensions,ScrollView,TouchableOpacity,ListView,SegmentedControlIOS} from "react-native";
+import {View, Text, StyleSheet, Image, Dimensions,ScrollView,TouchableOpacity,ListView,SegmentedControlIOS,Alert} from "react-native";
 import {Actions} from "react-native-router-flux";
 import Button from 'apsl-react-native-button'
 import GlobleStyles from '../styles/GlobleStyles';
@@ -128,7 +128,8 @@ class AnswerQuestion extends Component {
             showResult:0,
             startTimeText:startDate.toLocaleString(),
             startTime:startDate.getTime(),
-            uploadRecord:0//0没上传，1上传中，2上传完成
+            uploadRecord:0,//0没上传，1上传中，2上传完成
+
         };
 
         this._dofetchquestion = this.dofetchquestion.bind(this);
@@ -557,11 +558,34 @@ class AnswerQuestion extends Component {
         Actions.pop();
     }
 
+    endnow(){
+        this._timer && clearInterval(this._timer);
+        this.setState({
+            fragment:2
+        })
+    }
+
     onEndShowResult(){
         if(this.state.answermode ==0){
             Actions.pop();
             return;
         }
+
+        let notdone = 0;
+        for (let i = 0; i < this.state.answer_arr.length; i++) {
+            if (this.state.choose[i] == -1) {
+                notdone++;
+            }
+        }
+        if (notdone != 0) {
+            Alert.alert('未完成提醒', '还没答完题目，还有'+notdone+'立马结束?', [
+                {text: '不答了', onPress: () => this.endnow()},
+                {text: '继续答题'}
+            ]);
+            return;
+        }
+
+
         this._timer && clearInterval(this._timer);
         this.setState({
             fragment:2
