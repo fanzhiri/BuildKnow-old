@@ -414,6 +414,8 @@ class AnswerQuestion extends Component {
                 this.setState({fragment:1});
                 break;
             case 6:
+                let t_questiondata = this.state.questiondataarr[parseInt(this.state.questionidx)];
+                Actions.discuss({intype:2,qst_id:t_questiondata.questionid});
                 break;
             case 7:
                 break;

@@ -23,6 +23,7 @@ const styles = StyleSheet.create({
 
 var doGetDiscussUrl = "https://slako.applinzi.com/index.php?m=question&c=personal&a=getdiscuss";
 
+import DataStore from '../util/DataStore';
 
 
 class Disscuss extends Component {
@@ -37,11 +38,16 @@ class Disscuss extends Component {
         this._renderDiscussItem = this.renderDiscussItem.bind(this)
     }
 
-    dofetch_disscuss(){
+    dofetch_discuss(){
 
         let formData = new FormData();
         formData.append("auth",global.auth);
         formData.append("userid",global.userid);
+        formData.append("discusstype",this.props.intype);
+        if(this.props.intype == 2){
+            formData.append("discussid",this.props.qst_id);
+        }
+
         var opts = {
             method:"POST",
             body:formData
@@ -51,10 +57,14 @@ class Disscuss extends Component {
             .then((responseData) => {
                 if(responseData.code == 100){
                     this.setState({
-                        discuss_data_source:responseData.data
+                        discuss_data_source:responseData.data,
+                        get_disscuss_data:1
                     })
                 }else{
                     alert(responseData.message);
+                    this.setState({
+                        get_disscuss_data:2
+                    })
                 }
 
             })
@@ -65,6 +75,7 @@ class Disscuss extends Component {
 
     renderDiscussItem(rowData, sectionID, rowID){
         let imgUri=rowData.head;
+        let iconColor = "#FF0000";
         return(
             <View>
                 <View style={{height:24,flexDirection:"row",alignItems:"center"}}>
@@ -76,7 +87,7 @@ class Disscuss extends Component {
                 </View>
                 <View>
                     <Text>
-
+                        {rowData.content}
                     </Text>
                 </View>
             </View>
@@ -102,10 +113,10 @@ class Disscuss extends Component {
 
     renderPage(){
         if(this.state.get_disscuss_data == 0){
-            this.dofetch_disscuss();
+            this.dofetch_discuss();
             return (this.renderLoading());
         }else{
-            if(disscuss_data_source != null){
+            if(this.state.discuss_data_source != null){
                 return(this.renderDiscuss())
             }else{
                 return (this.rendernodata())
@@ -114,11 +125,29 @@ class Disscuss extends Component {
         }
     }
 
+    writeComment(){
+        Actions.comment({intype:this.props.intype,commentid:this.props.qst_id});
+    }
+
     render(){
 
         return (
             <View style={GlobleStyles.withoutTitleContainer}>
                 {this.renderPage()}
+                <View style={{flex:1,justifyContent:"flex-end"}}>
+
+                    <TouchableOpacity onPress={ () =>this.writeComment()} activeOpacity={0.8}>
+                        <View style={{flexDirection:'row',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        height:32,
+                        backgroundColor: '#00EE00'}}  >
+                            <Text style={{fontSize: 18}}>
+                                写评论
+                            </Text>
+                        </View>
+                    </TouchableOpacity>
+                </View>
             </View>
         );
     }
@@ -143,7 +172,7 @@ class Disscuss extends Component {
 
 Disscuss.PropTypes = {
     intype:PropTypes.number,//0发布的书目、1未发布的书目、2题目
-    idnumber:PropTypes.number,
+    qst_id:PropTypes.number,
 };
 
 module.exports = Disscuss;
