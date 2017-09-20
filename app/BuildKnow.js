@@ -89,6 +89,7 @@ import NewCompetition from './views/NewCompetition';
 //未完成
 
 import Discuss from './views/Discuss';
+import Comment from './views/Comment';
 
 import Icon from 'react-native-vector-icons/Ionicons';
 
@@ -185,6 +186,7 @@ export default class BuildKnow extends Component {
                 <Scene key="newreviewplan"      title="复习路线" component={NewReviewPlan} duration={0}  />
                 <Scene key="newcompetition"     title="对战" component={NewCompetition} duration={0}  />
                 <Scene key="discuss"            title="评论" component={Discuss} duration={0}  />
+                <Scene key="comment"            title="发评论" component={Comment} duration={0}  />
             </Router>
         );
     }

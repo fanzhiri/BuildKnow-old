@@ -3,7 +3,7 @@
  */
 import React, { Component ,PropTypes} from 'react';
 
-import {View, Text, Image, StyleSheet,Alert, SegmentedControlIOS} from "react-native";
+import {View, Text, Image, StyleSheet,Alert, SegmentedControlIOS,ListView,RefreshControl,TouchableOpacity} from "react-native";
 
 import Button from 'apsl-react-native-button'
 
@@ -22,7 +22,7 @@ import BookDiscuss from './BookDiscuss'
 import BookHistory from './BookHistory'
 
 import GlobleStyles from '../styles/GlobleStyles';
-
+import DataStore from '../util/DataStore';
 
 const styles = StyleSheet.create({
     container: {
@@ -80,9 +80,11 @@ const styles = StyleSheet.create({
 
 var httpsBaseUrl = "https://slako.applinzi.com/";
 
-
 var bookcollectchangeUrl = "https://slako.applinzi.com/index.php?m=question&c=personal&a=bookcollectchange";
+
 var getpublicbookUrl = "https://slako.applinzi.com/index.php?m=question&c=index&a=getpublicbook";
+
+var doGetDiscussUrl = "https://slako.applinzi.com/index.php?m=question&c=personal&a=getdiscuss";
 
 class BookCover extends Component {
     constructor(props) {
@@ -91,16 +93,51 @@ class BookCover extends Component {
         this.state = {
             selectedIndex:0,
             bookdata:null,
-            collectit:false
+            collectit:false,
+            comments_data_source:null,
+            get_comments_data:0,
+            gorefreshing:false,
         };
         this._onChange = this._onChange.bind(this);
-
+        this._renderDiscussItem = this.renderDiscussItem.bind(this);
     }
 
     _onChange(event) {
         this.setState({
             selectedIndex: event.nativeEvent.selectedSegmentIndex,
         });
+    }
+
+    dofetch_discuss(){
+        let formData = new FormData();
+        formData.append("auth",global.auth);
+        formData.append("userid",global.userid);
+        formData.append("discusstype",0);
+        formData.append("discussid",this.state.bookdata.reviewid);
+
+        var opts = {
+            method:"POST",
+            body:formData
+        }
+        fetch(doGetDiscussUrl,opts)
+            .then((response) => response.json())
+            .then((responseData) => {
+                if(responseData.code == 100){
+
+                    this.setState({
+                        comments_data_source:responseData.data,
+                        get_comments_data:1
+                    })
+                }else{
+                    this.setState({
+                        get_comments_data:2
+                    })
+                }
+
+            })
+            .catch((error) => {
+                alert(error)
+            })
     }
 
     docollect(collectitornot){
@@ -246,7 +283,7 @@ class BookCover extends Component {
             )
         } else if (this.state.selectedIndex === 1) {
             return (
-                this.renderDiscussView()
+                this.renderDiscussFragment()
             )
         } else if (this.state.selectedIndex === 2) {
             return (
@@ -269,15 +306,79 @@ class BookCover extends Component {
         )
     }
 
-    renderDiscussView(){
-        return (
-            <Text>Discuss</Text>
+    renderDiscussItem(rowData, sectionID, rowID){
+        return(
+            <View style={{height:24}}>
+                <Text>
+                    {rowData.content}  {rowData.create_at}
+                </Text>
+            </View>
         )
+    }
+
+    renderDiscuss(){
+        return(
+            <ListView
+                refreshControl={
+                    <RefreshControl
+                        refreshing={this.state.gorefreshing}
+                        onRefresh={() => this.dofetch_discuss()}
+                    />
+                }
+                style={styles.list}
+                dataSource={DataStore.cloneWithRows(this.state.comments_data_source)}
+                renderRow={this._renderDiscussItem}
+                enableEmptySections = {true}
+            />
+        )
+    }
+
+    writeComment(){
+        Actions.comment({intype:0,commentid:this.props.bookpublicid});
+    }
+
+    renderDiscussFragment(){
+        return(
+            <View style={{flex:1,justifyContent:"flex-end"}}>
+                {this.renderDiscussView()}
+                <TouchableOpacity onPress={ () =>this.writeComment()} activeOpacity={0.8}>
+                    <View style={{flexDirection:'row',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        height:32,
+                        backgroundColor: '#00EE00'}}  >
+                        <Text style={{fontSize: 18}}>
+                            写评论
+                        </Text>
+                    </View>
+                </TouchableOpacity>
+            </View>
+        )
+    }
+
+    renderDiscussView(){
+        if(this.state.get_comments_data == 0){
+            this.dofetch_discuss();
+            return(this.renderLoading())
+        }else{
+            if(this.state.comments_data_source == null){
+                return(this.rendernodata())
+            }else{
+                return(this.renderDiscuss())
+            }
+        }
+
     }
 
     renderHistoryView(){
         return (
             <Text>History</Text>
+        )
+    }
+
+    rendernodata(){
+        return (
+            <Text>没有数据</Text>
         )
     }
 }
