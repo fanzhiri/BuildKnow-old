@@ -45,6 +45,7 @@ class BeginTest extends Component {
             all_time:2,//min
             one_time:0,
             wrong_end:10,
+            range:0,//0全部、1已看、2未看、3错题、4收藏、5章节
             pull_back:"yes"
         };
 
@@ -145,6 +146,25 @@ class BeginTest extends Component {
 
     }
 
+    renderRangeText(range){
+        let rangeText = "";
+        switch (range){
+            //0全部、1已看、2未看、3错题、4收藏、5章节
+            case 0:rangeText = "全部";break;
+            case 1:rangeText = "已看";break;
+            case 2:rangeText = "未看";break;
+            case 3:rangeText = "错题";break;
+            case 4:rangeText = "收藏";break;
+            case 5:rangeText = "章节";break;
+            default:rangeText = "";
+        }
+        return(
+            <Text>
+                {rangeText}
+            </Text>
+        )
+    }
+
     renderModeItem(idx){
         let select_this=idx;
         let select_background_collor = "#FFFF00";
@@ -158,6 +178,7 @@ class BeginTest extends Component {
             all_time:"",//min
             one_time:"",
             wrong_end:"",
+            range:"",
             pull_back:""
         };
 
@@ -183,6 +204,9 @@ class BeginTest extends Component {
                 </View>
                 <View style={{flex:1,justifyContent:"center",alignItems:"center"}}>
                     <Text>{nowTestMode.wrong_end}</Text>
+                </View>
+                <View style={{flex:1,justifyContent:"center",alignItems:"center"}}>
+                    {this.renderRangeText(nowTestMode.range)}
                 </View>
                 <View style={{flex:1,justifyContent:"center",alignItems:"center"}}>
                     <Text>{nowTestMode.pull_back}</Text>
@@ -269,6 +293,7 @@ class BeginTest extends Component {
                         {this.renderModeTitleItem("总限定时间：")}
                         {this.renderModeTitleItem("每题限定时：")}
                         {this.renderModeTitleItem("错题量结束：")}
+                        {this.renderModeTitleItem("范围：")}
                         {this.renderModeTitleItem("反悔：")}
                         {this.renderModeTitleItem("")}
                     </View>
