@@ -229,7 +229,9 @@ class BeginTest extends Component {
         let t_questiondataarr = JSON.parse(this.props.bookdata.qidtext);
         //let t_questiondataarr = this.state.bookquestion_data_source[this.state.modeselect_idx];
         let nowTestMode = this.state.testMode[this.state.modeselect_idx];
-        t_questiondataarr = t_questiondataarr.reverse();
+        t_questiondataarr = t_questiondataarr.sort(function () {
+           return Math.random()>0.5;
+        });
         t_questiondataarr = t_questiondataarr.slice(0,nowTestMode.qst_num);
         let answer_arr = new Array();
         for(let i=0;i < nowTestMode.qst_num;i++){
