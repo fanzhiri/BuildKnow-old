@@ -23,9 +23,9 @@ import DataStore from '../util/DataStore';
 
 const styles = StyleSheet.create({
     container: {
-        marginLeft:10,
-        marginRight:10,
-        marginBottom:6
+        marginLeft:2,
+        marginRight:2,
+        marginBottom:2
     },
     peopleItem:{
 
@@ -67,20 +67,22 @@ const styles = StyleSheet.create({
         backgroundColor: '#00FF7F',
     },
     msgitem:{
-        marginTop:4,
-        borderColor: '#0000FF',
-        borderWidth: 1,
+        marginTop:6,
+        marginBottom:6
     },
     bottomInputViewContainer:{
-        padding:0,
+        padding:4,
+
         flexDirection:'row',
-        height: 38,
+        height: 42,
         alignItems: 'center',
+        borderTopWidth:1,
+        borderBottomWidth:1
     },
     bottomAttachmentViewContainer:{
-        padding:0,
+        paddingTop:8,
+        paddingBottom:8,
         flexDirection:'row',
-        height: 80,
         alignItems: 'center',
         justifyContent: 'space-around',
     },
@@ -88,10 +90,11 @@ const styles = StyleSheet.create({
         flex:1,
         fontSize:16,
         borderColor: 'gray',
-        borderWidth: 2,
+        borderWidth: 1,
         paddingLeft:10,
         paddingRight:10,
-        marginRight:6
+        marginRight:6,
+        borderRadius:4
     },
     msgcontent:{
         fontSize:18,
@@ -101,14 +104,14 @@ const styles = StyleSheet.create({
     },
     msgleft:{
         flexDirection: 'row',
-        alignItems: 'flex-end',
+        alignItems: 'flex-start',
         justifyContent: 'flex-start',
         marginLeft: 8,
         marginRight: 0,
     },
     msgRight:{
         flexDirection: 'row',
-        alignItems: 'flex-end',
+        alignItems: 'flex-start',
         justifyContent: 'flex-end',
         marginLeft: 0,
         marginRight: 8,
@@ -175,6 +178,9 @@ class ChatList extends Component {
             .then((response) => response.json())
             .then((responseData) => {
                 if(responseData.code == 100){
+                    this.setState({
+                        inputtextstring:"",
+                    });
                     this.dofetch_checkmsglist()
                 }else{
                     alert(responseData.message);
@@ -331,15 +337,43 @@ class ChatList extends Component {
         var msglr = styles.msgleft ;
         if(rowData.send_from_userid == global.userid){
             msglr = styles.msgRight ;
-        }
-
-        return(
-            <View style={[styles.msgitem,msglr]}>
-                <View>
-                    <Text style={styles.msgcontent}>{rowData.content}</Text>
-                    <Text style={styles.msgtime}>{d.toDateString()}</Text>
+            return(
+                <View style={[styles.msgitem,msglr]}>
+                    <View style={{borderWidth:1,backgroundColor:"#00FF00",
+                        borderRadius:8,
+                        paddingLeft:8,paddingRight:8,
+                        paddingTop:6,paddingBottom:6,
+                        marginRight:8}}>
+                        <Text style={styles.msgcontent}>{rowData.content}</Text>
+                        <Text style={styles.msgtime}>{d.toDateString()}</Text>
+                    </View>
+                    <Image style={{borderRadius:4,height:36,width:36}} resizeMode="cover" source={{uri:`${httpsBaseUrl}${global.userhead}`}}/>
                 </View>
+            );
+        }else{
+            return(
+                <View style={[styles.msgitem,msglr]}>
+                    <View style={{borderWidth:1,backgroundColor:"#FFFF0",
+                        borderRadius:8,
+                        paddingLeft:8,paddingRight:8,
+                        paddingTop:6,paddingBottom:6,
+                        marginRight:8}}>
+                        <Text style={styles.msgcontent}>{rowData.content}</Text>
+                        <Text style={styles.msgtime}>{d.toDateString()}</Text>
+                    </View>
 
+                </View>
+            );
+        }
+    }
+
+    renderAttachButton(icon,name,func){
+        return(
+            <View style={{alignItems:"center"}}>
+                <View style={{justifyContent:"center",alignItems:"center",width:54,height:54,borderWidth:1,borderRadius:6}}>
+                    <Icon name={icon} size={36} color={"#11FF00"}/>
+                </View>
+                <Text style={{fontSize:12,marginTop:8}}>{name}</Text>
             </View>
         )
     }
@@ -348,15 +382,9 @@ class ChatList extends Component {
         if(this.state.showattach){
             return (
                 <View style={styles.bottomAttachmentViewContainer}>
-                    <View>
-                        <Icon name={"md-contact"} size={64} color={"#11FF00"}/>
-                    </View>
-                    <View>
-                        <Icon name={"md-bookmarks"} size={64} color={"#11FF00"}/>
-                    </View>
-                    <View>
-                        <Icon name={"md-paper"} size={64} color={"#11FF00"}/>
-                    </View>
+                    {this.renderAttachButton("md-contact","联系人",null)}
+                    {this.renderAttachButton("md-bookmarks","书目",null)}
+                    {this.renderAttachButton("md-paper","题目",null)}
                 </View>
             );
         }
@@ -399,9 +427,14 @@ class ChatList extends Component {
                         multiline={true}
                     />
 
-                    <Button style={styles.sendbutton} textStyle={{fontSize: 16}} onPress={() => this.dofetch_sendmsg()} >发送</Button>
-
-
+                    <TouchableOpacity onPress={()=> this.dofetch_sendmsg()} >
+                        <View style={{
+                            borderWidth:1,backgroundColor:"#00FF00",
+                            justifyContent:"center",alignItems:"center",
+                            borderRadius:4,paddingLeft:8,paddingRight:8,paddingTop:6,paddingBottom:6}}>
+                            <Text style={{fontSize:16}}>发送</Text>
+                        </View>
+                    </TouchableOpacity>
                 </View>
                 {this.renderAttachView()}
             </View>
