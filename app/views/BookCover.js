@@ -60,10 +60,17 @@ const styles = StyleSheet.create({
         alignSelf:'center'
     },
     obtainButton:{
-        width:38,height:24,
+        justifyContent: 'center',
+        alignItems:'center',
+        borderRadius:6,
+        width:58,height:24,
         backgroundColor: '#00FF7F',
     },
     dropButton:{
+        justifyContent: 'center',
+        alignItems:'center',
+        marginRight:8,
+        borderRadius:6,
         width:38,height:24,
         backgroundColor: '#FF0000',
     },
@@ -209,14 +216,17 @@ class BookCover extends Component {
         if(global.bookcollect.contains(this.state.bookdata.reviewid)){
             return(
                 <View style={styles.container3}>
-                    <Button style={styles.dropButton} textStyle={{fontSize: 12}}  onPress={() => this.godropbook()}>丢弃</Button>
-                    <Button style={styles.dropButton} textStyle={{fontSize: 12}}  onPress={() => Actions.publicbook({bookid:this.state.bookdata.reviewid})}>进入</Button>
+
+                    <View style={styles.dropButton}  onPress={() => this.godropbook()}><Text style={{fontSize:12}}>丢弃</Text></View>
+                    <View style={styles.obtainButton} onPress={() => Actions.publicbook({bookid:this.state.bookdata.reviewid})}><Text style={{fontSize:12}}>进入</Text></View>
+
                 </View>
             );
         }else{
             return(
                 <View style={styles.container3}>
-                    <Button style={styles.obtainButton} textStyle={{fontSize: 12}}  onPress={() => this.docollect(1)}>收藏</Button>
+
+                    <View style={styles.obtainButton} onPress={() => this.docollect(1)}><Text style={{fontSize:12}}>收藏</Text></View>
                 </View>
             );
         }
