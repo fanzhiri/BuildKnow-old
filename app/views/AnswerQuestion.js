@@ -117,7 +117,7 @@ class AnswerQuestion extends Component {
             questiondataarr:t_questiondataarr,
             readyquestionarr:this.props.readyquestion_arr,
             choose:choose_arr,
-
+            answermode:this.props.answermode,
             fragment:0,//1为查看题卡,
             counttime:props.counttime?props.counttime:60,
             up_min:0,
