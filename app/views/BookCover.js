@@ -23,6 +23,7 @@ import BookHistory from './BookHistory'
 
 import GlobleStyles from '../styles/GlobleStyles';
 import DataStore from '../util/DataStore';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 const styles = StyleSheet.create({
     container: {
@@ -125,7 +126,7 @@ class BookCover extends Component {
                 if(responseData.code == 100){
 
                     this.setState({
-                        comments_data_source:responseData.data,
+                        comments_data_source:responseData.data.reverse(),
                         get_comments_data:1
                     })
                 }else{
@@ -307,11 +308,27 @@ class BookCover extends Component {
     }
 
     renderDiscussItem(rowData, sectionID, rowID){
+        let time_o = new Date();
+        time_o.setMilliseconds(rowData.create_at);
+        let time_t = time_o.toLocaleString();
+        let iconColor = "#FF0000";
         return(
-            <View style={{height:24}}>
-                <Text>
-                    {rowData.content}  {rowData.create_at}
+            <View style={{
+                borderBottomWidth:1,borderBottomColor:"#0000EE",
+                backgroundColor:"#F0FFEE",marginTop:4,paddingRight:2}}>
+                <View style={{flex:1,flexDirection:"row",alignItems:"center"}}>
+                    <Text style={{fontSize:12,color:"#9400D3"}}>
+                        {time_t} {rowData.nickname}
+                    </Text>
+                    <View style={{flex:1,flexDirection:"row",alignItems:"center",justifyContent:"flex-end"}}>
+                        <Icon name="ios-flame" size={18} color={iconColor}/>
+                    </View>
+                </View>
+
+                <Text style={{fontSize:14,marginBottom:2,marginTop:2}}>
+                    {rowData.content}
                 </Text>
+
             </View>
         )
     }

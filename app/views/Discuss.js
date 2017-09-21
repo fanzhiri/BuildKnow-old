@@ -61,7 +61,7 @@ class Disscuss extends Component {
                         get_disscuss_data:1
                     })
                 }else{
-                    alert(responseData.message);
+
                     this.setState({
                         get_disscuss_data:2
                     })
@@ -74,22 +74,27 @@ class Disscuss extends Component {
     }
 
     renderDiscussItem(rowData, sectionID, rowID){
-        let imgUri=rowData.head;
+        let time_o = new Date();
+        time_o.setMilliseconds(rowData.create_at);
+        let time_t = time_o.toLocaleString();
         let iconColor = "#FF0000";
         return(
-            <View>
-                <View style={{height:24,flexDirection:"row",alignItems:"center"}}>
-                    <Image style={styles.headimage} resizeMode="cover" source={{uri:imgUri}}></Image>
-                    <Text>{rowData.nickname}</Text>
-                    <View style={{flexDirection:"row",justifyContent:"flex-end",alignItems:"center"}}>
-                        <Icon name="ios-flame" size={22} color={iconColor}/>
+            <View style={{
+                borderBottomWidth:1,borderBottomColor:"#0000EE",
+                backgroundColor:"#F0FFEE",marginTop:4,paddingRight:2}}>
+                <View style={{flex:1,flexDirection:"row",alignItems:"center"}}>
+                    <Text style={{fontSize:12,color:"#9400D3"}}>
+                        {time_t} {rowData.nickname}
+                    </Text>
+                    <View style={{flex:1,flexDirection:"row",alignItems:"center",justifyContent:"flex-end"}}>
+                        <Icon name="ios-flame" size={18} color={iconColor}/>
                     </View>
                 </View>
-                <View>
-                    <Text>
-                        {rowData.content}
-                    </Text>
-                </View>
+
+                <Text style={{fontSize:14,marginBottom:2,marginTop:2}}>
+                    {rowData.content}
+                </Text>
+
             </View>
         )
     }

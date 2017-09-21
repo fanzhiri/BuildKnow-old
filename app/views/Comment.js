@@ -76,6 +76,7 @@ class Comment extends Component {
         let formData = new FormData();
         formData.append("auth",global.auth);
         formData.append("userid",global.userid);
+        formData.append("nickname",global.nickname);
         formData.append("commenttype",this.props.intype);
         formData.append("commentid",this.props.commentid);
         formData.append("comment",this.state.commenttext);

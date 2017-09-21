@@ -28,6 +28,7 @@ import BookHistory from './BookHistory'
 
 import DataStore from '../util/DataStore';
 import GlobleStyles from '../styles/GlobleStyles';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 var doGetBookUrl = "https://slako.applinzi.com/index.php?m=question&c=personal&a=getbook";
 var httpsBaseUrl = "https://slako.applinzi.com/";
@@ -36,6 +37,7 @@ var doGetBookQuestionUrl = "https://slako.applinzi.com/index.php?m=question&c=pe
 
 var doGetRecommendQuestionUrl = "https://slako.applinzi.com/index.php?m=question&c=personal&a=getrecommendquestion";
 
+var doGetDiscussUrl = "https://slako.applinzi.com/index.php?m=question&c=personal&a=getdiscuss";
 
 const styles = StyleSheet.create({
     container: {
@@ -115,7 +117,11 @@ class BuildingBook extends Component {
             get_qslist_data:null,
             idea_recommend_data_source:null,
             get_recommenddata:null,
-            gorefreshing:false
+            gorefreshing:false,
+            //评论模块
+            comments_data_source:null,
+            get_comments_data:0,
+
         };
         this._onChange = this._onChange.bind(this);
         this._handleRandom = this.handleRandom.bind(this);
@@ -125,6 +131,7 @@ class BuildingBook extends Component {
         this._renderLoading = this.renderLoading.bind(this);
         this._doFetchBook = this.doFetchBook.bind(this);
         this._renderQuestionItem = this.renderQuestionItem.bind(this);
+        this._renderDiscussItem = this.renderDiscussItem.bind(this);
     }
 
 
@@ -311,7 +318,7 @@ class BuildingBook extends Component {
             )
         } else if (this.state.selectedIndex === 1) {
             return (
-                this.renderDiscussView()
+                this.renderDiscussFragment()
             )
         } else if (this.state.selectedIndex === 2) {
             if(this.state.get_qslist_data == null){
@@ -363,19 +370,115 @@ class BuildingBook extends Component {
         )
     }
 
-    renderDiscussView(){
-        return (
-        <View style={styles.ButtonViewContainer}>
-            <View style={styles.bottomButtonViewContainer}>
+    dofetch_discuss(){
+        let formData = new FormData();
+        formData.append("auth",global.auth);
+        formData.append("userid",global.userid);
+        formData.append("discusstype",1);
+        formData.append("discussid",this.props.bookid);
 
-                <TouchableOpacity  onPress={()=> Actions.chatlist()} >
-                    <Text style={styles.bottomButtonText} >评论</Text>
-                </TouchableOpacity>
+        var opts = {
+            method:"POST",
+            body:formData
+        }
+        fetch(doGetDiscussUrl,opts)
+            .then((response) => response.json())
+            .then((responseData) => {
+                if(responseData.code == 100){
 
-                <Text style={styles.bottomButtonText} >赞</Text>
+                    this.setState({
+                        comments_data_source:responseData.data.reverse(),
+                        get_comments_data:1
+                    })
+                }else{
+                    this.setState({
+                        get_comments_data:2
+                    })
+                }
+
+            })
+            .catch((error) => {
+                alert(error)
+            })
+    }
+
+    renderDiscussItem(rowData, sectionID, rowID){
+        let time_o = new Date();
+        time_o.setMilliseconds(rowData.create_at);
+        let time_t = time_o.toLocaleString();
+        let iconColor = "#FF0000";
+        return(
+            <View style={{
+                borderBottomWidth:1,borderBottomColor:"#0000EE",
+                backgroundColor:"#F0FFEE",marginTop:4,paddingRight:2}}>
+                <View style={{flex:1,flexDirection:"row",alignItems:"center"}}>
+                    <Text style={{fontSize:12,color:"#9400D3"}}>
+                        {time_t} {rowData.nickname}
+                    </Text>
+                    <View style={{flex:1,flexDirection:"row",alignItems:"center",justifyContent:"flex-end"}}>
+                        <Icon name="ios-flame" size={18} color={iconColor}/>
+                    </View>
+                </View>
+
+                <Text style={{fontSize:14,marginBottom:2,marginTop:2}}>
+                    {rowData.content}
+                </Text>
+
             </View>
-        </View>
+        )
+    }
 
+    renderDiscuss(){
+        return(
+            <ListView
+                refreshControl={
+                    <RefreshControl
+                        refreshing={this.state.gorefreshing}
+                        onRefresh={() => this.dofetch_discuss()}
+                    />
+                }
+                style={styles.list}
+                dataSource={DataStore.cloneWithRows(this.state.comments_data_source)}
+                renderRow={this._renderDiscussItem}
+                enableEmptySections = {true}
+            />
+        )
+    }
+
+    writeComment(){
+        Actions.comment({intype:1,commentid:this.props.bookid});
+    }
+
+    renderDiscussView(){
+        if(this.state.get_comments_data == 0){
+            this.dofetch_discuss();
+            return(this.renderLoading())
+        }else{
+            if(this.state.comments_data_source == null){
+                return(this.rendernodata())
+            }else{
+                return(this.renderDiscuss())
+            }
+        }
+
+    }
+
+    renderDiscussFragment(){
+        return(
+            <View style={{flex:1,justifyContent:"flex-end"}}>
+                {this.renderDiscussView()}
+                <TouchableOpacity onPress={ () =>this.writeComment()} activeOpacity={0.8}>
+                    <View style={{flexDirection:'row',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        height:32,
+                        backgroundColor: '#00EE00'}}  >
+                        <Text style={{fontSize: 18}}>
+                            写评论
+                        </Text>
+                    </View>
+                </TouchableOpacity>
+            </View>
         )
     }
 
