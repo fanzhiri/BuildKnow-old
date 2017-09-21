@@ -32,6 +32,7 @@ const styles = StyleSheet.create({
         borderBottomColor:'#e8e8e8',
         //主轴方向
         flexDirection:'row',
+        alignItems:"center"
     },
     rightViewStyle:{
         //主轴对齐方式
@@ -44,7 +45,7 @@ const styles = StyleSheet.create({
         marginRight:15
     },
     topTitleStyle:{
-        fontSize:15,
+        fontSize:20,
         marginBottom:10
     },
     bottomTitleStyle:{
@@ -104,7 +105,7 @@ class NotificationList extends Component {
             .then((responseData) => {
                 if(responseData.code == 100){
                     this.setState({
-                        notifi_list_data_source:responseData.data
+                        notifi_list_data_source:responseData.data.reverse()
                     })
 
                 }else{
@@ -133,7 +134,7 @@ class NotificationList extends Component {
             .then((responseData) => {
                 if(responseData.code == 100){
                     this.setState({
-                        iask_list_data_source:responseData.data
+                        iask_list_data_source:responseData.data.reverse()
                     })
 
                 }else{
@@ -298,20 +299,30 @@ class NotificationList extends Component {
     renderAskFriend(people,from){
         var userId = (people.userid);
         var askId = (people.askid);
+
+        let time_o = new Date();
+        time_o.setMilliseconds(people.message_time);
+        let time_t = time_o.toLocaleString();
         return (
 
             <TouchableOpacity onPress={() => this.wearefriend({userId})}>
                 <View style={styles.peopleItem}>
                     <Image source={{uri:`${httpsBaseUrl}${people.head}`}} style={styles.leftImgStyle}/>
-                    {this.renderStatus(from,people.askstatus,askId)}
 
-                    <View>
+
+                    <View style={{flex:1}}>
                         <Text style={styles.topTitleStyle}>
-                            {people.username}
+                            {people.nickname}
                         </Text>
                         <Text >
                             请求:{people.content}
                         </Text>
+                        <Text >
+                            {time_t}
+                        </Text>
+                    </View>
+                    <View style={{width:96}}>
+                        {this.renderStatus(from,people.askstatus,askId)}
                     </View>
                 </View>
 
