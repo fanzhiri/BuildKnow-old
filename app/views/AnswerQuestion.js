@@ -129,6 +129,7 @@ class AnswerQuestion extends Component {
             startTimeText:startDate.toLocaleString(),
             startTime:startDate.getTime(),
             uploadRecord:0,//0没上传，1上传中，2上传完成
+            collectit:false  //题目是否被收藏
 
         };
 
@@ -397,6 +398,34 @@ class AnswerQuestion extends Component {
         )
     }
 
+    docollect(qid,collectitornot){
+        let formData = new FormData();
+        formData.append("auth",global.auth);
+        formData.append("userid",global.userid);
+        formData.append("qstid",qid);
+        formData.append("collect",collectitornot);
+        var opts = {
+            method:"POST",
+            body:formData
+        }
+        fetch(bookcollectchangeUrl,opts)
+            .then((response) => response.json())
+            .then((responseData) => {
+                if(responseData.code == 100){
+                    global.qstcollect=JSON.parse(responseData.data);
+                    this.setState({
+                        collectit:global.qstcollect.contains(qid)
+                    })
+                }else{
+                    alert(responseData.code)
+                }
+
+            })
+            .catch((error) => {
+                alert(error)
+            })
+    }
+
     invote(idx){
         switch (idx){
             case 0:
@@ -407,6 +436,8 @@ class AnswerQuestion extends Component {
             case 2:
                 break;
             case 3:
+                let t_questiondata = this.state.questiondataarr[parseInt(this.state.questionidx)];
+                this.docollect(t_questiondata.questionid,1);
                 break;
             case 4:
                 break;

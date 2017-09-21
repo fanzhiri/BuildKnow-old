@@ -216,17 +216,20 @@ class BookCover extends Component {
         if(global.bookcollect.contains(this.state.bookdata.reviewid)){
             return(
                 <View style={styles.container3}>
-
-                    <View style={styles.dropButton}  onPress={() => this.godropbook()}><Text style={{fontSize:12}}>丢弃</Text></View>
-                    <View style={styles.obtainButton} onPress={() => Actions.publicbook({bookid:this.state.bookdata.reviewid})}><Text style={{fontSize:12}}>进入</Text></View>
-
+                    <TouchableOpacity onPress={() => this.godropbook()}>
+                        <View style={styles.dropButton} ><Text style={{fontSize:12}}>丢弃</Text></View>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => Actions.publicbook({bookid:this.state.bookdata.reviewid})}>
+                        <View style={styles.obtainButton} ><Text style={{fontSize:12}}>进入</Text></View>
+                    </TouchableOpacity>
                 </View>
             );
         }else{
             return(
                 <View style={styles.container3}>
-
-                    <View style={styles.obtainButton} onPress={() => this.docollect(1)}><Text style={{fontSize:12}}>收藏</Text></View>
+                    <TouchableOpacity onPress={() => this.docollect(1)}>
+                        <View style={styles.obtainButton}><Text style={{fontSize:12}}>收藏</Text></View>
+                    </TouchableOpacity>
                 </View>
             );
         }
