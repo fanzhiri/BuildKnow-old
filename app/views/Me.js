@@ -115,7 +115,7 @@ class Me extends Component {
                         <MeItem icon={"md-build"} text={"我的题本"} iconColor="#FF0000"  onPress={() => Actions.mybooklist()} />
                         <MeItem icon={"md-cube"} text={"答案库"} iconColor="#D15FEE"  onPress={() => Actions.answerlib()} />
                         <MeItem icon={"md-link"} text={"分享管理"} onPress={() => Actions.sharemanager()} />
-                        <MeItem icon={"md-heart"} text={"我的收藏"} subText={"10篇"} iconColor="#32cd32" onPress={() => Actions.mycollectbooklist()} />
+                        <MeItem icon={"md-heart"} text={"我的收藏"} subText={"10篇"} iconColor="#32cd32" onPress={() => Actions.mycollectlist()} />
                         <MeItem icon={"md-sync"} text={"更新"}  subText={"4本"} onPress={() => Actions.mybooklist()} />
                         <MeItem icon={"md-mail"} text={"消息"}  subText={"10条"} iconColor="#1e90ff" onPress={() => Actions.messagelist()} />
                         <MeItem icon={"md-podium"} text={"数据"} iconColor="#7fff00" onPress={() => Actions.statistics()} />

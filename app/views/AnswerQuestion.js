@@ -72,7 +72,7 @@ const window = Dimensions.get('window');
 var doanswerquestionpostUrl = "https://slako.applinzi.com/index.php?m=question&c=index&a=getquestion";
 var doGetQuestionGetBaseUrl = "https://slako.applinzi.com/api/1/question/";
 var httpsBaseUrl = "https://slako.applinzi.com";
-
+var collectChangeUrl = "https://slako.applinzi.com/index.php?m=question&c=personal&a=collectchange";
 
 var saveRecordUrl = "https://slako.applinzi.com/index.php?m=question&c=personal&a=uploadrecord";
 
@@ -359,7 +359,8 @@ class AnswerQuestion extends Component {
             rightidx:rightindex,
             answer:answerarr,
             questionidx:t_questionidx,
-            selectone:-1
+            selectone:-1,
+            collectit:global.qstcollect == null ?false:global.qstcollect.contains(t_questiondata.questionid)
         })
     }
 
@@ -398,17 +399,18 @@ class AnswerQuestion extends Component {
         )
     }
 
-    docollect(qid,collectitornot){
+    docollect(qid){
         let formData = new FormData();
         formData.append("auth",global.auth);
         formData.append("userid",global.userid);
-        formData.append("qstid",qid);
-        formData.append("collect",collectitornot);
+        formData.append("collectid",qid);
+        formData.append("collect_type",1);
+        formData.append("collect",this.state.collectit);
         var opts = {
             method:"POST",
             body:formData
         }
-        fetch(bookcollectchangeUrl,opts)
+        fetch(collectChangeUrl,opts)
             .then((response) => response.json())
             .then((responseData) => {
                 if(responseData.code == 100){
@@ -418,6 +420,7 @@ class AnswerQuestion extends Component {
                     })
                 }else{
                     alert(responseData.code)
+                    alert(responseData.data)
                 }
 
             })
@@ -427,6 +430,7 @@ class AnswerQuestion extends Component {
     }
 
     invote(idx){
+        let t_questiondata;
         switch (idx){
             case 0:
                 Actions.answersetting();
@@ -436,8 +440,8 @@ class AnswerQuestion extends Component {
             case 2:
                 break;
             case 3:
-                let t_questiondata = this.state.questiondataarr[parseInt(this.state.questionidx)];
-                this.docollect(t_questiondata.questionid,1);
+                t_questiondata = this.state.questiondataarr[parseInt(this.state.questionidx)];
+                this.docollect(t_questiondata.questionid);
                 break;
             case 4:
                 break;
@@ -445,7 +449,7 @@ class AnswerQuestion extends Component {
                 this.setState({fragment:1});
                 break;
             case 6:
-                let t_questiondata = this.state.questiondataarr[parseInt(this.state.questionidx)];
+                t_questiondata = this.state.questiondataarr[parseInt(this.state.questionidx)];
                 Actions.discuss({intype:2,qst_id:t_questiondata.questionid});
                 break;
             case 7:
@@ -474,20 +478,28 @@ class AnswerQuestion extends Component {
         )
     }
 
-    showquestion(){
+    renderCollect(){
+        if(this.state.collectit){
+            return(
+                this.rendertopbutton("md-star",    "已收",   () => this.invote(3))
+            )
+        }else{
+            return(
+                this.rendertopbutton("md-star-outline",    "收藏",   () => this.invote(3))
+            )
+        }
 
+    }
+
+    showquestion(){
         return (
             <View style={styles.container}>
-
-
-
                 <View style={styles.topButtoncontainer}>
-
                     {this.rendertopbutton("md-grid",    "题卡",   () => this.invote(5))}
                     {this.rendertopbutton("md-alarm",   "时间",   () => this.invote(7))}
                     {this.rendertopbutton("md-cafe",    "评论",   () => this.invote(6))}
                     {this.rendertopbutton("md-thumbs-up","赞",    () => this.invote(4))}
-                    {this.rendertopbutton("md-star",    "收藏",   () => this.invote(3))}
+                    {this.renderCollect()}
                     {this.rendertopbutton("md-share",   "分享",   () => this.invote(2))}
                     {this.rendertopbutton("md-stats",   "统计",   () => this.invote(1))}
                     {this.rendertopbutton("md-settings","设置",   () => this.invote(0))}
@@ -800,5 +812,14 @@ AnswerQuestion.PropTypes = {
     answer_arr:PropTypes.object,
     counttime:PropTypes.number,
 };
+
+Array.prototype.contains = function (element) {
+    for (var i=0;i<this.length;i++){
+        if(this[i]==element){
+            return true;
+        }
+    }
+    return false;
+}
 
 module.exports = AnswerQuestion;

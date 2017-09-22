@@ -2,7 +2,7 @@
  * Created by slako on 17/2/18.
  */
 import React, { Component } from 'react';
-import {View, Text, StyleSheet, ListView, Image,TouchableOpacity} from "react-native";
+import {View, Text, StyleSheet, ListView, SegmentedControlIOS, Image,TouchableOpacity} from "react-native";
 import {Actions} from "react-native-router-flux";
 import Button from "react-native-button";
 import GlobleStyles from '../styles/GlobleStyles';
@@ -78,7 +78,7 @@ class MyCollectList extends Component {
         };
         this._onChange              = this.onChange.bind(this);
         this._renderBookItem        = this.renderBookItem.bind(this);
-        this._renderQuestionItem    = this.renderQuestionItem.bind(this);
+
         this._renderQstItem         = this.renderQstItem.bind(this);
         this._renderTestItem        = this.renderTestItem.bind(this);
     }
@@ -132,11 +132,14 @@ class MyCollectList extends Component {
             .then((response) => response.json())
             .then((responseData) => {
                 if(responseData.code == 100){
+
                     this.setState({
+
                         qsts_data_source:responseData.data,
                         get_qsts_data:1
                     })
                 }else{
+
                     this.setState({
                         get_qsts_data:2
                     })
@@ -148,9 +151,6 @@ class MyCollectList extends Component {
             })
     }
 
-    renderMyBooksView(){
-
-    }
 
 
     renderBookItem(rowData,sectionID, rowID){
@@ -177,25 +177,21 @@ class MyCollectList extends Component {
         )
     }
 
-    renderQuestionItem(rowData,sectionID, rowID){
-        var cover = (book.cover);
-        var bookid= (book.bookid);
-        return (
-            <TouchableOpacity onPress={() => Actions.bookcover({bookpublicid:book.reviewid})}>
-                <View style={styles.listItem}>
-                    <Image source={{uri:`${httpsBaseUrl}${cover}`}} style={styles.leftImgStyle}/>
-                    <View>
-                        <Text style={styles.topTitleStyle}>
-                            {book.bookname}
-                        </Text>
+    renderTestItem(rowData,sectionID, rowID){
+        return(
+            <View style={{height:32}}></View>
+        )
+    }
 
-                        <Text >
-                            {book.bookbrief}
-                        </Text>
-                        <Text >
-                            题数:{book.questioncount}  收藏:  评论:{10}
-                        </Text>
-                    </View>
+    renderQstItem(rowData,sectionID, rowID){
+        var ask = (rowData.ask);
+        var qId = (rowData.questionid);
+        return (
+            <TouchableOpacity >
+                <View  style={styles.questionitemcontainer}>
+                    <Text style={styles.questionitem}>
+                        {parseInt(rowID)+1} : {ask.substring(0,20)}
+                    </Text>
                 </View>
             </TouchableOpacity>
         )
@@ -235,7 +231,7 @@ class MyCollectList extends Component {
     }
 
     renderCollectBook(){
-        if(this.get_books_data == 0){
+        if(this.state.get_books_data == 0){
             this.dofetch_mycollectbooks();
             return (this.renderLoading())
         }else{
@@ -248,12 +244,13 @@ class MyCollectList extends Component {
     }
 
     renderCollectQuestion(){
-        if(this.get_qsts_data == 0){
+
+        if(this.state.get_qsts_data == 0){
             this.dofetch_mycollectqst();
+
             return (this.renderLoading())
         }else{
             if(this.state.qsts_data_source == null){
-
                 return (this.rendernodata())
             }else{
                 return (this.renderMyCollectQsts())
@@ -263,7 +260,7 @@ class MyCollectList extends Component {
     }
 
     renderCollectTest(){
-        if(this.get_test_data == 0){
+        if(this.state.get_test_data == 0){
             this.dofetch_mycollectqst();
             return (this.renderLoading())
         }else{
@@ -301,8 +298,7 @@ class MyCollectList extends Component {
                         onChange={this._onChange}
                     />
                 </View>
-
-                {this.renderMyBooksView()}
+                {this.renderFragment()}
             </View>
         );
     }
