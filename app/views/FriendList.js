@@ -114,6 +114,7 @@ class FriendList extends Component {
         formData.append("userid",global.userid);
         formData.append("peoplecarduserid",rowData.userid);
         formData.append("conversationid",this.props.cvst_id);
+        formData.append("chattoid",this.props.chattoid);
         formData.append("msg_type",1);
 
         var opts = {
@@ -124,8 +125,8 @@ class FriendList extends Component {
             .then((response) => response.json())
             .then((responseData) => {
                 if(responseData.code == 100){
-                    Actions.pop();
 
+                    Actions.pop();
                 }else{
                     alert(responseData.data)
                 }
@@ -309,6 +310,8 @@ FriendList.PropTypes = {
     intype: PropTypes.number.isRequired,//0群聊添加人，1发送名片
     option: PropTypes.number.isRequired,//0删除，1添加
     cvst_id: PropTypes.number.isRequired,//增加、删除会话人时用
+    chattoid:PropTypes.number,
+
 };
 
 module.exports = FriendList;

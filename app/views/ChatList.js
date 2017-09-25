@@ -151,7 +151,9 @@ class ChatList extends Component {
             selectedIndex:0,
             messageslist: null,
             inputtextstring:"",
-            showattach:false
+            showattach:false,
+            chattoid:props.chattoid,
+            cvstid:props.cvstid
         };
         this._onChange = this.onChange.bind(this);
         this._peoplelist = this.peoplelist.bind(this);
@@ -176,8 +178,9 @@ class ChatList extends Component {
         let formData = new FormData();
         formData.append("auth",global.auth);
         formData.append("userid",global.userid);
-        formData.append("chattoid",this.props.chattoid);
+        formData.append("chattoid",this.state.chattoid);
         formData.append("msgtext",this.state.inputtextstring);
+        formData.append("conversationid",this.state.cvstid);
         formData.append("msg_type",0);
         var opts = {
             method:"POST",
@@ -205,8 +208,8 @@ class ChatList extends Component {
         let formData = new FormData();
         formData.append("auth",global.auth);
         formData.append("userid",global.userid);
-        formData.append("cvstid",this.props.cvstid);
-        formData.append("chattoid",this.props.chattoid);
+        formData.append("cvstid",this.state.cvstid);
+        formData.append("chattoid",this.state.chattoid);
 
         var opts = {
             method:"POST",
@@ -378,7 +381,7 @@ class ChatList extends Component {
 
     invote(func){
         switch (func){
-            case 1:Actions.friendlist({inmode:1,intype:1});break;
+            case 1:Actions.friendlist({inmode:1,intype:1,cvst_id:this.props.cvstid,chattoid:this.state.chattoid});break;
             case 2:break;
             case 3:break;
 
