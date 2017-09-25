@@ -8,6 +8,7 @@ import Button from "react-native-button";
 import Swiper from 'react-native-swiper'
 import GlobleStyles from '../styles/GlobleStyles';
 import FoldView from 'react-native-foldview';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 import DataStore from '../util/DataStore';
 
@@ -30,10 +31,11 @@ const styles = StyleSheet.create({
         borderBottomColor:'#e8e8e8',
         //主轴方向
         flexDirection:'row',
+        alignItems:"center"
     },
     leftImgStyle:{
-        width:60,
-        height:60,
+        width:40,
+        height:40,
         marginRight:15
     },
     topTitleStyle:{
@@ -42,10 +44,16 @@ const styles = StyleSheet.create({
     },
     bottomTitleStyle:{
         color:'blue'
+    },selectbutton:{
+        flex:1,
+        flexDirection:'row',
+        justifyContent: 'flex-end',
     },
 });
 
 var getFrieldUrl = "https://slako.applinzi.com/index.php?m=question&c=personal&a=getfriendlist";
+
+var addPeopleCvstUrl = "https://slako.applinzi.com/index.php?m=question&c=personal&a=addpeoplecvst";
 
 var httpsBaseUrl = "https://slako.applinzi.com/";
 
@@ -59,9 +67,58 @@ class FriendList extends Component {
         this.state = {
             gorefreshing:false,
             friend_list_data_source: null,
-            getdata:null
+            getdata:null,
+            whoinselect:null
         };
         this._renderPeople = this.renderPeople.bind(this);
+        this._endAction = this.endAction.bind(this);
+    }
+
+    fetch_addPeopleToCvst(){
+        let formData = new FormData();
+        formData.append("auth",global.auth);
+        formData.append("userid",global.userid);
+        formData.append("chat_id",this.props.cvst_id);
+        let userids = new Array();
+        for(let i=0;i<this.state.friend_list_data_source.length;i++){
+            if(this.state.whoinselect[i]== 1){
+                userids.push(this.state.friend_list_data_source[i].userid);
+            }
+        }
+        formData.append("useridlist",JSON.stringify(userids));
+
+        var opts = {
+            method:"POST",
+            body:formData
+        }
+        fetch(addPeopleCvstUrl,opts)
+            .then((response) => response.json())
+            .then((responseData) => {
+                if(responseData.code == 100){
+                    Actions.pop();
+
+                }else{
+                    alert(responseData.code)
+                }
+
+            })
+            .catch((error) => {
+                alert(error)
+            })
+    }
+
+    endAction(){
+        if(this.props.option == 0){
+
+        }else{
+            this.fetch_addPeopleToCvst()
+        }
+    }
+
+    componentWillMount(){
+        if(this.props.inmode == 1){
+            Actions.refresh({rightTitle:"添加",onRight:this._endAction});
+        }
     }
 
     fetchfriendlist(){
@@ -77,10 +134,17 @@ class FriendList extends Component {
             .then((response) => response.json())
             .then((responseData) => {
                 if(responseData.code == 100){
+                    let whoinselect_arr = null;
+                    if(responseData.data == null){
+
+                    }else{
+                        whoinselect_arr= new Array([responseData.data.length]);
+                    }
                     this.setState({
                         friend_list_data_source:responseData.data,
                         gorefreshing:false,
-                        getdata:1
+                        getdata:1,
+                        whoinselect:whoinselect_arr
                     })
 
                 }else{
@@ -109,21 +173,52 @@ class FriendList extends Component {
         }
     }
 
-    renderPeople(people){
-        var userId = (people.userid);
+    changeselect(where){
+        let t_whoinselect = this.state.whoinselect;
+        t_whoinselect[where] = (t_whoinselect[where] == 1)?0:1;
+        this.setState({
+            whoinselect:t_whoinselect,
+        })
+    }
+
+    rendertake(where){
+        if(this.props.inmode == 1){
+            if(this.state.whoinselect[where] == 1){
+                return(
+                    <Icon name={"md-checkbox-outline"}  size={22} color="#008B00"/>
+                )
+            }else{
+                return(
+                    <Icon name={"md-expand"}            size={22} color="#008B00"/>
+                )
+            }
+        }
+    }
+
+    onPeopleClick(rowData, sectionID, rowID){
+        if(this.props.inmode == 0){
+            Actions.homepage({userId:rowData.userId,title:rowData.nickname,peopledata:rowData})
+        }else{
+            this.changeselect(rowID);
+        }
+    }
+
+    renderPeople(rowData, sectionID, rowID){
+
         return (
 
-            <TouchableOpacity onPress={() => Actions.homepage({userId:userId,title:people.nickname,peopledata:people})}>
+            <TouchableOpacity onPress={() => this.onPeopleClick(rowData, sectionID, rowID)}>
                 <View style={styles.peopleItem}>
-                    <Image source={{uri:`${httpsBaseUrl}${people.head}`}} style={styles.leftImgStyle}/>
+                    <Image source={{uri:`${httpsBaseUrl}${rowData.head}`}} style={styles.leftImgStyle}/>
                     <View>
                         <Text style={styles.topTitleStyle}>
-                            {people.nickname}
-                        </Text>
-                        <Text >
-                            标签：
+                            {rowData.nickname}
                         </Text>
                     </View>
+                    <View style={styles.selectbutton}>
+                        {this.rendertake(rowID)}
+                    </View>
+
                 </View>
             </TouchableOpacity>
         )
@@ -141,7 +236,7 @@ class FriendList extends Component {
                     }
                     style={styles.list}
                     dataSource={DataStore.cloneWithRows(this.state.friend_list_data_source)}
-                    renderRow={(rowData) => this._renderPeople(rowData)}
+                    renderRow={this._renderPeople}
                     enableEmptySections = {true}
                 />
             </View>
@@ -177,7 +272,8 @@ class FriendList extends Component {
 
 FriendList.PropTypes = {
     inmode: PropTypes.number.isRequired,//0查看，1选择
-
+    option: PropTypes.number.isRequired,//0删除，1添加
+    cvst_id: PropTypes.number.isRequired,//增加、删除会话人时用
 };
 
 module.exports = FriendList;

@@ -157,8 +157,16 @@ class ChatList extends Component {
         this._peoplelist = this.peoplelist.bind(this);
         this.onSend = this.onSend.bind(this);
         this._doOnPress = this.doOnPress.bind(this);
+        this._detial=this.detial.bind(this);
 
+    }
 
+    detial(){
+        Actions.chatsetting({chat_id:this.props.cvstid});
+    }
+
+    componentWillMount(){
+        Actions.refresh({rightTitle: "详情",onRight: this._detial})
     }
 
     dofetch_sendmsg(){

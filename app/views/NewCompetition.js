@@ -199,8 +199,6 @@ class NewCompetition extends Component {
                 )
             }
         }
-
-
     }
 
     changeselect(where){

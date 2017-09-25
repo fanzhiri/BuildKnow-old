@@ -9,7 +9,8 @@ import {
     StyleSheet,
     SegmentedControlIOS,
     ListView,Image,WebView,
-    Dimensions
+    Dimensions,
+    RefreshControl
 } from "react-native";
 import {Actions} from "react-native-router-flux";
 import Button from "react-native-button";
@@ -107,7 +108,8 @@ class Discover extends Component {
 
             knowledgeqst_data_source:null,
             categorySelect:0,
-            knowledgeItemData:null
+            knowledgeItemData:null,
+            gorefreshing:false
         };
         this._onChange = this.onChange.bind(this);
         this._peoplelist = this.peoplelist.bind(this);
@@ -543,6 +545,12 @@ class Discover extends Component {
     renderIntroduceView(){
         return (
             <ListView
+                refreshControl={
+                    <RefreshControl
+                        refreshing={this.state.gorefreshing}
+                        onRefresh={() => this._peoplelist()}
+                    />
+                }
                 style={styles.list}
                 dataSource={DataStore.cloneWithRows(this.state.people_list_data_source)}
                 renderRow={this._renderPeople}
