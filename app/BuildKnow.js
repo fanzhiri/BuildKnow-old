@@ -91,6 +91,11 @@ import NewCompetition from './views/NewCompetition';
 import Discuss from './views/Discuss';
 import Comment from './views/Comment';
 
+//61
+import ChatSetting from './views/ChatSetting';
+
+
+
 import Icon from 'react-native-vector-icons/Ionicons';
 
 export default class BuildKnow extends Component {
@@ -176,7 +181,7 @@ export default class BuildKnow extends Component {
                 <Scene key="reviewchecklist"    title="审核表" component={ReviewCheckList} duration={0} />
                 <Scene key="reviewquestion"     title="审核题目" component={ReviewQuestion} duration={0} />
                 <Scene key="mycollectlist"      title="我的收藏" component={MyCollectList} duration={0} />
-                <Scene key="chatlist"           title="聊天" component={ChatList} duration={0} />
+                <Scene key="chatlist"           title="聊天" component={ChatList} duration={0} rightTitle={"设置"} onRight={() => Actions.chatsetting()} />
                 <Scene key="testresult"         title="测试结果" component={TestResult} duration={0}  />
                 <Scene key="answerlibedit"      title="答案库编辑" component={AnswerLibEdit} duration={0}  />
                 <Scene key="testcard"           title="题卡" component={TestCard} duration={0}  />
@@ -187,6 +192,7 @@ export default class BuildKnow extends Component {
                 <Scene key="newcompetition"     title="对战" component={NewCompetition} duration={0}  />
                 <Scene key="discuss"            title="评论" component={Discuss} duration={0}  />
                 <Scene key="comment"            title="发评论" component={Comment} duration={0}  />
+                <Scene key="chatsetting"        title="聊天设置" component={ChatSetting} duration={0}  />
             </Router>
         );
     }
