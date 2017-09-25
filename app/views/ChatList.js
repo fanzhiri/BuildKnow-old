@@ -178,6 +178,7 @@ class ChatList extends Component {
         formData.append("userid",global.userid);
         formData.append("chattoid",this.props.chattoid);
         formData.append("msgtext",this.state.inputtextstring);
+        formData.append("msg_type",0);
         var opts = {
             method:"POST",
             body:formData
@@ -375,14 +376,26 @@ class ChatList extends Component {
         }
     }
 
+    invote(func){
+        switch (func){
+            case 1:Actions.friendlist({inmode:1,intype:1});break;
+            case 2:break;
+            case 3:break;
+
+        }
+    }
+
     renderAttachButton(icon,name,func){
         return(
-            <View style={{alignItems:"center"}}>
-                <View style={{justifyContent:"center",alignItems:"center",width:54,height:54,borderWidth:1,borderRadius:6}}>
-                    <Icon name={icon} size={36} color={"#11FF00"}/>
+            <TouchableOpacity onPress={() => this.invote(func)}>
+                <View style={{alignItems:"center"}}>
+                    <View style={{justifyContent:"center",alignItems:"center",width:54,height:54,borderWidth:1,borderRadius:6}}>
+                        <Icon name={icon} size={36} color={"#11FF00"}/>
+                    </View>
+                    <Text style={{fontSize:12,marginTop:8}}>{name}</Text>
                 </View>
-                <Text style={{fontSize:12,marginTop:8}}>{name}</Text>
-            </View>
+            </TouchableOpacity>
+
         )
     }
 
@@ -390,9 +403,9 @@ class ChatList extends Component {
         if(this.state.showattach){
             return (
                 <View style={styles.bottomAttachmentViewContainer}>
-                    {this.renderAttachButton("md-contact","联系人",null)}
-                    {this.renderAttachButton("md-bookmarks","书目",null)}
-                    {this.renderAttachButton("md-paper","题目",null)}
+                    {this.renderAttachButton("md-contact","名片",1)}
+                    {this.renderAttachButton("md-bookmarks","收藏",2)}
+                    {this.renderAttachButton("md-paper","题目",3)}
                 </View>
             );
         }

@@ -170,7 +170,7 @@ class MessageList extends Component {
             <View style={GlobleStyles.withoutTitleContainer}>
                 <View>
                     <SegmentedControlIOS
-                        values={['好友','做题邀请','需求']}
+                        values={['会话','做题邀请','需求']}
                         selectedIndex={this.state.selectedIndex}
                         style={styles.segmented}
                         onChange={this._onChange}
@@ -264,8 +264,12 @@ class MessageList extends Component {
 
 
     renderPeople(rowData, sectionID, rowID){
-
-
+        var dt = new Date();
+        dt.setTime(rowData.lastmsgtime);
+        let cvstName=rowData.nickname;
+        if(rowData.peoplenum >= 3){
+            cvstName=rowData.name;
+        }
         return (
 
             <TouchableOpacity onPress={() => Actions.chatlist({cvstid:rowData.id})}>
@@ -273,13 +277,13 @@ class MessageList extends Component {
                     <Image source={{uri:`${httpsBaseUrl}${rowData.head}`}} style={styles.leftImgStyle}/>
                     <View>
                         <Text style={styles.topTitleStyle}>
-                            {rowData.nickname}
+                            {cvstName}
                         </Text>
                         <Text style={styles.lastcontent}>
-                            {rowData.lastmsgcontent} {rowData.lastmsgtime}
+                            {rowData.lastmsgcontent}
                         </Text>
                         <Text style={styles.msgtime}>
-                            {rowData.lastmsgtime}
+                            {dt.toDateString()}
                         </Text>
 
                     </View>

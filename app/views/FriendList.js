@@ -54,6 +54,7 @@ const styles = StyleSheet.create({
 var getFrieldUrl = "https://slako.applinzi.com/index.php?m=question&c=personal&a=getfriendlist";
 
 var addPeopleCvstUrl = "https://slako.applinzi.com/index.php?m=question&c=personal&a=addpeoplecvst";
+var sendMsgUrl = "https://slako.applinzi.com/index.php?m=question&c=personal&a=sendmsg";
 
 var httpsBaseUrl = "https://slako.applinzi.com/";
 
@@ -98,7 +99,35 @@ class FriendList extends Component {
                     Actions.pop();
 
                 }else{
-                    alert(responseData.code)
+                    alert(responseData.data)
+                }
+
+            })
+            .catch((error) => {
+                alert(error)
+            })
+    }
+
+    fetch_sendPeopleCard(rowData){
+        let formData = new FormData();
+        formData.append("auth",global.auth);
+        formData.append("userid",global.userid);
+        formData.append("peoplecarduserid",rowData.userid);
+        formData.append("conversationid",this.props.cvst_id);
+        formData.append("msg_type",1);
+
+        var opts = {
+            method:"POST",
+            body:formData
+        }
+        fetch(sendMsgUrl,opts)
+            .then((response) => response.json())
+            .then((responseData) => {
+                if(responseData.code == 100){
+                    Actions.pop();
+
+                }else{
+                    alert(responseData.data)
                 }
 
             })
@@ -116,7 +145,7 @@ class FriendList extends Component {
     }
 
     componentWillMount(){
-        if(this.props.inmode == 1){
+        if(this.props.inmode == 1 && this.props.intype == 0){
             Actions.refresh({rightTitle:"添加",onRight:this._endAction});
         }
     }
@@ -182,7 +211,7 @@ class FriendList extends Component {
     }
 
     rendertake(where){
-        if(this.props.inmode == 1){
+        if(this.props.inmode == 1 && this.props.intype == 0){
             if(this.state.whoinselect[where] == 1){
                 return(
                     <Icon name={"md-checkbox-outline"}  size={22} color="#008B00"/>
@@ -197,9 +226,14 @@ class FriendList extends Component {
 
     onPeopleClick(rowData, sectionID, rowID){
         if(this.props.inmode == 0){
-            Actions.homepage({userId:rowData.userId,title:rowData.nickname,peopledata:rowData})
+            Actions.homepage({userId:rowData.userid,title:rowData.nickname,peopledata:rowData})
         }else{
-            this.changeselect(rowID);
+            if(this.props.intype == 0){
+                this.changeselect(rowID);
+            }else{
+                this.fetch_sendPeopleCard(rowData);
+            }
+
         }
     }
 
@@ -272,6 +306,7 @@ class FriendList extends Component {
 
 FriendList.PropTypes = {
     inmode: PropTypes.number.isRequired,//0查看，1选择
+    intype: PropTypes.number.isRequired,//0群聊添加人，1发送名片
     option: PropTypes.number.isRequired,//0删除，1添加
     cvst_id: PropTypes.number.isRequired,//增加、删除会话人时用
 };

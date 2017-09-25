@@ -153,7 +153,7 @@ class ChatSetting extends Component {
     }
 
     addPeople(what){
-        Actions.friendlist({inmode:1,option:what,cvst_id:this.state.cvst_id});
+        Actions.friendlist({inmode:1,intype:0,option:what,cvst_id:this.state.cvst_id});
     }
 
     renderPeople(){
