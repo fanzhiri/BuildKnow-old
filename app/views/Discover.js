@@ -520,19 +520,19 @@ class Discover extends Component {
         Actions.homepage({userid});
     }
 
-    renderPeople(people){
-        var userId = (people.userid);
+    renderPeople(rowData,sectionID, rowID){
+        var userId = (rowData.userid);
         return (
 
-            <TouchableOpacity onPress={() => Actions.homepage({userId:userId,title:people.nickname,peopledata:people})}>
+            <TouchableOpacity onPress={() => Actions.homepage({userId:userId,title:rowData.nickname,peopledata:rowData})}>
                 <View style={styles.peopleItem}>
-                    <Image source={{uri:`${httpsBaseUrl}${people.head}`}} style={styles.leftImgStyle}/>
+                    <Image source={{uri:`${httpsBaseUrl}${rowData.head}`}} style={styles.leftImgStyle}/>
                     <View>
                         <Text style={styles.topTitleStyle}>
-                            {people.nickname}
+                            {rowData.nickname}
                         </Text>
                         <Text >
-                            粉丝:{people.follow} 内测:{people.buildingshare} 在建:{people.buildingshare}  发布:{people.releaseshare}
+                            粉丝:{rowData.follow} 内测:{rowData.buildingshare} 在建:{rowData.buildingshare}  发布:{rowData.releaseshare}
                         </Text>
                     </View>
                 </View>
@@ -545,7 +545,7 @@ class Discover extends Component {
             <ListView
                 style={styles.list}
                 dataSource={DataStore.cloneWithRows(this.state.people_list_data_source)}
-                renderRow={(rowData) => this._renderPeople(rowData)}
+                renderRow={this._renderPeople}
                 enableEmptySections = {true}
             />
         )
