@@ -160,7 +160,8 @@ class ChatList extends Component {
         this.onSend = this.onSend.bind(this);
         this._doOnPress = this.doOnPress.bind(this);
         this._detial=this.detial.bind(this);
-
+        this._renderMsgItem=this.renderMsgItem.bind(this);
+        this._renderMsgContent=this.renderMsgContent.bind(this);
     }
 
     detial(){
@@ -335,15 +336,45 @@ class ChatList extends Component {
     }
     */
 
-    renderComposer(){
-        return(
-            <Text>
+    renderPeopleCard(rowData){
+        let peopleinfo= JSON.parse(rowData.content);
+        let head=peopleinfo.head;
+        let nickname=peopleinfo.nickname;
 
-            </Text>
+        return(
+            <TouchableOpacity onPress={() => Actions.homepage({userId:peopleinfo.userid,title:nickname})}>
+            <View>
+                <Image style={[{width: 80,height: 80,}, this.props.imageStyle]} resizeMode="cover" source={{uri:`${httpsBaseUrl}${head}`}} />
+                <Text>{nickname}</Text>
+            </View>
+            </TouchableOpacity>
         )
     }
 
-    renderMsgItem(rowData){
+    renderMsgContent(rowData){
+        return(
+            <Text style={styles.msgcontent}>{rowData.content}</Text>
+        )
+    }
+
+    renderQstCard(rowData){
+        return(
+            <View>
+                <Text>abc</Text>
+            </View>
+        )
+    }
+
+    renderMsgType(rowData){
+
+        switch (parseInt(rowData.msg_type)){
+            case 0 : return(this.renderMsgContent(rowData));break;
+            case 1 : return(this.renderPeopleCard(rowData));break;
+            case 2 : return(this.renderQstCard(rowData));break;
+        }
+    }
+
+    renderMsgItem(rowData,sectionID, rowID){
         var d = new Date();
         d.setTime(rowData.message_time);
         var msglr = styles.msgleft ;
@@ -356,7 +387,7 @@ class ChatList extends Component {
                         paddingLeft:8,paddingRight:8,
                         paddingTop:6,paddingBottom:6,
                         marginRight:8}}>
-                        <Text style={styles.msgcontent}>{rowData.content}</Text>
+                        {this.renderMsgType(rowData)}
                         <Text style={styles.msgtime}>{d.toDateString()}</Text>
                     </View>
                     <Image style={{borderRadius:4,height:36,width:36}} resizeMode="cover" source={{uri:`${httpsBaseUrl}${global.userhead}`}}/>
@@ -370,7 +401,7 @@ class ChatList extends Component {
                         paddingLeft:8,paddingRight:8,
                         paddingTop:6,paddingBottom:6,
                         marginRight:8}}>
-                        <Text style={styles.msgcontent}>{rowData.content}</Text>
+                        {this.renderMsgType(rowData)}
                         <Text style={styles.msgtime}>{d.toDateString()}</Text>
                     </View>
 
@@ -432,7 +463,7 @@ class ChatList extends Component {
                         ref="scrview"
                         style={styles.list}
                         dataSource={DataStore.cloneWithRows(this.state.messageslist)}
-                        renderRow={this.renderMsgItem}
+                        renderRow={this._renderMsgItem}
                         enableEmptySections = {true}
                     />
                 </ScrollView>

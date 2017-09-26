@@ -57,6 +57,7 @@ const styles = StyleSheet.create({
         fontSize:14,
     },
     msgtime:{
+        marginTop:8,
         fontSize:10,
     },
     listItem:{
