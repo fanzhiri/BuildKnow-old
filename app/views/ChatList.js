@@ -358,9 +358,18 @@ class ChatList extends Component {
     }
 
     renderQstCard(rowData){
+        let questioninfo= JSON.parse(rowData.content);
+        let ask =questioninfo.ask;
+        let qtype =questioninfo.qtype;
+        let qtype_text ;
+        switch (parseInt(qtype)){
+            case 0:qtype_text="[单选]:";break
+            case 1:qtype_text="[多选]:";break
+        }
         return(
-            <View>
-                <Text>abc</Text>
+            <View style={{width:200}}>
+                <Text >{qtype_text}</Text>
+                <Text >{ask}</Text>
             </View>
         )
     }
@@ -413,7 +422,7 @@ class ChatList extends Component {
     invote(func){
         switch (func){
             case 1:Actions.friendlist({inmode:1,intype:1,cvst_id:this.props.cvstid,chattoid:this.state.chattoid});break;
-            case 2:break;
+            case 2:Actions.mycollectlist({intype:1,cvst_id:this.props.cvstid});break;
             case 3:break;
 
         }

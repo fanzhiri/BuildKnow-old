@@ -112,7 +112,7 @@ class FriendList extends Component {
         let formData = new FormData();
         formData.append("auth",global.auth);
         formData.append("userid",global.userid);
-        formData.append("peoplecarduserid",rowData.userid);
+        formData.append("attachmentid",rowData.userid);
         formData.append("conversationid",this.props.cvst_id);
         formData.append("chattoid",this.props.chattoid);
         formData.append("msg_type",1);

@@ -1,7 +1,7 @@
 /**
  * Created by slako on 17/2/18.
  */
-import React, { Component } from 'react';
+import React, { Component ,PropTypes} from 'react';
 import {View, Text, StyleSheet, ListView, SegmentedControlIOS, Image,TouchableOpacity} from "react-native";
 import {Actions} from "react-native-router-flux";
 import Button from "react-native-button";
@@ -53,6 +53,7 @@ const styles = StyleSheet.create({
 
 var doGetMyCollectUrl = "https://slako.applinzi.com/index.php?m=question&c=personal&a=getmycollect";
 var httpsBaseUrl = "https://slako.applinzi.com/";
+var sendMsgUrl = "https://slako.applinzi.com/index.php?m=question&c=personal&a=sendmsg";
 
 class MyCollectList extends Component {
 
@@ -183,11 +184,47 @@ class MyCollectList extends Component {
         )
     }
 
+    fetch_sendCollectQst(rowData){
+        let formData = new FormData();
+        formData.append("auth",global.auth);
+        formData.append("userid",global.userid);
+        formData.append("attachmentid",rowData.questionid);
+        formData.append("conversationid",this.props.cvst_id);
+        formData.append("chattoid",this.props.chattoid);
+        formData.append("msg_type",2);
+
+        var opts = {
+            method:"POST",
+            body:formData
+        }
+        fetch(sendMsgUrl,opts)
+            .then((response) => response.json())
+            .then((responseData) => {
+                if(responseData.code == 100){
+
+                    Actions.pop();
+                }else{
+                    alert(responseData.data)
+                }
+
+            })
+            .catch((error) => {
+                alert(error)
+            })
+    }
+
+    pressCollect(rowData){
+        if(this.props.intype == 1){
+            this.fetch_sendCollectQst(rowData)
+        }
+    }
+
     renderQstItem(rowData,sectionID, rowID){
         var ask = (rowData.ask);
         var qId = (rowData.questionid);
+
         return (
-            <TouchableOpacity >
+            <TouchableOpacity onPress={() => this.pressCollect(rowData)}>
                 <View  style={styles.questionitemcontainer}>
                     <Text style={styles.questionitem}>
                         {parseInt(rowID)+1} : {ask.substring(0,20)}
@@ -319,5 +356,12 @@ class MyCollectList extends Component {
         )
     }
 }
+
+MyCollectList.PropTypes = {
+    intype:PropTypes.number,//0查看，1选择
+    //第一次对话，用到chattoid
+    cvst_id:PropTypes.number,//标识向某个会话发送收藏
+    chattoid:PropTypes.number
+};
 
 module.exports = MyCollectList;

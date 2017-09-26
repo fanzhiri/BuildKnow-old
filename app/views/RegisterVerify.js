@@ -234,22 +234,22 @@ class RegisterVerify extends Component {
 
     }
 
-    renderPeople(people){
+    renderPeople(rowData,sectionID, rowID){
 
         return (
 
 
             <View style={styles.peopleItem}>
-                <Image source={{uri:`${httpsBaseUrl}${people.head}`}} style={styles.leftImgStyle}/>
+                <Image source={{uri:`${httpsBaseUrl}${rowData.head}`}} style={styles.leftImgStyle}/>
                 <View>
                     <Text style={styles.topTitleStyle}>
-                        {people.username}
+                        {rowData.username}
                     </Text>
                     <Text >
-                        邮件:{people.email}
+                        邮件:{rowData.email}
                     </Text>
                 </View>
-                {this.renderControlButton(people.userid)}
+                {this.renderControlButton(rowData.userid)}
             </View>
 
         )
@@ -260,7 +260,7 @@ class RegisterVerify extends Component {
             <ListView
                 style={styles.list}
                 dataSource={DataStore.cloneWithRows(this.state.people_list_data_source)}
-                renderRow={(rowData) => this._renderPeople(rowData)}
+                renderRow={this._renderPeople}
                 enableEmptySections = {true}
             />
         )
