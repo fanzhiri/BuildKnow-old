@@ -363,8 +363,8 @@ class ChatList extends Component {
         let qtype =questioninfo.qtype;
         let qtype_text ;
         switch (parseInt(qtype)){
-            case 0:qtype_text="[单选]:";break
-            case 1:qtype_text="[多选]:";break
+            case 0:qtype_text="[单选]:";break;
+            case 1:qtype_text="[多选]:";break;
         }
         return(
             <View style={{width:200}}>

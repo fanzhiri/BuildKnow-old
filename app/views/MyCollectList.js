@@ -106,10 +106,13 @@ class MyCollectList extends Component {
             .then((responseData) => {
                 if(responseData.code == 100){
                     this.setState({
-                        books_data_source:responseData.data
+                        books_data_source:responseData.data,
+                        get_books_data:1
                     })
                 }else{
-                    alert(responseData.message);
+                    this.setState({
+                        get_books_data:2
+                    })
                 }
 
             })
