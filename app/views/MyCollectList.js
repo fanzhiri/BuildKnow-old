@@ -47,6 +47,11 @@ const styles = StyleSheet.create({
         fontSize: 14,
         justifyContent: 'center',
         color: 'red',
+    },questionitemcontainer:{
+    padding:5,
+        backgroundColor:'white',
+        borderBottomWidth:1,
+        borderBottomColor:'#ab82ff',
     },
 });
 
@@ -161,7 +166,7 @@ class MyCollectList extends Component {
         var cover = (rowData.cover);
         var bookid= (rowData.bookid);
         return (
-            <TouchableOpacity onPress={() => Actions.bookcover({bookpublicid:rowData.reviewid})}>
+            <TouchableOpacity onPress={() => this.pressCollect(rowData,3)}>
                 <View style={styles.listItem}>
                     <Image source={{uri:`${httpsBaseUrl}${cover}`}} style={styles.leftImgStyle}/>
                     <View>
@@ -216,9 +221,60 @@ class MyCollectList extends Component {
             })
     }
 
-    pressCollect(rowData){
+    fetch_sendCollect(rowData,whichtype){
+        let attachmentid,msg_type;
+        switch (whichtype){
+            //
+            case 2 :
+                attachmentid = rowData.questionid;
+                msg_type = whichtype;
+                break;
+            case 3 :
+                attachmentid = rowData.reviewid;
+                msg_type = whichtype;
+                break;
+        }
+        let formData = new FormData();
+        formData.append("auth",global.auth);
+        formData.append("userid",global.userid);
+        formData.append("attachmentid",attachmentid);
+        formData.append("conversationid",this.props.cvst_id);
+        formData.append("chattoid",this.props.chattoid);
+        formData.append("msg_type",msg_type);
+
+        var opts = {
+            method:"POST",
+            body:formData
+        }
+        fetch(sendMsgUrl,opts)
+            .then((response) => response.json())
+            .then((responseData) => {
+                if(responseData.code == 100){
+
+                    Actions.pop();
+                }else{
+                    alert(responseData.data)
+                }
+
+            })
+            .catch((error) => {
+                alert(error)
+            })
+    }
+
+    pressCollect(rowData,whichtype){
         if(this.props.intype == 1){
-            this.fetch_sendCollectQst(rowData)
+            switch (whichtype){
+                case 2 :this.fetch_sendCollectQst(rowData); break;
+                case 3 :this.fetch_sendCollect(rowData,whichtype); break;
+            }
+
+        }else{
+            switch (whichtype){
+                case 2 : break;
+                case 3 :Actions.bookcover({bookpublicid:rowData.reviewid}); break;
+            }
+
         }
     }
 
@@ -227,7 +283,7 @@ class MyCollectList extends Component {
         var qId = (rowData.questionid);
 
         return (
-            <TouchableOpacity onPress={() => this.pressCollect(rowData)}>
+            <TouchableOpacity onPress={() => this.pressCollect(rowData,2)}>
                 <View  style={styles.questionitemcontainer}>
                     <Text style={styles.questionitem}>
                         {parseInt(rowID)+1} : {ask.substring(0,20)}

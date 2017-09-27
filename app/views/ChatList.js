@@ -374,12 +374,32 @@ class ChatList extends Component {
         )
     }
 
+    renderBookCard(rowData){
+        let bookinfo= JSON.parse(rowData.content);
+        let bookname  =bookinfo.bookname;
+        let cover     =bookinfo.cover;
+        let bookbrief =bookinfo.bookbrief;
+
+        return(
+            <TouchableOpacity onPress={() => Actions.bookcover({bookpublicid:bookinfo.reviewid})}>
+                <View style={{width:200}}>
+                    <View style={{flexDirection:"row"}}>
+                        <Image style={[{width: 80,height: 80,}, this.props.imageStyle]} resizeMode="cover" source={{uri:`${httpsBaseUrl}${cover}`}} />
+                        <Text style={{color:"#FF0000",fontSize:20,marginLeft:6}}>{bookname}</Text>
+                    </View>
+                    <Text style={{marginLeft:6,marginTop:4}}>简介: {bookbrief}</Text>
+                </View>
+            </TouchableOpacity>
+        )
+    }
+
     renderMsgType(rowData){
 
         switch (parseInt(rowData.msg_type)){
             case 0 : return(this.renderMsgContent(rowData));break;
             case 1 : return(this.renderPeopleCard(rowData));break;
             case 2 : return(this.renderQstCard(rowData));break;
+            case 3 : return(this.renderBookCard(rowData));break;
         }
     }
 
