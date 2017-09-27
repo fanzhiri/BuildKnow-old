@@ -273,7 +273,7 @@ class MessageList extends Component {
         }
         return (
 
-            <TouchableOpacity onPress={() => Actions.chatlist({cvstid:rowData.id})}>
+            <TouchableOpacity onPress={() => Actions.chatlist({cvstid:rowData.id,title:cvstName})}>
                 <View style={styles.peopleItem}>
                     <Image source={{uri:`${httpsBaseUrl}${rowData.head}`}} style={styles.leftImgStyle}/>
                     <View>

@@ -81,10 +81,11 @@ const styles = StyleSheet.create({
     },
     bottomAttachmentViewContainer:{
         paddingTop:8,
-        paddingBottom:8,
+        paddingBottom:4,
         flexDirection:'row',
         alignItems: 'center',
         justifyContent: 'space-around',
+        backgroundColor:"#FFFFFF"
     },
     chatinput:{
         flex:1,
@@ -455,7 +456,7 @@ class ChatList extends Component {
                     <View style={{justifyContent:"center",alignItems:"center",width:54,height:54,borderWidth:1,borderRadius:6}}>
                         <Icon name={icon} size={36} color={"#11FF00"}/>
                     </View>
-                    <Text style={{fontSize:12,marginTop:8}}>{name}</Text>
+                    <Text style={{fontSize:14,marginTop:4}}>{name}</Text>
                 </View>
             </TouchableOpacity>
 
@@ -468,7 +469,8 @@ class ChatList extends Component {
                 <View style={styles.bottomAttachmentViewContainer}>
                     {this.renderAttachButton("md-contact","名片",1)}
                     {this.renderAttachButton("md-bookmarks","收藏",2)}
-                    {this.renderAttachButton("md-paper","题目",3)}
+                    {this.renderAttachButton("md-paper","考卷",3)}
+                    {this.renderAttachButton("md-mail","红包",4)}
                 </View>
             );
         }
