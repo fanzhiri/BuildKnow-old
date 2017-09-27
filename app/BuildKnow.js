@@ -93,7 +93,7 @@ import Comment from './views/Comment';
 
 //61
 import ChatSetting from './views/ChatSetting';
-
+import EditChapter from './views/EditChapter';
 
 
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -193,6 +193,7 @@ export default class BuildKnow extends Component {
                 <Scene key="discuss"            title="评论" component={Discuss} duration={0}  />
                 <Scene key="comment"            title="发评论" component={Comment} duration={0}  />
                 <Scene key="chatsetting"        title="聊天设置" component={ChatSetting} duration={0}  />
+                <Scene key="editchapter"        title="章节编辑" component={EditChapter} duration={0}  />
             </Router>
         );
     }

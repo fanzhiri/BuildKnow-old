@@ -197,12 +197,13 @@ class ComposeBook extends Component {
             get_questiondata:null,
             idea_recommend_data_source:null,
             gorefreshing:false,
-            get_recommenddata:null
+            get_recommenddata:null,
+            chapterSelect:0
         };
         this._onChange = this._onChange.bind(this);
         this._handlePress = this._handlePress.bind(this);
         this._renderQuestionItem = this.renderQuestionItem.bind(this);
-
+        this._renderChapterBarRow = this.renderChapterBarRow.bind(this);
     }
 
     do_operate_recommendquestion(what,qid){
@@ -596,9 +597,62 @@ class ComposeBook extends Component {
         )
     }
 
+    onChapterPressFunc(rowID){
+        this.setState({
+            chapterSelect: rowID,
+        });
+    }
+
+    renderChapterBarRow(rowData, sectionID, rowID){
+        let cateColor ;
+        if(this.state.chapterSelect == rowID){
+            cateColor="#FF0000";
+        }else{
+            cateColor="#000000";
+        }
+        return(
+            <TouchableOpacity onPress={()=> this.onChapterPressFunc(rowID)} activeOpacity={0.8}>
+                <Text style={{marginRight:6,marginLeft:6,color:cateColor}}>{rowData}</Text>
+            </TouchableOpacity>
+        )
+    }
+
+    renderAllChapter(){
+        if(this.state.composebookdata.chapter == ""){
+            return;
+        }
+        return(
+            <ListView
+                enableEmptySections={true}
+                horizontal={true}
+                dataSource={DataStore.cloneWithRows(JSON.parse(this.state.composebookdata.chapter))}
+                renderRow={this._renderChapterBarRow} />
+        )
+    }
+
+    editChapter(){
+        Actions.editchapter({bookid:this.props.bookid,chapter_arr:JSON.parse(this.state.composebookdata.chapter)});
+    }
+
+    renderChapterBar(){
+
+        return(
+            <View  style={{height:32,backgroundColor:'#F0FF00',flexDirection:'row',alignItems: 'center',justifyContent:"flex-end"}}>
+                {this.renderAllChapter()}
+                <TouchableOpacity onPress={()=> this.editChapter()}>
+                    <View style={{height:32,backgroundColor:"#FF0000",paddingLeft:6,paddingRight:6,justifyContent:"center",alignItems:"center"}}>
+                        <Text>编辑章节</Text>
+                    </View>
+                </TouchableOpacity>
+            </View>
+        )
+
+    }
+
     renderQuestionListView(){
         return (
             <View style={styles.btnFlexEndContainer} >
+                {this.renderChapterBar()}
                 <ScrollView>
                     <ListView
                         style={styles.list}
