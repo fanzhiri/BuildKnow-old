@@ -631,7 +631,13 @@ class ComposeBook extends Component {
     }
 
     editChapter(){
-        Actions.editchapter({bookid:this.props.bookid,chapter_arr:JSON.parse(this.state.composebookdata.chapter)});
+        let t_chapter_arr=null;
+        if(this.state.composebookdata.chapter ==null ||this.state.composebookdata.chapter ==''){
+
+        }else{
+            t_chapter_arr=JSON.parse(this.state.composebookdata.chapter);
+        }
+        Actions.editchapter({bookid:this.props.bookid,chapter_arr:t_chapter_arr});
     }
 
     renderChapterBar(){

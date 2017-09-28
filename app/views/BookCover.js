@@ -211,11 +211,18 @@ class BookCover extends Component {
         ]);
     }
 
+    sharebook(){
+        Actions.friendlist({title:"题本分享给朋友",inmode:1,intype:3,bookid:this.state.bookdata.reviewid});
+    }
+
     rendercollectbutton(){
 
         if(global.bookcollect.contains(this.state.bookdata.reviewid)){
             return(
                 <View style={styles.container3}>
+                    <TouchableOpacity onPress={() => this.sharebook()}>
+                        <View style={styles.obtainButton}><Text style={{fontSize:12}}>分享</Text></View>
+                    </TouchableOpacity>
                     <TouchableOpacity onPress={() => this.godropbook()}>
                         <View style={styles.dropButton} ><Text style={{fontSize:12}}>丢弃</Text></View>
                     </TouchableOpacity>
@@ -227,6 +234,9 @@ class BookCover extends Component {
         }else{
             return(
                 <View style={styles.container3}>
+                    <TouchableOpacity onPress={() => this.sharebook()}>
+                        <View style={styles.obtainButton}><Text style={{fontSize:12}}>分享</Text></View>
+                    </TouchableOpacity>
                     <TouchableOpacity onPress={() => this.docollect(1)}>
                         <View style={styles.obtainButton}><Text style={{fontSize:12}}>收藏</Text></View>
                     </TouchableOpacity>

@@ -81,7 +81,6 @@ const styles = StyleSheet.create({
     },
     bottomAttachmentViewContainer:{
         paddingTop:8,
-        paddingBottom:4,
         flexDirection:'row',
         alignItems: 'center',
         justifyContent: 'space-around',
@@ -120,7 +119,6 @@ const styles = StyleSheet.create({
 
     },cvscontainer:{
         justifyContent: 'flex-end',
-        marginBottom:6,
         flex:1
     },
     IconItem:{
@@ -474,7 +472,6 @@ class ChatList extends Component {
                 </View>
             );
         }
-
     }
 
     changeshowattach(now){

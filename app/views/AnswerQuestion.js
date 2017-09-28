@@ -430,7 +430,7 @@ class AnswerQuestion extends Component {
     }
 
     invote(idx){
-        let t_questiondata;
+        let t_questiondata = this.state.questiondataarr[parseInt(this.state.questionidx)];
         switch (idx){
             case 0:
                 Actions.answersetting();
@@ -438,9 +438,10 @@ class AnswerQuestion extends Component {
             case 1:
                 break;
             case 2:
+                Actions.friendlist({title:"题目分享给朋友",inmode:1,intype:2,questionid:t_questiondata.questionid});
                 break;
             case 3:
-                t_questiondata = this.state.questiondataarr[parseInt(this.state.questionidx)];
+
                 this.docollect(t_questiondata.questionid);
                 break;
             case 4:
@@ -449,7 +450,6 @@ class AnswerQuestion extends Component {
                 this.setState({fragment:1});
                 break;
             case 6:
-                t_questiondata = this.state.questiondataarr[parseInt(this.state.questionidx)];
                 Actions.discuss({intype:2,qst_id:t_questiondata.questionid});
                 break;
             case 7:

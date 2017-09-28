@@ -225,12 +225,42 @@ class FriendList extends Component {
         }
     }
 
+    fetch_sendCollectQst(rowData){
+        let formData = new FormData();
+        formData.append("auth",global.auth);
+        formData.append("userid",global.userid);
+        formData.append("attachmentid",this.props.questionid);
+        formData.append("chattoid",rowData.userid);
+        formData.append("msg_type",2);
+
+        var opts = {
+            method:"POST",
+            body:formData
+        }
+        fetch(sendMsgUrl,opts)
+            .then((response) => response.json())
+            .then((responseData) => {
+                if(responseData.code == 100){
+
+                    Actions.pop();
+                }else{
+                    alert(responseData.data)
+                }
+
+            })
+            .catch((error) => {
+                alert(error)
+            })
+    }
+
     onPeopleClick(rowData, sectionID, rowID){
         if(this.props.inmode == 0){
             Actions.homepage({userId:rowData.userid,title:rowData.nickname,peopledata:rowData})
         }else{
             if(this.props.intype == 0){
                 this.changeselect(rowID);
+            }else if(this.props.intype == 2){
+                this.fetch_sendCollectQst(rowData)
             }else{
                 this.fetch_sendPeopleCard(rowData);
             }
@@ -307,11 +337,14 @@ class FriendList extends Component {
 
 FriendList.PropTypes = {
     inmode: PropTypes.number.isRequired,//0查看，1选择
-    intype: PropTypes.number.isRequired,//0群聊添加人，1发送名片
-    option: PropTypes.number.isRequired,//0删除，1添加
-    cvst_id: PropTypes.number.isRequired,//增加、删除会话人时用
+    intype: PropTypes.number.isRequired,//0群聊添加人, 1发送名片, 2从回答界面向朋友分享, 3从发行的书面向朋友分享
+    option: PropTypes.number,//0删除，1添加
+    cvst_id: PropTypes.number,//增加、删除会话人时用
     chattoid:PropTypes.number,
-
+    //题目分享
+    questionid:PropTypes.number,
+    //书目分享
+    bookid:PropTypes.number,
 };
 
 module.exports = FriendList;
