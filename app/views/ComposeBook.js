@@ -612,7 +612,7 @@ class ComposeBook extends Component {
         }
         return(
             <TouchableOpacity onPress={()=> this.onChapterPressFunc(rowID)} activeOpacity={0.8}>
-                <Text style={{marginRight:6,marginLeft:6,color:cateColor}}>{rowData}</Text>
+                <Text style={{marginRight:6,marginLeft:6,color:cateColor}}>{rowData.name}</Text>
             </TouchableOpacity>
         )
     }
@@ -657,7 +657,7 @@ class ComposeBook extends Component {
 
     renderQuestionListView(){
         return (
-            <View style={styles.btnFlexEndContainer} >
+            <View style={{flex:1}} >
                 {this.renderChapterBar()}
                 <ScrollView>
                     <ListView
@@ -667,13 +667,16 @@ class ComposeBook extends Component {
                         enableEmptySections = {true}
                     />
                 </ScrollView>
-                <View style={{height:32}}>
-                    <TouchableOpacity
-                        style={{justifyContent: 'center',alignItems: 'center',flex:1,backgroundColor: '#3086cc'}}
-                        onPress={() => Actions.newsomequestions({bookid:this.props.bookid})} >
-                        <Text style={{fontSize:20}} >添题</Text>
-                    </TouchableOpacity>
+                <View style={styles.btnFlexEndContainer} >
+                    <View style={{height:32}}>
+                        <TouchableOpacity
+                            style={{justifyContent: 'center',alignItems: 'center',flex:1,backgroundColor: '#3086cc'}}
+                            onPress={() => Actions.newsomequestions({bookid:this.props.bookid})} >
+                            <Text style={{fontSize:20}} >添题</Text>
+                        </TouchableOpacity>
+                    </View>
                 </View>
+
             </View>
 
 
