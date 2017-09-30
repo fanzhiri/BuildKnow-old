@@ -63,6 +63,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems:'center',
         borderRadius:6,
+        marginRight:8,
         width:58,height:24,
         backgroundColor: '#00FF7F',
     },
@@ -220,12 +221,14 @@ class BookCover extends Component {
         if(global.bookcollect.contains(this.state.bookdata.reviewid)){
             return(
                 <View style={styles.container3}>
-                    <TouchableOpacity onPress={() => this.sharebook()}>
-                        <View style={styles.obtainButton}><Text style={{fontSize:12}}>分享</Text></View>
-                    </TouchableOpacity>
                     <TouchableOpacity onPress={() => this.godropbook()}>
                         <View style={styles.dropButton} ><Text style={{fontSize:12}}>丢弃</Text></View>
                     </TouchableOpacity>
+
+                    <TouchableOpacity onPress={() => this.sharebook()}>
+                        <View style={styles.obtainButton}><Text style={{fontSize:12}}>分享</Text></View>
+                    </TouchableOpacity>
+
                     <TouchableOpacity onPress={() => Actions.publicbook({bookid:this.state.bookdata.reviewid})}>
                         <View style={styles.obtainButton} ><Text style={{fontSize:12}}>进入</Text></View>
                     </TouchableOpacity>

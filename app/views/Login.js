@@ -76,10 +76,13 @@ class Login extends Component {
                     global.followperson=JSON.parse(responseData.data.followperson);
                     global.friend=JSON.parse(responseData.data.friend);
                     global.bookcollect=JSON.parse(responseData.data.bookcollect);
+                    global.qstcollect=JSON.parse(responseData.data.collectqst);
+
                     //注意看上面！！
                     global.infonum=responseData.data.infonum;
                     Actions.main();
                 }else{
+                    alert(responseData.code)
                     this.setState({
                         loginresult:responseData.code
                     })
@@ -105,6 +108,8 @@ class Login extends Component {
                     defaults={{
                         username: 'fantexi',
                         password: 'fantexi',
+                        //username: 'zi',
+                        //password: 'zzzzzz',
 
                     }}
                     validators={{

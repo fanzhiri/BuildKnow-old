@@ -453,6 +453,8 @@ class AnswerQuestion extends Component {
                 Actions.discuss({intype:2,qst_id:t_questiondata.questionid});
                 break;
             case 7:
+                //克隆
+                Actions.mybooklist({inmode:1,intype:1,qstid:t_questiondata.questionid});
                 break;
         }
     }
@@ -495,14 +497,14 @@ class AnswerQuestion extends Component {
         return (
             <View style={styles.container}>
                 <View style={styles.topButtoncontainer}>
-                    {this.rendertopbutton("md-grid",    "题卡",   () => this.invote(5))}
-                    {this.rendertopbutton("md-alarm",   "时间",   () => this.invote(7))}
-                    {this.rendertopbutton("md-cafe",    "评论",   () => this.invote(6))}
-                    {this.rendertopbutton("md-thumbs-up","赞",    () => this.invote(4))}
+                    {this.rendertopbutton("md-grid",        "题卡",   () => this.invote(5))}
+                    {this.rendertopbutton("md-git-branch",  "克隆",   () => this.invote(7))}
+                    {this.rendertopbutton("md-cafe",        "评论",   () => this.invote(6))}
+                    {this.rendertopbutton("md-thumbs-up",   "赞",    () => this.invote(4))}
                     {this.renderCollect()}
-                    {this.rendertopbutton("md-share",   "分享",   () => this.invote(2))}
-                    {this.rendertopbutton("md-stats",   "统计",   () => this.invote(1))}
-                    {this.rendertopbutton("md-settings","设置",   () => this.invote(0))}
+                    {this.rendertopbutton("md-share",       "分享",   () => this.invote(2))}
+                    {this.rendertopbutton("md-stats",       "统计",   () => this.invote(1))}
+                    {this.rendertopbutton("md-settings",    "设置",   () => this.invote(0))}
                 </View>
                 <Text style={styles.question}>完成进度 {this.state.count+1}:{this.state.allcount}</Text>
                 <Text style={styles.question}>题号: {this.state.questionidx+1}</Text>

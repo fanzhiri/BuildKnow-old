@@ -1,7 +1,7 @@
 /**
  * Created by slako on 17/2/18.
  */
-import React, { Component } from 'react';
+import React, { Component,PropTypes } from 'react';
 import {View, Text, StyleSheet, ListView, Image,TouchableOpacity,RefreshControl} from "react-native";
 import {Actions} from "react-native-router-flux";
 import Button from "react-native-button";
@@ -60,6 +60,8 @@ const styles = StyleSheet.create({
 var doGetMyBooksUrl = "https://slako.applinzi.com/index.php?m=question&c=personal&a=getmybooks";
 var httpsBaseUrl = "https://slako.applinzi.com/";
 
+var doCloneQstUrl = "https://slako.applinzi.com/index.php?m=question&c=personal&a=cloneqst";
+
 class MyBookList extends Component {
 
     constructor(props) {
@@ -101,6 +103,32 @@ class MyBookList extends Component {
             })
     }
 
+    dofetch_CloneQst(bookid){
+
+        let formData = new FormData();
+        formData.append("auth",global.auth);
+        formData.append("userid",global.userid);
+        formData.append("bookid",bookid);
+        formData.append("qstid",this.props.qstid);
+        var opts = {
+            method:"POST",
+            body:formData
+        }
+        fetch(doCloneQstUrl,opts)
+            .then((response) => response.json())
+            .then((responseData) => {
+                if(responseData.code == 100){
+                    Actions.pop();
+                }else{
+                    alert(responseData.message);
+                }
+
+            })
+            .catch((error) => {
+                alert(error)
+            })
+    }
+
     renderMyBooksView(){
         if(this.state.books_data_source ==null){
             this.dofetch_mybooks();
@@ -123,11 +151,22 @@ class MyBookList extends Component {
         }
     }
 
+    onItemPress(rowData){
+        if(this.props.inmode == 0){
+            Actions.composebook({bookid:rowData.question_book_id,title:rowData.bookname})
+        }else if(this.props.inmode == 1){
+            if(this.props.intype == 1){
+                dofetch_CloneQst(rowData.question_book_id);
+            }else{
+                Actions.pop();
+            }
+        }
+    }
+
     renderBookItem(rowData, sectionID, rowID){
         var cover = rowData.cover;
-        var bookid= rowData.question_book_id;
         return (
-            <TouchableOpacity onPress={() => Actions.composebook({bookid:bookid,title:rowData.bookname})}>
+            <TouchableOpacity onPress={() => this.onItemPress(rowData)}>
                 <View style={styles.listItem}>
                     <Text style={styles.numText}>{parseInt(rowID)+1}</Text>
                     <Image source={{uri:`${httpsBaseUrl}${cover}`}} style={styles.leftImgStyle}/>
@@ -183,5 +222,14 @@ class MyBookList extends Component {
         )
     }
 }
+
+MyBookList.PropTypes = {
+    inmode: PropTypes.number.isRequired,//0查看，1选择
+    intype: PropTypes.number,//1 克隆
+    qstid:PropTypes.number,
+    cvst_id: PropTypes.number,//发送给会话人时用
+    chattoid:PropTypes.number,
+};
+
 
 module.exports = MyBookList;

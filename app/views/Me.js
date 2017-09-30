@@ -112,7 +112,7 @@ class Me extends Component {
                         {this.renderAdmin()}
                         <MeItem icon={"ios-medal"} text={"我的主页"} iconColor="#c88400"
                                 onPress={() => Actions.homepage({userId:global.userid,peopledata:global.mydata})} />
-                        <MeItem icon={"md-build"} text={"我的题本"} iconColor="#FF0000"  onPress={() => Actions.mybooklist()} />
+                        <MeItem icon={"md-build"} text={"我的题本"} iconColor="#FF0000"  onPress={() => Actions.mybooklist({inmode:0})} />
                         <MeItem icon={"md-cube"} text={"答案库"} iconColor="#D15FEE"  onPress={() => Actions.answerlib()} />
                         <MeItem icon={"md-link"} text={"分享管理"} onPress={() => Actions.sharemanager()} />
                         <MeItem icon={"md-heart"} text={"我的收藏"} subText={"10篇"} iconColor="#32cd32" onPress={() => Actions.mycollectlist()} />
