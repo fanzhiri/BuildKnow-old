@@ -94,7 +94,8 @@ import Comment from './views/Comment';
 //61
 import ChatSetting from './views/ChatSetting';
 import EditChapter from './views/EditChapter';
-
+import MyArticleList from './views/MyArticleList';
+import IqBalance from './views/IqBalance';
 
 import Icon from 'react-native-vector-icons/Ionicons';
 
@@ -152,7 +153,7 @@ export default class BuildKnow extends Component {
                 <Scene key="about"              title="关于"          component={About} duration={0} />
                 <Scene key="bookdetial"         title="题本详情"       component={BookDetial} duration={0} />
                 <Scene key="forgetpasswd"       title="忘记密码"       component={ForgetPasswd} duration={0} />
-                <Scene key="answerquestion"     title="答题"          component={AnswerQuestion} duration={0} hideBackImage={true}/>
+                <Scene key="answerquestion"     title="答题"          component={AnswerQuestion} duration={0} />
                 <Scene key="newbook"            title="新建题本"       component={NewBook} duration={0} />
                 <Scene key="friendlist"         title="友人"          component={FriendList} duration={0} />
                 <Scene key="newonequestion"     title="新建单个题目"   component={NewOneQuestion} duration={0} />
@@ -194,6 +195,9 @@ export default class BuildKnow extends Component {
                 <Scene key="comment"            title="发评论" component={Comment} duration={0}  />
                 <Scene key="chatsetting"        title="聊天设置" component={ChatSetting} duration={0}  />
                 <Scene key="editchapter"        title="章节编辑" component={EditChapter} duration={0}  />
+                <Scene key="myarticlelist"      title="文章推荐" component={MyArticleList} duration={0}  rightTitle={"添加"} onRight={() => Actions.newsharemode()}/>
+                <Scene key="iqbalance"          title="智商资产" component={IqBalance} duration={0}  />
+                <Scene key="newarticleqst"      title="新建文章推荐" component={newArticleQst} duration={0} AQ />
             </Router>
         );
     }

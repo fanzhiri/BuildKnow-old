@@ -93,6 +93,9 @@ class RegisterVerify extends Component {
         this.state = {
             netresult:'no',
             people_list_data_source: null,
+            get_waiting:0,
+            get_reviewing:0,
+            get_finish:0,
             selectedIndex:0,
 
         };
@@ -117,11 +120,13 @@ class RegisterVerify extends Component {
             .then((responseData) => {
                 if(responseData.code == 100){
                     this.setState({
+                        get_waiting:1,
                         people_list_data_source:responseData.data
                     })
                 }else{
                     this.setState({
-                        netresult:responseData.code
+                        netresult:responseData.code,
+                        get_waiting:2
                     })
                 }
 
@@ -156,21 +161,23 @@ class RegisterVerify extends Component {
     renderSegmentedView() {
         if (this.state.selectedIndex === 0) {
 
-            if(this.state.people_list_data_source){
-
-                return (this.renderIntroduceView())
-            }else{
+            if(this.state.get_waiting == 0){
                 this._peoplelist();
                 return (this.renderLoading())
+            }else{
+                if(this.state.people_list_data_source){
+                    return (this.renderIntroduceView())
+                }else{
+                    return(this.rendernodata())
+                }
             }
-
         } else if (this.state.selectedIndex === 1) {
             return (
-                this.renderLoading()
+                this.rendernodata()
             )
         } else if (this.state.selectedIndex === 2) {
             return (
-                this.renderLoading()
+                this.rendernodata()
             )
         }
     }
@@ -263,6 +270,14 @@ class RegisterVerify extends Component {
                 renderRow={this._renderPeople}
                 enableEmptySections = {true}
             />
+        )
+    }
+
+    rendernodata(){
+        return (
+            <View style={styles.container}>
+                <Text>没有数据</Text>
+            </View>
         )
     }
 }

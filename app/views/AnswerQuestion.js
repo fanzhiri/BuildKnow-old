@@ -220,6 +220,10 @@ class AnswerQuestion extends Component {
 
         this.anotherquestion(1);
         this._timer=setInterval(()=>this.changeTimeCount(),1000);
+
+        if(this.props.answermode == 1 ||this.props.answermode == 2){
+            Actions.refresh({hideBackImage:true});
+        }
     }
 
     componentWillUnmount(){
@@ -639,6 +643,21 @@ class AnswerQuestion extends Component {
         })
     }
 
+    renderUploadButton(score){
+        if(score < 60){
+            return;
+        }
+        return(
+            <TouchableOpacity style={{flex:1}} onPress={ () =>this.saveTestRecord(score,right_num,takeTime)} activeOpacity={0.8}>
+                <View style={{flex:1,justifyContent: 'center',alignItems: 'center', height:32, backgroundColor:saveButtonColor}}  >
+                    <Text style={{fontSize: 18}}>
+                        {uploadText}
+                    </Text>
+                </View>
+            </TouchableOpacity>
+        )
+    }
+
     renderResult(){
         let right_num = 0;
         for(let i=0;i<this.state.answer_arr.length;i++){
@@ -686,13 +705,7 @@ class AnswerQuestion extends Component {
                 <Text>结束时间:{endTimeText}</Text>
                 <View style={{flex: 1, justifyContent: 'flex-end',}}>
                     <View style={{flexDirection:"row", height:32}}>
-                        <TouchableOpacity style={{flex:1}} onPress={ () =>this.saveTestRecord(score,right_num,takeTime)} activeOpacity={0.8}>
-                            <View style={{flex:1,justifyContent: 'center',alignItems: 'center', height:32, backgroundColor:saveButtonColor}}  >
-                                <Text style={{fontSize: 18}}>
-                                    {uploadText}
-                                </Text>
-                            </View>
-                        </TouchableOpacity>
+                        {this.renderUploadButton(score)}
                         <TouchableOpacity style={{flex:1}} onPress={ () =>this.onEndPressFunc()} activeOpacity={0.8}>
                             <View style={{flex:1,justifyContent: 'center',alignItems: 'center', height:32, backgroundColor:endButtonColor }}  >
                                 <Text style={{fontSize: 18}}>
@@ -802,11 +815,11 @@ class AnswerQuestion extends Component {
 }
 
 AnswerQuestion.PropTypes = {
-    intype:PropTypes.number,          //0正在建的题本测试 1已经发布的 2已经整理好的题目
+    intype:PropTypes.number,          //0正在建的题本测试 1已经发布的 2已经整理好的题目多题，3会话列表中分享的单题
     asktype:PropTypes.number,          //0顺序 1随机
     questiontype: PropTypes.string.isRequired,//random随机；order顺序
     questioncount:PropTypes.number,
-    answermode:PropTypes.number,//0看题，1随便考 2真考
+    answermode:PropTypes.number,//0看题，1多题随便考 2多题真考 3单题测验
     // qids:PropTypes.array.isRequired,
     publicbookdata:PropTypes.object,
     buildingbookdata:PropTypes.object,

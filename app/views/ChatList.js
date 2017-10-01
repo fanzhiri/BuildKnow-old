@@ -356,6 +356,18 @@ class ChatList extends Component {
         )
     }
 
+    onQstPress(t_questiondata){
+        let answer_arr = new Array();
+        let rightindex = Math.floor(Math.random() * 4);
+        let answerarr=JSON.parse(t_questiondata.wrong_answer);
+        let rightanswer=t_questiondata.right_answer;
+        answerarr.splice(rightindex,0,rightanswer);
+        answer_arr.push({ri:rightindex,randomanswer:answerarr});
+        let qst_arr = new Array();
+        qst_arr.push(t_questiondata);
+        Actions.answerquestion({intype:2,answermode:3,readyquestion_arr:qst_arr,answer_arr:answer_arr})
+    }
+
     renderQstCard(rowData){
         let questioninfo= JSON.parse(rowData.content);
         let ask =questioninfo.ask;
@@ -366,10 +378,12 @@ class ChatList extends Component {
             case 1:qtype_text="[多选]:";break;
         }
         return(
-            <View style={{width:200}}>
-                <Text >{qtype_text}</Text>
-                <Text >{ask}</Text>
-            </View>
+            <TouchableOpacity onPress={() => this.onQstPress(questioninfo)}>
+                <View style={{width:200}}>
+                    <Text >{qtype_text}</Text>
+                    <Text >{ask}</Text>
+                </View>
+            </TouchableOpacity>
         )
     }
 
