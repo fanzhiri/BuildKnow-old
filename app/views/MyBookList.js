@@ -156,7 +156,7 @@ class MyBookList extends Component {
             Actions.composebook({bookid:rowData.question_book_id,title:rowData.bookname})
         }else if(this.props.inmode == 1){
             if(this.props.intype == 1){
-                dofetch_CloneQst(rowData.question_book_id);
+                this.dofetch_CloneQst(rowData.question_book_id);
             }else{
                 Actions.pop();
             }
