@@ -95,6 +95,7 @@ import Comment from './views/Comment';
 import ChatSetting from './views/ChatSetting';
 import EditChapter from './views/EditChapter';
 import MyArticleList from './views/MyArticleList';
+import NewArticleQst from './views/NewArticleQst';
 import IqBalance from './views/IqBalance';
 
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -195,9 +196,9 @@ export default class BuildKnow extends Component {
                 <Scene key="comment"            title="发评论" component={Comment} duration={0}  />
                 <Scene key="chatsetting"        title="聊天设置" component={ChatSetting} duration={0}  />
                 <Scene key="editchapter"        title="章节编辑" component={EditChapter} duration={0}  />
-                <Scene key="myarticlelist"      title="文章推荐" component={MyArticleList} duration={0}  rightTitle={"添加"} onRight={() => Actions.newsharemode()}/>
+                <Scene key="myarticlelist"      title="文章推荐" component={MyArticleList} duration={0}  rightTitle={"添加"} onRight={() => Actions.newarticleqst()}/>
                 <Scene key="iqbalance"          title="智商资产" component={IqBalance} duration={0}  />
-                <Scene key="newarticleqst"      title="新建文章推荐" component={newArticleQst} duration={0} AQ />
+                <Scene key="newarticleqst"      title="新建文章推荐" component={NewArticleQst} duration={0} />
             </Router>
         );
     }

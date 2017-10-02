@@ -2,11 +2,11 @@
  * Created by slako on 17/10/01.
  */
 import React, { Component ,PropTypes} from 'react';
-import {View, Text, StyleSheet, TextInput,SegmentedControlIOS,Image,ScrollView,TouchableOpacity,Alert} from "react-native";
+import {View, Text, StyleSheet, TextInput,SegmentedControlIOS,Image,ScrollView,TouchableOpacity,Alert,WebView,ListView} from "react-native";
 import {Actions} from "react-native-router-flux";
 import Button from 'apsl-react-native-button'
 import GlobleStyles from '../styles/GlobleStyles';
-
+import DataStore from '../util/DataStore';
 const styles = StyleSheet.create({
     container: {
         backgroundColor: '#F5FCFF',
@@ -107,22 +107,80 @@ class NewArticleQst extends Component {
         this.state = {
             intype:props.intype,
             articlelink_shadow:"",
-            articlelink:"",
+            articlelink:"https://www.baidu.com",
+            refreshbutton:1, //1改动过
+            qsts_data_source:null
         };
+        this._renderQstItem = this.renderQstItem.bind(this);
 
     }
 
-    articleLinkTextChange(){
+    articleLinkTextChange(text){
         this.setState({
-            books_data_source:responseData.data
+            articlelink_shadow:text,
+            refreshbutton:1
         })
+    }
+
+    onRefreshClick(){
+
+        this.setState({
+            articlelink:this.state.articlelink_shadow,
+            refreshbutton:0
+        })
+    }
+
+    renderRefreshButton(){
+
+        let buttoncolor="#F000FF";
+        if(this.state.refreshbutton == 1){
+            buttoncolor="#00FF0F";
+        }else if(this.state.refreshbutton == 2){
+            buttoncolor="#B09090";
+        }
+
+        return(
+            <TouchableOpacity onPress={()=>this.onRefreshClick()}>
+                <View style={{height:32,justifyContent:"center",alignItems:"center",
+                        backgroundColor:buttoncolor,
+                        margin:6,borderRadius:8}}>
+                    <Text>刷新</Text>
+                </View>
+            </TouchableOpacity>
+        )
+    }
+
+    renderQstItem(rowData,sectionID, rowID){
+        return(
+            <View style={{height:32,borderBottomColor:"#0000FF"}}>
+
+            </View>
+        )
+    }
+
+    renderQstList(){
+        if(this.state.qsts_data_source == null){
+            return;
+        }
+        return(
+            <ListView
+                style={{flex:1,borderColor:"FF0000",margin:6}}
+                dataSource={DataStore.cloneWithRows(this.state.qsts_data_source)}
+                renderRow={this._renderQstItem}
+                enableEmptySections = {true}
+            />
+        )
     }
 
     render(){
         return (
             <View style={[GlobleStyles.withoutTitleContainer,styles.container]}>
                 <View>
-                    <Text>文章链接</Text>
+                    <View style={{justifyContent:"center",alignItems:"center",height:32,margin:6}}>
+                        <Text style={{fontSize:16}}>链接拷贝到如下边框,点击刷新</Text>
+                    </View>
+
+
                     <TextInput
                         onChangeText={(text) => {this.articleLinkTextChange(text)}}
                         style={styles.answerinput}
@@ -131,10 +189,28 @@ class NewArticleQst extends Component {
                         maxLength={20}
                         multiline={true}
                     />
-                </View>
-                <View style={{height:300}}>
 
                 </View>
+                {this.renderRefreshButton()}
+                <View style={{height:300,margin:6,borderWidth:1}}>
+                    <WebView
+                        source={{
+                        uri: this.state.articlelink,
+                        method: 'GET'
+                    }}
+                        domStorageEnabled={true}
+                        scalesPageToFit={false}
+                        javaScriptEnabled={true}
+                    />
+                </View>
+                <View style={{justifyContent:"center",alignItems:"center",height:32,margin:6,
+                        backgroundColor:"#66CD00",
+                        borderRadius:8
+                        }}>
+                    <Text>添加问题</Text>
+                </View>
+
+                {this.renderQstList()}
             </View>
         );
     }
