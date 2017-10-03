@@ -66,6 +66,11 @@ class MyCollectList extends Component {
 
         super(props);
 
+        let t_selectedIndex =0;
+        if(props.processprop == 1){
+            t_selectedIndex = 1;
+        }
+
         this.state = {
             //发布的
             books_data_source: null,
@@ -80,7 +85,7 @@ class MyCollectList extends Component {
             test_data_source: null,
             get_test_data:0,
 
-            selectedIndex:0,
+            selectedIndex:t_selectedIndex,
         };
         this._onChange              = this.onChange.bind(this);
         this._renderBookItem        = this.renderBookItem.bind(this);
@@ -262,11 +267,22 @@ class MyCollectList extends Component {
             })
     }
 
+    finishToMarketManage(rowData){
+        Actions.pop({refresh:{bookdata:rowData}});
+    }
+
     pressCollect(rowData,whichtype){
         if(this.props.intype == 1){
-            switch (whichtype){
+            switch (whichtype){//2问题，3书目
                 case 2 :this.fetch_sendCollectQst(rowData); break;
-                case 3 :this.fetch_sendCollect(rowData,whichtype); break;
+                case 3 :
+                    if(this.props.inmode == 1){
+                        this.finishToMarketManage(rowData)
+                    }else{
+                        this.fetch_sendCollect(rowData,whichtype);
+                    }
+
+                    break;
             }
 
         }else{
@@ -383,17 +399,28 @@ class MyCollectList extends Component {
         }
     }
 
+    renderSegmentSelect(){
+        if(this.props.processprop == 1){
+
+            return;
+        }
+
+        return(
+            <View>
+                <SegmentedControlIOS
+                    values={['题目','书目','考卷']}
+                    selectedIndex={this.state.selectedIndex}
+                    style={styles.segmented}
+                    onChange={this._onChange}
+                />
+            </View>
+        )
+    }
+
     render(){
         return (
             <View style={GlobleStyles.withoutTitleContainer}>
-                <View>
-                    <SegmentedControlIOS
-                        values={['题目','书目','考卷']}
-                        selectedIndex={this.state.selectedIndex}
-                        style={styles.segmented}
-                        onChange={this._onChange}
-                    />
-                </View>
+                {this.renderSegmentSelect()}
                 {this.renderFragment()}
             </View>
         );
@@ -417,10 +444,15 @@ class MyCollectList extends Component {
 }
 
 MyCollectList.PropTypes = {
-    intype:PropTypes.number,//0查看，1选择
+    intype:PropTypes.number,        //操作形态    0查看，1选择
+    processprop:PropTypes.number,   //显示属性    0都选，1只显示收藏书目
+    inmode:PropTypes.number,        //操作目标    0标识向某个会话发送,1单选收藏书目添加到上架模块
     //第一次对话，用到chattoid
     cvst_id:PropTypes.number,//标识向某个会话发送收藏
-    chattoid:PropTypes.number
+    chattoid:PropTypes.number,
+
+    //
+
 };
 
 module.exports = MyCollectList;
