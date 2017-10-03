@@ -72,15 +72,31 @@ class MarketManage extends Component {
     constructor(props) {
 
         super(props);
-        let t_Store_Mode_List=new Array();
+        let t_Store_Mode_List = new Array();
         this.state = {
             store_data_source: t_Store_Mode_List,
             gorefreshing:false,
+            module_idx:0,
+            module_sub_idx:0
         };
 
-        this._renderStoreItem = this.renderStoreItem.bind(this);
+        this._renderStoreItem       = this.renderStoreItem.bind(this);
+        this._renderSubItem         = this.renderSubItem.bind(this);
         this._onStoreItemTypeChange = this.onStoreItemTypeChange.bind(this);
         this._renderSubItemListView = this.renderSubItemListView.bind(this);
+    }
+
+    componentWillReceiveProps(nextProps){
+        if(nextProps.bookdata == null){
+            return;
+        }
+        let t_store_data_source=this.state.store_data_source;
+
+        t_store_data_source[this.state.module_idx].sub_item[this.state.module_sub_idx].name = nextProps.bookdata.bookname;
+        t_store_data_source[this.state.module_idx].sub_item[this.state.module_sub_idx].bookid = nextProps.bookdata.reviewid;
+        this.setState({
+            store_data_source:t_store_data_source
+        })
     }
 
     addSubItem(rowData, rowID){
@@ -89,7 +105,8 @@ class MarketManage extends Component {
         let t_sub_data_source =t_store_data_source[rowID].sub_item;
         let sub_item_one={
             idx:0,
-            name:"",
+            bookid:0,
+            name:"点击添加",
             img:null,
             url:null,
             sortnum:MAX_SUBITEM-remainadd+1,
@@ -128,15 +145,19 @@ class MarketManage extends Component {
         })
     }
 
-    renderSubItemListView(rowData){
+
+
+
+    renderSubItemListView(rowData, rowID){
+
         if(rowData.sub_item.length == 0){
             return;
         }
         return(
             <ListView
-                style={styles.list}
+                style={{marginLeft:12}}
                 dataSource={DataStore.cloneWithRows(rowData.sub_item)}
-                renderRow={this._renderStoreItem}
+                renderRow={this._renderSubItem}
                 enableEmptySections = {true}
             />
         )
@@ -149,40 +170,94 @@ class MarketManage extends Component {
 
     }
 
+    addSubItemButton(rowData, rowID){
+        if(rowData.bookid != 0){
+            Actions.bookcover({bookpublicid:rowData.bookid})
+            return;
+        }
+        this.setState({
+            module_idx:rowData.idx,
+            module_sub_idx:rowID
+        });
+        Actions.mycollectlist({intype:1,processprop:1,inmode:1});
+    }
+
+    renderAddDellBtn(rowData){
+        if(rowData.name == "点击添加"){
+            return;
+        }
+        return(
+            <View style={{flexDirection:"row",height:24,width:100,alignItems:"center"}}>
+                <TouchableOpacity style={{flex:1}} onPress={() => this.modify_subitem()}>
+                    <View style={{borderRadius:4,margin:2,padding:2,flexDirection:"row",backgroundColor:"#ADD8E6",justifyContent:"center",alignItems:"center"}}>
+                        <Text>修改</Text>
+                    </View>
+                </TouchableOpacity>
+                <TouchableOpacity style={{flex:1}} onPress={() => this.del_subitem()}>
+                    <View style={{borderRadius:4,margin:2,padding:2,flexDirection:"row",backgroundColor:"#ADD8E6",justifyContent:"center",alignItems:"center"}}>
+                        <Text>删除</Text>
+                    </View>
+                </TouchableOpacity>
+            </View>
+        )
+    }
+
+    renderSubItem(rowData, sectionID, rowID) {
+        return(
+            <View style={{flexDirection:"row",height:24,alignItems:"center",margin:2}}>
+                <TouchableOpacity style={{flex:1}} onPress={() => this.addSubItemButton(rowData, rowID)}>
+                    <View style={{borderColor:"#0000FF",borderWidth: 1,margin:2,padding:2,flexDirection:"row",backgroundColor:"#ADD8E6"}}>
+                        <Text>sub id:{rowID}</Text>
+                        <Text style={{marginLeft:6}}>{rowData.name}</Text>
+                    </View>
+                </TouchableOpacity>
+                {this.renderAddDellBtn(rowData)}
+            </View>
+
+        )
+    }
+
     renderStoreItem(rowData, sectionID, rowID) {
 
-        let remainadd =14;
+        let remainadd = MAX_SUBITEM-rowData.sub_item.length;
         return(
-            <View>
-                <TextInput
-                    style={{height:24,width:32,fontSize:14,borderColor:"#0000FF",borderWidth: 2,padding:2,marginLeft:6}}
-                    onChangeText={(text) => this.sortNumChange(rowID,text)}
-                    value={this.state.store_data_source[rowID].sortnum.toString()}
-                    placeholder={""}
-                    maxLength={2}
-                    multiline={false}
-                />
-                <View>
-                    <SegmentedControlIOS
-                        values={["轮播","横列表","缩点"]}
-                        selectedIndex={rowData.type}
-                        style={{width:180}}
-                        onChange={(event)=>this._onStoreItemTypeChange(event,rowData, rowID)}
+            <View style={{margin:4,padding:2,borderWidth:1,borderColor:"#000000",backgroundColor:"#EEEE00"}}>
+                <View style={{justifyContent:"center",alignItems:"center",height:24,marginBottom:4}}>
+                    <Text>
+                        模块{parseInt(rowID)+1}
+                    </Text>
+                </View>
+                <View style={{flexDirection:"row",marginBottom:4}}>
+                    <TextInput
+                        style={{height:24,width:32,fontSize:14,borderColor:"#0000FF",borderWidth: 1,padding:2,marginLeft:6,backgroundColor:"#FFFFFF"}}
+                        onChangeText={(text) => this.sortNumChange(rowID,text)}
+                        value={this.state.store_data_source[rowID].sortnum.toString()}
+                        placeholder={""}
+                        maxLength={2}
+                        multiline={false}
+                    />
+                    <View>
+                        <SegmentedControlIOS
+                            values={["轮播","横列表","缩点"]}
+                            selectedIndex={rowData.type}
+                            style={{height:24,width:150,marginLeft:10}}
+                            onChange={(event)=>this._onStoreItemTypeChange(event,rowData, rowID)}
+                        />
+                    </View>
+
+                    <TextInput
+                        style={{height:24,width:100,fontSize:14,borderColor:"#0000FF",borderWidth: 1,padding:2,marginLeft:10,backgroundColor:"#FFFFFF"}}
+                        onChangeText={(text) => this.nameChange(rowID,text)}
+                        value={this.state.store_data_source[rowID].name}
+                        placeholder={"名称填写"}
+                        maxLength={20}
+                        multiline={false}
                     />
                 </View>
 
-                <TextInput
-                    style={{height:24,width:100,fontSize:14,borderColor:"#0000FF",borderWidth: 2,padding:2,marginLeft:10}}
-                    onChangeText={(text) => this.nameChange(rowID,text)}
-                    value={this.state.store_data_source[rowID].name}
-                    placeholder={"填写"}
-                    maxLength={20}
-                    multiline={false}
-                />
-
-                {this.renderSubItemListView(rowData)}
+                {this._renderSubItemListView(rowData, rowID)}
                 <TouchableOpacity onPress={() => this.addSubItem(rowData, rowID)}>
-                    <View style={{justifyContent:"center",alignItems:"center",height:32,borderRadius:8,backgroundColor:"#00F0F0"}}>
+                    <View style={{justifyContent:"center",alignItems:"center",margin:4,height:32,borderRadius:8,backgroundColor:"#CD69C9"}}>
                         <Text>添加子项,还可以添加{remainadd}个</Text>
                     </View>
                 </TouchableOpacity>
@@ -204,6 +279,14 @@ class MarketManage extends Component {
         )
     }
 
+    preview(){
+
+    }
+
+    finishEdit(){
+
+    }
+
     render(){
 
         let remainadd = MAX_TEMPLATE-this.state.store_data_source.length;
@@ -211,11 +294,23 @@ class MarketManage extends Component {
         return (
             <View style={GlobleStyles.withoutTitleContainer}>
                 {this.renderStoreListView()}
-                <TouchableOpacity onPress={() => this.addStoreItem()}>
-                    <View style={{justifyContent:"center",alignItems:"center",height:32,borderRadius:8,backgroundColor:"#00F0F0"}}>
-                        <Text>添加模块,还可以添加{remainadd}个</Text>
-                    </View>
-                </TouchableOpacity>
+                <View style={{margin:2,height:36,flexDirection:"row"}}>
+                    <TouchableOpacity style={{flex:4}} onPress={() => this.addStoreItem()}>
+                        <View style={{justifyContent:"center",alignItems:"center",margin:2,height:32,borderRadius:8,backgroundColor:"#00F0F0"}}>
+                            <Text>添加模块,还可以添加{remainadd}个</Text>
+                        </View>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={{flex:1}} onPress={() => this.preview()}>
+                        <View style={{justifyContent:"center",alignItems:"center",margin:2,height:32,borderRadius:8,backgroundColor:"#8B7500"}}>
+                            <Text>预览</Text>
+                        </View>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={{flex:1}} onPress={() => this.finishEdit()}>
+                        <View style={{justifyContent:"center",alignItems:"center",margin:2,height:32,borderRadius:8,backgroundColor:"#7FFF00"}}>
+                            <Text>完成</Text>
+                        </View>
+                    </TouchableOpacity>
+                </View>
             </View>
         );
     }
@@ -236,6 +331,8 @@ MarketManage.PropTypes = {
     qstid:PropTypes.number,
     cvst_id: PropTypes.number,//发送给会话人时用
     chattoid:PropTypes.number,
+
+    bookdata:PropTypes.object
 };
 
 

@@ -40,6 +40,7 @@ const styles = StyleSheet.create({
         marginBottom:0,
     },
     container2: {
+        flex:1,
         marginLeft:10,
     },
     container3: {
