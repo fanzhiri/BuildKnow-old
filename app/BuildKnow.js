@@ -99,6 +99,7 @@ import NewArticleQst from './views/NewArticleQst';
 import IqBalance from './views/IqBalance';
 import MarketManage from './views/MarketManage';
 import BalanceRecharge from './views/BalanceRecharge';
+import AttributeChange from './views/AttributeChange';
 
 
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -204,6 +205,7 @@ export default class BuildKnow extends Component {
                 <Scene key="newarticleqst"      title="新建文推" component={NewArticleQst} duration={0} />
                 <Scene key="marketmanage"       title="上架管理" component={MarketManage} duration={0} />
                 <Scene key="balancerecharge"    title="智商充值" component={BalanceRecharge} duration={0} />
+                <Scene key="attributechange"    title="属性修改" component={AttributeChange} duration={0} />
             </Router>
         );
     }

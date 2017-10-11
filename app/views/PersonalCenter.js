@@ -101,10 +101,10 @@ class PersonalCenter extends Component {
                     <View style={styles.list}>
                         <SettingItem text={"头像"} subText={"未设置"} imgUri={`${httpsBaseUrl}${global.userhead}`} onPress={() => Actions.setheadpic()}/>
                         <SettingItem text={"主页背景"} imgUri={`${httpsBaseUrl}${global.userhead}`} onPress={() => Actions.sethomepagepic()}/>
-                        <SettingItem text={"昵称"} subText={global.nickname}/>
+                        <SettingItem text={"昵称"} subText={global.nickname} onPress={()=>Actions.attributechange({attribute:1})}/>
                         <SettingItem text={"建识号"} subText={global.username}/>
                         <SettingItem text={"二维码名片"} />
-                        <SettingItem text={"我的地址"} subText={"未设置"}/>
+                        <SettingItem text={"我的地址"} subText={"未设置"}  />
                     </View>
                     <View style={styles.list}>
                         <SettingItem text={"绑定新浪微博"} subText={"未设置"} isHasSwitcher={true}/>
@@ -112,14 +112,14 @@ class PersonalCenter extends Component {
                     </View>
                     <View style={styles.list}>
                         <SettingItem text={"邮箱"} subText={"未设置"}/>
-                        <SettingItem text={"手机号"} subText={"未设置"}/>
+                        <SettingItem text={"手机号"} subText={"未设置"}  onPress={()=>Actions.attributechange({attribute:2})}/>
                     </View>
 
                     <View style={styles.list}>
 
                         <SettingItem text={"性别"} onPress={() => Actions.about()}/>
                         <SettingItem text={"地区"} onPress={() => Actions.help()}/>
-                        <SettingItem text={"个性签名"} onPress={() => Actions.help()}/>
+                        <SettingItem text={"个性签名"} onPress={()=>Actions.attributechange({attribute:3})}/>
 
                     </View>
                     <View style={styles.list}>
