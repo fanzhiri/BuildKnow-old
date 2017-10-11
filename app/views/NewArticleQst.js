@@ -106,6 +106,7 @@ class NewArticleQst extends Component {
 
         this.state = {
             intype:props.intype,
+            article_title:"",
             articlelink_shadow:"",
             articlelink:"https://www.baidu.com",
             refreshbutton:1, //1改动过
@@ -172,10 +173,30 @@ class NewArticleQst extends Component {
         )
     }
 
+    articleTitleChange(text){
+        this.setState({
+            article_title:text,
+        })
+    }
+
     render(){
         return (
             <View style={[GlobleStyles.withoutTitleContainer,styles.container]}>
                 <View>
+                    <TextInput
+                        onChangeText={(text) => {this.articleTitleChange(text)}}
+                        style={{fontSize:16,
+                            marginTop:6,
+                            height: 32,
+                            borderColor: 'gray',
+                            borderWidth: 2,
+                            paddingLeft:10,
+                            paddingRight:10}}
+                        value={this.state.article_title}
+                        placeholder={"填写标题"}
+                        maxLength={20}
+                        multiline={true}
+                    />
                     <View style={{justifyContent:"center",alignItems:"center",height:32,margin:6}}>
                         <Text style={{fontSize:16}}>链接拷贝到如下边框,点击刷新</Text>
                     </View>
