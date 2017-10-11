@@ -484,8 +484,8 @@ class ComposeBook extends Component {
         this.dofetch_deletequestion(id);
     }
 
-    checkquestion(id){
-        //this.dofetch_deletequestion(id);
+    checkquestion(index){
+        Actions.newsomequestions({title:"题目查看",intype:1,qstlist:this.state.bookquestion_data_source,index:index})
     }
 
     acceptquestion(id){
@@ -508,7 +508,7 @@ class ComposeBook extends Component {
             return (
                 <View style={styles.questioneditcontainer}>
 
-                    <TouchableOpacity  onPress={()=> this.checkquestion(qId)} >
+                    <TouchableOpacity style={{backgroundColor:"#00FFFF",borderRadius:4}} onPress={()=> this.checkquestion(index)} >
                         <Text style={styles.questionedittext} >查看</Text>
                     </TouchableOpacity>
                     <Text style={styles.questionedittext} >编辑</Text>
@@ -671,7 +671,7 @@ class ComposeBook extends Component {
                     <View style={{height:32}}>
                         <TouchableOpacity
                             style={{justifyContent: 'center',alignItems: 'center',flex:1,backgroundColor: '#3086cc'}}
-                            onPress={() => Actions.newsomequestions({bookid:this.props.bookid})} >
+                            onPress={() => Actions.newsomequestions({intype:0,bookid:this.props.bookid})} >
                             <Text style={{fontSize:20}} >添题</Text>
                         </TouchableOpacity>
                     </View>
@@ -788,7 +788,7 @@ class ComposeBook extends Component {
                 <View style={{flexDirection:'row',height:38}}>
                     <TouchableOpacity
                         style={{justifyContent: 'center',alignItems: 'center',flex:1,backgroundColor: '#0066cc'}}
-                        onPress={() => Actions.newsomequestions({bookid:this.props.bookid})} >
+                        onPress={() => Actions.newsomequestions({intype:0,bookid:this.props.bookid})} >
                         <Text style={styles.addbuttontext} >添题</Text>
                     </TouchableOpacity>
                 </View>
