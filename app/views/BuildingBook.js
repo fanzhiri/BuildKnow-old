@@ -38,6 +38,7 @@ var doGetBookQuestionUrl = "https://slako.applinzi.com/index.php?m=question&c=pe
 var doGetRecommendQuestionUrl = "https://slako.applinzi.com/index.php?m=question&c=personal&a=getrecommendquestion";
 
 var doGetDiscussUrl = "https://slako.applinzi.com/index.php?m=question&c=personal&a=getdiscuss";
+var doCloneUrl = "https://slako.applinzi.com/index.php?m=question&c=personal&a=clonebook";
 
 const styles = StyleSheet.create({
     container: {
@@ -155,6 +156,31 @@ class BuildingBook extends Component {
                         bookCover:`${httpsBaseUrl}${responseData.data.cover}`,
                         getdata:1
                     })
+                }else{
+                    alert(responseData.message)
+                }
+
+            })
+            .catch((error) => {
+                alert(error)
+            })
+    }
+
+    doCloneBook(){
+        let formData = new FormData();
+        formData.append("auth",global.auth);
+        formData.append("userid",global.userid);
+        formData.append("bookid",this.props.bookid);
+
+        var opts = {
+            method:"POST",
+            body:formData
+        }
+        fetch(doCloneUrl,opts)
+            .then((response) => response.json())
+            .then((responseData) => {
+                if(responseData.code == 100){
+                    alert("ok")
                 }else{
                     alert(responseData.message)
                 }
@@ -356,15 +382,40 @@ class BuildingBook extends Component {
 
     }
 
+    clonebook(){
+        this.doCloneBook();
+    }
+
+    recommendbook(){
+
+    }
+
     renderIntroduceView(){
         return (
-            <View>
-                <Text style={styles.textmargin}>题本名字 :{this.state.bookdata.bookname}</Text>
-                <Text style={styles.textmargin}>题目数量 :{this.state.bookdata.q_count}</Text>
-                <Text style={styles.textmargin}>题本简介 :{this.state.bookdata.bookbrief}</Text>
-                <Text style={styles.textmargin}>题本详情 :{this.state.bookdata.bookdescription}</Text>
-                <Text style={styles.textmargin}>题目编号 :{this.state.bookdata.qids}</Text>
-                <Text style={styles.textmargin}>关注人数 :{this.state.bookdata.follow}</Text>
+            <View style={{marginLeft:10,marginRight:10}}>
+
+                <View style={{flexDirection:"row",alignItems:"center",marginTop:10,height:24}}>
+                    <Text style={{}}>题本名字 : {this.state.bookdata.bookname}</Text>
+                    <View style={{flex:1,flexDirection:"row",justifyContent:"flex-end"}}>
+                        <TouchableOpacity style={{marginLeft:10,borderRadius:8,width:68,height:24,backgroundColor:"#00FB00",justifyContent:"center",alignItems:"center"}} onPress={() => this.recommendbook()} >
+                            <Text style={{fontSize: 14}}>推荐</Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+                <Text style={styles.textmargin}>题目数量 : {this.state.bookdata.q_count}</Text>
+                <Text style={styles.textmargin}>题本简介 : {this.state.bookdata.bookbrief}</Text>
+                <Text style={styles.textmargin}>题本详情 : {this.state.bookdata.bookdescription}</Text>
+                <Text style={styles.textmargin}>题目编号 : {this.state.bookdata.qids}</Text>
+                <Text style={styles.textmargin}>关注人数 : {this.state.bookdata.follow}</Text>
+                <View style={{flexDirection:"row",alignItems:"center",marginTop:10,height:24}}>
+                    <Text style={{}}>克隆次数 : {this.state.bookdata.follow}</Text>
+                    <View style={{flex:1,flexDirection:"row",justifyContent:"flex-end"}}>
+                        <TouchableOpacity style={{marginLeft:10,borderRadius:8,width:68,height:24,backgroundColor:"#0FFBF0",justifyContent:"center",alignItems:"center"}} onPress={() => this.clonebook()} >
+                            <Text style={{fontSize: 14}}>克隆</Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+
             </View>
 
         )
