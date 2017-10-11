@@ -137,7 +137,7 @@ class NewSomeQuestions extends Component {
             //下面是查看的
             qstlist:props.qstlist,
             qidx:props.index,
-            allcount:props.qstlist.length,
+            allcount:props.qstlist == null ?0:props.qstlist.length,
             questiondata:t_questiondata
         };
 
@@ -502,6 +502,10 @@ class NewSomeQuestions extends Component {
     }
 
     renderAuthorName(){
+
+        if(this.state.intype == 0){
+            return;
+        }
         return(
             <View style={styles.typeContainer}>
                 <Text style={styles.typetext}>作者：</Text>
@@ -513,6 +517,9 @@ class NewSomeQuestions extends Component {
     }
 
     renderCommitTime(){
+        if(this.state.intype == 0){
+            return;
+        }
         let date = new Date();
         let time = date.setMilliseconds(this.state.questiondata.inputtime);
         let date_str = date.toLocaleString();
