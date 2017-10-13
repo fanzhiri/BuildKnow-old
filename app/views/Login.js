@@ -107,7 +107,7 @@ class Login extends Component {
 
                     defaults={{
                         username: 'fantexi',
-                        password: 'fantexi',
+                        password: '',
                         //username: 'zi',
                         //password: 'zzzzzz',
 
@@ -137,7 +137,7 @@ class Login extends Component {
                 >
                     <GiftedForm.TextInputWidget
                         name='username'
-                        title='Username'
+                        title='用户名'
 
                         placeholder='fantexi'
                         clearButtonMode='while-editing'
@@ -147,7 +147,7 @@ class Login extends Component {
 
                     <GiftedForm.TextInputWidget
                         name='password' // mandatory
-                        title='Password'
+                        title='密码'
                         placeholder='fantexi'
                         clearButtonMode='while-editing'
                         secureTextEntry={true}
@@ -156,10 +156,10 @@ class Login extends Component {
 
                     <GiftedForm.ErrorsWidget />
                     <GiftedForm.SubmitWidget
-                        title='Login'
+                        title='登陆'
                         widgetStyles={{
                             submitButton: {
-                                backgroundColor: '#fa0000',
+                                backgroundColor: '#00F000',
                             }
                         }}
                         onSubmit={(isValid, values, validationResults, postSubmit = null, modalNavigator = null) => {

@@ -60,6 +60,7 @@ class Comment extends Component {
                         value={this.state.commenttext}
                         placeholder={"写评论..."}
                         maxLength={96}
+                        returnKeyType={'done'}
                     />
                     <Button onPress={() => this.sendComment()}>{buttonText}</Button>
                 </View>

@@ -79,6 +79,7 @@ class Market extends Component {
                         enableEmptySections={true}
                         horizontal={true}
                         dataSource={DataStore.cloneWithRows(this.state.newbookdataSource)}
+                        showsHorizontalScrollIndicator={false}
                         renderRow={this._renderRow} />
                 </View>
             );
@@ -98,6 +99,7 @@ class Market extends Component {
                         enableEmptySections={true}
                         horizontal={true}
                         dataSource={DataStore.cloneWithRows(this.state.newbookdataSource)}
+                        showsHorizontalScrollIndicator={false}
                         renderRow={this._renderRow} />
                 </View>
             );

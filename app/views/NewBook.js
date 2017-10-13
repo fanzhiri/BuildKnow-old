@@ -15,16 +15,16 @@ var Tform = TcombForm.form.Form;
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        alignItems: 'center',
-        backgroundColor: '#BCEE68',
-        margin:10
+
+        margin:6
     },
     nameinput:{
+
         fontSize:16,
-        marginTop:10,
+        marginTop:6,
         height: 32,
         borderColor: 'gray',
-        borderWidth: 2,
+        borderWidth: 1,
         paddingLeft:10,
         paddingRight:10
     },
@@ -33,7 +33,7 @@ const styles = StyleSheet.create({
         marginTop:10,
         height: 64,
         borderColor: 'gray',
-        borderWidth: 2,
+        borderWidth: 1,
         paddingLeft:10,
         paddingRight:10
     },
@@ -42,12 +42,12 @@ const styles = StyleSheet.create({
         marginTop:10,
         height: 128,
         borderColor: 'gray',
-        borderWidth: 2,
+        borderWidth: 1,
         paddingLeft:10,
         paddingRight:10
     },
     imgcontainer:{
-        width:360,
+        flex:1,
         marginTop:10,
         justifyContent: 'space-around',
         flexDirection:'row',
@@ -58,11 +58,15 @@ const styles = StyleSheet.create({
         backgroundColor: '#FFEE00'
     },
     leftImgStyle:{
+        marginTop:10,
+        marginLeft:10,
         width:80,
         height:80,
 
     },
     rightImgStyle:{
+        marginTop:10,
+        marginLeft:10,
         width:180,
         height:80,
 
@@ -203,14 +207,17 @@ class NewBook extends Component {
 
     }
 
-    onPress(){
+    newbook(){
         if(this.state.name ===""){
+            alert("需填写名字");
             return;
         }
         if(this.state.brief ===""){
+            alert("需填写简介");
             return;
         }
         if(this.state.descriptioninput ===""){
+            alert("需填写描述");
             return;
         }
         this.docommit();
@@ -220,41 +227,53 @@ class NewBook extends Component {
     render(){
         return (
             <View style={[GlobleStyles.withoutTitleContainer,styles.container]}>
-                <TextInput
-                    style={styles.nameinput}
-                    onChangeText={(text) => this.setState({name:text})}
-                    value={this.state.name}
-                    placeholder={"名字：请添写最多12字"}
-                    maxLength={12}
-                    multiline={false}
-                />
-                <TextInput
-                    style={styles.briefinput}
-                    onChangeText={(text) => this.setState({brief:text})}
-                    value={this.state.brief}
-                    placeholder={"简介：请添写最多32字"}
-                    maxLength={32}
-                    multiline={true}
-                />
-                <TextInput
-                    style={styles.descriptioninput}
-                    onChangeText={(text) => this.setState({description:text})}
-                    value={this.state.description}
-                    placeholder={"描述：请添写最多100字"}
-                    maxLength={100}
-                    multiline={true}
-                />
-                <View  style={styles.imgcontainer}>
+                <ScrollView>
+                    <TextInput
+                        style={styles.nameinput}
+                        onChangeText={(text) => this.setState({name:text})}
+                        value={this.state.name}
+                        placeholder={"名字：请添写最多12字"}
+                        maxLength={12}
+                        multiline={false}
+                        returnKeyType={'done'}
+                    />
+                    <TextInput
+                        style={styles.briefinput}
+                        onChangeText={(text) => this.setState({brief:text})}
+                        value={this.state.brief}
+                        placeholder={"简介：请添写最多32字"}
+                        maxLength={32}
+                        multiline={true}
+                        returnKeyType={'done'}
+                    />
+                    <TextInput
+                        style={styles.descriptioninput}
+                        onChangeText={(text) => this.setState({description:text})}
+                        value={this.state.description}
+                        placeholder={"描述：请添写最多100字"}
+                        maxLength={100}
+                        multiline={true}
+                        returnKeyType={'done'}
+                    />
+                    <Text style={{marginTop:10}}>图标：</Text>
                     <TouchableOpacity onPress={()=>this._onSelectCoverPress(1)} >
                         <Image source={this.state.coverSource8080} style={styles.leftImgStyle} />
                     </TouchableOpacity>
+                    <Text style={{marginTop:10}}>海报：</Text>
                     <TouchableOpacity onPress={()=>this._onSelectCoverPress(2)} >
                         <Image source={this.state.coverSource18080} style={styles.rightImgStyle} />
                     </TouchableOpacity>
+
+                </ScrollView>
+
+
+                <View style={{flex:1,justifyContent:"flex-end"}}>
+                    <TouchableOpacity style={{margin:4,borderRadius:8,height:32,
+                        backgroundColor:"#0FFBF0",justifyContent:"center",alignItems:"center"}} onPress={() => this.newbook()} >
+                        <Text style={{fontSize: 18}}>添加题本</Text>
+                    </TouchableOpacity>
                 </View>
 
-
-                <Button style={styles.addbutton} textStyle={{fontSize: 20}} onPress={() => this.onPress()} >添加题本</Button>
             </View>
         );
     }

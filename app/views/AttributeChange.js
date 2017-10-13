@@ -70,6 +70,7 @@ class AttributeChange extends Component {
                         value={this.state.descriptiontext}
                         placeholder={changeText}
                         maxLength={textmaxlength}
+                        returnKeyType={'done'}
                     />
 
                     <TouchableOpacity style={{height:36,margin:20,borderRadius:12,backgroundColor:"#00FF00",justifyContent:"center",alignItems:"center"}} onPress={() => this.submitchange()} >

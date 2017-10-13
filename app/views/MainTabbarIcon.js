@@ -24,7 +24,7 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#919191',
+        backgroundColor: '#FFFFED',
         width:100
     },
 
@@ -32,10 +32,10 @@ const styles = StyleSheet.create({
 
 const MainTabbarIcon = (props) => (
     <View style={styles.container}>
-        <Icon style={{textAlign: 'center', marginRight: 0}} name={props.selected ? props.selectIconName : props.iconName} size={25} color={props.selected ? "red" : "black"}/>
+        <Icon style={{textAlign: 'center', marginRight: 0}} name={props.selected ? props.selectIconName : props.iconName} size={28} color={props.selected ? "#FF1493" : "black"}/>
 
         <Text
-            style={{ color: props.selected ? 'red' : 'black' ,fontSize:12}}
+            style={{ color: props.selected ? '#000FFF' : 'black' ,fontSize:12}}
         >
             {props.title}
         </Text>

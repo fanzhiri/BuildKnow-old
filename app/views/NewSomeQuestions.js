@@ -225,6 +225,7 @@ class NewSomeQuestions extends Component {
                         placeholder={paceholder_answer}
                         maxLength={20}
                         multiline={true}
+                        returnKeyType={'done'}
                     />
                     :
                     null
@@ -237,6 +238,7 @@ class NewSomeQuestions extends Component {
                     placeholder={paceholder_explain}
                     maxLength={160}
                     multiline={true}
+                    returnKeyType={'done'}
                 />
             </View>
         );
@@ -383,6 +385,7 @@ class NewSomeQuestions extends Component {
                 placeholder={"答案：请添写最多10字"}
                 maxLength={10}
                 multiline={true}
+                returnKeyType={'done'}
             />
         );
     }
@@ -546,6 +549,7 @@ class NewSomeQuestions extends Component {
                     placeholder={"题目：请添写10个字以上来描述问题，最多60字"}
                     maxLength={60}
                     multiline={true}
+                    returnKeyType={'done'}
                 />
                 {this.renderAttachmentViewSelect()}
                 {this.renderAttachmentView()}
@@ -686,7 +690,9 @@ class NewSomeQuestions extends Component {
         return (
             <View style={[GlobleStyles.withoutTitleContainer,styles.container]}>
                 {this.renderOneOrMultViewSelect()}
-                {this.renderOneOrMultView()}
+                <ScrollView>
+                    {this.renderOneOrMultView()}
+                </ScrollView>
                 {this.renderNextstep()}
             </View>
         );
