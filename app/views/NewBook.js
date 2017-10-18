@@ -92,6 +92,8 @@ class NewBook extends Component {
             bookcover8080_id:null,
             bookcover18080_id:null,
             uploading:0,
+            bookcover8080_size:0,
+            bookcover18080_size:0,
         };
 
         this._onSelectCoverPress = this.onSelectCoverPress.bind(this)
@@ -170,54 +172,30 @@ class NewBook extends Component {
     }
 
     onSelectCoverPress(what){
-        /*
-        var options = {
-            title: 'Select Cover',
-
-            storageOptions: {
-                skipBackup: true,
-                path: 'images'
-            }
-        };
-
-        ImagePicker.showImagePicker(options, (response) => {
-            console.log('Response = ', response);
-
-            if (response.didCancel) {
-                console.log('User cancelled image picker');
-            }
-            else if (response.error) {
-                console.log('ImagePicker Error: ', response.error);
-            }
-            else if (response.customButton) {
-                console.log('User tapped custom button: ', response.customButton);
-            }
-            else {
-
-                //alert(response.uri);
-                // You can also display the image using data:
-                // let source = { uri: 'data:image/jpeg;base64,' + response.data };
-                if(what == 1 ){
-                    let source = { uri: response.uri , width: 80, height: 80 };
-                    this.setState({
-                        coverSource8080: source
-                    });
-                }else{
-                    let source = { uri: response.uri , width: 180, height: 80 };
-                    this.setState({
-                        coverSource18080: source
-                    });
-                }
-
-            }
-        });
-*/
+        let img_width =80;
+        if(what == 2){
+            img_width =180;
+        }
         ImagePicker.openPicker({
-            width: 80,
+            width: img_width,
             height: 80,
             cropping: true
         }).then(image => {
-            alert(image);
+            //alert(image.sourceURL);
+            console.log(image.size);
+            if(what == 1 ){
+                let source = { uri: image.sourceURL , width: 80, height: 80 };
+                this.setState({
+                    coverSource8080: source,
+                    bookcover8080_size:Math.ceil(image.size/1024)
+                });
+            }else{
+                let source = { uri: image.sourceURL , width: 180, height: 80 };
+                this.setState({
+                    coverSource18080: source,
+                    bookcover18080_size:Math.ceil(image.size/1024)
+                });
+            }
         });
     }
 
@@ -270,11 +248,11 @@ class NewBook extends Component {
                         multiline={true}
                         returnKeyType={'done'}
                     />
-                    <Text style={{marginTop:10}}>图标：</Text>
+                    <Text style={{marginTop:10}}>图标：图片大小 {this.state.bookcover8080_size} k</Text>
                     <TouchableOpacity onPress={()=>this._onSelectCoverPress(1)} >
                         <Image source={this.state.coverSource8080} style={styles.leftImgStyle} />
                     </TouchableOpacity>
-                    <Text style={{marginTop:10}}>海报：</Text>
+                    <Text style={{marginTop:10}}>海报：图片大小 {this.state.bookcover18080_size} k</Text>
                     <TouchableOpacity onPress={()=>this._onSelectCoverPress(2)} >
                         <Image source={this.state.coverSource18080} style={styles.rightImgStyle} />
                     </TouchableOpacity>
