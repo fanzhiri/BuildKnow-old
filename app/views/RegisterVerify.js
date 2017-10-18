@@ -51,7 +51,7 @@ const styles = StyleSheet.create({
         color:'blue'
     },
     list:{
-        marginBottom:48
+        marginBottom:0
     },
     passbutton:{
         width:48,
@@ -81,7 +81,7 @@ var doverifyregisterListUrl = "https://slako.applinzi.com/index.php?m=question&c
 var httpsBaseUrl = "https://slako.applinzi.com/";
 
 
-var doPassRegisterUrl = "https://slako.applinzi.com/index.php?m=member&c=member_verify&a=pass";
+var doPassRegisterUrl = "https://slako.applinzi.com/index.php?m=question&c=admin&a=pass";
 var doRejectRegisterUrl = "https://slako.applinzi.com/index.php?m=member&c=member_verify&a=reject";
 
 class RegisterVerify extends Component {
@@ -144,7 +144,7 @@ class RegisterVerify extends Component {
 
     render(){
         return (
-            <View style={GlobleStyles.withoutTitleContainer}>
+            <View style={{flex: 1, marginTop:64}}>
                 <View>
                     <SegmentedControlIOS
                         values={['等待','审核中','审完']}
@@ -204,8 +204,6 @@ class RegisterVerify extends Component {
         formData.append("auth",global.auth);
         formData.append("adminid",global.adminid);
         formData.append("userid",verifyid);
-        formData.append("api","true");
-
         var opts = {
             method:"POST",
             body:formData
@@ -216,7 +214,7 @@ class RegisterVerify extends Component {
                 if(responseData.code == 100){
                     this._peoplelist();
                 }else{
-
+                    alert(responseData.message)
                 }
 
             })
@@ -238,11 +236,36 @@ class RegisterVerify extends Component {
             </View>
         )
 
+    }
+
+    renderItemRight(rowData){
+        if(rowData.status == 0){
+            return(this.renderControlButton(rowData.userid));
+        }else if(rowData.status == 1) {
+            return(this.renderStatus());
+        }
 
     }
 
-    renderPeople(rowData,sectionID, rowID){
+    renderStatus(){
+        return(
+            <View style={styles.leftbuttonContainer1}>
+                <View style={styles.leftbuttonContainer2}>
 
+                        <Text>
+                            审核通过
+                        </Text>
+
+                </View>
+
+            </View>
+        )
+    }
+
+    renderPeople(rowData,sectionID, rowID){
+        let time_o = new Date();
+        time_o.setMilliseconds(rowData.regdate);
+        let time_t = time_o.toLocaleString();
         return (
 
 
@@ -255,8 +278,10 @@ class RegisterVerify extends Component {
                     <Text >
                         邮件:{rowData.email}
                     </Text>
+                    <Text>IP:{rowData.regip}</Text>
+                    <Text>时间:{time_t}</Text>
                 </View>
-                {this.renderControlButton(rowData.userid)}
+                {this.renderItemRight(rowData)}
             </View>
 
         )

@@ -94,9 +94,9 @@ class Admin extends Component {
         var adminId = (global.adminid);
 
         return (
-            <View style={GlobleStyles.withoutTitleContainer}>
+            <View style={{flex: 1, marginTop:64,backgroundColor:"#FFEC8B"}}>
 
-                <ScrollView style={styles.settingItemList}>
+                <ScrollView >
                     <TouchableOpacity  onPress={()=>(Actions.personalcenter())} >
                         <View style={styles.personalinfo}>
                             <Image style={styles.headimage} resizeMode="cover" source={{uri:`${httpsBaseUrl}${global.userhead}`}}/>

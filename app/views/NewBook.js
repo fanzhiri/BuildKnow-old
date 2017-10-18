@@ -7,9 +7,9 @@ import {Actions} from "react-native-router-flux";
 import Button from 'apsl-react-native-button'
 import GlobleStyles from '../styles/GlobleStyles';
 
-import ImagePicker from "react-native-image-picker";
+//import ImagePicker from "react-native-image-picker";
 import TcombForm from "tcomb-form-native";
-
+import ImagePicker from 'react-native-image-crop-picker';
 var Tform = TcombForm.form.Form;
 
 const styles = StyleSheet.create({
@@ -91,6 +91,7 @@ class NewBook extends Component {
             description:"",
             bookcover8080_id:null,
             bookcover18080_id:null,
+            uploading:0,
         };
 
         this._onSelectCoverPress = this.onSelectCoverPress.bind(this)
@@ -128,7 +129,12 @@ class NewBook extends Component {
     }
 
     docommit(){
-
+        if(this.state.uploading == 1){
+            return;
+        }
+        this.setState({
+            uploading:1,
+        });
         let formData = new FormData();
         let file_8080 = {uri: this.state.coverSource8080, type: 'multipart/form-data', name: 'bookcover8080.jpg'};
         let file_18080 = {uri: this.state.coverSource18080, type: 'multipart/form-data', name: 'bookcover18080.jpg'};
@@ -164,6 +170,7 @@ class NewBook extends Component {
     }
 
     onSelectCoverPress(what){
+        /*
         var options = {
             title: 'Select Cover',
 
@@ -204,7 +211,14 @@ class NewBook extends Component {
 
             }
         });
-
+*/
+        ImagePicker.openPicker({
+            width: 80,
+            height: 80,
+            cropping: true
+        }).then(image => {
+            alert(image);
+        });
     }
 
     newbook(){
@@ -225,6 +239,7 @@ class NewBook extends Component {
     }
 
     render(){
+        let buttontext = this.state.uploading ==0 ?"添加题本":"添加中";
         return (
             <View style={[GlobleStyles.withoutTitleContainer,styles.container]}>
                 <ScrollView>
@@ -270,7 +285,7 @@ class NewBook extends Component {
                 <View style={{flex:1,justifyContent:"flex-end"}}>
                     <TouchableOpacity style={{margin:4,borderRadius:8,height:32,
                         backgroundColor:"#0FFBF0",justifyContent:"center",alignItems:"center"}} onPress={() => this.newbook()} >
-                        <Text style={{fontSize: 18}}>添加题本</Text>
+                        <Text style={{fontSize: 18}}>{buttontext}</Text>
                     </TouchableOpacity>
                 </View>
 

@@ -107,7 +107,7 @@ class Login extends Component {
 
                     defaults={{
                         username: 'fantexi',
-                        password: '',
+                        password: 'fantexi',
                         //username: 'zi',
                         //password: 'zzzzzz',
 

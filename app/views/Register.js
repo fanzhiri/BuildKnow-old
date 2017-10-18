@@ -2,7 +2,7 @@
  * Created by slako on 17/2/18.
  */
 import React, { Component } from 'react';
-import {View, Text, StyleSheet} from "react-native";
+import {View, Text, StyleSheet,Alert} from "react-native";
 import {Actions} from "react-native-router-flux";
 import Button from "react-native-button";
 import GlobleStyles from '../styles/GlobleStyles';
@@ -64,8 +64,10 @@ class Register extends Component {
                     this.setState({
                         registerresult:"ok"
                     })
-                    alert(responseData.message);
-
+                    //alert(responseData.message);
+                    Alert.alert('注册提示','请等待管理员审核，等审核通过通知到您的邮箱，再登录',[
+                        {text:'好的'}
+                    ]);
                 }else{
                     this.setState({
                         registerresult:responseData.message
@@ -79,6 +81,7 @@ class Register extends Component {
     }
 
     render(){
+
         return (
             <View style={GlobleStyles.withoutTitleContainer} >
                 <GiftedForm
@@ -87,10 +90,10 @@ class Register extends Component {
                     clearOnClose={false}
 
                     defaults={{
-                        username: 'sunnyhu',
-                        password: 'sunnyhu',
-                        passwordagain:'sunnyhu',
-                        emailAddress:'sunnyhu@qq.com',
+                        username: 'buildquestion',
+                        password: 'buildquestion',
+                        passwordagain:'buildquestion',
+                        emailAddress:'buildquestion@qq.com',
                     }}
                     validators={{
                         username: {
@@ -136,14 +139,14 @@ class Register extends Component {
                 >
                     <GiftedForm.TextInputWidget
                         name='username'
-                        title='Username'
+                        title='用户名'
                         placeholder='fantexi'
                         clearButtonMode='while-editing'
                     />
 
                     <GiftedForm.TextInputWidget
                         name='password' // mandatory
-                        title='Password'
+                        title='密码'
                         placeholder='******'
                         clearButtonMode='while-editing'
                         secureTextEntry={true}
@@ -151,7 +154,7 @@ class Register extends Component {
 
                     <GiftedForm.TextInputWidget
                         name='passwordagain' // mandatory
-                        title='Confirm'
+                        title='密码确认'
                         placeholder='******'
                         clearButtonMode='while-editing'
                         secureTextEntry={true}
@@ -159,7 +162,7 @@ class Register extends Component {
 
                     <GiftedForm.TextInputWidget
                         name='emailaddress' // mandatory
-                        title='Email address'
+                        title='邮件地址'
                         placeholder='example@qq.com'
 
                         keyboardType='email-address'
@@ -169,7 +172,7 @@ class Register extends Component {
                     />
                     <GiftedForm.ErrorsWidget />
                     <GiftedForm.SubmitWidget
-                        title='Sign up'
+                        title='注册'
                         widgetStyles={{
                             submitButton: {
                                 backgroundColor: '#FF00dd',
@@ -202,13 +205,13 @@ class Register extends Component {
                     />
 
                     <GiftedForm.NoticeWidget
-                        title='you agree to the Terms of Service and Privacy Policity. 11'
+                        title='请确定您同意服务条款和隐私政策'
                     />
 
                     <GiftedForm.HiddenWidget name='tos' value={true} />
 
                 </GiftedForm>
-                <Text>{this.state.registerresult}</Text>
+
             </View>
         );
     }
