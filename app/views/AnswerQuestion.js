@@ -647,6 +647,8 @@ class AnswerQuestion extends Component {
         if(score < 60){
             return;
         }
+        let saveButtonColor="#0FF0F0";
+        let uploadText ="上传记录";
         return(
             <TouchableOpacity style={{flex:1}} onPress={ () =>this.saveTestRecord(score,right_num,takeTime)} activeOpacity={0.8}>
                 <View style={{flex:1,justifyContent: 'center',alignItems: 'center', height:32, backgroundColor:saveButtonColor}}  >
