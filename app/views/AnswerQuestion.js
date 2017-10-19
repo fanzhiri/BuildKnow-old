@@ -100,7 +100,8 @@ class AnswerQuestion extends Component {
             choose_arr[i] = -1;
         }
 
-        this._timer=null;//计时器
+        this._timer=null;//考题计时器
+        this.timer_to_jump=null;//选择答案后计时跳
 
         let startDate = new Date();
 
@@ -228,6 +229,7 @@ class AnswerQuestion extends Component {
 
     componentWillUnmount(){
         this._timer && clearInterval(this._timer);
+        this.timer_to_jump && clearInterval(this.timer_to_jump);
     }
 
     renderwrongright(idx){
@@ -267,6 +269,7 @@ class AnswerQuestion extends Component {
 
     }
 
+    //选择答案
     onSelectAnswer(idx){
         let t_choose=this.state.choose;
         t_choose[this.state.questionidx]=idx;
@@ -274,10 +277,8 @@ class AnswerQuestion extends Component {
             selectone:idx,
             choose:t_choose
         })
+        this.timer_to_jump=setInterval(()=>this.anotherquestion(1),400);
     }
-
-
-
 
     showAnswerItem(text,idx){
 
@@ -327,8 +328,11 @@ class AnswerQuestion extends Component {
                 alert(error)
             })
     }
-
+    //上一个或下一个问题
     anotherquestion(what){
+
+        this.timer_to_jump && clearInterval(this.timer_to_jump);
+
         let t_questionidx=0;
         if(what == 0){
             t_questionidx=this.state.questionidx-1;
@@ -340,6 +344,10 @@ class AnswerQuestion extends Component {
 
             if(t_questionidx == this.state.allcount){
                 t_questionidx = 0;
+
+                Alert.alert('提示','刚刚已经是最后一题了，请查看题卡',[
+                    {text:'好的'}
+                ]);
             }
         }
 

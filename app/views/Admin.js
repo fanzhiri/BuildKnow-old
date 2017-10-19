@@ -97,7 +97,7 @@ class Admin extends Component {
             <View style={{flex: 1, marginTop:64,backgroundColor:"#FFEC8B"}}>
 
                 <ScrollView >
-                    <TouchableOpacity  onPress={()=>(Actions.personalcenter())} >
+
                         <View style={styles.personalinfo}>
                             <Image style={styles.headimage} resizeMode="cover" source={{uri:`${httpsBaseUrl}${global.userhead}`}}/>
                             <View style={styles.bottomTextContainer}>
@@ -105,7 +105,7 @@ class Admin extends Component {
                                 <Text style={styles.bottomText}>管理等级：{adminId}</Text>
                              </View>
                         </View>
-                    </TouchableOpacity>
+
                     <View style={styles.list}>
                         <MeItem icon={"md-basketball"}  text={"数据统计"} iconColor="#A020F0"   />
                         <MeItem icon={"md-bowtie"}      text={"推荐管理"} iconColor="#00EEEE"  onPress={() => Actions.marketmanage()} />
