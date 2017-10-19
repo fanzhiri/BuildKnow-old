@@ -6,7 +6,7 @@ import {View, Text, Image,StyleSheet,TouchableOpacity} from "react-native";
 import {Actions} from "react-native-router-flux";
 import Button from "react-native-button";
 import GlobleStyles from '../styles/GlobleStyles';
-import ImagePicker from "react-native-image-picker";
+import ImagePicker from 'react-native-image-crop-picker';
 import TcombForm from "tcomb-form-native";
 var Tform = TcombForm.form.Form;
 
@@ -20,14 +20,14 @@ const styles = StyleSheet.create({
     image: {
         justifyContent: 'center',
         alignItems: 'center',
-        width: 200,
+        width: 300,
         height: 200,
     },
 });
 
 var docommitpostUrl = "https://slako.applinzi.com/index.php?m=question&c=personal&a=homepagepic";
 
-var addimguri ={uri:"https://slako.applinzi.com/statics/images/question/util/addimg.jpg" , width: 200, height: 200};
+var addimguri ={uri:"https://slako.applinzi.com/statics/images/question/util/addimg.jpg" , width: 300, height: 200};
 
 
 class SetHomePagePic extends Component {
@@ -37,6 +37,8 @@ class SetHomePagePic extends Component {
 
         this.state = {
             imgSource: null,
+            img_size:0,
+            filename:null
         };
 
         this._onSelectImgPress = this.onSelectImgPress.bind(this)
@@ -45,7 +47,7 @@ class SetHomePagePic extends Component {
     docommit(){
 
         let formData = new FormData();
-        let file = {uri: this.state.imgSource, type: 'multipart/form-data', name: 'pic.jpg'};
+        let file = {uri: this.state.imgSource, type: 'multipart/form-data', name: this.state.filename};
         formData.append("auth",global.auth);
         formData.append("userid",global.userid);
 
@@ -78,6 +80,7 @@ class SetHomePagePic extends Component {
     }
 
     onSelectImgPress(){
+        /*
         var options = {
             title: 'Select Img',
 
@@ -110,7 +113,23 @@ class SetHomePagePic extends Component {
                 });
             }
         });
+        */
+        ImagePicker.openPicker({
+            width: 300,
+            height: 200,
+            cropping: true
+        }).then(image => {
 
+            console.log(image.size);
+
+            let source = { uri: image.sourceURL , width: 300, height: 200 };
+            this.setState({
+                imgSource: source,
+                img_size:Math.ceil(image.size/1024),
+                filename:image.filename
+            });
+
+        });
     }
 
     onPress(){
@@ -129,7 +148,7 @@ class SetHomePagePic extends Component {
         return (
             <View style={GlobleStyles.withoutTitleContainer}>
 
-                <Button onPress={() => this.onPress()}>上传</Button>
+
                 <TouchableOpacity style={styles.container} onPress={() => this._onSelectImgPress()}>
                     {this.state.imgSource?
                         <Image style={styles.image} resizeMode="cover"
@@ -143,6 +162,11 @@ class SetHomePagePic extends Component {
 
                 </TouchableOpacity>
 
+                <Text>图片大小：{this.state.img_size}k</Text>
+                <TouchableOpacity style={{margin:4,borderRadius:8,height:32,
+                    backgroundColor:"#0FFBF0",justifyContent:"center",alignItems:"center"}} onPress={() => this.onPress()} >
+                    <Text style={{fontSize: 18}}>上传</Text>
+                </TouchableOpacity>
             </View>
         );
     }

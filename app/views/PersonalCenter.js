@@ -17,7 +17,7 @@ import {storageSave,storeageGet} from '../util/NativeStore';
 import ImagePicker from "react-native-image-picker";
 
 var httpsBaseUrl = "https://slako.applinzi.com/";
-
+var httpsPicBaseUrl = "http://slako-buildqst.stor.sinaapp.com/";
 const styles = StyleSheet.create({
     list:{
         borderTopWidth: 1,
@@ -99,7 +99,7 @@ class PersonalCenter extends Component {
                 <ScrollView>
 
                     <View style={styles.list}>
-                        <SettingItem text={"头像"} subText={"未设置"} imgUri={`${httpsBaseUrl}${global.userhead}`} onPress={() => Actions.setheadpic()}/>
+                        <SettingItem text={"头像"} subText={"未设置"} imgUri={`${httpsPicBaseUrl}${global.userhead}`} onPress={() => Actions.setheadpic()}/>
                         <SettingItem text={"主页背景"} imgUri={`${httpsBaseUrl}${global.userhead}`} onPress={() => Actions.sethomepagepic()}/>
                         <SettingItem text={"昵称"} subText={global.nickname} onPress={()=>Actions.attributechange({attribute:1})}/>
                         <SettingItem text={"建识号"} subText={global.username}/>

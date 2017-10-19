@@ -18,6 +18,7 @@ const window = Dimensions.get('window');
 
 var httpsBaseUrl = "https://slako.applinzi.com/";
 
+var httpsPicBaseUrl = "http://slako-buildqst.stor.sinaapp.com/";
 
 const styles = StyleSheet.create({
     list:{
@@ -99,7 +100,7 @@ class Me extends Component {
                 <ScrollView style={styles.settingItemList}>
                     <TouchableOpacity  onPress={()=>(Actions.personalcenter())} >
                         <View style={styles.personalinfo}>
-                            <Image style={styles.headimage} resizeMode="cover" source={{uri:`${httpsBaseUrl}${global.userhead}`}}/>
+                            <Image style={styles.headimage} resizeMode="cover" source={{uri:`${httpsPicBaseUrl}${global.userhead}`}}/>
                             <View style={styles.bottomTextContainer}>
                                 <Text style={styles.bottomText}>昵称：{global.nickname}</Text>
                                 <Text style={styles.bottomText}>学术等级:10</Text>
