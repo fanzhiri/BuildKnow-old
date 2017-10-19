@@ -19,6 +19,8 @@ import Icon from 'react-native-vector-icons/Ionicons';
 
 import DataStore from '../util/DataStore';
 
+import {PicBaseUrl} from '../util/Attributes';
+
 const styles = StyleSheet.create({
     container: {
         flex: 1,
@@ -528,7 +530,7 @@ class Discover extends Component {
 
             <TouchableOpacity onPress={() => Actions.homepage({userId:userId,title:rowData.nickname,peopledata:rowData})}>
                 <View style={styles.peopleItem}>
-                    <Image source={{uri:`${httpsBaseUrl}${rowData.head}`}} style={styles.leftImgStyle}/>
+                    <Image source={{uri:`${PicBaseUrl}${rowData.head}`}} style={styles.leftImgStyle}/>
                     <View>
                         <Text style={styles.topTitleStyle}>
                             {rowData.nickname}

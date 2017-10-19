@@ -60,7 +60,7 @@ const styles = StyleSheet.create({
 var peoplelistUrl = "https://slako.applinzi.com/index.php?m=question&c=index&a=peoplelist";
 
 var httpsBaseUrl = "https://slako.applinzi.com/";
-
+import {PicBaseUrl} from '../util/Attributes';
 class SearchBook extends Component {
 
     constructor(props) {
@@ -169,7 +169,7 @@ class SearchBook extends Component {
 
             <TouchableOpacity onPress={() => Actions.homepage({userId})}>
                 <View style={styles.peopleItem}>
-                    <Image source={{uri:`${httpsBaseUrl}${people.head}`}} style={styles.leftImgStyle}/>
+                    <Image source={{uri:`${PicBaseUrl}${people.head}`}} style={styles.leftImgStyle}/>
                     <View>
                         <Text style={styles.topTitleStyle}>
                             {people.username}

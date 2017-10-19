@@ -61,7 +61,8 @@ var getFollowUrl = "https://slako.applinzi.com/index.php?m=question&c=personal&a
 var getFrieldUrl = "https://slako.applinzi.com/index.php?m=question&c=personal&a=getfriendlist";
 
 
-var httpsBaseUrl = "https://slako.applinzi.com/";
+
+import {PicBaseUrl} from '../util/Attributes';
 
 class Follow extends Component {
 
@@ -226,7 +227,7 @@ class Follow extends Component {
 
             <TouchableOpacity onPress={() => Actions.homepage({userId:userId,title:rowData.nickname,peopledata:rowData})}>
                 <View style={styles.peopleItem}>
-                    <Image source={{uri:`${httpsBaseUrl}${rowData.head}`}} style={styles.leftImgStyle}/>
+                    <Image source={{uri:`${PicBaseUrl}${rowData.head}`}} style={styles.leftImgStyle}/>
                     <View>
                         <Text style={styles.topTitleStyle}>
                             {rowData.nickname}
