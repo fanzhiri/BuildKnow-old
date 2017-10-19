@@ -16,9 +16,7 @@ import {storageSave,storeageGet} from '../util/NativeStore';
 
 const window = Dimensions.get('window');
 
-var httpsBaseUrl = "https://slako.applinzi.com/";
-
-
+import {PicBaseUrl} from '../util/Attributes';
 const styles = StyleSheet.create({
     list:{
         borderTopWidth: 1,
@@ -99,7 +97,7 @@ class Admin extends Component {
                 <ScrollView >
 
                         <View style={styles.personalinfo}>
-                            <Image style={styles.headimage} resizeMode="cover" source={{uri:`${httpsBaseUrl}${global.userhead}`}}/>
+                            <Image style={styles.headimage} resizeMode="cover" source={{uri:`${PicBaseUrl}${global.userhead}`}}/>
                             <View style={styles.bottomTextContainer}>
                                 <Text style={styles.bottomText}>昵称：{global.nickname}</Text>
                                 <Text style={styles.bottomText}>管理等级：{adminId}</Text>

@@ -15,7 +15,8 @@ const styles = StyleSheet.create({
         backgroundColor: '#F5FCFF',
     },
     question:{
-        fontSize:20
+        fontSize:20,
+        padding:8
     },
     answerfont:{
         fontSize:20
@@ -55,7 +56,8 @@ const styles = StyleSheet.create({
         paddingLeft: 16,
         paddingRight: 25,
         borderBottomColor: '#c4c4c4',
-        borderBottomWidth: 1
+        borderBottomWidth: 1,
+        marginTop:4,
     },circle:{
         borderRadius:16,
         height:32,
@@ -518,8 +520,7 @@ class AnswerQuestion extends Component {
                     {this.rendertopbutton("md-stats",       "统计",   () => this.invote(1))}
                     {this.rendertopbutton("md-settings",    "设置",   () => this.invote(0))}
                 </View>
-                <Text style={styles.question}>完成进度 {this.state.count+1}:{this.state.allcount}</Text>
-                <Text style={styles.question}>题号: {this.state.questionidx+1}</Text>
+                <Text style={styles.question}>位置: {this.state.questionidx+1}:{this.state.allcount}</Text>
                 {
                     this.state.questiondata.img?
                         <Image resizeMode="cover" source={{uri:`${httpsBaseUrl}${this.state.questiondata.img}`, width: window.width, height: 200 }} ></Image>
@@ -604,7 +605,7 @@ class AnswerQuestion extends Component {
         return(
             <TouchableOpacity onPress={()=> this.onBackPressFunc()} activeOpacity={0.8}>
                 <View style={styles.IconItem}>
-                    <Icon name={"ios-arrow-back"} size={32} color={iconColor}/>
+                    <Icon name={"ios-arrow-back"} size={48} color={iconColor}/>
                 </View>
             </TouchableOpacity>
         )
@@ -735,7 +736,7 @@ class AnswerQuestion extends Component {
         return(
             <TouchableOpacity onPress={()=> this.onEndShowResult()} activeOpacity={0.8}>
                 <View style={styles.IconItem}>
-                    <Icon name={"ios-arrow-forward"} size={32} color={iconColor}/>
+                    <Icon name={"ios-arrow-forward"} size={48} color={iconColor}/>
                 </View>
             </TouchableOpacity>
         )
@@ -743,11 +744,11 @@ class AnswerQuestion extends Component {
 
     renderBackBar(){
         return(
-            <View style={{height:32,flexDirection:"row",alignItems:"center"}}>
+            <View style={{height:48,flexDirection:"row",alignItems:"center"}}>
                 {this.renderBackButton()}
-                <Text>继续答题</Text>
-                <View style={{height:32,flexDirection:"row",alignItems:"center",flex:1,justifyContent:"flex-end"}}>
-                    <Text>结束答题</Text>
+                <Text style={{fontSize:28}}>继续答题</Text>
+                <View style={{height:48,flexDirection:"row",alignItems:"center",flex:1,justifyContent:"flex-end"}}>
+                    <Text style={{fontSize:28}}>结束答题</Text>
                     {this.renderEndButton()}
                 </View>
             </View>
