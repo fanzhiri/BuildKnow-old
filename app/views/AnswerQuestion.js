@@ -179,6 +179,9 @@ class AnswerQuestion extends Component {
                     this.setState({
                         uploadRecord:2//上传完成
                     })
+                    Alert.alert('上传提示','上传完成',[
+                        {text:'好的'}
+                    ]);
                 }else{
                     alert(responseData.message);
                     this.setState({
@@ -652,12 +655,25 @@ class AnswerQuestion extends Component {
         })
     }
 
-    renderUploadButton(score){
+    renderUploadButton(score,right_num,takeTime){
         if(score < 60){
             return;
         }
-        let saveButtonColor="#0FF0F0";
-        let uploadText ="上传记录";
+
+        let uploadText ;
+        let endButtonColor ='#CD00CD';
+        let saveButtonColor ='#EEB422';
+        switch (this.state.uploadRecord){
+            case 0:uploadText = "上传记录";
+            break;
+            case 1:uploadText = "上传中，请稍后";
+                endButtonColor="#6E6E6E";
+                saveButtonColor="#6E6E6E";
+                break;
+
+            case 2:uploadText = "已经上传";break;
+        }
+
         return(
             <TouchableOpacity style={{flex:1}} onPress={ () =>this.saveTestRecord(score,right_num,takeTime)} activeOpacity={0.8}>
                 <View style={{flex:1,justifyContent: 'center',alignItems: 'center', height:32, backgroundColor:saveButtonColor}}  >
@@ -716,7 +732,7 @@ class AnswerQuestion extends Component {
                 <Text>结束时间:{endTimeText}</Text>
                 <View style={{flex: 1, justifyContent: 'flex-end',}}>
                     <View style={{flexDirection:"row", height:32}}>
-                        {this.renderUploadButton(score)}
+                        {this.renderUploadButton(score,right_num,takeTime)}
                         <TouchableOpacity style={{flex:1}} onPress={ () =>this.onEndPressFunc()} activeOpacity={0.8}>
                             <View style={{flex:1,justifyContent: 'center',alignItems: 'center', height:32, backgroundColor:endButtonColor }}  >
                                 <Text style={{fontSize: 18}}>

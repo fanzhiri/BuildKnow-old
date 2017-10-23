@@ -106,10 +106,12 @@ class Admin extends Component {
 
                     <View style={styles.list}>
                         <MeItem icon={"md-basketball"}  text={"数据统计"} iconColor="#A020F0"   />
+                        <MeItem icon={"md-pizza"}       text={"内用管理"} iconColor="#7FFF00"   />
                         <MeItem icon={"md-bowtie"}      text={"推荐管理"} iconColor="#00EEEE"  onPress={() => Actions.marketmanage()} />
                         <MeItem icon={"md-film"}        text={"发布审核"} iconColor="#FF0000"  onPress={() => Actions.releasereview()} />
                         <MeItem icon={"md-contacts"}    text={"注册审核"} iconColor="#D15FEE"  onPress={() => Actions.registerverify()} />
                         <MeItem icon={"md-baseball"}    text={"权限管理"} iconColor="#1E90FF"   />
+                        <MeItem icon={"md-umbrella"}    text={"活动组织"} iconColor="#8B2500"   />
                         <MeItem icon={"md-filing"}      text={"意见建议"} iconColor="#76EE00"   />
                     </View>
                 </ScrollView>

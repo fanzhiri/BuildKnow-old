@@ -88,17 +88,21 @@ class TestResult extends Component {
     }
 
     renderRecordItem(rowData,sectionID, rowID){
+        let time_o = new Date();
+        time_o.setMilliseconds(rowData.begintime);
+        let time_t = time_o.toLocaleString();
         return(
             <View style={{
                 height:32,
-                borderWidth: 1,
-                borderColor:'#e464e4',
+                borderBottomWidth:1,
+                borderBottomColor:'#e464e4',
                 flexDirection:"row",
                 alignItems:"center"
                 }}>
                 <Text>得分:{rowData.score}  </Text>
                 <Text>题数:{rowData.qstnum}  </Text>
-                <Text>开始时间:{rowData.begintime}  </Text>
+                <Text>开始:{time_t}  </Text>
+                <Text>耗时:{rowData.taketime}  </Text>
             </View>
         )
     }
