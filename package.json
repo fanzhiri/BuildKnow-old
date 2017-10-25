@@ -8,6 +8,8 @@
   },
   "dependencies": {
     "apsl-react-native-button": "^3.0.2",
+    "echarts": "^3.7.2",
+    "native-echarts": "^0.3.0",
     "react": "16.0.0-alpha.6",
     "react-native": "0.44.0",
     "react-native-button": "^1.8.2",

@@ -205,7 +205,7 @@ class Register extends Component {
                     />
 
                     <GiftedForm.NoticeWidget
-                        title='请确定您同意服务条款和隐私政策'
+                        title='请确定您同意服务条款和隐私政策再点击注册'
                     />
 
                     <GiftedForm.HiddenWidget name='tos' value={true} />
