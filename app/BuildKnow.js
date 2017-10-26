@@ -101,6 +101,10 @@ import MarketManage from './views/MarketManage';
 import BalanceRecharge from './views/BalanceRecharge';
 import AttributeChange from './views/AttributeChange';
 import ServerData from './views/ServerData';
+import PublishList from './views/PublishList';
+
+//71
+import UploadPic from './views/UploadPic';
 
 import Icon from 'react-native-vector-icons/Ionicons';
 
@@ -207,6 +211,8 @@ export default class BuildKnow extends Component {
                 <Scene key="balancerecharge"    title="智商充值" component={BalanceRecharge} duration={0} />
                 <Scene key="attributechange"    title="属性修改" component={AttributeChange} duration={0} />
                 <Scene key="serverdata"         title="服务器数据" component={ServerData} duration={0} />
+                <Scene key="publishlist"        title="出版列表" component={PublishList} duration={0} />
+                <Scene key="uploadpic"          title="上传图片"        component={UploadPic} duration={0} />
             </Router>
         );
     }

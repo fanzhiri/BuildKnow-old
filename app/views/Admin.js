@@ -106,6 +106,7 @@ class Admin extends Component {
 
                     <View style={styles.list}>
                         <MeItem icon={"md-basketball"}  text={"数据统计"} iconColor="#A020F0"  onPress={() => Actions.serverdata()}  />
+                        <MeItem icon={"md-lock"}        text={"人员权限"} iconColor="#0A0A0A"   />
                         <MeItem icon={"md-pizza"}       text={"内用管理"} iconColor="#7FFF00"   />
                         <MeItem icon={"md-bowtie"}      text={"推荐管理"} iconColor="#00EEEE"  onPress={() => Actions.marketmanage()} />
                         <MeItem icon={"md-film"}        text={"发布审核"} iconColor="#FF0000"  onPress={() => Actions.releasereview()} />

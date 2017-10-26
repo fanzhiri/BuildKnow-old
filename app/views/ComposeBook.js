@@ -185,6 +185,8 @@ var doAcceptRecommendQuestionUrl = "https://slako.applinzi.com/index.php?m=quest
 
 var httpsBaseUrl = "https://slako.applinzi.com/";
 
+var httpsPicBaseUrl = "http://slako-buildqst.stor.sinaapp.com/";
+
 class ComposeBook extends Component {
     constructor(props) {
         super(props);
@@ -545,6 +547,10 @@ class ComposeBook extends Component {
 
     }
 
+    editbookposter(){
+        Actions.uploadpic({uploadtype:1,bookid:this.props.bookid});
+    }
+
     renderClassSelect(){
         return(
             <TouchableOpacity
@@ -569,14 +575,14 @@ class ComposeBook extends Component {
             <ScrollView style={styles.infocontainer}>
                 <View style={styles.imgcontainer}>
                     <Image source={{uri:`${httpsBaseUrl}${this.state.composebookdata.cover}`}} style={styles.leftImgStyle}/>
-                    <Image source={{uri:`${httpsBaseUrl}${this.state.composebookdata.cover}`}} style={styles.rightImgStyle}/>
+                    <Image source={{uri:`${httpsPicBaseUrl}${this.state.composebookdata.poster}`}} style={styles.rightImgStyle}/>
 
                 </View>
                 <View style={styles.imgcontainer}>
                     <TouchableOpacity  onPress={()=> this.editbookinfo()} >
                         <Text style={styles.edittext} >(编辑 -> 图标)</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity  onPress={()=> this.editbookinfo()} >
+                    <TouchableOpacity  onPress={()=> this.editbookposter()} >
                         <Text style={styles.edittext} >(编辑 -> 推荐照片)  </Text>
                     </TouchableOpacity>
 
@@ -759,6 +765,7 @@ class ComposeBook extends Component {
                     </View>
                 </TouchableOpacity>
                 <TouchableOpacity onPress={() => this.cancelapplydialog()}>
+
                     <Text>撤销申请</Text>
                 </TouchableOpacity>
             </ScrollView>

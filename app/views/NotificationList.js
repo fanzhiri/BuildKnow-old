@@ -13,7 +13,7 @@ import {
 import {Actions} from "react-native-router-flux";
 import Button from "react-native-button";
 import GlobleStyles from '../styles/GlobleStyles';
-
+import {PicBaseUrl} from '../util/Attributes';
 
 import DataStore from '../util/DataStore';
 
@@ -73,6 +73,7 @@ var acceptfriendUrl = "https://slako.applinzi.com/index.php?m=question&c=persona
 var rejectfriendUrl = "https://slako.applinzi.com/index.php?m=question&c=personal&a=rejectfriend";
 
 var httpsBaseUrl = "https://slako.applinzi.com/";
+
 
 class NotificationList extends Component {
 
@@ -307,7 +308,7 @@ class NotificationList extends Component {
 
             <TouchableOpacity onPress={() => this.wearefriend({userId})}>
                 <View style={styles.peopleItem}>
-                    <Image source={{uri:`${httpsBaseUrl}${people.head}`}} style={styles.leftImgStyle}/>
+                    <Image source={{uri:`${PicBaseUrl}${people.head}`}} style={styles.leftImgStyle}/>
 
 
                     <View style={{flex:1}}>

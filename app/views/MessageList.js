@@ -13,7 +13,7 @@ import {
 import {Actions} from "react-native-router-flux";
 import Button from "react-native-button";
 import GlobleStyles from '../styles/GlobleStyles';
-
+import {PicBaseUrl} from '../util/Attributes';
 
 import DataStore from '../util/DataStore';
 
@@ -275,7 +275,7 @@ class MessageList extends Component {
 
             <TouchableOpacity onPress={() => Actions.chatlist({cvstid:rowData.id,title:cvstName})}>
                 <View style={styles.peopleItem}>
-                    <Image source={{uri:`${httpsBaseUrl}${rowData.head}`}} style={styles.leftImgStyle}/>
+                    <Image source={{uri:`${PicBaseUrl}${rowData.head}`}} style={styles.leftImgStyle}/>
                     <View>
                         <Text style={styles.topTitleStyle}>
                             {cvstName}
