@@ -2,7 +2,7 @@
  * Created by slako on 17/10/26.
  */
 import React, { Component ,PropTypes} from 'react';
-import {View, Text, Image,StyleSheet,TouchableOpacity} from "react-native";
+import {View, Text, Image,StyleSheet,TouchableOpacity,Alert} from "react-native";
 import {Actions} from "react-native-router-flux";
 import Button from "react-native-button";
 import GlobleStyles from '../styles/GlobleStyles';
