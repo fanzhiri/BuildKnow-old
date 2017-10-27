@@ -51,7 +51,7 @@
 		D96173761F972B1A008B2CA2 /* RSKImageCropper.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = D96173741F972B1A008B2CA2 /* RSKImageCropper.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		D96173951F972B2A008B2CA2 /* QBImagePicker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D96173941F972B2A008B2CA2 /* QBImagePicker.framework */; };
 		D96173961F972B2A008B2CA2 /* QBImagePicker.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = D96173941F972B2A008B2CA2 /* QBImagePicker.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		D96173981F9D7AB2008B2CA2 /* Images-2.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D96173971F9D7AB2008B2CA2 /* Images-2.xcassets */; };
+		D96173981F9D7AB2008B2CA2 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D96173971F9D7AB2008B2CA2 /* Images.xcassets */; };
 		E438BDE64ABC406393861D1F /* SimpleLineIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 171394A92855412198DC46CF /* SimpleLineIcons.ttf */; };
 		EAD88F9C6CB646D59FB907F2 /* MaterialCommunityIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5F6524554F2A4AD1B2A71281 /* MaterialCommunityIcons.ttf */; };
 /* End PBXBuildFile section */
@@ -328,7 +328,7 @@
 		D3790BBD9F7F4F6FA9A987F3 /* Entypo.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Entypo.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Entypo.ttf"; sourceTree = "<group>"; };
 		D96173741F972B1A008B2CA2 /* RSKImageCropper.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = RSKImageCropper.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D96173941F972B2A008B2CA2 /* QBImagePicker.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = QBImagePicker.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		D96173971F9D7AB2008B2CA2 /* Images-2.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = "Images-2.xcassets"; path = "BuildKnow/Images-2.xcassets"; sourceTree = "<group>"; };
+		D96173971F9D7AB2008B2CA2 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = BuildKnow/Images.xcassets; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -475,7 +475,7 @@
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				13B07FB11A68108700A75B9A /* LaunchScreen.xib */,
 				13B07FB71A68108700A75B9A /* main.m */,
-				D96173971F9D7AB2008B2CA2 /* Images-2.xcassets */,
+				D96173971F9D7AB2008B2CA2 /* Images.xcassets */,
 			);
 			name = BuildKnow;
 			sourceTree = "<group>";
@@ -1006,7 +1006,7 @@
 			files = (
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
-				D96173981F9D7AB2008B2CA2 /* Images-2.xcassets in Resources */,
+				D96173981F9D7AB2008B2CA2 /* Images.xcassets in Resources */,
 				C4D103C814B94F40893C2160 /* Entypo.ttf in Resources */,
 				5CD56FEA77784830B54FAD53 /* EvilIcons.ttf in Resources */,
 				06C50DFF93884E1D92FEF63A /* FontAwesome.ttf in Resources */,
@@ -1192,7 +1192,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = NO;
 				DEVELOPMENT_TEAM = FYTTZP6W89;
@@ -1218,7 +1217,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = FYTTZP6W89;
 				HEADER_SEARCH_PATHS = (
