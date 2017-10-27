@@ -2,7 +2,7 @@
  * Created by slako on 17/10/02.
  */
 import React, { Component,PropTypes } from 'react';
-import {View, Text, StyleSheet, ListView, Image,TouchableOpacity,RefreshControl,TextInput,SegmentedControlIOS} from "react-native";
+import {View, Text, StyleSheet, ListView, Image,TouchableOpacity,RefreshControl,TextInput,SegmentedControlIOS,Alert} from "react-native";
 import {Actions} from "react-native-router-flux";
 import Button from "react-native-button";
 import GlobleStyles from '../styles/GlobleStyles';
@@ -10,6 +10,7 @@ import BookItem from '../component/BookItem';
 import DataStore from '../util/DataStore';
 import {storageSave,storeageGet} from '../util/NativeStore';
 import Swiper from 'react-native-swiper';
+import MarketListItem from '../component/MarketListItem';
 
 const styles = StyleSheet.create({
     container: {
@@ -59,7 +60,13 @@ const styles = StyleSheet.create({
         width:380,
         height:200,
         resizeMode:'cover',
-    },
+    },title:{
+        marginTop:16,
+        marginBottom:8,
+        marginLeft:8,
+        color: 'red',
+        fontSize: 24,
+    }
 });
 
 var doGetMyBooksUrl = "https://slako.applinzi.com/index.php?m=question&c=personal&a=getmybooks";
@@ -92,6 +99,7 @@ class MarketManage extends Component {
         this._onStoreItemTypeChange = this.onStoreItemTypeChange.bind(this);
         this._renderSubItemListView = this.renderSubItemListView.bind(this);
         this._renderPreview         = this.renderPreview.bind(this);
+        this._renderPrevHoriRow     = this.renderPrevHoriRow.bind(this);
     }
 
     componentWillReceiveProps(nextProps){
@@ -138,7 +146,7 @@ class MarketManage extends Component {
         let sub_item_list = new Array();
         let store_item_one ={
             idx:this.state.store_data_source.length,
-            type:0,
+            type:0,//0广告轮播 1横列表 2多点
             name:"",
             sortnum:MAX_TEMPLATE-remainadd+1,
             sub_item:sub_item_list
@@ -178,9 +186,19 @@ class MarketManage extends Component {
     }
 
     sortNumChange(rowID,text){
+        let t_store_data_source=this.state.store_data_source;
+        t_store_data_source[rowID].sortnum = parseInt(text);
+        this.setState({
+            store_data_source:t_store_data_source
+        });
 
     }
     nameChange(rowID,text){
+        let t_store_data_source=this.state.store_data_source;
+        t_store_data_source[rowID].name = text;
+        this.setState({
+            store_data_source:t_store_data_source
+        });
 
     }
 
@@ -322,7 +340,28 @@ class MarketManage extends Component {
         )
     }
 
+    checkRight(){
+        let t_store_data_source=this.state.store_data_source;
+        let swipernum =0;
+        for(let i=0;i< t_store_data_source.length;i++){
+            if(t_store_data_source[i].type == 0){
+                if(swipernum == 1){
+
+                    return false;
+                }
+                swipernum++;
+            }
+        }
+        return true;
+    }
+
     preview(yes){
+        if(this.checkRight() == false){
+            Alert.alert('提示','不符合规范',[
+                {text:'好的'}
+            ]);
+            return;
+        }
 
         this.setState({
             preview:yes
@@ -347,6 +386,15 @@ class MarketManage extends Component {
         return imageViews;
     }
 
+    renderPrevHoriRow(rowData, sectionID, rowID){
+        return(
+            <View>
+                <MarketListItem
+                    rowID={rowID}  cover={rowData.cover} bookname={rowData.name} book={rowData}/>
+            </View>
+        )
+    }
+
     renderPreview(rowData, sectionID, rowID){
 
         switch (this.state.store_data_source[rowID].type){
@@ -360,7 +408,17 @@ class MarketManage extends Component {
                 )
                 break;
             case 1 :
-
+                return(
+                    <View>
+                        <Text style={styles.title} >{this.state.store_data_source[rowID].name}</Text>
+                        <ListView
+                            enableEmptySections={true}
+                            horizontal={true}
+                            dataSource={DataStore.cloneWithRows(this.state.store_data_source[rowID].sub_item)}
+                            showsHorizontalScrollIndicator={false}
+                            renderRow={this._renderPrevHoriRow} />
+                    </View>
+                )
                 break;
             case 2 :break;
         }
