@@ -105,6 +105,8 @@ import PublishList from './views/PublishList';
 
 //71
 import UploadPic from './views/UploadPic';
+import Donate from './views/Donate';
+
 
 import Icon from 'react-native-vector-icons/Ionicons';
 
@@ -213,6 +215,7 @@ export default class BuildKnow extends Component {
                 <Scene key="serverdata"         title="服务器数据" component={ServerData} duration={0} />
                 <Scene key="publishlist"        title="出版列表" component={PublishList} duration={0} />
                 <Scene key="uploadpic"          title="上传图片"        component={UploadPic} duration={0} />
+                <Scene key="donate"          title="捐助支持"        component={Donate} duration={0} />
             </Router>
         );
     }

@@ -161,16 +161,17 @@ class MarketManage extends Component {
 
 
 
-    renderSubItemListView(rowData, rowID){
+    renderSubItemListView(rowData, rowiD){
 
         if(rowData.sub_item.length == 0){
             return;
         }
+        let idx =rowiD;
         return(
             <ListView
                 style={{marginLeft:12}}
                 dataSource={DataStore.cloneWithRows(rowData.sub_item)}
-                renderRow={this._renderSubItem}
+                renderRow={(rowData, sectionID,rowID)=>this.renderSubItem(rowData,sectionID, rowID, idx)}
                 enableEmptySections = {true}
             />
         )
@@ -183,17 +184,21 @@ class MarketManage extends Component {
 
     }
 
-    addSubItemButton(rowData, rowID){
+    addSubItemButton(rowData, rowID,storeidx){
         if(rowData.bookid != 0){
             Actions.bookcover({bookpublicid:rowData.bookid})
             return;
         }
         this.setState({
-            module_idx:rowData.idx,
+            module_idx:storeidx,
             module_sub_idx:rowID
         });
         //alert(rowData.idx+"]:["+rowID);
         Actions.mycollectlist({intype:1,processprop:1,inmode:1});
+    }
+
+    modify_subitem(){
+
     }
 
     del_subitem(){
@@ -220,12 +225,12 @@ class MarketManage extends Component {
         )
     }
 
-    renderSubItem(rowData, sectionID, rowID) {
+    renderSubItem(rowData,sectionID,rowID,idx) {
         return(
             <View style={{flexDirection:"row",height:24,alignItems:"center",margin:2}}>
-                <TouchableOpacity style={{flex:1}} onPress={() => this.addSubItemButton(rowData, rowID)}>
+                <TouchableOpacity style={{flex:1}} onPress={() => this.addSubItemButton(rowData, rowID,idx)}>
                     <View style={{borderColor:"#0000FF",borderWidth: 1,margin:2,padding:2,flexDirection:"row",backgroundColor:"#ADD8E6"}}>
-                        <Text>sub id:{rowID}</Text>
+                        <Text>{idx}:{rowID}</Text>
                         <Text style={{marginLeft:6}}>{rowData.name}</Text>
                     </View>
                 </TouchableOpacity>
@@ -233,6 +238,15 @@ class MarketManage extends Component {
             </View>
 
         )
+    }
+
+    deleteStoreItem(rowData, rowID){
+        let t_store_data_source=this.state.store_data_source;
+        t_store_data_source.splice(rowID,1);
+
+        this.setState({
+            store_data_source:t_store_data_source
+        })
     }
 
     renderStoreItem(rowData, sectionID, rowID) {
@@ -243,10 +257,16 @@ class MarketManage extends Component {
         } else {
             return (
                 <View style={{margin:4,padding:2,borderWidth:1,borderColor:"#000000",backgroundColor:"#EEEE00"}}>
-                    <View style={{justifyContent:"center",alignItems:"center",height:24,marginBottom:4}}>
-                        <Text>
-                            模块{parseInt(rowID) + 1}
+                    <View style={{alignItems:"center",height:24,marginBottom:4,flexDirection:"row",}}>
+                        <Text style={{flexDirection:"row",justifyContent:"center",alignItems:"center",fontSize:16,flex:1}}>
+                            模块 {parseInt(rowID) + 1}
                         </Text>
+                        <TouchableOpacity onPress={() => this.deleteStoreItem(rowData, rowID)}>
+                            <View
+                                style={{justifyContent:"center",alignItems:"center",width:36,height:22,borderRadius:4,backgroundColor:"#CD69C9"}}>
+                                <Text>删除</Text>
+                            </View>
+                        </TouchableOpacity>
                     </View>
                     <View style={{flexDirection:"row",marginBottom:4}}>
                         <TextInput
