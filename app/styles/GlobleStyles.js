@@ -5,7 +5,7 @@ const globleStyles = StyleSheet.create({
         flex: 1,
         marginTop:64,
         height:848,
-        
+
     },
 });
 

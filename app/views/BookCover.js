@@ -60,6 +60,14 @@ const styles = StyleSheet.create({
         width:240,
         alignSelf:'center'
     },
+    looklookButton:{
+        justifyContent: 'center',
+        alignItems:'center',
+        borderRadius:6,
+        marginRight:8,
+        width:78,height:24,
+        backgroundColor: '#00FF7F',
+    },
     obtainButton:{
         justifyContent: 'center',
         alignItems:'center',
@@ -217,6 +225,16 @@ class BookCover extends Component {
         Actions.friendlist({title:"题本分享给朋友",inmode:1,intype:3,bookid:this.state.bookdata.reviewid});
     }
 
+    looklook(){
+        // Actions.answerquestion({
+        //     intype:1,
+        //     publicbookdata:this.state.bookdata,
+        //     questioncount:10,
+        //     asktype:0,
+        //     answermode:0
+        // });
+    }
+
     rendercollectbutton(){
 
         if(global.bookcollect.contains(this.state.bookdata.reviewid)){
@@ -238,6 +256,9 @@ class BookCover extends Component {
         }else{
             return(
                 <View style={styles.container3}>
+                    <TouchableOpacity onPress={() => this.looklook()}>
+                        <View style={styles.looklookButton} ><Text style={{fontSize:12}}>随便看看</Text></View>
+                    </TouchableOpacity>
                     <TouchableOpacity onPress={() => this.sharebook()}>
                         <View style={styles.obtainButton}><Text style={{fontSize:12}}>分享</Text></View>
                     </TouchableOpacity>
@@ -321,11 +342,21 @@ class BookCover extends Component {
     }
 
     renderIntroduceView(){
+        let time_o = new Date();
+        time_o.setMilliseconds(this.state.bookdata.releasetime);
+        let time_t = time_o.toLocaleString();
         return (
             <View>
+
+                <Text style={styles.textmargin}>简介 :{this.state.bookdata.bookbrief}</Text>
+
+                <Text style={styles.textmargin}>详情 :{this.state.bookdata.bookdescription}</Text>
                 <Text style={styles.textmargin}>题目数量 :{this.state.bookdata.questioncount}</Text>
-                <Text style={styles.textmargin}>题本简介 :{this.state.bookdata.bookbrief}</Text>
-                <Text style={styles.textmargin}>题本详情 :{this.state.bookdata.bookdescription}</Text>
+                <Text style={styles.textmargin}>版本 :{this.state.bookdata.version}</Text>
+                <Text style={styles.textmargin}>更新日期 :{time_t}</Text>
+                <Text style={styles.textmargin}>语言 :中文</Text>
+                <Text style={styles.textmargin}>作者 :slako</Text>
+                <Text style={styles.textmargin}>类别 :{this.state.bookdata.classifypath}</Text>
                 <Text style={styles.textmargin}>题目编号 :{this.state.bookdata.qids}</Text>
                 <Text style={styles.textmargin}>关注人数 :{this.state.bookdata.follow}</Text>
                 <Text style={styles.textmargin}>测试人数 :{this.state.bookdata.testtime}</Text>
