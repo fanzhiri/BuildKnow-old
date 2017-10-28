@@ -24,7 +24,7 @@ import BookHistory from './BookHistory'
 import GlobleStyles from '../styles/GlobleStyles';
 import DataStore from '../util/DataStore';
 import Icon from 'react-native-vector-icons/Ionicons';
-
+import EmptyData from '../component/EmptyData';
 const styles = StyleSheet.create({
     container: {
         flex: 1,
@@ -406,7 +406,7 @@ class BookCover extends Component {
             return(this.renderLoading())
         }else{
             if(this.state.comments_data_source == null){
-                return(this.rendernodata())
+                return(<EmptyData/>)
             }else{
                 return(this.renderDiscuss())
             }

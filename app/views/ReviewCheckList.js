@@ -11,6 +11,9 @@ import GlobleStyles from '../styles/GlobleStyles';
 import TestingItem from '../component/TestingItem';
 import DataStore from '../util/DataStore';
 
+import LoadingData from '../component/LoadingData';
+import EmptyData from '../component/EmptyData';
+
 
 const window = Dimensions.get('window');
 const STICKY_HEADER_HEIGHT = 32;
@@ -171,21 +174,21 @@ class ReviewCheckList extends Component {
                 return (this.renderBookListView())
             } else {
                 this.fetchQuestionlist(0);
-                return (this.renderLoading())
+                return (<LoadingData/>)
             }
         }else if (this.state.selectedIndex === 1) {
             if (this.state.question_audit_list_data_source) {
                 return (this.renderBookListView())
             } else {
                 this.fetchQuestionlist(1);
-                return (this.renderLoading())
+                return (<LoadingData/>)
             }
         }else if (this.state.selectedIndex === 2) {
             if (this.state.question_audit_list_data_source) {
                 return (this.renderBookListView())
             } else {
                 this.fetchQuestionlist(2);
-                return (this.renderLoading())
+                return (<LoadingData/>)
             }
         }
     }
@@ -215,14 +218,6 @@ class ReviewCheckList extends Component {
         );
     }
 
-    renderLoading(){
-        return (
-            <View style={styles.container}>
-                <Text>Loading...</Text>
-            </View>
-
-        )
-    }
 
     fetchpass(bookid){
         this.fetchgroup(bookid, doPassBookUrl);
@@ -312,7 +307,6 @@ class ReviewCheckList extends Component {
 
         )
     }
-
 
 }
 

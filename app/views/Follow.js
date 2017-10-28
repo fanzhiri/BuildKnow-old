@@ -16,6 +16,8 @@ import Button from "react-native-button";
 import GlobleStyles from '../styles/GlobleStyles';
 import DataStore from '../util/DataStore';
 
+import EmptyData from '../component/EmptyData';
+
 const styles = StyleSheet.create({
     container: {
 
@@ -199,11 +201,11 @@ class Follow extends Component {
             }
         } else if (this.state.selectedIndex === 2) {
             return (
-                this.rendernodata()
+                <EmptyData/>
             )
         } else if (this.state.selectedIndex === 3) {
             return (
-                this.rendernodata()
+                <EmptyData/>
             )
         }
     }

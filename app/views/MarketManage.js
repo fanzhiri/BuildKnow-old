@@ -267,6 +267,22 @@ class MarketManage extends Component {
         })
     }
 
+    renderTitleEdit(rowID){
+        if(this.state.store_data_source[rowID].type != 1){
+            return;
+        }
+        return(
+            <TextInput
+                style={{height:24,width:100,fontSize:14,borderColor:"#0000FF",borderWidth: 1,padding:2,marginLeft:10,backgroundColor:"#FFFFFF"}}
+                onChangeText={(text) => this.nameChange(rowID,text)}
+                value={this.state.store_data_source[rowID].name}
+                placeholder={"名称填写"}
+                maxLength={20}
+                multiline={false}
+            />
+        )
+    }
+
     renderStoreItem(rowData, sectionID, rowID) {
 
         let remainadd = MAX_SUBITEM - rowData.sub_item.length;
@@ -304,14 +320,7 @@ class MarketManage extends Component {
                             />
                         </View>
 
-                        <TextInput
-                            style={{height:24,width:100,fontSize:14,borderColor:"#0000FF",borderWidth: 1,padding:2,marginLeft:10,backgroundColor:"#FFFFFF"}}
-                            onChangeText={(text) => this.nameChange(rowID,text)}
-                            value={this.state.store_data_source[rowID].name}
-                            placeholder={"名称填写"}
-                            maxLength={20}
-                            multiline={false}
-                        />
+                        {this.renderTitleEdit(rowID)}
                     </View>
 
                     {this._renderSubItemListView(rowData, rowID)}
@@ -346,10 +355,13 @@ class MarketManage extends Component {
         for(let i=0;i< t_store_data_source.length;i++){
             if(t_store_data_source[i].type == 0){
                 if(swipernum == 1){
-
                     return false;
                 }
                 swipernum++;
+            }else if(t_store_data_source[i].type == 1){
+                if(t_store_data_source[i].name == ''){
+                    return false;
+                }
             }
         }
         return true;

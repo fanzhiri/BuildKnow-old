@@ -7,7 +7,7 @@ import {Actions} from "react-native-router-flux";
 import Button from "react-native-button";
 import GlobleStyles from '../styles/GlobleStyles';
 import DataStore from '../util/DataStore';
-
+import EmptyData from '../component/EmptyData';
 const styles = StyleSheet.create({
     container: {
         flex: 1,
@@ -94,18 +94,11 @@ class ShareManager extends Component {
             return (this.renderShareWay())
         }else{
             //this.fetchShareWayData();
-            return (this.renderLoading())
+            return (<EmptyData/>)
         }
     }
 
-    renderLoading(){
-        return (
-            <View style={styles.container}>
-                <Text>Loading...</Text>
-            </View>
 
-        )
-    }
 
     renderShareWay(){
         return (
