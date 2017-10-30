@@ -9,7 +9,7 @@ import Swiper from 'react-native-swiper';
 import MarketListItem from '../component/MarketListItem';
 import Marketlistdata from '../testdata/Marketlist.json'
 import DataStore from '../util/DataStore';
-
+import GlobleStyles from '../styles/GlobleStyles';
 const styles = StyleSheet.create({
     container: {
 
@@ -38,6 +38,8 @@ const styles = StyleSheet.create({
 });
 
 var doGetPublickBookPostUrl = "https://slako.applinzi.com/index.php?m=question&c=index&a=getbookstore";
+
+//var doGetPublickBookPostUrl = "http://slako-buildqst.stor.sinaapp.com/platform/store/recommend/today.json";
 
 class Market extends Component {
 
@@ -135,7 +137,7 @@ class Market extends Component {
 
     render(){
         return (
-            <View style={styles.container}>
+            <View style={GlobleStyles.withoutTitleContainer}>
                 <ScrollView
                     refreshControl={
                         <RefreshControl

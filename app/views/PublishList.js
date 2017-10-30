@@ -182,10 +182,20 @@ class PublishList extends Component {
         });
     }
 
+    applyforrelease(){
+        var bookid=this.props.bookid;
+        Actions.applyrelease({bookid});
+    }
+
     render(){
         const {userId} = this.props;
         return (
             <View style={GlobleStyles.withoutTitleContainer}>
+                <TouchableOpacity onPress={() => this.applyforrelease()}>
+                    <View style={{height:32,borderRadius:6,margin:4,backgroundColor:"#00FF00",justifyContent:"center",alignItems:"center"}}>
+                        <Text>申请发布</Text>
+                    </View>
+                </TouchableOpacity>
                 <View>
                     <SegmentedControlIOS
                         values={['等待','审核中','审完']}
@@ -313,7 +323,7 @@ class PublishList extends Component {
 }
 
 PublishList.PropTypes = {
-    userId: PropTypes.string,
+    bookid: PropTypes.number,
 };
 
 

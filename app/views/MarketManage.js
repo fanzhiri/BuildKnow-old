@@ -69,7 +69,9 @@ const styles = StyleSheet.create({
     }
 });
 
-var doGetMyBooksUrl = "https://slako.applinzi.com/index.php?m=question&c=personal&a=getmybooks";
+var doUpdateMarketUrl = "https://slako.applinzi.com/index.php?m=question&c=admin&a=updatemarket";
+
+var doGetMarketUrl = "https://slako.applinzi.com/index.php?m=question&c=admin&a=getmarket";
 var httpsBaseUrl = "https://slako.applinzi.com/";
 
 var doCloneQstUrl = "https://slako.applinzi.com/index.php?m=question&c=personal&a=cloneqst";
@@ -116,6 +118,61 @@ class MarketManage extends Component {
         this.setState({
             store_data_source:t_store_data_source
         })
+    }
+
+    fetchUpdateMarket(){
+        let formData = new FormData();
+        formData.append("auth",global.auth);
+        formData.append("adminid",global.adminid);
+        formData.append("market",JSON.stringify(this.state.store_data_source));
+        var opts = {
+            method:"POST",
+            body:formData
+        }
+        fetch(doUpdateMarketUrl,opts)
+            .then((response) => response.json())
+            .then((responseData) => {
+                if(responseData.code == 100){
+                    Alert.alert('提示','上传成功',[
+                        {text:'好的'}
+                    ]);
+                }else{
+                    alert(responseData.message)
+                }
+
+            })
+            .catch((error) => {
+                alert(error)
+            })
+    }
+
+    fetchtoday(){
+        let formData = new FormData();
+        formData.append("auth",global.auth);
+        formData.append("adminid",global.adminid);
+
+        var opts = {
+            method:"POST",
+            body:formData
+        }
+        fetch(doGetMarketUrl,opts)
+            .then((response) => response.json())
+            .then((responseData) => {
+                if(responseData.code == 100){
+                    this.setState({
+                        store_data_source:JSON.parse(responseData.data)
+                    })
+                    Alert.alert('提示','下载成功',[
+                        {text:'好的'}
+                    ]);
+                }else{
+                    alert(responseData.message)
+                }
+
+            })
+            .catch((error) => {
+                alert(error)
+            })
     }
 
     addSubItem(rowData, rowID){
@@ -215,26 +272,39 @@ class MarketManage extends Component {
         Actions.mycollectlist({intype:1,processprop:1,inmode:1});
     }
 
-    modify_subitem(){
+    change_subitem(rowData, rowID,storeidx){
 
+        this.setState({
+            module_idx:storeidx,
+            module_sub_idx:rowID
+        });
+        //alert(rowData.idx+"]:["+rowID);
+        Actions.mycollectlist({intype:1,processprop:1,inmode:1});
     }
 
-    del_subitem(){
+    del_subitem(rowID,idx){
+        //alert(rowID+"]["+idx);
+        let t_store_data_source=this.state.store_data_source;
+        //alert(t_store_data_source[rowID].sub_item.length+"]["+rowID+"]["+idx);
+        t_store_data_source[idx].sub_item.splice(rowID,1);
 
+        this.setState({
+            store_data_source:t_store_data_source
+        })
     }
 
-    renderAddDellBtn(rowData){
+    renderAddDellBtn(rowData, rowID,idx){
         if(rowData.name == "点击添加"){
             return;
         }
         return(
             <View style={{flexDirection:"row",height:24,width:100,alignItems:"center"}}>
-                <TouchableOpacity style={{flex:1}} onPress={() => this.modify_subitem()}>
+                <TouchableOpacity style={{flex:1}} onPress={() => this.change_subitem(rowData, rowID,idx)}>
                     <View style={{borderRadius:4,margin:2,padding:2,flexDirection:"row",backgroundColor:"#ADD8E6",justifyContent:"center",alignItems:"center"}}>
                         <Text>修改</Text>
                     </View>
                 </TouchableOpacity>
-                <TouchableOpacity style={{flex:1}} onPress={() => this.del_subitem()}>
+                <TouchableOpacity style={{flex:1}} onPress={() => this.del_subitem(rowID,idx)}>
                     <View style={{borderRadius:4,margin:2,padding:2,flexDirection:"row",backgroundColor:"#ADD8E6",justifyContent:"center",alignItems:"center"}}>
                         <Text>删除</Text>
                     </View>
@@ -252,7 +322,7 @@ class MarketManage extends Component {
                         <Text style={{marginLeft:6}}>{rowData.name}</Text>
                     </View>
                 </TouchableOpacity>
-                {this.renderAddDellBtn(rowData)}
+                {this.renderAddDellBtn(rowData, rowID,idx)}
             </View>
 
         )
@@ -290,7 +360,7 @@ class MarketManage extends Component {
             return(this.renderPreview(rowData, sectionID, rowID));
         } else {
             return (
-                <View style={{margin:4,padding:2,borderWidth:1,borderColor:"#000000",backgroundColor:"#EEEE00"}}>
+                <View style={{margin:4,padding:6,borderWidth:1,borderColor:"#000000",backgroundColor:"#EEEE00"}}>
                     <View style={{alignItems:"center",height:24,marginBottom:4,flexDirection:"row",}}>
                         <Text style={{flexDirection:"row",justifyContent:"center",alignItems:"center",fontSize:16,flex:1}}>
                             模块 {parseInt(rowID) + 1}
@@ -381,7 +451,7 @@ class MarketManage extends Component {
     }
 
     finishEdit(){
-
+        this.fetchUpdateMarket();
     }
 
     renderImage(store_data_item){
@@ -438,6 +508,8 @@ class MarketManage extends Component {
 
     }
 
+
+
     renderBottomButtom(){
         let remainadd = MAX_TEMPLATE-this.state.store_data_source.length;
         if(this.state.preview) {
@@ -459,6 +531,11 @@ class MarketManage extends Component {
                     <TouchableOpacity style={{flex:4}} onPress={() => this.addStoreItem()}>
                         <View style={{justifyContent:"center",alignItems:"center",margin:2,height:32,borderRadius:8,backgroundColor:"#00F0F0"}}>
                             <Text>添加模块,还可以添加{remainadd}个</Text>
+                        </View>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={{flex:1}} onPress={() => this.fetchtoday()}>
+                        <View style={{justifyContent:"center",alignItems:"center",margin:2,height:32,borderRadius:8,backgroundColor:"#0BFF50"}}>
+                            <Text>获取</Text>
                         </View>
                     </TouchableOpacity>
                     <TouchableOpacity style={{flex:1}} onPress={() => this.preview(true)}>

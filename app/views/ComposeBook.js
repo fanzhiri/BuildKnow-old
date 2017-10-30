@@ -689,10 +689,7 @@ class ComposeBook extends Component {
         )
     }
 
-    applyforrelease(){
-        var bookid=this.props.bookid;
-        Actions.applyrelease({bookid});
-    }
+
 
     docancelapply(){
         this.refs.toastmsg.show('真的吗!',DURATION.LENGTH_LONG)
@@ -749,6 +746,8 @@ class ComposeBook extends Component {
         );
     }
 
+
+
     renderDiscussView(){
         //const {bookid} = this.props;
         return (
@@ -756,18 +755,15 @@ class ComposeBook extends Component {
                 {this.renderShareWay()}
 
                 <TouchableOpacity
-                    onPress={() => this.applyforrelease()}
+                    onPress={() => Actions.publishlist({bookid:this.props.bookid})}
                     activeOpacity={0.8}>
                     <View style={[styles.listItem,style={marginTop:10}]}>
 
-                        <Text style={{color: '#FF0000', fontSize: 16}}>发布申请</Text>
+                        <Text style={{color: '#FF0000', fontSize: 16}}>出版列表</Text>
 
                     </View>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={() => this.cancelapplydialog()}>
 
-                    <Text>撤销申请</Text>
-                </TouchableOpacity>
             </ScrollView>
 
         )
