@@ -80,7 +80,7 @@ const styles = StyleSheet.create({
         height: 60,
         justifyContent: 'space-around',
         marginLeft: 10,
-        width:window.width-140,
+
     },titleText: {
         fontSize: 20,
         justifyContent: 'center',
@@ -90,10 +90,10 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         width:window.width-100,
     },leftbutton:{
-        width:36,
+        width:100,
         justifyContent:'space-around',
-        marginRight:4,
-        marginLeft:4,
+        marginRight:2,
+        marginLeft:2,
         alignItems: 'center',
     }
 });
@@ -219,22 +219,23 @@ class PublishList extends Component {
         )
     }
 
-    fetchpass(reviewid){
-        this.fetchgroup(reviewid, doPassBookUrl);
+    fetchpass(reviewid,force){
+        this.fetchgroup(reviewid, doPassBookUrl,force);
     }
     fetchreject(reviewid){
-        this.fetchgroup(reviewid, doRejectBooksUrl);
+        this.fetchgroup(reviewid, doRejectBooksUrl,0);
     }
     fetchbeginreview(reviewid) {
-        this.fetchgroup(reviewid, doReviewBookUrl);
+        this.fetchgroup(reviewid, doReviewBookUrl,0);
     }
 
-    fetchgroup(reviewid,url){
+    fetchgroup(reviewid,url,force){
         let formData = new FormData();
         formData.append("auth",global.auth);
         formData.append("userid",global.userid);
         formData.append("adminid",global.adminid);
         formData.append("reviewid",reviewid);
+        formData.append("force",force);
         var opts = {
             method:"POST",
             body:formData
@@ -260,6 +261,8 @@ class PublishList extends Component {
             })
     }
 
+
+
     renderControlButton(bookstatus,reviewid){
         if(bookstatus == 1){
             return(
@@ -272,7 +275,10 @@ class PublishList extends Component {
         }else if(bookstatus == 2){
             return(
                 <View style={styles.leftbutton}>
-                    <TouchableOpacity onPress={() => this.fetchpass(reviewid)}>
+                    <TouchableOpacity onPress={() => this.fetchpass(reviewid,1)}>
+                        <Text >免审且通过</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => this.fetchpass(reviewid,0)}>
                         <Text >通过</Text>
                     </TouchableOpacity>
                     <TouchableOpacity onPress={() => this.fetchreject(reviewid)}>
@@ -289,10 +295,13 @@ class PublishList extends Component {
         var cover = rowData.cover;
         var name =rowData.bookname;
         var bookbrief =rowData.bookbrief;
-        var questionsnumber =rowData.q_count;
+        var questionsnumber =rowData.questioncount;
         var follow =rowData.follow;
         var bookstatus =rowData.status;
         var reviewid =rowData.reviewid;
+        let time_o = new Date();
+        time_o.setMilliseconds(rowData.applytime);
+        let time_t = time_o.toLocaleString();
         return (
             <TouchableOpacity  onPress={()=>(Actions.reviewchecklist({reviewid}))} >
                 <View style={styles.listItem}>
@@ -301,8 +310,10 @@ class PublishList extends Component {
                         <Text style={styles.titleText}>{name}</Text>
                         <Text style={styles.bottomText}>审核id:{reviewid}</Text>
                         <Text style={styles.bottomText}>题数:{questionsnumber} 关注:{follow} </Text>
+                        <Text style={styles.bottomText}>申请时间:{time_t}</Text>
                     </View>
-                    {this.renderControlButton(bookstatus,reviewid)}
+
+
                 </View>
             </TouchableOpacity>
         );

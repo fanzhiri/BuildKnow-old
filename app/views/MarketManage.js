@@ -343,7 +343,7 @@ class MarketManage extends Component {
         }
         return(
             <TextInput
-                style={{height:24,width:100,fontSize:14,borderColor:"#0000FF",borderWidth: 1,padding:2,marginLeft:10,backgroundColor:"#FFFFFF"}}
+                style={{height:24,width:100,fontSize:14,borderColor:"#0000FF",borderWidth: 1,padding:2,marginLeft:4,backgroundColor:"#FFFFFF"}}
                 onChangeText={(text) => this.nameChange(rowID,text)}
                 value={this.state.store_data_source[rowID].name}
                 placeholder={"名称填写"}
@@ -351,6 +351,10 @@ class MarketManage extends Component {
                 multiline={false}
             />
         )
+    }
+
+    batchinput(rowData, rowID){
+
     }
 
     renderStoreItem(rowData, sectionID, rowID) {
@@ -374,7 +378,7 @@ class MarketManage extends Component {
                     </View>
                     <View style={{flexDirection:"row",marginBottom:4}}>
                         <TextInput
-                            style={{height:24,width:32,fontSize:14,borderColor:"#0000FF",borderWidth: 1,padding:2,marginLeft:6,backgroundColor:"#FFFFFF"}}
+                            style={{height:24,width:32,fontSize:14,borderColor:"#0000FF",borderWidth: 1,padding:2,marginLeft:4,backgroundColor:"#FFFFFF"}}
                             onChangeText={(text) => this.sortNumChange(rowID,text)}
                             value={this.state.store_data_source[rowID].sortnum.toString()}
                             placeholder={""}
@@ -391,6 +395,12 @@ class MarketManage extends Component {
                         </View>
 
                         {this.renderTitleEdit(rowID)}
+                        <TouchableOpacity onPress={() => this.batchinput(rowData, rowID)}>
+                            <View
+                                style={{justifyContent:"center",alignItems:"center",width:68,height:22,marginLeft:4,borderRadius:4,backgroundColor:"#1E90FF"}}>
+                                <Text>批量导入</Text>
+                            </View>
+                        </TouchableOpacity>
                     </View>
 
                     {this._renderSubItemListView(rowData, rowID)}

@@ -90,7 +90,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         width:window.width-100,
     },leftbutton:{
-        width:36,
+        width:100,
         justifyContent:'space-around',
         marginRight:4,
         marginLeft:4,
@@ -209,22 +209,23 @@ class ReleaseReview extends Component {
         )
     }
 
-    fetchpass(reviewid){
-        this.fetchgroup(reviewid, doPassBookUrl);
+    fetchpass(reviewid,force){
+        this.fetchgroup(reviewid, doPassBookUrl,force);
     }
     fetchreject(reviewid){
-        this.fetchgroup(reviewid, doRejectBooksUrl);
+        this.fetchgroup(reviewid, doRejectBooksUrl,0);
     }
     fetchbeginreview(reviewid) {
-        this.fetchgroup(reviewid, doReviewBookUrl);
+        this.fetchgroup(reviewid, doReviewBookUrl,0);
     }
 
-    fetchgroup(reviewid,url){
+    fetchgroup(reviewid,url,force){
         let formData = new FormData();
         formData.append("auth",global.auth);
         formData.append("userid",global.userid);
         formData.append("adminid",global.adminid);
         formData.append("reviewid",reviewid);
+        formData.append("force",force);
         var opts = {
             method:"POST",
             body:formData
@@ -262,7 +263,10 @@ class ReleaseReview extends Component {
         }else if(bookstatus == 2){
             return(
                 <View style={styles.leftbutton}>
-                    <TouchableOpacity onPress={() => this.fetchpass(reviewid)}>
+                    <TouchableOpacity onPress={() => this.fetchpass(reviewid,1)}>
+                        <Text >免审且通过</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => this.fetchpass(reviewid,0)}>
                         <Text >通过</Text>
                     </TouchableOpacity>
                     <TouchableOpacity onPress={() => this.fetchreject(reviewid)}>
@@ -274,6 +278,7 @@ class ReleaseReview extends Component {
 
     }
 
+
     renderRow(rowData, sectionID, rowID) {
         var bookid =rowData.bookid;
         var cover = rowData.cover;
@@ -283,6 +288,9 @@ class ReleaseReview extends Component {
         var follow =rowData.follow;
         var bookstatus =rowData.status;
         var reviewid =rowData.reviewid;
+        let time_o = new Date();
+        time_o.setMilliseconds(rowData.applytime);
+        let time_t = time_o.toLocaleString();
         return (
             <TouchableOpacity  onPress={()=>(Actions.reviewchecklist({reviewid}))} >
                 <View style={styles.listItem}>
@@ -291,8 +299,11 @@ class ReleaseReview extends Component {
                         <Text style={styles.titleText}>{name}</Text>
                         <Text style={styles.bottomText}>审核id:{reviewid}</Text>
                         <Text style={styles.bottomText}>题数:{questionsnumber} 关注:{follow} </Text>
+                        <Text style={styles.bottomText}>申请时间:{time_t}</Text>
                     </View>
-                    {this.renderControlButton(bookstatus,reviewid)}
+                    <View style={{flexDirection:"row",justifyContent:"flex-end",flex:1}}>
+                        {this.renderControlButton(bookstatus,reviewid)}
+                    </View>
                 </View>
             </TouchableOpacity>
         );

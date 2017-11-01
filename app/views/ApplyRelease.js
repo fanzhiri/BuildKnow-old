@@ -2,7 +2,7 @@
  * Created by slako on 17/5/4.
  */
 import React, { Component,PropTypes } from 'react';
-import {View, Text, StyleSheet,TextInput,PickerIOS} from "react-native";
+import {View, Text, StyleSheet,TextInput,PickerIOS,Alert,TouchableOpacity} from "react-native";
 import {Actions} from "react-native-router-flux";
 import Button from "react-native-button";
 import GlobleStyles from '../styles/GlobleStyles';
@@ -23,7 +23,8 @@ const styles = StyleSheet.create({
         marginTop:20,
         height: 40,
         borderColor: 'gray',
-        borderWidth: 1
+        borderWidth: 1,
+        paddingLeft:6
     },
     fromhint:{
         marginLeft:20,
@@ -34,6 +35,8 @@ const styles = StyleSheet.create({
 });
 
 var askforreleaseUrl = "https://slako.applinzi.com/index.php?m=question&c=personal&a=applyreleasebook";
+
+var checkBeforeApplyUrl = "https://slako.applinzi.com/index.php?m=question&c=personal&a=checkapply";
 
 /*
 var NUMBER_PICK_ITEM=['0','100','1000','10000','100000'];
@@ -63,27 +66,86 @@ class ApplyRelease extends Component {
         this.state = {
             descriptiontext:"我要发布",
             numberpeopleselect:0,
+            checkresult:0
         };
 
+    }
+
+    checkApply(){
+        let formData = new FormData();
+        formData.append("auth",global.auth);
+        formData.append("userid",global.userid);
+        formData.append("bookid",this.props.bookid);
+
+        var opts = {
+            method:"POST",
+            body:formData
+        }
+        fetch(checkBeforeApplyUrl,opts)
+            .then((response) => response.json())
+            .then((responseData) => {
+                if(responseData.code == 100){
+                    this.setState({
+                        checkresult:1,
+                    });
+                    Alert.alert('检测提示','检测通过',[
+                        {text:'好的'}
+                    ]);
+                }else{
+                    let error_text =null;
+                    switch (responseData.code){
+                        case 201:error_text="请先设置海报";break;
+                        case 202:error_text="题目数量少于10";break;
+                        case 203:error_text="请选择类型";break;
+                    }
+                    Alert.alert('检测提示',error_text,[
+                        {text:'好的'}
+                    ]);
+                }
+
+            })
+            .catch((error) => {
+                alert(error)
+            })
+    }
+
+    renderVerify(){
+        return(
+            <TouchableOpacity onPress={() => this.checkApply()}>
+                <View style={{height:32,borderRadius:6,margin:4,backgroundColor:"#A0BF00",justifyContent:"center",alignItems:"center"}}>
+                    <Text>初步校验</Text>
+                </View>
+            </TouchableOpacity>
+        );
+    }
+
+    renderApplySubmit(){
+        if(this.state.checkresult != 1){
+            return;
+        }
+        return(
+            <View>
+                <Text style={styles.fromhint}>
+                    你准备发布{this.props.bookid}，需要发送审核申请，等批准通过
+                </Text>
+                <TextInput
+                    style={styles.descriptioninput}
+                    onChangeText={(text) => this.setState({descriptiontext:text})}
+                    value={this.state.descriptiontext}
+                    placeholder={"  描述你自己"}
+                />
+
+                <Button onPress={() => this.askforfriend()}>发送验证申请</Button>
+            </View>
+        )
     }
 
     render(){
 
         return (
             <View style={GlobleStyles.withoutTitleContainer}>
-                <View>
-                    <Text style={styles.fromhint}>
-                        你准备发布{this.props.bookid}需要发送审核申请，等批准通过
-                    </Text>
-                    <TextInput
-                        style={styles.descriptioninput}
-                        onChangeText={(text) => this.setState({descriptiontext:text})}
-                        value={this.state.descriptiontext}
-                        placeholder={"  描述你自己"}
-                    />
-
-                    <Button onPress={() => this.askforfriend()}>发送验证申请</Button>
-                </View>
+                {this.renderVerify()}
+                {this.renderApplySubmit()}
             </View>
         );
     }
@@ -103,7 +165,9 @@ class ApplyRelease extends Component {
             .then((response) => response.json())
             .then((responseData) => {
                 if(responseData.code == 100){
-                    alert("ok")
+                    Alert.alert('申请提示','等待审核',[
+                        {text:'好的'}
+                    ]);
                 }else{
                     this.setState({
                         netresult:responseData.code

@@ -491,7 +491,7 @@ class HomePage extends Component {
     renderBottomText(rowData) {
         var name =rowData.bookname;
         var bookbrief =rowData.bookbrief;
-        var questionsnumber =rowData.q_count;
+        var questionsnumber =rowData.questioncount;
         var follow =rowData.follow;
         if (name) {
             return (

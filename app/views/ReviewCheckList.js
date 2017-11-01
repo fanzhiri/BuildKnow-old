@@ -114,23 +114,23 @@ const styles = StyleSheet.create({
 });
 
 var reviewQuestionsUrl = "https://slako.applinzi.com/index.php?m=question&c=personal&a=getauditquestions";
-/*
-var doReviewBookUrl = "https://slako.applinzi.com/index.php?m=question&c=personal&a=reviewbook";
-var doPassBookUrl = "https://slako.applinzi.com/index.php?m=question&c=personal&a=passbook";
-var doRejectBooksUrl = "https://slako.applinzi.com/index.php?m=question&c=personal&a=rejectbook";
-
-*/
+var doauditpostUrl = "https://slako.applinzi.com/index.php?m=question&c=personal&a=setaudit";
 var httpsBaseUrl = "https://slako.applinzi.com/";
 
 class ReviewCheckList extends Component {
 
     constructor(props) {
         super(props);
+
+        let getcheck_arr = new Array(3);
+        for(let i=0;i<3;i++){
+            getcheck_arr[i] = 0;
+        }
         this.state = {
             netresult:'no',
             question_audit_list_data_source: null,
-
             selectedIndex:0,
+            getcheck:getcheck_arr
         };
         this._onChange = this.onChange.bind(this);
         this._renderRow = this.renderRow.bind(this);
@@ -152,13 +152,20 @@ class ReviewCheckList extends Component {
         fetch(reviewQuestionsUrl,opts)
             .then((response) => response.json())
             .then((responseData) => {
+                let t_getcheck = this.state.getcheck;
+                t_getcheck[audit]=1;
+
                 if(responseData.code == 100){
                     //alert(responseData.data);
+
                     this.setState({
-                        question_audit_list_data_source:responseData.data
+                        question_audit_list_data_source:responseData.data,
+                        getcheck:t_getcheck
                     })
                 }else{
-                    alert(responseData.message);
+                    this.setState({
+                        getcheck:t_getcheck
+                    })
                 }
 
             })
@@ -169,34 +176,28 @@ class ReviewCheckList extends Component {
 
 
     renderCheckList(){
-        if (this.state.selectedIndex === 0) {
-            if (this.state.question_audit_list_data_source) {
-                return (this.renderBookListView())
-            } else {
-                this.fetchQuestionlist(0);
+
+        if (this.state.question_audit_list_data_source) {
+            return (this.renderCheckListView())
+        } else {
+            if(this.state.getcheck[this.state.selectedIndex] == 0){
+                this.fetchQuestionlist(this.state.selectedIndex);
                 return (<LoadingData/>)
+            }else{
+                return(<EmptyData/>)
             }
-        }else if (this.state.selectedIndex === 1) {
-            if (this.state.question_audit_list_data_source) {
-                return (this.renderBookListView())
-            } else {
-                this.fetchQuestionlist(1);
-                return (<LoadingData/>)
-            }
-        }else if (this.state.selectedIndex === 2) {
-            if (this.state.question_audit_list_data_source) {
-                return (this.renderBookListView())
-            } else {
-                this.fetchQuestionlist(2);
-                return (<LoadingData/>)
-            }
+
         }
+
     }
 
     onChange(event) {
+        let t_getcheck = this.state.getcheck;
+        t_getcheck[event.nativeEvent.selectedSegmentIndex]=0;
         this.setState({
             question_audit_list_data_source:null,
             selectedIndex: event.nativeEvent.selectedSegmentIndex,
+            getcheck:t_getcheck
         });
     }
 
@@ -218,71 +219,6 @@ class ReviewCheckList extends Component {
         );
     }
 
-
-    fetchpass(bookid){
-        this.fetchgroup(bookid, doPassBookUrl);
-    }
-    fetchreject(bookid){
-        this.fetchgroup(bookid, doRejectBooksUrl);
-    }
-    fetchbeginreview(bookid) {
-        this.fetchgroup(bookid, doReviewBookUrl);
-    }
-
-    fetchgroup(bookid,url){
-        let formData = new FormData();
-        formData.append("auth",global.auth);
-        formData.append("userid",global.userid);
-        formData.append("adminid",global.adminid);
-        formData.append("bookid",bookid);
-        var opts = {
-            method:"POST",
-            body:formData
-        }
-        fetch(url,opts)
-            .then((response) => response.json())
-            .then((responseData) => {
-                if(responseData.code == 100){
-                    //alert(bookid);
-                    this.setState({
-                        book_list_data_source:null,
-                    });
-                }else{
-
-                }
-
-            })
-            .catch((error) => {
-                alert(error)
-            })
-    }
-
-    renderControlButton(bookstatus,bookid){
-        if(bookstatus == 1){
-            return(
-                <View style={styles.leftbutton}>
-                    <TouchableOpacity onPress={() => this.fetchbeginreview(bookid)}>
-                        <Text >开始审核</Text>
-                    </TouchableOpacity>
-                </View>
-            )
-        }else if(bookstatus == 2){
-            return(
-                <View style={styles.leftbutton}>
-                    <TouchableOpacity onPress={() => this.fetchpass(bookid)}>
-                        <Text >通过</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={() => this.fetchreject(bookid)}>
-                        <Text >拒绝</Text>
-                    </TouchableOpacity>
-                </View>
-            )
-        }
-
-    }
-
-
-
     renderRow(rowData, sectionID, rowID) {
         var ask = (rowData.ask);
         var qId = (rowData.questionid);
@@ -298,13 +234,60 @@ class ReviewCheckList extends Component {
         )
     }
 
-    renderBookListView(){
-        return (
-            <ListView
-                enableEmptySections={true}
-                dataSource={DataStore.cloneWithRows(this.state.question_audit_list_data_source)}
-                renderRow={this._renderRow} />
+    allpass(){
+        let formData = new FormData();
+        formData.append("auth",global.auth);
+        formData.append("userid",global.userid);
+        formData.append("adminid",global.adminid);
+        formData.append("reviewid",this.props.reviewid);
+        formData.append("audit",4);
 
+
+        var opts = {
+            method:"POST",
+            body:formData
+        }
+        fetch(doauditpostUrl,opts)
+            .then((response) => response.json())
+            .then((responseData) => {
+                if(responseData.code == 100){
+
+                }else{
+
+                }
+
+            })
+            .catch((error) => {
+                alert(error)
+            })
+    }
+
+    renderButton(){
+        switch (this.state.selectedIndex){
+            case 0:
+                return(
+                    <TouchableOpacity onPress={() => this.allpass()}>
+                        <View style={{height:32,borderRadius:6,margin:4,backgroundColor:"#00EE00",justifyContent:"center",alignItems:"center"}}>
+                            <Text>全部通过</Text>
+                        </View>
+                    </TouchableOpacity>
+                );
+                break
+
+
+        }
+        return;
+    }
+
+    renderCheckListView(){
+        return (
+            <View>
+                {this.renderButton()}
+                <ListView
+                    enableEmptySections={true}
+                    dataSource={DataStore.cloneWithRows(this.state.question_audit_list_data_source)}
+                    renderRow={this._renderRow} />
+            </View>
         )
     }
 
