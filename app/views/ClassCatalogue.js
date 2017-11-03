@@ -105,6 +105,9 @@ class ClassCatalogue extends Component {
                         cataloguedata:responseData.data
                     })
 
+                }else if(responseData.code == 101){
+
+
                 }else{
 
                     alert(responseData.code)
@@ -264,6 +267,11 @@ class ClassCatalogue extends Component {
 
             }
         }
+        if(rowData.num == 0){
+            Actions.booklist({inmode:0,classifyid:rowData.id});
+            return;
+        }
+
         let deepnum = this.props.deep + 1;
         Actions.classcatalogue({classifyid:rowData.id,title:rowData.name,intype:this.props.intype,deep:deepnum,bookid:this.props.bookid});
     }
@@ -279,7 +287,7 @@ class ClassCatalogue extends Component {
                 <View style={styles.listItem}>
                     <Text style={{color:"#0000FF", fontSize: 14}}>{rowData.name}</Text>
                     <View style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-end', alignItems:'center'}}>
-                        <Text style={{color: "#ccc"}}>{rowData.num}</Text>
+                        <Text style={{color: "#ccc"}}>子类数量：{rowData.num}   题本累计：{rowData.booknum }</Text>
                     </View>
                 </View>
             </TouchableOpacity>

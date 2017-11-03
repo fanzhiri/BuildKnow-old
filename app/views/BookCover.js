@@ -104,6 +104,8 @@ var getpublicbookUrl = "https://slako.applinzi.com/index.php?m=question&c=index&
 
 var doGetDiscussUrl = "https://slako.applinzi.com/index.php?m=question&c=personal&a=getdiscuss";
 
+var doGetTestRankUrl = "https://slako.applinzi.com/index.php?m=question&c=personal&a=gettestrank";
+
 class BookCover extends Component {
     constructor(props) {
         super(props);
@@ -114,16 +116,52 @@ class BookCover extends Component {
             collectit:false,
             comments_data_source:null,
             get_comments_data:0,
+
+            rank_data_source:null,
+            get_rank_data:0,
+
             gorefreshing:false,
         };
         this._onChange = this._onChange.bind(this);
         this._renderDiscussItem = this.renderDiscussItem.bind(this);
+        this._renderRankItem = this.renderRankItem.bind(this);
     }
 
     _onChange(event) {
         this.setState({
             selectedIndex: event.nativeEvent.selectedSegmentIndex,
         });
+    }
+
+    dofetch_rank(){
+        let formData = new FormData();
+        formData.append("auth",global.auth);
+        formData.append("userid",global.userid);
+        formData.append("publicbookid",this.state.bookdata.reviewid);
+
+        var opts = {
+            method:"POST",
+            body:formData
+        }
+        fetch(doGetTestRankUrl,opts)
+            .then((response) => response.json())
+            .then((responseData) => {
+                if(responseData.code == 100){
+
+                    this.setState({
+                        rank_data_source:responseData.data,
+                        get_rank_data:1
+                    })
+                }else{
+                    this.setState({
+                        get_rank_data:2
+                    })
+                }
+
+            })
+            .catch((error) => {
+                alert(error)
+            })
     }
 
     dofetch_discuss(){
@@ -391,6 +429,26 @@ class BookCover extends Component {
         )
     }
 
+    renderRankItem(rowData,sectionID, rowID){
+        let time_o = new Date();
+        time_o.setMilliseconds(rowData.begintime);
+        let time_t = time_o.toLocaleString();
+        return(
+            <View style={{
+                height:32,
+                borderBottomWidth:1,
+                borderBottomColor:'#e464e4',
+                flexDirection:"row",
+                alignItems:"center"
+            }}>
+                <Text>得分:{rowData.score}  </Text>
+                <Text>题数:{rowData.qstnum}  </Text>
+                <Text>开始:{time_t}  </Text>
+                <Text>耗时:{rowData.taketime}  </Text>
+            </View>
+        )
+    }
+
     renderDiscuss(){
         return(
             <ListView
@@ -403,6 +461,23 @@ class BookCover extends Component {
                 style={styles.list}
                 dataSource={DataStore.cloneWithRows(this.state.comments_data_source)}
                 renderRow={this._renderDiscussItem}
+                enableEmptySections = {true}
+            />
+        )
+    }
+
+    renderRank(){
+        return(
+            <ListView
+                refreshControl={
+                    <RefreshControl
+                        refreshing={this.state.gorefreshing}
+                        onRefresh={() => this.dofetch_rank()}
+                    />
+                }
+                style={styles.list}
+                dataSource={DataStore.cloneWithRows(this.state.rank_data_source)}
+                renderRow={this._renderRankItem}
                 enableEmptySections = {true}
             />
         )
@@ -446,9 +521,17 @@ class BookCover extends Component {
     }
 
     renderHistoryView(){
-        return (
-            <Text>History</Text>
-        )
+
+        if(this.state.get_rank_data == 0){
+            this.dofetch_rank();
+            return(this.renderLoading())
+        }else{
+            if(this.state.rank_data_source == null){
+                return(<EmptyData/>)
+            }else{
+                return(this.renderRank())
+            }
+        }
     }
 
     rendernodata(){

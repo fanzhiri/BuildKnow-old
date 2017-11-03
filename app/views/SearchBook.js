@@ -51,7 +51,7 @@ const styles = StyleSheet.create({
         color:'blue'
     },
     list:{
-        marginBottom:48
+
     }
 
 });

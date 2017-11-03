@@ -1,5 +1,5 @@
 /**
- * Created by slako on 17/2/18.
+ * Created by slako on 17/11/02.
  */
 import React, { Component } from 'react';
 import {
@@ -20,6 +20,9 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import DataStore from '../util/DataStore';
 
 import {PicBaseUrl} from '../util/Attributes';
+
+import LoadingData from '../component/LoadingData';
+import EmptyData from '../component/EmptyData';
 
 const styles = StyleSheet.create({
     container: {
@@ -49,14 +52,13 @@ const styles = StyleSheet.create({
     },
     topTitleStyle:{
         fontSize:20,
-        marginTop:4,
-        marginBottom:4
+        marginBottom:10
     },
     bottomTitleStyle:{
         color:'blue'
     },
     list:{
-        marginBottom:48
+        marginBottom:0
     },
     topButtonitemcontainer:{
         height:40,
@@ -81,7 +83,7 @@ const styles = StyleSheet.create({
 });
 const {width, height} = Dimensions.get('window');
 
-var peoplelistUrl = "https://slako.applinzi.com/index.php?m=question&c=index&a=peoplelist";
+var allpeoplelistUrl = "https://slako.applinzi.com/index.php?m=question&c=admin&a=allpeoplelist";
 
 var httpsBaseUrl = "https://slako.applinzi.com/";
 
@@ -91,7 +93,7 @@ var categoryUrl  = "https://slako.applinzi.com/index.php?m=question&c=index&a=ca
 
 var knowledgeQstUrl  = "https://slako.applinzi.com/index.php?m=question&c=index&a=knowledgequestion";
 
-class Discover extends Component {
+class MemberList extends Component {
 
     constructor(props) {
 
@@ -125,12 +127,14 @@ class Discover extends Component {
 
     peoplelist(){
         let formData = new FormData();
-        formData.append("api","true");
+        formData.append("auth",global.auth);
+        formData.append("userid",global.userid);
+        formData.append("adminid",global.adminid);
         var opts = {
             method:"POST",
             body:formData
         }
-        fetch(peoplelistUrl,opts)
+        fetch(allpeoplelistUrl,opts)
             .then((response) => response.json())
             .then((responseData) => {
                 if(responseData.code == 100){
@@ -248,7 +252,7 @@ class Discover extends Component {
             <View style={GlobleStyles.withoutTitleContainer}>
                 <View>
                     <SegmentedControlIOS
-                        values={['用户','知识','活动']}
+                        values={['用户','企业','管理员']}
                         selectedIndex={this.state.selectedIndex}
                         style={styles.segmented}
                         onChange={this._onChange}
@@ -525,20 +529,6 @@ class Discover extends Component {
         Actions.homepage({userid});
     }
 
-    renderVipIcon(yes){
-        if(yes == 1){
-            return(
-                <View style={{flexDirection:"row", alignItems: 'center'}}>
-                    <View style={{marginLeft:4, justifyContent: 'center', alignItems: 'center', width: 18, height:18}}>
-                        <Icon name="md-ribbon" size={18} color="#FF0000"/>
-                    </View>
-                    <Text style={{fontSize:16}}>3</Text>
-                </View>
-
-            )
-        }
-    }
-
     renderPeople(rowData,sectionID, rowID){
         var userId = (rowData.userid);
         return (
@@ -547,13 +537,9 @@ class Discover extends Component {
                 <View style={styles.peopleItem}>
                     <Image source={{uri:`${PicBaseUrl}${rowData.head}`}} style={styles.leftImgStyle}/>
                     <View>
-                        <View style={{flexDirection:"row", alignItems: 'center'}}>
-                            <Text style={styles.topTitleStyle}>
-                                {rowData.nickname}
-                            </Text>
-                            {this.renderVipIcon(rowData.vip)}
-                        </View>
-
+                        <Text style={styles.topTitleStyle}>
+                            {rowData.nickname}
+                        </Text>
                         <Text >
                             粉丝:{rowData.follow} 内测:{rowData.buildingshare} 在建:{rowData.buildingshare}  发布:{rowData.releaseshare}
                         </Text>
@@ -589,4 +575,4 @@ class Discover extends Component {
     }
 }
 
-module.exports = Discover;
+module.exports = MemberList;

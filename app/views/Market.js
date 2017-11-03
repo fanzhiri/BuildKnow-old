@@ -24,8 +24,8 @@ const styles = StyleSheet.create({
         backgroundColor: '#9DD6EB',
     },
     imgCarousel:{
-        width:380,
-        height:200,
+
+        flex: 1,
         resizeMode:'cover',
     },
     title:{

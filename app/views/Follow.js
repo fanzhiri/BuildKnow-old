@@ -17,6 +17,7 @@ import GlobleStyles from '../styles/GlobleStyles';
 import DataStore from '../util/DataStore';
 
 import EmptyData from '../component/EmptyData';
+import LoadingData from '../component/LoadingData';
 
 const styles = StyleSheet.create({
     container: {
