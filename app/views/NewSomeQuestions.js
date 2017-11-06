@@ -6,6 +6,7 @@ import {View, Text, StyleSheet, TextInput,SegmentedControlIOS,Image,ScrollView,T
 import {Actions} from "react-native-router-flux";
 import Button from 'apsl-react-native-button'
 import GlobleStyles from '../styles/GlobleStyles';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
 const {width,height} = Dimensions.get('window');
 
@@ -142,51 +143,18 @@ class NewSomeQuestions extends Component {
             allcount:props.qstlist == null ?0:props.qstlist.length,
             questiondata:t_questiondata
         };
-        this.textInputView = null;
+
     }
 
-    _keyboardDidShow(e){
 
-        this.textInputView="2";
-        if(this.textInputView == null){
-            alert("fuck")
-            return;
-        }
-        this.needMove = false;
-        this.refs[0].measure((ox,oy,w,h,px,py)=>{
-            let leftHeight = height - py;
-            if( leftHeight < (e.startCoordinates.height +25)){
-                this.needMove = true;
-                let moveHeight = 25 +(e.startCoordinates.height - leftHeight);
-                alert(moveHeight)
-                if((this.moveH + height) > this.contentHeight ){
-                    this.moveH = this.contentHeight - height;
-                }
-                this.lastMoveH = this.moveH;
-                this.refs.scroll.scrollTo({y:this.moveH + moveHeight,x:0});
-            }
-        })
-    }
-
-    _keyboardDidHide(){
-        if(this.needMove){
-            this.refs.scroll.scrollTo({y:this.lastMoveH,x:0});
-        }
-        this.textInputView = null;
-    }
 
     componentWillMount(){
         if(Platform.OS === 'ios'){
-            this.subscriptions=[
-                Keyboard.addListener('keyboardDidShow',this._keyboardDidShow),
-                Keyboard.addListener('keyboardDidHide',this._keyboardDidHide),
-            ];
         }
     }
 
     componentWillUnmount(){
         if(Platform.OS === 'ios'){
-            this.subscriptions.forEach((sub)=>sub.remove());
         }
     }
 
@@ -604,11 +572,7 @@ class NewSomeQuestions extends Component {
                 {this.renderAttachmentView()}
                 {this.renderFillAnswerView()}
                 {this.renderQuestionTypeView()}
-                <View
-                    style={{height:320,backgroundColor:"#FF0000"}}
-                >
 
-                </View>
             </View>
         )
     }
@@ -744,20 +708,9 @@ class NewSomeQuestions extends Component {
         return (
             <View style={[GlobleStyles.withoutTitleContainer,styles.container]}>
                 {this.renderOneOrMultViewSelect()}
-                <ScrollView
-                    onContentSizeChange={(contentWidth,contentHeight)=>{
-                        this.contentHeight = parseInt(contentHeight);
-                    }}
-
-                    onMomentumScrollEnd={(e)=>{
-
-                        this.moveH = e.nativeEvent.contentOffset.y;
-
-                    }}
-                >
+                <KeyboardAwareScrollView extraScrollHeight={80}>
                     {this.renderOneOrMultView()}
-
-                </ScrollView>
+                </KeyboardAwareScrollView>
                 {this.renderNextstep()}
             </View>
         );

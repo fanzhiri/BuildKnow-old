@@ -18,7 +18,7 @@ import Button from 'apsl-react-native-button'
 import GlobleStyles from '../styles/GlobleStyles';
 import { GiftedChat } from 'react-native-gifted-chat';
 import Icon from 'react-native-vector-icons/Ionicons';
-
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import DataStore from '../util/DataStore';
 
 const styles = StyleSheet.create({
@@ -116,7 +116,7 @@ const styles = StyleSheet.create({
         marginLeft: 0,
         marginRight: 8,
     },scrlist:{
-
+        flex:1
     },cvscontainer:{
         justifyContent: 'flex-end',
         flex:1
@@ -497,44 +497,49 @@ class ChatList extends Component {
 
     renderIntroduceView(){
         return (
-            <View style={styles.cvscontainer}>
-                <ScrollView
+            <KeyboardAwareScrollView extraScrollHeight={20} >
+                <View style={{flex:1,justifyContent:"flex-end"}}>
 
-                    style={styles.scrlist}>
-                    <ListView
-                        ref="scrview"
-                        style={styles.list}
-                        dataSource={DataStore.cloneWithRows(this.state.messageslist)}
-                        renderRow={this._renderMsgItem}
-                        enableEmptySections = {true}
-                    />
-                </ScrollView>
-                <View style={styles.bottomInputViewContainer}>
-                    <TouchableOpacity onPress={()=>this.changeshowattach(this.state.showattach)} >
-                        <View style={styles.IconItem}>
-                            <Icon name={"md-add-circle"} size={32} color={"#11FF00"}/>
-                        </View>
-                    </TouchableOpacity>
-                    <TextInput
-                        style={styles.chatinput}
-                        onChangeText={(text) => this.setState({inputtextstring:text})}
-                        value={this.state.inputtextstring}
-                        placeholder={""}
-                        maxLength={60}
-                        multiline={true}
-                    />
+                    <ScrollView
 
-                    <TouchableOpacity onPress={()=> this.dofetch_sendmsg()} >
-                        <View style={{
-                            borderWidth:1,backgroundColor:"#00FF00",
-                            justifyContent:"center",alignItems:"center",
-                            borderRadius:4,paddingLeft:8,paddingRight:8,paddingTop:6,paddingBottom:6}}>
-                            <Text style={{fontSize:16}}>发送</Text>
-                        </View>
-                    </TouchableOpacity>
+                        style={styles.scrlist}>
+                        <ListView
+                            ref="scrview"
+                            style={styles.list}
+                            dataSource={DataStore.cloneWithRows(this.state.messageslist)}
+                            renderRow={this._renderMsgItem}
+                            enableEmptySections = {true}
+                        />
+                    </ScrollView>
+
+                    <View style={styles.bottomInputViewContainer}>
+                        <TouchableOpacity onPress={()=>this.changeshowattach(this.state.showattach)} >
+                            <View style={styles.IconItem}>
+                                <Icon name={"md-add-circle"} size={32} color={"#11FF00"}/>
+                            </View>
+                        </TouchableOpacity>
+                        <TextInput
+                            style={styles.chatinput}
+                            onChangeText={(text) => this.setState({inputtextstring:text})}
+                            value={this.state.inputtextstring}
+                            placeholder={""}
+                            maxLength={60}
+                            multiline={true}
+                        />
+
+                        <TouchableOpacity onPress={()=> this.dofetch_sendmsg()} >
+                            <View style={{
+                                borderWidth:1,backgroundColor:"#00FF00",
+                                justifyContent:"center",alignItems:"center",
+                                borderRadius:4,paddingLeft:8,paddingRight:8,paddingTop:6,paddingBottom:6}}>
+                                <Text style={{fontSize:16}}>发送</Text>
+                            </View>
+                        </TouchableOpacity>
+                    </View>
+                    {this.renderAttachView()}
+
                 </View>
-                {this.renderAttachView()}
-            </View>
+            </KeyboardAwareScrollView>
         )
     }
 }

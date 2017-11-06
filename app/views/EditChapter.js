@@ -9,7 +9,7 @@ import GlobleStyles from '../styles/GlobleStyles';
 import BookItem from '../component/BookItem';
 import DataStore from '../util/DataStore';
 import {storageSave,storeageGet} from '../util/NativeStore';
-
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import Icon from 'react-native-vector-icons/Ionicons';
 const styles = StyleSheet.create({
     container: {
@@ -488,8 +488,8 @@ class EditChapter extends Component {
         let nowChapterList = this.state.editing?this.state.chapterListShadow:this.state.chapterList;
 
         return (
-            <ScrollView
-                style={styles.scrlist}>
+            <KeyboardAwareScrollView
+                extraScrollHeight={10}>
                 <ListView
                     ref="scrview"
                     style={styles.list}
@@ -498,7 +498,7 @@ class EditChapter extends Component {
                     enableEmptySections = {true}
                 />
                 {this.renderAddView()}
-            </ScrollView>
+            </KeyboardAwareScrollView>
         )
     }
 
