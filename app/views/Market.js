@@ -2,7 +2,7 @@
  * Created by slako on 17/2/18.
  */
 import React, { Component } from 'react';
-import {View, Text, StyleSheet, ListView, ScrollView, Image,RefreshControl} from "react-native";
+import {View, Text, StyleSheet, ListView, ScrollView, Image,RefreshControl,TouchableOpacity} from "react-native";
 import {Actions} from "react-native-router-flux";
 import Button from "react-native-button";
 import Swiper from 'react-native-swiper';
@@ -10,6 +10,10 @@ import MarketListItem from '../component/MarketListItem';
 import Marketlistdata from '../testdata/Marketlist.json'
 import DataStore from '../util/DataStore';
 import GlobleStyles from '../styles/GlobleStyles';
+
+import EmptyData from '../component/EmptyData';
+import LoadingData from '../component/LoadingData';
+
 const styles = StyleSheet.create({
     container: {
 
@@ -37,9 +41,12 @@ const styles = StyleSheet.create({
     }
 });
 
-var doGetPublickBookPostUrl = "https://slako.applinzi.com/index.php?m=question&c=index&a=getbookstore";
+//var doGetPublickBookPostUrl = "https://slako.applinzi.com/index.php?m=question&c=index&a=getbookstore";
 
-//var doGetPublickBookPostUrl = "http://slako-buildqst.stor.sinaapp.com/platform/store/recommend/today.json";
+var doGetPublickBookPostUrl = "http://slako-buildqst.stor.sinaapp.com/platform/store/recommend/today.json";
+var httpsPicBaseUrl = "http://slako-buildqst.stor.sinaapp.com/";
+
+
 
 class Market extends Component {
 
@@ -48,134 +55,119 @@ class Market extends Component {
         super(props);
         const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
         this.state = {
-            newbookdataSource:null,
+            store_data_source:null,
             gorefreshing:false,
-            dataSource1: ds.cloneWithRows(Marketlistdata),
-            dataSource2: ds.cloneWithRows(Marketlistdata),
-            dataSource3: ds.cloneWithRows(Marketlistdata),
-            dataSource4: ds.cloneWithRows(Marketlistdata),
-            dataSource5: ds.cloneWithRows(Marketlistdata)
+            get_storedata:0
         };
-        this._renderRow = this.renderRow.bind(this);
-        //this._renderRow2 = this.renderRow2.bind(this);
+        this._renderStoreItem       = this.renderStoreItem.bind(this);
+        this._renderPrevHoriRow     = this.renderPrevHoriRow.bind(this);
     }
 
-    renderRow(rowData, sectionID, rowID) {
-        return (
-            <MarketListItem
-                rowID={rowID}  cover={rowData.cover} bookname={rowData.bookname} book={rowData}/>
-        );
-    }
+    renderImage(store_data_item){
+        let imageViews=[];
+        for(let i=0;i< store_data_item.sub_item.length;i++){
+            imageViews.push(
 
+                    <Image
+                        key={i}
+                        style={styles.imgCarousel}
+                        source={{uri:`${httpsPicBaseUrl}${store_data_item.sub_item[i].poster}`}}
 
+                    />
 
-    renderNewBookView(){
-        if(this.state.newbookdataSource == null){
-            this.fetchBookStorelist(1);
-
-        }else{
-            return(
-                <View>
-                    <Text style={styles.title} >最新审核</Text>
-                    <ListView
-                        enableEmptySections={true}
-                        horizontal={true}
-                        dataSource={DataStore.cloneWithRows(this.state.newbookdataSource)}
-                        showsHorizontalScrollIndicator={false}
-                        renderRow={this._renderRow} />
-                </View>
             );
         }
-
+        return imageViews;
     }
 
-    renderRankBookView(name){
-        if(this.state.newbookdataSource == null){
-            this.fetchBookStorelist(1);
+    renderPrevHoriRow(rowData, sectionID, rowID){
+        return(
+            <View>
+                <MarketListItem
+                    rowID={rowID}  cover={rowData.cover} bookname={rowData.name} book={rowData}/>
+            </View>
+        )
+    }
 
-        }else{
-            return(
-                <View>
-                    <Text style={styles.title} >{name}</Text>
-                    <ListView
-                        enableEmptySections={true}
-                        horizontal={true}
-                        dataSource={DataStore.cloneWithRows(this.state.newbookdataSource)}
-                        showsHorizontalScrollIndicator={false}
-                        renderRow={this._renderRow} />
-                </View>
-            );
+    renderStoreItem(rowData, sectionID, rowID){
+
+        switch (this.state.store_data_source[rowID].type){
+            case 0 :
+                return(
+                    <View>
+                        <Swiper height={200} loop={true} autoplay={true}>
+
+                                {this.renderImage(this.state.store_data_source[rowID])}
+
+                        </Swiper>
+                    </View>
+                )
+                break;
+            case 1 :
+                return(
+                    <View>
+                        <Text style={styles.title} >{this.state.store_data_source[rowID].name}</Text>
+                        <ListView
+                            enableEmptySections={true}
+                            horizontal={true}
+                            dataSource={DataStore.cloneWithRows(this.state.store_data_source[rowID].sub_item)}
+                            showsHorizontalScrollIndicator={false}
+                            renderRow={this._renderPrevHoriRow} />
+                    </View>
+                )
+                break;
+            case 2 :break;
         }
 
+
     }
 
-    fetchBookStorelist(type){
-        let formData = new FormData();
-        formData.append("auth",global.auth);
-        formData.append("userid",global.userid);
-        formData.append("type",type);
+
+    fetchtoday(){
+
         var opts = {
-            method:"POST",
-            body:formData
+            method:"GET",
         }
         fetch(doGetPublickBookPostUrl,opts)
             .then((response) => response.json())
             .then((responseData) => {
-                if(responseData.code == 100){
                     this.setState({
-                        newbookdataSource:responseData.data
+                        store_data_source:responseData,
+                        get_storedata:1
                     })
-                }else{
-
-                }
-
             })
             .catch((error) => {
                 alert(error)
             })
     }
-
     render(){
         return (
-            <View style={GlobleStyles.withoutTitleContainer}>
-                <ScrollView
-                    refreshControl={
-                        <RefreshControl
-                            refreshing={this.state.gorefreshing}
-                            onRefresh={() => this.fetchBookStorelist(1)}
-                        />
-                    }
-
-                >
-                <Swiper height={200} loop={true} autoplay={true}>
-                    <View style={styles.slide} >
-                        <Image source={require('../image/market/carousel/1.jpg')} style={styles.imgCarousel}></Image>
-
-                    </View>
-                    <View style={styles.slide}>
-                        <Image source={require('../image/market/carousel/2.jpg')} style={styles.imgCarousel}></Image>
-                    </View>
-                    <View style={styles.slide}>
-                        <Image source={require('../image/market/carousel/3.jpg')} style={styles.imgCarousel}></Image>
-                    </View>
-                </Swiper>
-
-                    {this.renderNewBookView()}
-
-
-                    {this.renderRankBookView("本周排行")}
-
-                    {this.renderRankBookView("本月排行")}
-                <Text style={styles.title} >年度排行</Text>
-
-                <Text style={styles.title} >收费排行</Text>
-
-                <Text style={styles.title} >热门推荐</Text>
-
-                    <Text style={styles.title} >兴趣推荐</Text>
-                </ScrollView>
+            <View style={[GlobleStyles.withoutTitleContainer,{marginBottom:48}]}>
+                {this.renderList()}
             </View>
-        );
+        )
+    }
+
+    renderList(){
+        if(this.state.store_data_source == null){
+            if(this.state.get_storedata == 0){
+                this.fetchtoday();
+                return(<LoadingData/>)
+            }else{
+                return(<EmptyData/>)
+            }
+        }else{
+            return(
+                    <ListView
+                        style={styles.list}
+                        dataSource={DataStore.cloneWithRows(this.state.store_data_source)}
+                        renderRow={this._renderStoreItem}
+                        enableEmptySections = {true}
+                    />
+                )
+
+        }
+
     }
 }
 

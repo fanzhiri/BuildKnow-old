@@ -528,7 +528,7 @@ class ComposeBook extends Component {
         var ask = (rowData.ask);
         var qId = (rowData.questionid);
         return (
-            <TouchableOpacity onPress={() => this.selectquestion(rowID)}>
+            <TouchableOpacity onPress={() => this.checkquestion(rowID)}>
                 <View  style={styles.questionitemcontainer}>
                     <Text style={styles.questionitem}>
                         {parseInt(rowID)+1} : {ask.substring(0,20)}

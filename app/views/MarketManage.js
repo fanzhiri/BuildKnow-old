@@ -343,7 +343,7 @@ class MarketManage extends Component {
         }
         return(
             <TextInput
-                style={{height:24,width:100,fontSize:14,borderColor:"#0000FF",borderWidth: 1,padding:2,marginLeft:4,backgroundColor:"#FFFFFF"}}
+                style={{height:24,width:80,fontSize:14,borderColor:"#0000FF",borderWidth: 1,padding:2,marginLeft:4,backgroundColor:"#FFFFFF"}}
                 onChangeText={(text) => this.nameChange(rowID,text)}
                 value={this.state.store_data_source[rowID].name}
                 placeholder={"名称填写"}
@@ -378,7 +378,7 @@ class MarketManage extends Component {
                     </View>
                     <View style={{flexDirection:"row",marginBottom:4}}>
                         <TextInput
-                            style={{height:24,width:32,fontSize:14,borderColor:"#0000FF",borderWidth: 1,padding:2,marginLeft:4,backgroundColor:"#FFFFFF"}}
+                            style={{height:24,width:24,fontSize:14,borderColor:"#0000FF",borderWidth: 1,padding:2,marginLeft:4,backgroundColor:"#FFFFFF"}}
                             onChangeText={(text) => this.sortNumChange(rowID,text)}
                             value={this.state.store_data_source[rowID].sortnum.toString()}
                             placeholder={""}
@@ -389,7 +389,7 @@ class MarketManage extends Component {
                             <SegmentedControlIOS
                                 values={["轮播","横列表","缩点"]}
                                 selectedIndex={rowData.type}
-                                style={{height:24,width:150,marginLeft:10}}
+                                style={{height:24,width:146,marginLeft:4}}
                                 onChange={(event)=>this._onStoreItemTypeChange(event,rowData, rowID)}
                             />
                         </View>

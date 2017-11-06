@@ -126,7 +126,7 @@ class PublishList extends Component {
         let formData = new FormData();
         formData.append("auth",global.auth);
         formData.append("userid",global.userid);
-        formData.append("adminid",global.adminid);
+
         formData.append("status",status);
         var opts = {
             method:"POST",

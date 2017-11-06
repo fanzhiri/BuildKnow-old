@@ -98,9 +98,9 @@ const styles = StyleSheet.create({
     }
 });
 
-var doPendingReleaseBooksUrl = "https://slako.applinzi.com/index.php?m=question&c=personal&a=getpendingreleasebook";
-var doReviewBookUrl = "https://slako.applinzi.com/index.php?m=question&c=personal&a=reviewbook";
-var doPassBookUrl = "https://slako.applinzi.com/index.php?m=question&c=personal&a=passbook";
+var doPendingReleaseBooksUrl = "https://slako.applinzi.com/index.php?m=question&c=admin&a=getpendingreleasebook";
+var doReviewBookUrl = "https://slako.applinzi.com/index.php?m=question&c=admin&a=reviewbook";
+var doPassBookUrl = "https://slako.applinzi.com/index.php?m=question&c=admin&a=passbook";
 var doRejectBooksUrl = "https://slako.applinzi.com/index.php?m=question&c=personal&a=rejectbook";
 
 

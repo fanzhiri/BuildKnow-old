@@ -53,7 +53,7 @@ class MarketListItem extends Component {
     render() {
         const {rowID, cover} = this.props;
         return (
-            <TouchableOpacity rowID={rowID}  onPress={()=>(Actions.bookcover({bookpublicid:this.props.book.reviewid}))} >
+            <TouchableOpacity rowID={rowID}  onPress={()=>(Actions.bookcover({bookpublicid:this.props.book.bookid}))} >
                 <View style={styles.mkitem}>
                     <Image style={[styles.image, this.props.imageStyle]} resizeMode="cover" source={{uri:`${httpsBaseUrl}${cover}`}} />
                     {this.renderBottomText()}
