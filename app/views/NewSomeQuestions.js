@@ -7,7 +7,7 @@ import {Actions} from "react-native-router-flux";
 import Button from 'apsl-react-native-button'
 import GlobleStyles from '../styles/GlobleStyles';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
-
+import ImagePicker from 'react-native-image-crop-picker';
 const {width,height} = Dimensions.get('window');
 
 const styles = StyleSheet.create({
@@ -141,9 +141,12 @@ class NewSomeQuestions extends Component {
             qstlist:props.qstlist,
             qidx:props.index,
             allcount:props.qstlist == null ?0:props.qstlist.length,
-            questiondata:t_questiondata
-        };
+            questiondata:t_questiondata,
 
+            img_size:0,
+            filename:null
+        };
+        this._onSelectImgPress = this.onSelectImgPress.bind(this)
     }
 
 
@@ -261,12 +264,35 @@ class NewSomeQuestions extends Component {
         );
     }
 
+    onSelectImgPress(){
+
+        ImagePicker.openPicker({
+            width: 160,
+            height: 160,
+            cropping: true
+        }).then(image => {
+
+            console.log(image.size);
+
+            let source = { uri: image.sourceURL , width: 80, height: 80 };
+
+            this.setState({
+                imgSource: source,
+                img_size:Math.ceil(image.size/1024),
+                filename:image.filename
+            });
+
+        });
+    }
+
     renderAttachmentView(){
-        if(this.state.intype !=0 ){
+        if(this.state.attachmentIndex !=0 ){
             return;
         }
         return(
-            <Image source={this.state.imgSource}  />
+            <TouchableOpacity  onPress={() => this._onSelectImgPress()}>
+                <Image source={this.state.imgSource}  />
+            </TouchableOpacity>
         );
     }
 
