@@ -82,7 +82,9 @@ var httpsBaseUrl = "https://slako.applinzi.com/";
 
 
 var doPassRegisterUrl = "https://slako.applinzi.com/index.php?m=question&c=admin&a=pass";
-var doRejectRegisterUrl = "https://slako.applinzi.com/index.php?m=member&c=member_verify&a=reject";
+//var doRejectRegisterUrl = "https://slako.applinzi.com/index.php?m=member&c=member_verify&a=reject";
+var doRejectRegisterUrl = "https://slako.applinzi.com/index.php?m=question&c=index&a=reject";
+
 
 class RegisterVerify extends Component {
 
@@ -213,6 +215,7 @@ class RegisterVerify extends Component {
             .then((responseData) => {
                 if(responseData.code == 100){
                     this._peoplelist();
+
                 }else{
                     alert(responseData.message)
                 }
@@ -230,7 +233,7 @@ class RegisterVerify extends Component {
                 <View style={styles.leftbuttonContainer2}>
                     <Button style={styles.passbutton} textStyle={{fontSize: 12}} onPress={() => this.fetchpass(verifyid) }>通过</Button>
 
-                    <Button style={styles.rejectbutton} textStyle={{fontSize: 12}} onPress={() => this.fetchpass(verifyid) }>拒绝</Button>
+                    <Button style={styles.rejectbutton} textStyle={{fontSize: 12}} onPress={() => this.fetchreject(verifyid) }>拒绝</Button>
                 </View>
 
             </View>
@@ -242,18 +245,19 @@ class RegisterVerify extends Component {
         if(rowData.status == 0){
             return(this.renderControlButton(rowData.userid));
         }else if(rowData.status == 1) {
-            return(this.renderStatus());
+            return(this.renderStatus("审核通过"));
+        }else if(rowData.status == 2) {
+            return(this.renderStatus("已经拒绝"));
         }
 
     }
 
-    renderStatus(){
+    renderStatus(tt){
         return(
             <View style={styles.leftbuttonContainer1}>
                 <View style={styles.leftbuttonContainer2}>
-
                         <Text>
-                            审核通过
+                            {tt}
                         </Text>
 
                 </View>

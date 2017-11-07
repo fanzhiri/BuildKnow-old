@@ -81,7 +81,7 @@ class ForgetPasswd extends Component {
 
                     <TouchableOpacity style={{margin:4,borderRadius:8,height:32,
                         backgroundColor:"#00FF00",justifyContent:"center",alignItems:"center"}} onPress={() => this.sendemail()} >
-                        <Text style={{fontSize: 18}}>已经发送修改到您的邮件</Text>
+                        <Text style={{fontSize: 18}}>发送修改到您的邮件</Text>
                     </TouchableOpacity>
                 </View>
 
