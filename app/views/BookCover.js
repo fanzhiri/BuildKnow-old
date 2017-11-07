@@ -107,6 +107,7 @@ var doGetDiscussUrl = "https://slako.applinzi.com/index.php?m=question&c=persona
 var doGetTestRankUrl = "https://slako.applinzi.com/index.php?m=question&c=personal&a=gettestrank";
 
 class BookCover extends Component {
+
     constructor(props) {
         super(props);
 
@@ -125,6 +126,13 @@ class BookCover extends Component {
         this._onChange = this._onChange.bind(this);
         this._renderDiscussItem = this.renderDiscussItem.bind(this);
         this._renderRankItem = this.renderRankItem.bind(this);
+    }
+
+    componentWillReceiveProps(nextProps){
+        if(nextProps.gorefresh == null){
+            return;
+        }
+        this.dofetch_discuss();
     }
 
     _onChange(event) {
@@ -543,6 +551,7 @@ class BookCover extends Component {
 
 BookCover.PropTypes = {
     bookpublicid: PropTypes.number,
+    gorefresh: PropTypes.number,
 };
 
 Array.prototype.contains = function (element) {

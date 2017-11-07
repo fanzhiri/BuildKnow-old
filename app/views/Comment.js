@@ -92,7 +92,7 @@ class Comment extends Component {
                     this.setState({
                         upload:0
                     });
-                    Actions.pop();
+                    Actions.pop({refresh:{gorefresh:1}});
                 }else{
                     this.setState({
                         netresult:responseData.code,

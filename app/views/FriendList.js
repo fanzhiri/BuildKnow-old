@@ -2,13 +2,15 @@
  * Created by slako on 17/2/18.
  */
 import React, { Component,PropTypes } from 'react';
-import {View, Text, StyleSheet, ListView, ScrollView,RefreshControl,TouchableOpacity,Image} from "react-native";
+import {View, Text, StyleSheet, ListView, ScrollView,RefreshControl,TouchableOpacity,Image,Alert} from "react-native";
 import {Actions} from "react-native-router-flux";
 import Button from "react-native-button";
 import Swiper from 'react-native-swiper'
 import GlobleStyles from '../styles/GlobleStyles';
 import FoldView from 'react-native-foldview';
 import Icon from 'react-native-vector-icons/Ionicons';
+import {PicBaseUrl} from '../util/Attributes';
+
 
 import DataStore from '../util/DataStore';
 
@@ -127,6 +129,49 @@ class FriendList extends Component {
                 if(responseData.code == 100){
 
                     Actions.pop();
+                }else{
+                    alert(responseData.data)
+                }
+
+            })
+            .catch((error) => {
+                alert(error)
+            })
+    }
+
+    fetch_sendCollect(rowData,whichtype){
+        let attachmentid,msg_type;
+        switch (whichtype){
+            //
+            case 2 :
+                //attachmentid = rowData.questionid;
+                //msg_type = whichtype;
+                break;
+            case 3 :
+                attachmentid = this.props.bookid;
+                msg_type = whichtype;
+                break;
+        }
+        let formData = new FormData();
+        formData.append("auth",global.auth);
+        formData.append("userid",global.userid);
+        formData.append("attachmentid",attachmentid);
+        formData.append("chattoid",rowData.userid);
+        formData.append("msg_type",msg_type);
+
+        var opts = {
+            method:"POST",
+            body:formData
+        }
+        fetch(sendMsgUrl,opts)
+            .then((response) => response.json())
+            .then((responseData) => {
+                if(responseData.code == 100){
+
+                    Actions.pop();
+                    Alert.alert('操作提示','分享成功',[
+                        {text:'留在会话',onPress:()=>Actions.chatlist({chattoid:rowData.userid})},{text:'返回'}
+                    ]);
                 }else{
                     alert(responseData.data)
                 }
@@ -259,10 +304,12 @@ class FriendList extends Component {
         }else{
             if(this.props.intype == 0){
                 this.changeselect(rowID);
+            }else if(this.props.intype == 1){
+                this.fetch_sendPeopleCard(rowData);
             }else if(this.props.intype == 2){
                 this.fetch_sendCollectQst(rowData)
-            }else{
-                this.fetch_sendPeopleCard(rowData);
+            }else if(this.props.intype == 3){
+                this.fetch_sendCollect(rowData,3);
             }
 
         }
@@ -274,7 +321,7 @@ class FriendList extends Component {
 
             <TouchableOpacity onPress={() => this.onPeopleClick(rowData, sectionID, rowID)}>
                 <View style={styles.peopleItem}>
-                    <Image source={{uri:`${httpsBaseUrl}${rowData.head}`}} style={styles.leftImgStyle}/>
+                    <Image source={{uri:`${PicBaseUrl}${rowData.head}`}} style={styles.leftImgStyle}/>
                     <View>
                         <Text style={styles.topTitleStyle}>
                             {rowData.nickname}

@@ -11,6 +11,7 @@ import DataStore from '../util/DataStore';
 import {storageSave,storeageGet} from '../util/NativeStore';
 import Swiper from 'react-native-swiper';
 import MarketListItem from '../component/MarketListItem';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
 const styles = StyleSheet.create({
     container: {
@@ -420,12 +421,15 @@ class MarketManage extends Component {
             return;
         }
         return(
+            <KeyboardAwareScrollView
+                extraScrollHeight={10}>
             <ListView
                 style={styles.list}
                 dataSource={DataStore.cloneWithRows(this.state.store_data_source)}
                 renderRow={this._renderStoreItem}
                 enableEmptySections = {true}
             />
+            </KeyboardAwareScrollView>
         )
     }
 

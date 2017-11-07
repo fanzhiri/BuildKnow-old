@@ -17,6 +17,9 @@ import {PicBaseUrl} from '../util/Attributes';
 
 import DataStore from '../util/DataStore';
 
+import EmptyData from '../component/EmptyData';
+import LoadingData from '../component/LoadingData';
+
 const styles = StyleSheet.create({
     container: {
         flex: 1,
@@ -236,12 +239,12 @@ class NotificationList extends Component {
                 return (this.renderIntroduceView())
             }else{
                 this.fetchnotificationlist();
-                return (this.renderLoading())
+                return (<LoadingData/>)
             }
 
         } else if (this.state.selectedIndex === 1) {
             return (
-                this.renderLoading()
+                <LoadingData/>
             )
         } else if (this.state.selectedIndex === 2) {
 
@@ -249,20 +252,10 @@ class NotificationList extends Component {
                 return (this.renderIAskView())
             }else{
                 this.fetchiaskfriendlist();
-                return (this.renderLoading())
+                return (<LoadingData/>)
             }
         }
     }
-
-    renderLoading(){
-        return (
-            <View style={styles.container}>
-                <Text>Loading...</Text>
-            </View>
-
-        )
-    }
-
 
 
     wearefriend(userid){
