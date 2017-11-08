@@ -2,7 +2,7 @@
  * Created by slako on 17/05/23.
  */
 import React, { Component } from 'react';
-import {View, Text, StyleSheet,Image,TouchableOpacity,TextInput,ScrollView} from "react-native";
+import {View, Text, StyleSheet,Image,TouchableOpacity,TextInput,ScrollView,Alert} from "react-native";
 import {Actions} from "react-native-router-flux";
 import Button from 'apsl-react-native-button'
 import GlobleStyles from '../styles/GlobleStyles';
@@ -94,6 +94,9 @@ class NewBook extends Component {
             uploading:0,
             bookcover8080_size:0,
             bookcover18080_size:0,
+            bookcover8080_filename:null,
+            poster_filename:null
+
         };
 
         this._onSelectCoverPress = this.onSelectCoverPress.bind(this)
@@ -138,15 +141,17 @@ class NewBook extends Component {
             uploading:1,
         });
         let formData = new FormData();
-        let file_8080 = {uri: this.state.coverSource8080, type: 'multipart/form-data', name: 'bookcover8080.jpg'};
-        let file_18080 = {uri: this.state.coverSource18080, type: 'multipart/form-data', name: 'bookcover18080.jpg'};
+        let imgfile=new Array(2);
+        imgfile[0] = {uri: this.state.coverSource8080, type: 'multipart/form-data', name:this.state.bookcover8080_filename};
+        imgfile[1] = {uri: this.state.coverSource18080, type: 'multipart/form-data', name:this.state.poster_filename};
+
         formData.append("auth",global.auth);
         formData.append("userid",global.userid);
         formData.append("bookname",this.state.name);
         formData.append("bookbrief",this.state.brief);
         formData.append("bookdescription",this.state.description);
-        formData.append("bookcover8080",file_8080);
-        formData.append("bookcover18080",file_18080);
+        formData.append("upload[]",imgfile[0]);
+        formData.append("upload[]",imgfile[1]);
         var opts = {
             method:"POST",
             headers:{
@@ -159,7 +164,10 @@ class NewBook extends Component {
             .then((responseData) => {
                 if(responseData.code == 100){
 
-                    Actions.pop();
+                    Actions.pop({refresh:{gorefresh:1}});
+                    Alert.alert('操作提示','新建成功',[
+                        {text:'去刚才创建题本',onPress:()=>Actions.composebook({bookid:responseData.data})},{text:'返回'}
+                    ]);
                 }else{
                     alert(global.auth);
                     alert(responseData.message)
@@ -187,13 +195,15 @@ class NewBook extends Component {
                 let source = { uri: image.sourceURL , width: 80, height: 80 };
                 this.setState({
                     coverSource8080: source,
-                    bookcover8080_size:Math.ceil(image.size/1024)
+                    bookcover8080_size:Math.ceil(image.size/1024),
+                    bookcover8080_filename:image.filename
                 });
             }else{
                 let source = { uri: image.sourceURL , width: 180, height: 80 };
                 this.setState({
                     coverSource18080: source,
-                    bookcover18080_size:Math.ceil(image.size/1024)
+                    bookcover18080_size:Math.ceil(image.size/1024),
+                    poster_filename:image.filename
                 });
             }
         });

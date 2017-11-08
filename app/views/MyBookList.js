@@ -9,7 +9,7 @@ import GlobleStyles from '../styles/GlobleStyles';
 import BookItem from '../component/BookItem';
 import DataStore from '../util/DataStore';
 import {storageSave,storeageGet} from '../util/NativeStore';
-
+import {PicBaseUrl} from '../util/Attributes';
 
 const styles = StyleSheet.create({
     container: {
@@ -74,6 +74,13 @@ class MyBookList extends Component {
         };
 
         this._renderBookItem = this.renderBookItem.bind(this)
+    }
+
+    componentWillReceiveProps(nextProps){
+        if(nextProps.gorefresh == null){
+            return;
+        }
+        this.dofetch_mybooks();
     }
 
     dofetch_mybooks(){
@@ -164,12 +171,19 @@ class MyBookList extends Component {
     }
 
     renderBookItem(rowData, sectionID, rowID){
-        var cover = rowData.cover;
+        let cover = rowData.cover;
+        let coverpath = null;
+        if(rowData.coveraid == 0){
+            coverpath = `${httpsBaseUrl}${cover}`;
+        }else{
+            coverpath = `${PicBaseUrl}${cover}`;
+        }
+
         return (
             <TouchableOpacity onPress={() => this.onItemPress(rowData)}>
                 <View style={styles.listItem}>
                     <Text style={styles.numText}>{parseInt(rowID)+1}</Text>
-                    <Image source={{uri:`${httpsBaseUrl}${cover}`}} style={styles.leftImgStyle}/>
+                    <Image source={{uri:coverpath}} style={styles.leftImgStyle}/>
                     <View>
                         <Text style={styles.topTitleStyle}>
                             {rowData.bookname}
@@ -229,6 +243,7 @@ MyBookList.PropTypes = {
     qstid:PropTypes.number,
     cvst_id: PropTypes.number,//发送给会话人时用
     chattoid:PropTypes.number,
+    gorefresh: PropTypes.number,
 };
 
 

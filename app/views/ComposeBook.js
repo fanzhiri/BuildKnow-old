@@ -28,7 +28,7 @@ import Dialog from "react-native-dialog";
 
 import Toast, {DURATION} from 'react-native-easy-toast'
 
-
+import {PicBaseUrl} from '../util/Attributes';
 
 const styles = StyleSheet.create({
     container: {
@@ -185,7 +185,7 @@ var doAcceptRecommendQuestionUrl = "https://slako.applinzi.com/index.php?m=quest
 
 var httpsBaseUrl = "https://slako.applinzi.com/";
 
-var httpsPicBaseUrl = "http://slako-buildqst.stor.sinaapp.com/";
+
 
 class ComposeBook extends Component {
     constructor(props) {
@@ -570,12 +570,19 @@ class ComposeBook extends Component {
     }
 
     renderBaseInfoView(){
+
+        let coverpath = null;
+        if(this.state.composebookdata.coveraid == 0){
+            coverpath = `${httpsBaseUrl}${this.state.composebookdata.cover}`;
+        }else{
+            coverpath = `${PicBaseUrl}${this.state.composebookdata.cover}`;
+        }
         return (
             //注意!!!下面不能改为View，否则第一次查询不能显示
             <ScrollView style={styles.infocontainer}>
                 <View style={styles.imgcontainer}>
-                    <Image source={{uri:`${httpsBaseUrl}${this.state.composebookdata.cover}`}} style={styles.leftImgStyle}/>
-                    <Image source={{uri:`${httpsPicBaseUrl}${this.state.composebookdata.poster}`}} style={styles.rightImgStyle}/>
+                    <Image source={{uri:coverpath}} style={styles.leftImgStyle}/>
+                    <Image source={{uri:`${PicBaseUrl}${this.state.composebookdata.poster}`}} style={styles.rightImgStyle}/>
 
                 </View>
                 <View style={styles.imgcontainer}>
