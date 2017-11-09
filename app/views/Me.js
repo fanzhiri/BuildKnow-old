@@ -126,6 +126,7 @@ class Me extends Component {
                         <MeItem icon={"md-wifi"}          text={"复习路线管理"} iconColor="#CD0000" onPress={() => Actions.reviewplan()} />
                         <MeItem icon={"md-notifications"} text={"通知"} iconColor="#1C86EE" onPress={() => Actions.notificationlist()} />
                         <MeItem icon={"md-people"}        text={"朋友"} iconColor="#EE9A00" onPress={() => Actions.friendlist({inmode:0})} />
+                        <MeItem icon={"md-school"}        text={"成就"} iconColor="#242424" onPress={() => Actions.achievementlist()} />
                         <MeItem icon={"md-settings"}      text={"设置"} iconColor="#ea66a6" onPress={() => Actions.setting()} />
                     </View>
                 </ScrollView>

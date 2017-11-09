@@ -541,11 +541,15 @@ class Discover extends Component {
 
     renderPeople(rowData,sectionID, rowID){
         var userId = (rowData.userid);
+        let head = rowData.head;
+        if(head == ''){
+            head="public/head/3.jpg";
+        }
         return (
 
             <TouchableOpacity onPress={() => Actions.homepage({userId:userId,title:rowData.nickname,peopledata:rowData})}>
                 <View style={styles.peopleItem}>
-                    <Image source={{uri:`${PicBaseUrl}${rowData.head}`}} style={styles.leftImgStyle}/>
+                    <Image source={{uri:`${PicBaseUrl}${head}`}} style={styles.leftImgStyle}/>
                     <View>
                         <View style={{flexDirection:"row", alignItems: 'center'}}>
                             <Text style={styles.topTitleStyle}>

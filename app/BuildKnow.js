@@ -108,6 +108,8 @@ import UploadPic from './views/UploadPic';
 import Donate from './views/Donate';
 import BookList from './views/BookList';
 import MemberList from './views/MemberList';
+import AchievementList from './views/AchievementList';
+import ChangePasswd from './views/ChangePasswd';
 
 
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -220,6 +222,8 @@ export default class BuildKnow extends Component {
                 <Scene key="donate"             title="捐助支持"        component={Donate} duration={0} />
                 <Scene key="booklist"           title="出书列表"        component={BookList} duration={0} />
                 <Scene key="memberlist"         title="用户列表"        component={MemberList} duration={0} />
+                <Scene key="achievementlist"    title="成就"        component={AchievementList} duration={0} />
+                <Scene key="changepasswd"       title="更改密码"        component={ChangePasswd} duration={0} />
             </Router>
         );
     }

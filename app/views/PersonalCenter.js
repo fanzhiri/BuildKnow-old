@@ -124,7 +124,7 @@ class PersonalCenter extends Component {
                     </View>
                     <View style={styles.list}>
 
-                        <SettingItem text={"密码更改"} onPress={() => Actions.about()}/>
+                        <SettingItem text={"密码更改"} onPress={() => Actions.changepasswd()}/>
 
                     </View>
                 </ScrollView>

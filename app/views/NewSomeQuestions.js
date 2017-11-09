@@ -97,7 +97,7 @@ var addvideouri ={uri:"https://slako.applinzi.com/statics/images/question/util/a
 
 var docommitpostUrl = "https://slako.applinzi.com/index.php?m=question&c=personal&a=addquestion";
 //var docommitpostUrl = "https://slako.applinzi.com/index.php?m=question&c=index&a=testquestion";
-
+var httpsPicBaseUrl = "http://slako-buildqst.stor.sinaapp.com/";
 
 
 class NewSomeQuestions extends Component {
@@ -267,8 +267,8 @@ class NewSomeQuestions extends Component {
     onSelectImgPress(){
 
         ImagePicker.openPicker({
-            width: 160,
-            height: 160,
+            width: 180,
+            height: 120,
             cropping: true
         }).then(image => {
 
@@ -286,14 +286,21 @@ class NewSomeQuestions extends Component {
     }
 
     renderAttachmentView(){
-        if(this.state.attachmentIndex !=0 ){
-            return;
+        if(this.props.intype == 0){
+            if(this.state.attachmentIndex !=0 ){
+                return;
+            }
+            return(
+                <TouchableOpacity  onPress={() => this._onSelectImgPress()}>
+                    <Image source={this.state.imgSource}  />
+                </TouchableOpacity>
+            );
+        }else{
+            return(<Image source={{uri:`${httpsPicBaseUrl}${this.state.questiondata.img}`}}/>)
         }
-        return(
-            <TouchableOpacity  onPress={() => this._onSelectImgPress()}>
-                <Image source={this.state.imgSource}  />
-            </TouchableOpacity>
-        );
+
+
+
     }
 
     renderAnswerTypeView(){
@@ -317,7 +324,7 @@ class NewSomeQuestions extends Component {
         }
 
         let formData = new FormData();
-        let file = {uri: this.state.imgSource, type: 'multipart/form-data', name: 'pic.jpg'};
+
         formData.append("auth",global.auth);
         formData.append("userid",global.userid);
         formData.append("bookid",this.props.bookid);
@@ -336,7 +343,8 @@ class NewSomeQuestions extends Component {
                 body:formData
             }
         }else{
-            formData.append("pic320240",file);
+            let file = {uri: this.state.imgSource, type: 'multipart/form-data', name: this.state.filename};
+            formData.append("upload",file);
             opts = {
                 method:"POST",
                 headers:{

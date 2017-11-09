@@ -113,6 +113,7 @@ class Admin extends Component {
                         <MeItem icon={"md-contacts"}    text={"注册审核"} iconColor="#D15FEE"  onPress={() => Actions.registerverify()} />
                         <MeItem icon={"md-baseball"}    text={"权限管理"} iconColor="#1E90FF"   />
                         <MeItem icon={"md-umbrella"}    text={"活动组织"} iconColor="#8B2500"   />
+                        <MeItem icon={"md-school"}      text={"成就编辑"} iconColor="#282828"   />
                         <MeItem icon={"md-filing"}      text={"意见建议"} iconColor="#76EE00"   />
                     </View>
                 </ScrollView>

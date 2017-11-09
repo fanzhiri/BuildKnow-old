@@ -1,5 +1,5 @@
 /**
- * Created by slako on 17/2/18.
+ * Created by slako on 1711/09.
  */
 import React, { Component,PropTypes } from 'react';
 import {View, Text, StyleSheet, ListView, Image,TouchableOpacity,RefreshControl} from "react-native";
@@ -10,7 +10,8 @@ import BookItem from '../component/BookItem';
 import DataStore from '../util/DataStore';
 import {storageSave,storeageGet} from '../util/NativeStore';
 import {PicBaseUrl} from '../util/Attributes';
-
+import EmptyData from '../component/EmptyData';
+import LoadingData from '../component/LoadingData';
 const styles = StyleSheet.create({
     container: {
         flex: 1,
@@ -30,7 +31,6 @@ const styles = StyleSheet.create({
         //主轴方向
         flexDirection:'row',
         alignItems: 'center',
-        marginRight:2
     },
     rightViewStyle:{
         //主轴对齐方式
@@ -58,23 +58,22 @@ const styles = StyleSheet.create({
     },
 });
 
-var doGetMyBooksUrl = "https://slako.applinzi.com/index.php?m=question&c=personal&a=getmybooks";
+var doGetAchieveUrl = "https://slako.applinzi.com/index.php?m=question&c=personal&a=getachieve";
 var httpsBaseUrl = "https://slako.applinzi.com/";
 
-var doCloneQstUrl = "https://slako.applinzi.com/index.php?m=question&c=personal&a=cloneqst";
-
-class MyBookList extends Component {
+class AchievementList extends Component {
 
     constructor(props) {
 
         super(props);
 
         this.state = {
-            books_data_source: null,
+            achieve_data_source: null,
+            get_achieve_data:0,
             gorefreshing:false,
         };
 
-        this._renderBookItem = this.renderBookItem.bind(this)
+        this._renderAchieveItem = this.renderAchieveItem.bind(this)
     }
 
     componentWillReceiveProps(nextProps){
@@ -84,22 +83,21 @@ class MyBookList extends Component {
         this.dofetch_mybooks();
     }
 
-    dofetch_mybooks(){
+    dofetch_myAchieve(){
 
         let formData = new FormData();
         formData.append("auth",global.auth);
-        formData.append("api","true");
         formData.append("userid",global.userid);
         var opts = {
             method:"POST",
             body:formData
         }
-        fetch(doGetMyBooksUrl,opts)
+        fetch(doGetAchieveUrl,opts)
             .then((response) => response.json())
             .then((responseData) => {
                 if(responseData.code == 100){
                     this.setState({
-                        books_data_source:responseData.data
+                        achieve_data_source:responseData.data
                     })
                 }else{
                     alert(responseData.message);
@@ -111,67 +109,26 @@ class MyBookList extends Component {
             })
     }
 
-    dofetch_CloneQst(bookid){
+    renderMyAchieveView(){
+        if(this.state.achieve_data_source == null){
+            if(this.state.get_achieve_data == 0){
+                this.dofetch_myAchieve();
+                return (<LoadingData/>)
+            }else{
+                return(<EmptyData/>)
+            }
 
-        let formData = new FormData();
-        formData.append("auth",global.auth);
-        formData.append("userid",global.userid);
-        formData.append("bookid",bookid);
-        formData.append("qstid",this.props.qstid);
-        var opts = {
-            method:"POST",
-            body:formData
-        }
-        fetch(doCloneQstUrl,opts)
-            .then((response) => response.json())
-            .then((responseData) => {
-                if(responseData.code == 100){
-                    Actions.pop();
-                }else{
-                    alert(responseData.message);
-                }
-
-            })
-            .catch((error) => {
-                alert(error)
-            })
-    }
-
-    renderMyBooksView(){
-        if(this.state.books_data_source ==null){
-            this.dofetch_mybooks();
-            return (this.renderLoading())
         }else{
-            return (this.renderMyBooks())
+            return (this.renderMyAchieve())
         }
     }
 
-    renderReviewing(status){
-
-        if(status == 1){
-            return(
-                <View >
-                    <Text style={styles.statusText}>等待审核中</Text>
-                </View>
-            )
-        }else{
-            return null;
-        }
-    }
 
     onItemPress(rowData){
-        if(this.props.inmode == 0){
-            Actions.composebook({bookid:rowData.question_book_id,title:rowData.bookname})
-        }else if(this.props.inmode == 1){
-            if(this.props.intype == 1){
-                this.dofetch_CloneQst(rowData.question_book_id);
-            }else{
-                Actions.pop();
-            }
-        }
+
     }
 
-    renderBookItem(rowData, sectionID, rowID){
+    renderAchieveItem(rowData, sectionID, rowID){
         let cover = rowData.cover;
         let coverpath = null;
         if(rowData.coveraid == 0){
@@ -183,37 +140,24 @@ class MyBookList extends Component {
         return (
             <TouchableOpacity onPress={() => this.onItemPress(rowData)}>
                 <View style={styles.listItem}>
-                    <Text style={styles.numText}>{parseInt(rowID)+1}</Text>
-                    <Image source={{uri:coverpath}} style={styles.leftImgStyle}/>
-                    <View style={{marginRight:6}}>
-                        <Text style={styles.topTitleStyle}>
-                            {rowData.bookname}
-                        </Text>
-                        {this.renderReviewing(rowData.status)}
-                        <Text >
-                            {rowData.bookbrief}
-                        </Text>
-                        <Text >
-                            题数:{rowData.q_count}  关注:{rowData.follow}  分享:{rowData.share}  评论:{10}
-                        </Text>
-                    </View>
+
                 </View>
             </TouchableOpacity>
         )
     }
 
-    renderMyBooks(){
+    renderMyAchieve(){
         return (
             <ListView
                 refreshControl={
                     <RefreshControl
                         refreshing={this.state.gorefreshing}
-                        onRefresh={() => this.dofetch_mybooks()}
+                        onRefresh={() => this.dofetch_myAchieve()}
                     />
                 }
                 style={styles.list}
-                dataSource={DataStore.cloneWithRows(this.state.books_data_source)}
-                renderRow={this._renderBookItem}
+                dataSource={DataStore.cloneWithRows(this.state.achieve_data_source)}
+                renderRow={this._renderAchieveItem}
                 enableEmptySections = {true}
             />
         )
@@ -222,8 +166,7 @@ class MyBookList extends Component {
     render(){
         return (
             <View style={GlobleStyles.withoutTitleContainer}>
-                {/*<Button onPress={() => Actions.newbook()}>添加题本</Button>*/}
-                {this.renderMyBooksView()}
+                {this.renderMyAchieveView()}
             </View>
         );
     }
@@ -238,7 +181,7 @@ class MyBookList extends Component {
     }
 }
 
-MyBookList.PropTypes = {
+AchievementList.PropTypes = {
     inmode: PropTypes.number.isRequired,//0查看，1选择
     intype: PropTypes.number,//1 克隆
     qstid:PropTypes.number,
@@ -248,4 +191,4 @@ MyBookList.PropTypes = {
 };
 
 
-module.exports = MyBookList;
+module.exports = AchievementList;

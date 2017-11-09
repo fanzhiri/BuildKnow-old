@@ -40,7 +40,8 @@ class Register extends Component {
 
         this.state = {
             registerresult:"ready",
-            code:0
+            code:0,
+            checkright:0
         };
         this._doregister = this.doregister.bind(this);
 
@@ -69,9 +70,9 @@ class Register extends Component {
                         {text:'好的'}
                     ]);
                 }else{
-                    this.setState({
-                        registerresult:responseData.message
-                    })
+                    Alert.alert('注册提示',responseData.message,[
+                        {text:'好的'}
+                    ]);
                 }
 
             })
@@ -82,6 +83,7 @@ class Register extends Component {
 
     render(){
 
+        let buttontext = '注册';
         return (
             <View style={GlobleStyles.withoutTitleContainer} >
                 <GiftedForm
@@ -172,7 +174,7 @@ class Register extends Component {
                     />
                     <GiftedForm.ErrorsWidget />
                     <GiftedForm.SubmitWidget
-                        title='注册'
+                        title={buttontext}
                         widgetStyles={{
                             submitButton: {
                                 backgroundColor: '#FF00dd',
