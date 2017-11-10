@@ -208,6 +208,13 @@ class ComposeBook extends Component {
         this._renderChapterBarRow = this.renderChapterBarRow.bind(this);
     }
 
+    componentWillReceiveProps(nextProps){
+        if(nextProps.gorefresh == null){
+            return;
+        }
+        this.dofetch_mybookquestion();
+    }
+
     do_operate_recommendquestion(what,qid){
 
         let formData = new FormData();
@@ -809,6 +816,7 @@ class ComposeBook extends Component {
 
 ComposeBook.PropTypes = {
     bookid: PropTypes.number,
+    gorefresh: PropTypes.number,
 };
 
 module.exports = ComposeBook;

@@ -25,8 +25,8 @@ const styles = StyleSheet.create({
     },
 });
 
-//var docommitpostUrl = "https://slako.applinzi.com/index.php?m=question&c=personal&a=headpic";
-var docommitpostUrl = "https://slako.applinzi.com/index.php?m=attachment&c=attachments&a=upload";
+
+var docommitpostUrl = "https://slako.applinzi.com/index.php?m=question&c=personal&a=headpic";
 var addimguri ={uri:"https://slako.applinzi.com/statics/images/question/util/addimg.jpg" , width: 200, height: 200};
 
 
@@ -81,40 +81,7 @@ class SetHeadPic extends Component {
     }
 
     onSelectImgPress(){
-        /*
-        var options = {
-            title: 'Select Img',
 
-            storageOptions: {
-                skipBackup: true,
-                path: 'images'
-            }
-        };
-
-        ImagePicker.showImagePicker(options, (response) => {
-            console.log('Response = ', response);
-
-            if (response.didCancel) {
-                console.log('User cancelled image picker');
-            }
-            else if (response.error) {
-                console.log('ImagePicker Error: ', response.error);
-            }
-            else if (response.customButton) {
-                console.log('User tapped custom button: ', response.customButton);
-            }
-            else {
-                let source = { uri: response.uri , width: 200, height: 200 };
-                //alert(response.uri);
-                // You can also display the image using data:
-                // let source = { uri: 'data:image/jpeg;base64,' + response.data };
-
-                this.setState({
-                    imgSource: source
-                });
-            }
-        });
-    */
         ImagePicker.openPicker({
             width: 80,
             height: 80,
@@ -123,7 +90,7 @@ class SetHeadPic extends Component {
 
             console.log(image.size);
 
-            let source = { uri: image.sourceURL , width: 80, height: 80 };
+            let source = { uri: image.path , width: 80, height: 80 };
 
             this.setState({
                 imgSource: source,

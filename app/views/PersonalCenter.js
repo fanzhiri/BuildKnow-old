@@ -44,7 +44,7 @@ class PersonalCenter extends Component {
 
         this._showAuth = this.showAuth.bind(this);
         this._savemyAuth = this.savemyAuth.bind(this);
-        this._onSelectImgPress = this.onSelectImgPress.bind(this)
+
     }
 
     showAuth(){
@@ -52,42 +52,6 @@ class PersonalCenter extends Component {
     }
 
     savemyAuth(){
-
-    }
-
-    onSelectImgPress(){
-        var options = {
-            title: 'Select Img',
-
-            storageOptions: {
-                skipBackup: true,
-                path: 'images'
-            }
-        };
-
-        ImagePicker.showImagePicker(options, (response) => {
-            console.log('Response = ', response);
-
-            if (response.didCancel) {
-                console.log('User cancelled image picker');
-            }
-            else if (response.error) {
-                console.log('ImagePicker Error: ', response.error);
-            }
-            else if (response.customButton) {
-                console.log('User tapped custom button: ', response.customButton);
-            }
-            else {
-                let source = { uri: response.uri , width: 100, height: 68 };
-                //alert(response.uri);
-                // You can also display the image using data:
-                // let source = { uri: 'data:image/jpeg;base64,' + response.data };
-
-                this.setState({
-                    imgSource: source
-                });
-            }
-        });
 
     }
 

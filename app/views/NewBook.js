@@ -192,14 +192,14 @@ class NewBook extends Component {
             //alert(image.sourceURL);
             console.log(image.size);
             if(what == 1 ){
-                let source = { uri: image.sourceURL , width: 80, height: 80 };
+                let source = { uri: image.path , width: 80, height: 80 };
                 this.setState({
                     coverSource8080: source,
                     bookcover8080_size:Math.ceil(image.size/1024),
                     bookcover8080_filename:image.filename
                 });
             }else{
-                let source = { uri: image.sourceURL , width: 180, height: 80 };
+                let source = { uri: image.path , width: 180, height: 80 };
                 this.setState({
                     coverSource18080: source,
                     bookcover18080_size:Math.ceil(image.size/1024),

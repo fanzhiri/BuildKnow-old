@@ -10,7 +10,7 @@ import ParallaxScrollView from 'react-native-parallax-scroll-view';
 import GlobleStyles from '../styles/GlobleStyles';
 import TestingItem from '../component/TestingItem';
 import DataStore from '../util/DataStore';
-
+import Icon from 'react-native-vector-icons/Ionicons';
 
 const window = Dimensions.get('window');
 const STICKY_HEADER_HEIGHT = 32;
@@ -100,7 +100,7 @@ var prbUrl = "https://slako.applinzi.com/index.php?m=question&c=index&a=personal
 var doGetHomePageBaseUrl = "https://slako.applinzi.com/api/1/homepage/";
 var doGetReleaseBooksUrl = "https://slako.applinzi.com/api/1/releasebooks/";
 var httpsBaseUrl = "https://slako.applinzi.com/";
-
+var httpsPicBaseUrl = "http://slako-buildqst.stor.sinaapp.com/";
 var doGetPersonBaseUrl = "https://slako.applinzi.com/api/1/person/";
 
 class HomePage extends Component {
@@ -283,6 +283,10 @@ class HomePage extends Component {
 
         }else{
 
+            let homepageimgpath='https://slako.applinzi.com/statics/images/question/personalhomepage/1.jpg';
+            if(this.state.peopledata.homepagepicaid != 0){
+                homepageimgpath=`${httpsPicBaseUrl}${this.state.peopledata.homepagepic}`;
+            }
             return (
                 <View style={GlobleStyles.withoutTitleContainer}>
                     <ParallaxScrollView
@@ -292,9 +296,10 @@ class HomePage extends Component {
                         renderForeground={() => (
                             <View>
                                 <View style={styles.topViewContainer}>
-                                    <Image style={styles.topImgView} source={{uri:'https://slako.applinzi.com/statics/images/question/personalhomepage/1.jpg', width: window.width, height: 200 }} >
+                                    <Image style={styles.topImgView} source={{uri:homepageimgpath, width: window.width, height: 200 }} >
                                         <Image source={{uri:`${httpsBaseUrl}${this.state.peopledata.head}`, width: 80, height: 80}} />
                                         <Text>昵称:{this.state.peopledata.nickname}</Text>
+                                        {this.renderVipIcon(this.state.peopledata.vip)}
                                         <Text>题本数:5</Text>
                                         <Text>粉丝:20  题本： 被收藏:60</Text>
 
@@ -488,6 +493,20 @@ class HomePage extends Component {
         )
     }
 
+    renderVipIcon(yes){
+        if(yes == 1){
+            return(
+                <View style={{flexDirection:"row", alignItems: 'center'}}>
+                    <View style={{marginLeft:4, justifyContent: 'center', alignItems: 'center', width: 18, height:18}}>
+                        <Icon name="md-ribbon" size={18} color="#FF0000"/>
+                    </View>
+                    <Text style={{fontSize:16}}>3</Text>
+                </View>
+
+            )
+        }
+    }
+
     renderBottomText(rowData) {
         var name =rowData.bookname;
         var bookbrief =rowData.bookbrief;
@@ -497,6 +516,7 @@ class HomePage extends Component {
             return (
                 <View style={styles.bottomTextContainer}>
                     <Text style={{fontSize: 20}}>{name}</Text>
+
                     <Text style={styles.bottomText}>简介：{bookbrief}</Text>
                     <Text style={styles.bottomText}>题数：{questionsnumber}     关注：{follow}</Text>
                 </View>

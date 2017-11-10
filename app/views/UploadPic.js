@@ -113,7 +113,7 @@ class UploadPic extends Component {
 
             console.log(image.size);
 
-            let source = { uri: image.sourceURL , width: this.state.pic_width, height: this.state.pic_height };
+            let source = { uri: image.path , width: this.state.pic_width, height: this.state.pic_height };
             this.setState({
                 imgSource: source,
                 img_size:Math.ceil(image.size/1024),

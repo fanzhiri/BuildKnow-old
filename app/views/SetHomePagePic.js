@@ -53,7 +53,7 @@ class SetHomePagePic extends Component {
 
         var opts =null;
 
-        formData.append("homepagepic",file);
+        formData.append("upload",file);
         opts = {
             method:"POST",
             headers:{
@@ -80,40 +80,7 @@ class SetHomePagePic extends Component {
     }
 
     onSelectImgPress(){
-        /*
-        var options = {
-            title: 'Select Img',
 
-            storageOptions: {
-                skipBackup: true,
-                path: 'images'
-            }
-        };
-
-        ImagePicker.showImagePicker(options, (response) => {
-            console.log('Response = ', response);
-
-            if (response.didCancel) {
-                console.log('User cancelled image picker');
-            }
-            else if (response.error) {
-                console.log('ImagePicker Error: ', response.error);
-            }
-            else if (response.customButton) {
-                console.log('User tapped custom button: ', response.customButton);
-            }
-            else {
-                let source = { uri: response.uri , width: 200, height: 200 };
-                //alert(response.uri);
-                // You can also display the image using data:
-                // let source = { uri: 'data:image/jpeg;base64,' + response.data };
-
-                this.setState({
-                    imgSource: source
-                });
-            }
-        });
-        */
         ImagePicker.openPicker({
             width: 300,
             height: 200,
@@ -122,7 +89,7 @@ class SetHomePagePic extends Component {
 
             console.log(image.size);
 
-            let source = { uri: image.sourceURL , width: 300, height: 200 };
+            let source = { uri: image.path , width: 300, height: 200 };
             this.setState({
                 imgSource: source,
                 img_size:Math.ceil(image.size/1024),
@@ -161,7 +128,7 @@ class SetHomePagePic extends Component {
                     }
 
                 </TouchableOpacity>
-
+                <Text>图片名字：{this.state.filename}k</Text>
                 <Text>图片大小：{this.state.img_size}k</Text>
                 <TouchableOpacity style={{margin:4,borderRadius:8,height:32,
                     backgroundColor:"#0FFBF0",justifyContent:"center",alignItems:"center"}} onPress={() => this.onPress()} >

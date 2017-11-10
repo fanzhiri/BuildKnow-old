@@ -274,7 +274,7 @@ class NewSomeQuestions extends Component {
 
             console.log(image.size);
 
-            let source = { uri: image.sourceURL , width: 80, height: 80 };
+            let source = { uri: image.path , width: 80, height: 80 };
 
             this.setState({
                 imgSource: source,
@@ -296,7 +296,8 @@ class NewSomeQuestions extends Component {
                 </TouchableOpacity>
             );
         }else{
-            return(<Image source={{uri:`${httpsPicBaseUrl}${this.state.questiondata.img}`}}/>)
+            //alert(`${httpsPicBaseUrl}${this.state.questiondata.img}`)
+            return(<Image style={{height:180,margin:8}} resizeMode="cover" source={{uri:`${httpsPicBaseUrl}${this.state.questiondata.img}`}}/>)
         }
 
 
@@ -358,8 +359,10 @@ class NewSomeQuestions extends Component {
             .then((response) => response.json())
             .then((responseData) => {
                 if(responseData.code == 100){
-
-                    //Actions.pop();
+                    Actions.refresh({onLeft:()=> Actions.pop({refresh:{gorefresh:1}})})
+                    Alert.alert('提交提示','提交成功',[
+                        {text:'好的'}
+                    ]);
                 }else{
                     //alert(global.auth);
                     alert(responseData.message)
