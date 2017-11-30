@@ -185,7 +185,7 @@ var doAcceptRecommendQuestionUrl = "https://slako.applinzi.com/index.php?m=quest
 
 var httpsBaseUrl = "https://slako.applinzi.com/";
 
-
+var doDeleteBookPostUrl = "https://slako.applinzi.com/index.php?m=question&c=personal&a=delbook";
 
 class ComposeBook extends Component {
     constructor(props) {
@@ -212,6 +212,7 @@ class ComposeBook extends Component {
         if(nextProps.gorefresh == null){
             return;
         }
+        this.dofetch_mycomposebook();
         this.dofetch_mybookquestion();
     }
 
@@ -368,7 +369,42 @@ class ComposeBook extends Component {
 
     }
 
-    deletebook(){
+    yesDelete(){
+        let formData = new FormData();
+        formData.append("auth",global.auth);
+        formData.append("bookid",this.props.bookid);
+        formData.append("userid",global.userid);
+        var opts = {
+            method:"POST",
+            body:formData
+        }
+        fetch(doDeleteBookPostUrl,opts)
+            .then((response) => response.json())
+            .then((responseData) => {
+                if(responseData.code == 100){
+                    Actions.pop({refresh:{gorefresh:1}});
+                }else{
+
+                }
+            })
+            .catch((error) => {
+                alert(error)
+            })
+    }
+
+    askDeleteAgain(){
+        Alert.alert('再给你一次机会','再问一次，真的要丢弃这本书吗?',[
+            {text:'是的',onPress:()=> this.yesDelete()},
+            {text:'不了'}
+        ]);
+    }
+
+    deleteBook(){
+
+        Alert.alert('慎重操作','真的要丢弃这本书吗?',[
+            {text:'是的',onPress:()=> this.askDeleteAgain()},
+            {text:'不了'}
+        ]);
 
     }
 
@@ -554,8 +590,18 @@ class ComposeBook extends Component {
 
     }
 
+    editbookcover(){
+        Actions.uploadpic({
+            uploadtype:2,//题本头像
+            bookid:this.props.bookid
+        });
+    }
+
     editbookposter(){
-        Actions.uploadpic({uploadtype:1,bookid:this.props.bookid});
+        Actions.uploadpic({
+            uploadtype:1,//题本海报
+            bookid:this.props.bookid
+        });
     }
 
     renderClassSelect(){
@@ -569,6 +615,22 @@ class ComposeBook extends Component {
                     <Text style={{color: "#FF0FF0", fontSize: 16}}>{this.state.composebookdata.classifyname}</Text>
                     <View style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-end'}}>
                         <Text style={{color: "#ccc"}}>更改</Text>
+                    </View>
+
+                </View>
+            </TouchableOpacity>
+        );
+    }
+
+    renderDelete(){
+        return(
+            <TouchableOpacity
+                onPress={() => this.deleteBook()}
+                activeOpacity={0.8}>
+                <View style={[styles.listItem,style={marginTop:10}]}>
+
+                    <View style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-end'}}>
+                        <Text style={{color: "#FF0000"}}>删除该题本</Text>
                     </View>
 
                 </View>
@@ -593,7 +655,7 @@ class ComposeBook extends Component {
 
                 </View>
                 <View style={styles.imgcontainer}>
-                    <TouchableOpacity  onPress={()=> this.editbookinfo()} >
+                    <TouchableOpacity  onPress={()=> this.editbookcover()} >
                         <Text style={styles.edittext} >(编辑 -> 图标)</Text>
                     </TouchableOpacity>
                     <TouchableOpacity  onPress={()=> this.editbookposter()} >
@@ -612,6 +674,7 @@ class ComposeBook extends Component {
                     <Text style={styles.infoedittext}>类型路径：{this.state.composebookdata.classifypath}</Text>
                 </View>
                 {this.renderClassSelect()}
+                {this.renderDelete()}
             </ScrollView>
             //注意!!!上面不能改为View，否则第一次查询不能显示
         )

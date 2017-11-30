@@ -2,12 +2,13 @@
  * Created by slako on 17/2/18.
  */
 import React, { Component } from 'react';
-import {View, Text, StyleSheet} from "react-native";
+import {View, Text, StyleSheet,AsyncStorage,TouchableOpacity} from "react-native";
 import {Actions} from "react-native-router-flux";
 import Button from "react-native-button";
 import GlobleStyles from '../styles/GlobleStyles';
 import {GiftedForm, GiftedFormManager} from "react-native-gifted-form";
-import {storageSave,storeageGet} from '../util/NativeStore';
+import g_storage from '../util/NativeStore';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 const styles = StyleSheet.create({
     container: {
@@ -28,8 +29,11 @@ class Login extends Component {
         super(props);
 
         this.state = {
+            username:'',
+            passwd:'',
             loginresult:"no",
-            code:0
+            code:0,
+            savenamepasswd:false
         };
         this._dologin = this.dologin.bind(this);
 
@@ -53,9 +57,26 @@ class Login extends Component {
                     code:responseData.code
                 })
                 if(responseData.code == 100){
-                    this.setState({
-                        loginresult:"ok"
-                    })
+
+                    if(this.state.savenamepasswd){
+                        g_storage.save({
+                            key: 'username',  // Note: Do not use underscore("_") in key!
+                            id: '1',	  // Note: Do not use underscore("_") in id!
+                            data: this.state.username,
+                        });
+                        g_storage.save({
+                            key: 'passwd',  // Note: Do not use underscore("_") in key!
+                            id: '2',	  // Note: Do not use underscore("_") in id!
+                            data: this.state.passwd,
+                        });
+                    }else{
+                        g_storage.remove({
+                            key: 'passwd',  // Note: Do not use underscore("_") in key!
+                            id: '2',	  // Note: Do not use underscore("_") in id!
+                        });
+                    }
+
+                    /*
                     if(responseData.data){
                         storageSave("auth", responseData.data.auth);
                         storageSave("userid", responseData.data.userid);
@@ -64,6 +85,7 @@ class Login extends Component {
                         storageSave("nickname", responseData.data.nickname);
                         storageSave("userhead", responseData.data.userhead);
                     }
+                    */
                     global.auth=responseData.data.auth;
                     global.userid=responseData.data.userid;
                     global.username=responseData.data.username;
@@ -94,7 +116,97 @@ class Login extends Component {
             })
     }
 
+    componentDidMount(){
 
+        g_storage.load({
+            key: 'username',
+            id: '1'
+        }).then(ret => {
+            // found data goes to then()
+            this.setState({
+                username:ret,
+            });
+        }).catch(err => {
+            // any exception including data not found
+            // goes to catch()
+
+            switch (err.name) {
+                case 'NotFoundError':
+                    // TODO;
+
+                    break;
+                case 'ExpiredError':
+                    // TODO
+                    break;
+            }
+
+            this.setState({
+                username:"",
+            });
+        });
+
+        g_storage.load({
+            key: 'passwd',
+            id: '2'
+        }).then(ret => {
+            // found data goes to then()
+            this.setState({
+                passwd:ret,
+            });
+        }).catch(err => {
+            // any exception including data not found
+            // goes to catch()
+
+            switch (err.name) {
+                case 'NotFoundError':
+                    // TODO;
+
+                    break;
+                case 'ExpiredError':
+                    // TODO
+                    break;
+            }
+
+            this.setState({
+                passwd:"",
+            });
+        });
+    }
+
+    onSaveChange(){
+        let savestate=this.state.savenamepasswd;
+        if(savestate == true){
+            savestate = false;
+        }else{
+            savestate = true ;
+        }
+        this.setState({
+            savenamepasswd:savestate,
+        });
+    }
+
+    renderSave(){
+        return(
+            <TouchableOpacity onPress={()=>this.onSaveChange()} >
+                <View style={{height:48,flexDirection:"row",alignItems:"center",paddingLeft:24}}>
+                    {this.renderSavebox()}
+                    <Text style={{marginLeft:12}}>记住密码</Text>
+                </View>
+            </TouchableOpacity>
+        )
+    }
+
+    renderSavebox(){
+        if(this.state.savenamepasswd == true){
+            return(
+                <Icon name={"md-checkbox-outline"}  size={22} color="#008B00"/>
+            )
+        }else {
+            return (
+                <Icon name={"md-expand"} size={22} color="#008B00"/>
+            )
+        }
+    }
 
     render(){
         return (
@@ -106,6 +218,8 @@ class Login extends Component {
                     clearOnClose={false}
 
                     defaults={{
+                        //username: this.state.username,
+                        //password: this.state.passwd,
                         username: 'fantexi',
                         password: 'fantexi',
                         //username: 'zi',
@@ -139,7 +253,7 @@ class Login extends Component {
                         name='username'
                         title='用户名'
 
-                        placeholder='fantexi'
+                        placeholder='用户名'
                         clearButtonMode='while-editing'
 
 
@@ -148,13 +262,14 @@ class Login extends Component {
                     <GiftedForm.TextInputWidget
                         name='password' // mandatory
                         title='密码'
-                        placeholder='fantexi'
+                        placeholder='密码'
                         clearButtonMode='while-editing'
                         secureTextEntry={true}
 
                     />
 
                     <GiftedForm.ErrorsWidget />
+
                     <GiftedForm.SubmitWidget
                         title='登陆'
                         widgetStyles={{
@@ -186,6 +301,7 @@ class Login extends Component {
 
                     <GiftedForm.HiddenWidget name='tos' value={true} />
                 </GiftedForm>
+                {this.renderSave()}
 
 
             </View>

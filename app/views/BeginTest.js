@@ -229,15 +229,23 @@ class BeginTest extends Component {
         let t_questiondataarr = JSON.parse(this.props.bookdata.qidtext);
         //let t_questiondataarr = this.state.bookquestion_data_source[this.state.modeselect_idx];
         let nowTestMode = this.state.testMode[this.state.modeselect_idx];
-        t_questiondataarr = t_questiondataarr.sort(function () {
-           return Math.random()>0.5;
-        });
-        t_questiondataarr = t_questiondataarr.slice(0,nowTestMode.qst_num);
+
+        let arrlength = t_questiondataarr.length;
+
+
+        //let t_questiondataarr_random = t_questiondataarr.sort(function () {
+        //   return Math.random()>0.5;
+        //});
+        //t_questiondataarr = t_questiondataarr_random.slice(0,nowTestMode.qst_num);
+        let ask_arr = new Array();
         let answer_arr = new Array();
         for(let i=0;i < nowTestMode.qst_num;i++){
+            let askindex = Math.floor(Math.random() * arrlength);
+            let t_questiondata = t_questiondataarr[askindex];
+            ask_arr.push(t_questiondataarr[askindex]);
+            t_questiondataarr.splice(askindex,1);
+            arrlength=arrlength -1;
             let rightindex = Math.floor(Math.random() * 4);
-
-            let t_questiondata = t_questiondataarr[i];
             let answerarr=JSON.parse(t_questiondata.wrong_answer);
             let rightanswer=t_questiondata.right_answer;
             answerarr.splice(rightindex,0,rightanswer);
@@ -247,7 +255,7 @@ class BeginTest extends Component {
         Actions.answerquestion({
             intype:2,
             bookdata:this.props.bookdata,
-            readyquestion_arr:t_questiondataarr,
+            readyquestion_arr:ask_arr,
             answer_arr:answer_arr,
             answermode:1});
     }

@@ -139,7 +139,7 @@ class ClassCatalogue extends Component {
                     this.setState({
                         addclass:false,
                         classtext:""
-                    })
+                    });
                     this.dofetch_cataloguedata(this.props.classifyid);
                 }else{
 
@@ -167,7 +167,7 @@ class ClassCatalogue extends Component {
             .then((response) => response.json())
             .then((responseData) => {
                 if(responseData.code == 100){
-                    Actions.pop({popNum:this.props.deep})
+                    Actions.pop({popNum:this.props.deep ,refresh:{gorefresh:1}});
 
                 }else{
 

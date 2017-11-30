@@ -150,7 +150,17 @@ class AnswerQuestion extends Component {
         }
         this.setState({
             uploadRecord:1//上传中
-        })
+        });
+        let qids_arr = JSON.parse(this.props.bookdata.qids);
+        let do_arr = new Array(this.state.answer_arr.length);
+        for(let i=0;i<this.state.answer_arr.length;i++){
+            for(let j=0;j<qids_arr.length;j++){
+                if(parseInt(qids_arr[j]) == parseInt(this.props.readyquestion_arr[i].questionid)){
+                    do_arr[i]=j;
+                }
+            }
+        }
+        //alert(JSON.stringify(do_arr));
         let formData = new FormData();
         formData.append("auth",global.auth);
         formData.append("userid",global.userid);
@@ -166,6 +176,7 @@ class AnswerQuestion extends Component {
         formData.append("qstasktext",JSON.stringify(this.props.readyquestion_arr));
         formData.append("qstanswertext",JSON.stringify(this.props.answer_arr));
         formData.append("answerchoose",JSON.stringify(this.state.choose));
+        formData.append("doqids",JSON.stringify(do_arr));
 
         var opts = {
             method:"POST",

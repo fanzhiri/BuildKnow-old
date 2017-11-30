@@ -359,7 +359,7 @@ class NewSomeQuestions extends Component {
             .then((response) => response.json())
             .then((responseData) => {
                 if(responseData.code == 100){
-                    Actions.refresh({onLeft:()=> Actions.pop({refresh:{gorefresh:1}})})
+                    Actions.refresh({onLeft:()=> Actions.pop({refresh:{gorefresh:1}})});
                     Alert.alert('提交提示','提交成功',[
                         {text:'好的'}
                     ]);

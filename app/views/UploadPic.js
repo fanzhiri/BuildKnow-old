@@ -166,7 +166,7 @@ class UploadPic extends Component {
     }
 }
 UploadPic.PropTypes = {
-    uploadtype: PropTypes.number,
+    uploadtype: PropTypes.number,//1、题本海报 2、题本头像
     bookid: PropTypes.number,//uploadtype == 1
     pic: PropTypes.number,
 

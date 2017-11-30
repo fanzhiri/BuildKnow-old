@@ -29,6 +29,9 @@ import GlobleStyles from '../styles/GlobleStyles';
 var doGetBookBaseUrl = "https://slako.applinzi.com/api/1/publicbook/";
 var httpsBaseUrl = "https://slako.applinzi.com/";
 
+
+var doGetCollectBookDataUrl = "https://slako.applinzi.com/index.php?m=question&c=personal&a=getcollectbookdata";
+
 const styles = StyleSheet.create({
     container: {
         flex: 1,
@@ -85,8 +88,41 @@ class PublicBook extends Component {
             readortest:0,//0看题 1测试
             bookdata:null,
             getdata:null,
+            collectbookdata:null,
         };
 
+    }
+
+    componentDidMount(){
+        this.dofetch_collectbookdata();
+    }
+
+    dofetch_collectbookdata(){
+        let formData = new FormData();
+        formData.append("auth",global.auth);
+        formData.append("userid",global.userid);
+        formData.append("bookid",this.props.bookid);
+
+        var opts = {
+            method:"POST",
+            body:formData
+        }
+        fetch(doGetCollectBookDataUrl,opts)
+            .then((response) => response.json())
+            .then((responseData) => {
+                if(responseData.code == 100){
+
+                    this.setState({
+                        collectbookdata:responseData.data,
+                    })
+                }else{
+
+                }
+
+            })
+            .catch((error) => {
+                alert(error)
+            })
     }
 
     doFetchBook(bookid){
@@ -240,27 +276,36 @@ class PublicBook extends Component {
         )
     }
 
+    renderDetialdata(){
+        if(this.state.collectbookdata == null ){
+            return;
+        }
+        return(
+            <View  style={styles.datacontainer}>
+                <ScrollView style={styles.dataitemcontainer}>
+                    <Text>熟练程度：</Text>
+                    <Text>做题数：</Text>
+                    <Text>未看题数：</Text>
+                    <Text>测试次数：{this.state.collectbookdata.testtime}</Text>
+                    <Text>最近均分：</Text>
+                    <Text>错题数：</Text>
+                </ScrollView>
+                <ScrollView style={styles.dataitemcontainer}>
+                    <Text>熟练程度：</Text>
+                    <Text>做题数：</Text>
+                    <Text>未看题数：</Text>
+                    <Text>测试次数：</Text>
+                    <Text>最近均分：</Text>
+                    <Text>错题数：</Text>
+                </ScrollView>
+            </View>
+        )
+    }
+
     renderbook(){
         return(
             <View >
-                <View  style={styles.datacontainer}>
-                    <ScrollView style={styles.dataitemcontainer}>
-                        <Text>熟练程度：</Text>
-                        <Text>做题数：</Text>
-                        <Text>未看题数：</Text>
-                        <Text>测试次数：</Text>
-                        <Text>最近均分：</Text>
-                        <Text>错题数：</Text>
-                    </ScrollView>
-                    <ScrollView style={styles.dataitemcontainer}>
-                        <Text>熟练程度：</Text>
-                        <Text>做题数：</Text>
-                        <Text>未看题数：</Text>
-                        <Text>测试次数：</Text>
-                        <Text>最近均分：</Text>
-                        <Text>错题数：</Text>
-                    </ScrollView>
-                </View>
+                {this.renderDetialdata()}
 
                 <View style={styles.segmentcontainer}>
                     <SegmentedControlIOS
@@ -280,7 +325,7 @@ class PublicBook extends Component {
                 {this.renderListItem("md-medkit",  "排行",   () => this.invote(2))}
 
                 {this.renderListItem("md-eye","熟练计划",   () => this.invote(22))}
-                {this.renderListItem("md-eye","前后版本",   () => this.invote(0))}
+                {this.renderListItem("md-eye","前后版本",   () => this.invote(3))}
                 {this.renderListItem("md-locate","在建地址",() => this.invote(21))}
 
             </View>

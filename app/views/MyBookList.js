@@ -51,6 +51,7 @@ const styles = StyleSheet.create({
         color: 'red',
     },
     numText: {
+        width:24,
         fontSize: 20,
         marginRight:10,
         justifyContent: 'center',

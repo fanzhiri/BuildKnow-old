@@ -242,13 +242,18 @@ class RegisterVerify extends Component {
     }
 
     renderItemRight(rowData){
-        if(rowData.status == 0){
-            return(this.renderControlButton(rowData.userid));
-        }else if(rowData.status == 1) {
-            return(this.renderStatus("审核通过"));
-        }else if(rowData.status == 2) {
-            return(this.renderStatus("已经拒绝"));
+        if(rowData.mailconfirm == 0) {
+            return(this.renderStatus("等待确认"));
+        }else if(rowData.mailconfirm == 1){
+            if(rowData.status == 0){
+                return(this.renderControlButton(rowData.userid));
+            }else if(rowData.status == 1) {
+                return(this.renderStatus("审核通过"));
+            }else if(rowData.status == 2) {
+                return(this.renderStatus("已经拒绝"));
+            }
         }
+
 
     }
 

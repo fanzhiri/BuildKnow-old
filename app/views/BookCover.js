@@ -294,7 +294,7 @@ class BookCover extends Component {
                         <View style={styles.obtainButton}><Text style={{fontSize:12}}>分享</Text></View>
                     </TouchableOpacity>
 
-                    <TouchableOpacity onPress={() => Actions.publicbook({bookid:this.state.bookdata.reviewid})}>
+                    <TouchableOpacity onPress={() => Actions.publicbook({bookid:this.state.bookdata.reviewid,title:this.state.bookdata.bookname})}>
                         <View style={styles.obtainButton} ><Text style={{fontSize:12}}>进入</Text></View>
                     </TouchableOpacity>
                 </View>
