@@ -11,7 +11,7 @@ import Storage from 'react-native-storage'
 const storage = new Storage({
     // maximum capacity, default 1000
     size: 1000,
-
+    storageBackend:AsyncStorage,
     // expire time, default 1 day(1000 * 3600 * 24 secs)
     defaultExpires: 1000 * 3600 * 24 * 30, //30 days
 
