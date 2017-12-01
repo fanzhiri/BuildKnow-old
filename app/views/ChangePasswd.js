@@ -32,6 +32,9 @@ const styles = StyleSheet.create({
     },
 });
 
+
+var doChangepwdUrl = "https://slako.applinzi.com/index.php?m=question&c=personal&a=changepwdinapp";
+
 class ChangePasswd extends Component {
 
     constructor(props) {
@@ -45,7 +48,35 @@ class ChangePasswd extends Component {
     }
 
     gochangepasswd(){
+        if(this.state.new_passwd == ''){
+            return;
+        }
+        if(this.state.new_passwd_2 == ''){
+            return;
+        }
+        let formData = new FormData();
+        formData.append("auth",global.auth);
+        formData.append("userid",global.userid);
+        formData.append("username",global.username);
+        formData.append("oldpassword",this.state.old_passwd);
+        formData.append("newpassword",this.state.new_passwd);
+        var opts = {
+            method:"POST",
+            body:formData
+        }
+        fetch(doChangepwdUrl,opts)
+            .then((response) => response.json())
+            .then((responseData) => {
+                if(responseData.code == 100){
+                    alert("ok");
+                }else{
+                    alert(responseData.message);
+                }
 
+            })
+            .catch((error) => {
+                alert(error)
+            })
     }
 
     render(){
