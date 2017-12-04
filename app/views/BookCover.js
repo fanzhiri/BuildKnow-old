@@ -223,7 +223,7 @@ class BookCover extends Component {
                         collectit:global.bookcollect.contains(this.state.bookdata.reviewid)
                     })
                 }else{
-                    alert(responseData.code)
+                    Alert.alert("提示",responseData.message);
                 }
 
             })
@@ -404,8 +404,8 @@ class BookCover extends Component {
                 <Text style={styles.textmargin}>作者 :slako</Text>
                 <Text style={styles.textmargin}>类别 :{this.state.bookdata.classifypath}</Text>
                 <Text style={styles.textmargin}>题目编号 :{this.state.bookdata.qids}</Text>
-                <Text style={styles.textmargin}>关注人数 :{this.state.bookdata.follow}</Text>
-                <Text style={styles.textmargin}>测试人数 :{this.state.bookdata.testtime}</Text>
+                <Text style={styles.textmargin}>收藏人数 :{this.state.bookdata.collectnum}</Text>
+                <Text style={styles.textmargin}>测试人数 :{this.state.bookdata.testpeople}</Text>
                 <Text style={styles.textmargin}>测试次数 :{this.state.bookdata.testtime}</Text>
             </View>
         )
@@ -561,6 +561,6 @@ Array.prototype.contains = function (element) {
         }
     }
     return false;
-}
+};
 
 module.exports = BookCover;

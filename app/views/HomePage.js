@@ -511,14 +511,14 @@ class HomePage extends Component {
         var name =rowData.bookname;
         var bookbrief =rowData.bookbrief;
         var questionsnumber =rowData.questioncount;
-        var follow =rowData.follow;
+        var collectnum =rowData.collectnum;
         if (name) {
             return (
                 <View style={styles.bottomTextContainer}>
                     <Text style={{fontSize: 20}}>{name}</Text>
 
                     <Text style={styles.bottomText}>简介：{bookbrief}</Text>
-                    <Text style={styles.bottomText}>题数：{questionsnumber}     关注：{follow}</Text>
+                    <Text style={styles.bottomText}>题数：{questionsnumber}     关注：{collectnum}</Text>
                 </View>
             );
         } else {

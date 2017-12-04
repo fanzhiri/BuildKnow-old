@@ -8,7 +8,7 @@ import {
     Text,
     StyleSheet,
     SegmentedControlIOS,
-    ListView,Image
+    ListView,Image,RefreshControl
 } from "react-native";
 import {Actions} from "react-native-router-flux";
 import Button from "apsl-react-native-button";
@@ -99,7 +99,7 @@ class RegisterVerify extends Component {
             get_reviewing:0,
             get_finish:0,
             selectedIndex:0,
-
+            gorefreshing:false
         };
         this._onChange = this.onChange.bind(this);
         this._peoplelist = this.peoplelist.bind(this);
@@ -299,6 +299,12 @@ class RegisterVerify extends Component {
     renderIntroduceView(){
         return (
             <ListView
+                refreshControl={
+                    <RefreshControl
+                        refreshing={this.state.gorefreshing}
+                        onRefresh={() => this.peoplelist()}
+                    />
+                }
                 style={styles.list}
                 dataSource={DataStore.cloneWithRows(this.state.people_list_data_source)}
                 renderRow={this._renderPeople}

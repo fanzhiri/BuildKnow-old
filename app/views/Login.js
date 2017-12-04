@@ -29,11 +29,14 @@ class Login extends Component {
         super(props);
 
         this.state = {
-            username:'',
-            passwd:'',
             loginresult:"no",
             code:0,
-            savenamepasswd:false
+            savenamepasswd:false,
+            form: {
+                username: '',
+                password:'',
+                tos: false,
+            }
         };
         this._dologin = this.dologin.bind(this);
 
@@ -60,32 +63,27 @@ class Login extends Component {
 
                     if(this.state.savenamepasswd){
                         g_storage.save({
-                            key: 'username',  // Note: Do not use underscore("_") in key!
-                            id: '1',	  // Note: Do not use underscore("_") in id!
-                            data: this.state.username,
+                            key: 'savenamepasswd',  // Note: Do not use underscore("_") in key!
+                            id: '0',	  // Note: Do not use underscore("_") in id!
+                            data: this.state.savenamepasswd == true ?1:0,
                         });
                         g_storage.save({
-                            key: 'passwd',  // Note: Do not use underscore("_") in key!
+                            key: 'username',  // Note: Do not use underscore("_") in key!
+                            id: '1',	  // Note: Do not use underscore("_") in id!
+                            data: this.state.form.username,
+                        });
+                        g_storage.save({
+                            key: 'password',  // Note: Do not use underscore("_") in key!
                             id: '2',	  // Note: Do not use underscore("_") in id!
-                            data: this.state.passwd,
+                            data: this.state.form.password,
                         });
                     }else{
                         g_storage.remove({
-                            key: 'passwd',  // Note: Do not use underscore("_") in key!
+                            key: 'password',  // Note: Do not use underscore("_") in key!
                             id: '2',	  // Note: Do not use underscore("_") in id!
                         });
                     }
 
-                    /*
-                    if(responseData.data){
-                        storageSave("auth", responseData.data.auth);
-                        storageSave("userid", responseData.data.userid);
-                        storageSave("username", responseData.data.username);
-                        storageSave("groupid", responseData.data.groupid);
-                        storageSave("nickname", responseData.data.nickname);
-                        storageSave("userhead", responseData.data.userhead);
-                    }
-                    */
                     global.auth=responseData.data.auth;
                     global.userid=responseData.data.userid;
                     global.username=responseData.data.username;
@@ -99,9 +97,10 @@ class Login extends Component {
                     global.friend=JSON.parse(responseData.data.friend);
                     global.bookcollect=JSON.parse(responseData.data.bookcollect);
                     global.qstcollect=JSON.parse(responseData.data.collectqst);
-
+                    global.collectbuildbook=JSON.parse(responseData.data.collectbuildbook);
                     //注意看上面！！
                     global.infonum=responseData.data.infonum;
+
                     Actions.main();
                 }else{
                     alert(responseData.code)
@@ -119,12 +118,12 @@ class Login extends Component {
     componentDidMount(){
 
         g_storage.load({
-            key: 'username',
-            id: '1'
+            key: 'savenamepasswd',
+            id: '0'
         }).then(ret => {
             // found data goes to then()
             this.setState({
-                username:ret,
+                savenamepasswd:(ret == 0)? false:true,
             });
         }).catch(err => {
             // any exception including data not found
@@ -141,17 +140,19 @@ class Login extends Component {
             }
 
             this.setState({
-                username:"",
+                savenamepasswd:false,
             });
         });
 
         g_storage.load({
-            key: 'passwd',
-            id: '2'
+            key: 'username',
+            id: '1'
         }).then(ret => {
             // found data goes to then()
+            let t_form = this.state.form;
+            t_form.username=ret;
             this.setState({
-                passwd:ret,
+                form:t_form,
             });
         }).catch(err => {
             // any exception including data not found
@@ -167,8 +168,41 @@ class Login extends Component {
                     break;
             }
 
+            let t_form = this.state.form;
+            t_form.username='';
             this.setState({
-                passwd:"",
+                form:t_form,
+            });
+        });
+
+        g_storage.load({
+            key: 'password',
+            id: '2'
+        }).then(ret => {
+            // found data goes to then()
+            let t_form = this.state.form;
+            t_form.password=ret;
+            this.setState({
+                form:t_form,
+            });
+        }).catch(err => {
+            // any exception including data not found
+            // goes to catch()
+
+            switch (err.name) {
+                case 'NotFoundError':
+                    // TODO;
+
+                    break;
+                case 'ExpiredError':
+                    // TODO
+                    break;
+            }
+
+            let t_form = this.state.form;
+            t_form.password='';
+            this.setState({
+                form:t_form,
             });
         });
     }
@@ -183,6 +217,23 @@ class Login extends Component {
         this.setState({
             savenamepasswd:savestate,
         });
+        g_storage.save({
+            key: 'savenamepasswd',  // Note: Do not use underscore("_") in key!
+            id: '0',	  // Note: Do not use underscore("_") in id!
+            data: savestate == true ?1:0,
+        });
+        if(savestate == true){
+            g_storage.save({
+                key: 'username',  // Note: Do not use underscore("_") in key!
+                id: '1',	  // Note: Do not use underscore("_") in id!
+                data: this.state.form.username,
+            });
+        }else{
+            g_storage.remove({
+                key: 'username',  // Note: Do not use underscore("_") in key!
+                id: '1',	  // Note: Do not use underscore("_") in id!
+            });
+        }
     }
 
     renderSave(){
@@ -208,6 +259,11 @@ class Login extends Component {
         }
     }
 
+    handleValueChange(values) {
+
+        this.setState({ form: values })
+    }
+
     render(){
         return (
             <View style={GlobleStyles.withoutTitleContainer}>
@@ -216,19 +272,19 @@ class Login extends Component {
                     keyboardShouldPersistTaps="always"
                     formName='loginForm'
                     clearOnClose={false}
-
+                    onValueChange={this.handleValueChange.bind(this)}
                     defaults={{
                         //username: this.state.username,
                         //password: this.state.passwd,
-                        username: 'fantexi',
-                        password: 'fantexi',
+                        username: '',
+                        password: '',
                         //username: 'zi',
                         //password: 'zzzzzz',
 
                     }}
                     validators={{
                         username: {
-                            title: 'Username',
+                            title: '用户名',
                             validate: [{
                                 validator: 'isLength',
                                 arguments: [2, 16],
@@ -240,7 +296,7 @@ class Login extends Component {
                             }]
                         },
                         password: {
-                            title: 'Password',
+                            title: '密码',
                             validate: [{
                                 validator: 'isLength',
                                 arguments: [6, 16],
@@ -255,7 +311,7 @@ class Login extends Component {
 
                         placeholder='用户名'
                         clearButtonMode='while-editing'
-
+                        value={this.state.form.username}
 
                     />
 
@@ -265,7 +321,7 @@ class Login extends Component {
                         placeholder='密码'
                         clearButtonMode='while-editing'
                         secureTextEntry={true}
-
+                        value={this.state.form.password}
                     />
 
                     <GiftedForm.ErrorsWidget />

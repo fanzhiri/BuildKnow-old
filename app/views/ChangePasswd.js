@@ -2,7 +2,7 @@
  * Created by slako on 17/11/09.
  */
 import React, { Component ,PropTypes} from 'react';
-import {View, Text, StyleSheet,TextInput,TouchableOpacity} from "react-native";
+import {View, Text, StyleSheet,TextInput,TouchableOpacity,Alert} from "react-native";
 import {Actions} from "react-native-router-flux";
 import Button from "react-native-button";
 import GlobleStyles from '../styles/GlobleStyles';
@@ -68,7 +68,10 @@ class ChangePasswd extends Component {
             .then((response) => response.json())
             .then((responseData) => {
                 if(responseData.code == 100){
-                    alert("ok");
+                    Alert.alert('提示','密码修改成功',[
+                        {text:'好的'}
+                    ]);
+                    Actions.pop();
                 }else{
                     alert(responseData.message);
                 }

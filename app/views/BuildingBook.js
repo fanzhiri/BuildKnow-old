@@ -40,6 +40,8 @@ var doGetRecommendQuestionUrl = "https://slako.applinzi.com/index.php?m=question
 var doGetDiscussUrl = "https://slako.applinzi.com/index.php?m=question&c=personal&a=getdiscuss";
 var doCloneUrl = "https://slako.applinzi.com/index.php?m=question&c=personal&a=clonebook";
 
+var buildingbookcollectchangeUrl = "https://slako.applinzi.com/index.php?m=question&c=personal&a=collectchange";
+
 const styles = StyleSheet.create({
     container: {
         flex: 1,
@@ -78,6 +80,14 @@ const styles = StyleSheet.create({
     textmargin:{
         marginTop:10,
     },
+    arrButton:{
+        justifyContent: 'center',
+        alignItems:'center',
+        borderRadius:6,
+        marginRight:8,
+        width:60,height:32,
+        backgroundColor: '#00FF7F',
+    },
     ButtonViewContainer:{
         flex:1,
         justifyContent: 'flex-end',
@@ -113,7 +123,7 @@ class BuildingBook extends Component {
             bookdata:null,
             bookCover:null,
             getdata:0,
-
+            collectit:false,
             questionlist_data_source:null,
             get_qslist_data:null,
             idea_recommend_data_source:null,
@@ -133,6 +143,7 @@ class BuildingBook extends Component {
         this._doFetchBook = this.doFetchBook.bind(this);
         this._renderQuestionItem = this.renderQuestionItem.bind(this);
         this._renderDiscussItem = this.renderDiscussItem.bind(this);
+        this._handleCollect = this.handleCollect.bind(this);
     }
 
 
@@ -158,6 +169,36 @@ class BuildingBook extends Component {
                     })
                 }else{
                     alert(responseData.message)
+                }
+
+            })
+            .catch((error) => {
+                alert(error)
+            })
+    }
+
+    docollect(collectitornot){
+        let formData = new FormData();
+        formData.append("auth",global.auth);
+        formData.append("userid",global.userid);
+        formData.append("collectid",this.props.bookid);
+        formData.append("collect",collectitornot);
+        formData.append("collect_type",4);
+        var opts = {
+            method:"POST",
+            body:formData
+        }
+        fetch(buildingbookcollectchangeUrl,opts)
+            .then((response) => response.json())
+            .then((responseData) => {
+                if(responseData.code == 100){
+                    global.collectbuildbook=JSON.parse(responseData.data);
+
+                    this.setState({
+                        collectit:global.collectbuildbook.contains(this.props.bookid)
+                    })
+                }else{
+                    Alert.alert("提示",responseData.message);
                 }
 
             })
@@ -291,6 +332,41 @@ class BuildingBook extends Component {
         Actions.begintest({intype:0,bookdata:this.state.bookdata});
     }
 
+    handleCollect() {
+        if(this.state.collectit == false){
+            this.docollect(1);
+        }
+    }
+
+    godropbook(){
+        Alert.alert('慎重操作','真的要丢弃这本书吗?',[
+            {text:'是的',onPress:()=> this.docollect(0)},
+            {text:'不了'}
+        ]);
+    }
+
+    rendercollectbutton(){
+
+        if(global.collectbuildbook.contains(this.props.bookid)){
+            return(
+
+                    <TouchableOpacity onPress={() => this.godropbook()}>
+                        <View style={styles.arrButton} ><Text style={{fontSize:12}}>丢弃</Text></View>
+                    </TouchableOpacity>
+
+            );
+        }else{
+            return(
+
+                    <TouchableOpacity onPress={() => this.docollect(1)}>
+                        <View style={styles.arrButton}><Text style={{fontSize:14}}>收藏</Text></View>
+                    </TouchableOpacity>
+
+            );
+        }
+
+    }
+
     renderBook(){
         return (
             <View style={GlobleStyles.withoutTitleContainer}>
@@ -300,14 +376,26 @@ class BuildingBook extends Component {
                         <Image style={styles.image} source={{uri:this.state.bookCover}}/>
                     </View>
                     <View style={styles.container2}>
-                        <Button style={styles.button} onPress={() => this._handleRandom()} >随机</Button>
-                        <Button style={styles.button} onPress={() => this._handleOrder()}>顺序</Button>
-                        <Button style={styles.button} onPress={() => this._handleSection()}>章节</Button>
+                        <TouchableOpacity onPress={() => this._handleRandom()}>
+                            <View style={styles.arrButton}><Text style={{fontSize:14}}>随机</Text></View>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={() => this._handleOrder()}>
+                            <View style={styles.arrButton}><Text style={{fontSize:14}}>顺序</Text></View>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={() => this._handleSection()}>
+                            <View style={styles.arrButton}><Text style={{fontSize:14}}>章节</Text></View>
+                        </TouchableOpacity>
+
                     </View>
                     <View style={styles.container2}>
-                        <Button style={styles.button} >错题</Button>
-                        <Button style={styles.button} >收藏</Button>
-                        <Button style={styles.button} onPress={() => this.handleBeginTest()} >测试</Button>
+                        <TouchableOpacity onPress={() => this._handleRandom()}>
+                            <View style={styles.arrButton}><Text style={{fontSize:14}}>错题</Text></View>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={() => this.handleBeginTest()}>
+                            <View style={styles.arrButton}><Text style={{fontSize:14}}>测试</Text></View>
+                        </TouchableOpacity>
+                        {this.rendercollectbutton()}
+
                     </View>
                 </View>
                 <View>
@@ -406,7 +494,7 @@ class BuildingBook extends Component {
                 <Text style={styles.textmargin}>题本简介 : {this.state.bookdata.bookbrief}</Text>
                 <Text style={styles.textmargin}>题本详情 : {this.state.bookdata.bookdescription}</Text>
                 <Text style={styles.textmargin}>题目编号 : {this.state.bookdata.qids}</Text>
-                <Text style={styles.textmargin}>关注人数 : {this.state.bookdata.follow}</Text>
+                <Text style={styles.textmargin}>收藏人数 : {this.state.bookdata.collectnum}</Text>
                 <View style={{flexDirection:"row",alignItems:"center",marginTop:10,height:24}}>
                     <Text style={{}}>克隆次数 : {this.state.bookdata.follow}</Text>
                     <View style={{flex:1,flexDirection:"row",justifyContent:"flex-end"}}>
@@ -625,6 +713,15 @@ class BuildingBook extends Component {
 
 BuildingBook.PropTypes = {
     bookid:PropTypes.number,
+};
+
+Array.prototype.contains = function (element) {
+    for (var i=0;i<this.length;i++){
+        if(this[i]==element){
+            return true;
+        }
+    }
+    return false;
 };
 
 module.exports = BuildingBook;

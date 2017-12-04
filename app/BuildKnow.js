@@ -110,6 +110,7 @@ import BookList from './views/BookList';
 import MemberList from './views/MemberList';
 import AchievementList from './views/AchievementList';
 import ChangePasswd from './views/ChangePasswd';
+import AnswerLibAdd from './views/AnswerLibAdd';
 
 
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -187,7 +188,7 @@ export default class BuildKnow extends Component {
                 <Scene key="friendverify"       title="朋友验证" component={FriendVerify} duration={0} />
                 <Scene key="complaint"          title="投诉" component={Complaint} duration={0} />
                 <Scene key="searchbook"         title="搜索" component={SearchBook} duration={0} />
-                <Scene key="answerlib"          title="答案库" component={AnswerLib} duration={0} />
+                <Scene key="answerlib"          title="答案库" component={AnswerLib} duration={0}  rightTitle={"添加"} onRight={() => Actions.answerlibadd()}/>
                 <Scene key="applyrelease"       title="申请发布" component={ApplyRelease} duration={0} />
                 <Scene key="admin"              title="管理事务" component={Admin} duration={0} />
                 <Scene key="releasereview"      title="审核发布" component={ReleaseReview} duration={0} />
@@ -224,6 +225,7 @@ export default class BuildKnow extends Component {
                 <Scene key="memberlist"         title="用户列表"        component={MemberList} duration={0} />
                 <Scene key="achievementlist"    title="成就"        component={AchievementList} duration={0} />
                 <Scene key="changepasswd"       title="更改密码"        component={ChangePasswd} duration={0} />
+                <Scene key="answerlibadd"       title="添加答案群" component={AnswerLibAdd} duration={0} />
             </Router>
         );
     }

@@ -95,7 +95,7 @@ class Register extends Component {
                         username: 'buildquestion',
                         password: 'buildquestion',
                         passwordagain:'buildquestion',
-                        emailAddress:'buildquestion@qq.com',
+                        emailaddress:'buildquestion@buildquestion.com',
                     }}
                     validators={{
                         username: {
@@ -130,10 +130,11 @@ class Register extends Component {
                             title: 'Email address',
                             validate: [{
                                 validator: 'isLength',
-                                arguments: [6, 255],
-
+                                arguments: [6, 60],
+                                message: '{TITLE} must be between {ARGS[0]} and {ARGS[1]} characters'
                             },{
                                 validator: 'isEmail',
+
                             }]
                         },
 
@@ -142,14 +143,14 @@ class Register extends Component {
                     <GiftedForm.TextInputWidget
                         name='username'
                         title='用户名'
-                        placeholder='fantexi'
+                        placeholder='用户名'
                         clearButtonMode='while-editing'
                     />
 
                     <GiftedForm.TextInputWidget
                         name='password' // mandatory
                         title='密码'
-                        placeholder='******'
+                        placeholder='密码'
                         clearButtonMode='while-editing'
                         secureTextEntry={true}
                     />
@@ -157,7 +158,7 @@ class Register extends Component {
                     <GiftedForm.TextInputWidget
                         name='passwordagain' // mandatory
                         title='密码确认'
-                        placeholder='******'
+                        placeholder='密码确认'
                         clearButtonMode='while-editing'
                         secureTextEntry={true}
                     />
@@ -165,7 +166,7 @@ class Register extends Component {
                     <GiftedForm.TextInputWidget
                         name='emailaddress' // mandatory
                         title='邮件地址'
-                        placeholder='example@qq.com'
+                        placeholder='邮件地址'
 
                         keyboardType='email-address'
 
@@ -193,15 +194,19 @@ class Register extends Component {
 
                                 //postSubmit('An error occurred, please try again');
                                 //postSubmit();
-                                if(values.password == values.passwordagain){
+                                if(values.password == ''){
+
+                                    //postSubmit(['密码不能为空']);
+                                }else if(values.password == values.passwordagain){
                                    this._doregister(values.username,values.password,values.emailaddress);
                                     postSubmit();
                                 }else{
-                                    postSubmit('go check passwordagain');
+                                    postSubmit(['两次密码不一致']);
                                 }
 
-                                //GiftedFormManager.reset('registerForm');
+
                             }
+                            //GiftedFormManager.reset('registerForm');
                         }}
 
                     />

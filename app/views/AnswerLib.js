@@ -1,8 +1,8 @@
 /**
  * Created by slako on 17/2/18.
  */
-import React, { Component } from 'react';
-import {View, Text, StyleSheet,TouchableOpacity,SegmentedControlIOS,ListView,RefreshControl} from "react-native";
+import React, { Component,PropTypes } from 'react';
+import {Alert,View, Text, StyleSheet,TouchableOpacity,SegmentedControlIOS,ListView,RefreshControl} from "react-native";
 import {Actions} from "react-native-router-flux";
 import GlobleStyles from '../styles/GlobleStyles';
 import DataStore from '../util/DataStore';
@@ -88,8 +88,21 @@ class AnswerLib extends Component {
             })
     }
 
+    confirmSelect(rowData){
+        Actions.pop({refresh:{selectlib:rowData}});
+    }
+
     onItemClickIt(rowData){
-        Actions.answerlibedit({answerlibdata:rowData});
+        if(this.props.intype == 1){
+            Alert.alert('答案群选定',rowData.name,[
+                {text:'是的',onPress:()=> this.confirmSelect(rowData)},
+                {text:'不了'}
+            ]);
+            return;
+        }else{
+            Actions.answerlibedit({answerlibdata:rowData});
+        }
+
     }
 
     renderItem(rowData){
@@ -180,5 +193,9 @@ class AnswerLib extends Component {
         )
     }
 }
+
+AnswerLib.PropTypes = {
+    intype:PropTypes.number,        //操作形态    0查看，1选择
+};
 
 module.exports = AnswerLib;

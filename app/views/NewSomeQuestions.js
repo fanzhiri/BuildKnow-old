@@ -161,6 +161,25 @@ class NewSomeQuestions extends Component {
         }
     }
 
+    componentWillReceiveProps(nextProps){
+        if(nextProps.selectlib == null){
+            return;
+        }
+        let  wrong_answer_lib = JSON.parse(nextProps.selectlib.answer);
+        let arrlength = wrong_answer_lib.length;
+        let t_answertext=this.state.answertext;
+        for(let i=1;i <8;i++){
+            let ansindex = Math.floor(Math.random() * arrlength);
+            let t_answer = wrong_answer_lib[ansindex];
+            t_answertext[i]=t_answer;
+            wrong_answer_lib.splice(ansindex,1);
+            arrlength=arrlength -1;
+        }
+        this.setState({
+            answertext:t_answertext,
+        });
+    }
+
     onSCChange(event) {
         this.setState({
             sgmctlselectedIndex: event.nativeEvent.selectedSegmentIndex,
@@ -383,6 +402,40 @@ class NewSomeQuestions extends Component {
 
     }
 
+    batchAddWrong(){
+        Actions.answerlib({intype:1});
+    }
+
+    batchdelWrong(){
+        let t_answertext=this.state.answertext;
+        for(let i=1;i<8;i++){
+            t_answertext[i]="";
+        }
+        this.setState({
+            answertext:t_answertext,
+        });
+    }
+
+    renderBatchAdd(){
+        if(this.state.fillorselect == 0){
+            return(
+                <View style={{flexDirection:'row',alignItems:'center',}}>
+                    <TouchableOpacity  onPress={() => this.batchAddWrong()} >
+                        <View style={{flexDirection:'row',flex:1,height:32,borderRadius:8,margin:4,backgroundColor:"#0FFBF0",alignItems:'center',justifyContent: 'center'}}>
+                            <Text style={styles.typetext}>批量添加错误答案</Text>
+                        </View>
+                    </TouchableOpacity>
+                    <TouchableOpacity  onPress={() => this.batchdelWrong()} >
+                        <View style={{height:32,borderRadius:8,margin:4,backgroundColor:"#FFBF00",alignItems:'center',justifyContent: 'center'}}>
+                            <Text style={styles.typetext}>删除答案</Text>
+                        </View>
+                    </TouchableOpacity>
+                </View>
+
+            )
+        }
+    }
+
     renderOneSelectView(which) {
         var enumString = null;
         var SegmentedControlValues=null;
@@ -405,9 +458,6 @@ class NewSomeQuestions extends Component {
             SegmentedControlValues=['答1', '答2', '答3', '答4', '答5', '答6', '答7', '答8'];
         }
 
-
-
-
         return (
             <View>
                 {this.renderselectright()}
@@ -425,6 +475,7 @@ class NewSomeQuestions extends Component {
                         />
                     </View>
                 </View>
+                {this.renderBatchAdd()}
                 {this.renderAnswerView()}
             </View>
         );
@@ -760,5 +811,6 @@ NewSomeQuestions.PropTypes = {
     qstlist: PropTypes.object,  //[查看]进入界面时 传进来的question list
     index:  PropTypes.number, //[查看]进入界面时 传进来的index
     bookid: PropTypes.number,
+    selectlib:PropTypes.object
 };
 module.exports = NewSomeQuestions;

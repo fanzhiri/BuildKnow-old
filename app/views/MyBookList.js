@@ -10,6 +10,7 @@ import BookItem from '../component/BookItem';
 import DataStore from '../util/DataStore';
 import {storageSave,storeageGet} from '../util/NativeStore';
 import {PicBaseUrl} from '../util/Attributes';
+import {checkerrorcode } from '../util/CheckNetError'
 
 const styles = StyleSheet.create({
     container: {
@@ -102,8 +103,9 @@ class MyBookList extends Component {
                     this.setState({
                         books_data_source:responseData.data
                     })
+
                 }else{
-                    alert(responseData.message);
+                    checkerrorcode(responseData);
                 }
 
             })
