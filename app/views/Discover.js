@@ -20,6 +20,9 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import DataStore from '../util/DataStore';
 
 import {PicBaseUrl} from '../util/Attributes';
+import EmptyData from '../component/EmptyData';
+import LoadingData from '../component/LoadingData';
+
 
 const styles = StyleSheet.create({
     container: {
@@ -54,6 +57,17 @@ const styles = StyleSheet.create({
     },
     bottomTitleStyle:{
         color:'blue'
+    },
+    listItem:{
+
+        padding:10,
+        backgroundColor:'white',
+        borderBottomWidth:1,
+        borderBottomColor:'#e8e8e8',
+        //主轴方向
+        flexDirection:'row',
+        alignItems: 'center',
+        marginRight:2
     },
     list:{
         marginBottom:48
@@ -91,6 +105,8 @@ var categoryUrl  = "https://slako.applinzi.com/index.php?m=question&c=index&a=ca
 
 var knowledgeQstUrl  = "https://slako.applinzi.com/index.php?m=question&c=index&a=knowledgequestion";
 
+let doGetOrganizesUrl = "https://slako.applinzi.com/index.php?m=question&c=organize&a=getallorgs";
+
 class Discover extends Component {
 
     constructor(props) {
@@ -112,7 +128,10 @@ class Discover extends Component {
             knowledgeqst_data_source:null,
             categorySelect:0,
             knowledgeItemData:null,
-            gorefreshing:false
+            gorefreshing:false,
+
+            org_list_data_source:null,
+            get_org_data:null,
         };
         this._onChange = this.onChange.bind(this);
         this._peoplelist = this.peoplelist.bind(this);
@@ -121,6 +140,7 @@ class Discover extends Component {
         this._renderknowledgeRow = this.renderknowledgeRow.bind(this);
         this._renderCatalogueBarRow = this.renderCatalogueBarRow.bind(this);
         this._renderQuestionItem = this.renderQuestionItem.bind(this);
+        this._renderOrgItem = this.renderOrgItem.bind(this);
     }
 
     peoplelist(){
@@ -142,6 +162,35 @@ class Discover extends Component {
                     this.setState({
                         netresult:responseData.code,
                         get_people_data:2
+                    })
+                }
+
+            })
+            .catch((error) => {
+                alert(error)
+            })
+    }
+
+    fetch_allorgs(){
+        let formData = new FormData();
+        formData.append("api","true");
+        formData.append("auth",global.auth);
+        var opts = {
+            method:"POST",
+            body:formData
+        };
+        fetch(doGetOrganizesUrl,opts)
+            .then((response) => response.json())
+            .then((responseData) => {
+                if(responseData.code == 100){
+                    //alert(responseData.data);
+                    this.setState({
+                        org_list_data_source:responseData.data,
+                        get_org_data:1
+                    })
+                }else{
+                    this.setState({
+                        get_org_data:2
                     })
                 }
 
@@ -248,7 +297,7 @@ class Discover extends Component {
             <View style={GlobleStyles.withoutTitleContainer}>
                 <View>
                     <SegmentedControlIOS
-                        values={['用户','知识','活动']}
+                        values={['用户','知识','活动','组织']}
                         selectedIndex={this.state.selectedIndex}
                         style={styles.segmented}
                         onChange={this._onChange}
@@ -404,6 +453,56 @@ class Discover extends Component {
             //活动专栏
             return (
                 this.renderEvent()
+            )
+        }else if (this.state.selectedIndex === 3) {
+            //企业
+            return (
+                this.renderOrgsView()
+            )
+        }
+    }
+
+    renderOrgItem(rowData, sectionID, rowID){
+
+        return (
+            <TouchableOpacity onPress={() => this.onItemPress(rowData)}>
+                <View style={styles.listItem}>
+                    <Text style={styles.numText}>{parseInt(rowID)+1}</Text>
+                    <View style={{marginRight:6}}>
+                        <Text style={styles.topTitleStyle}>
+                            {rowData.name}
+                        </Text>
+                        <Text >
+                            {rowData.brief}
+                        </Text>
+                    </View>
+                </View>
+            </TouchableOpacity>
+        )
+    }
+
+    renderOrgsView(){
+        if(this.state.org_list_data_source == null){
+            if(this.state.get_org_data == null){
+                this.fetch_allorgs();
+            }
+            return(
+                <EmptyData/>
+            )
+        }else{
+            return(
+                <ListView
+                    refreshControl={
+                    <RefreshControl
+                        refreshing={this.state.gorefreshing}
+                        onRefresh={() => this.fetch_allorgs()}
+                    />
+                }
+                    style={styles.list}
+                    dataSource={DataStore.cloneWithRows(this.state.org_list_data_source)}
+                    renderRow={this._renderOrgItem}
+                    enableEmptySections = {true}
+                />
             )
         }
     }

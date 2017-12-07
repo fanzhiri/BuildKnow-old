@@ -111,6 +111,7 @@ class Admin extends Component {
                         <MeItem icon={"md-bowtie"}      text={"推荐管理"} iconColor="#00EEEE"  onPress={() => Actions.marketmanage()} />
                         <MeItem icon={"md-film"}        text={"发布审核"} iconColor="#FF0000"  onPress={() => Actions.releasereview()} />
                         <MeItem icon={"md-contacts"}    text={"注册审核"} iconColor="#D15FEE"  onPress={() => Actions.registerverify()} />
+                        <MeItem icon={"md-boat"}        text={"企业进驻"} iconColor="#76EE00"  onPress={() => Actions.enterpriseenter()} />
                         <MeItem icon={"md-baseball"}    text={"权限管理"} iconColor="#1E90FF"   />
                         <MeItem icon={"md-umbrella"}    text={"活动组织"} iconColor="#8B2500"   />
                         <MeItem icon={"md-school"}      text={"成就编辑"} iconColor="#282828"   />

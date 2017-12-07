@@ -113,10 +113,10 @@ class Me extends Component {
                         {this.renderAdmin()}
                         <MeItem icon={"ios-medal"}  text={"我的主页"} iconColor="#c88400"
                                 onPress={() => Actions.homepage({userId:global.userid,peopledata:global.mydata})} />
-                        <MeItem icon={"md-build"}         text={"我的题本"} iconColor="#FF0000"  onPress={() => Actions.mybooklist({inmode:0})} />
-                        <MeItem icon={"md-color-palette"} text={"智商余额"} iconColor="#171717"  onPress={() => Actions.iqbalance()} />
-                        <MeItem icon={"md-flower"}        text={"文章推荐"} iconColor="#00BFFF"  onPress={() => Actions.myarticlelist({inmode:0})} />
-                        <MeItem icon={"md-cube"}          text={"答案库"} iconColor="#D15FEE"  onPress={() => Actions.answerlib()} />
+                        <MeItem icon={"md-build"}         text={"我的题本"}     iconColor="#FF0000"  onPress={() => Actions.mybooklist({inmode:0})} />
+                        <MeItem icon={"md-color-palette"} text={"智商余额"}     iconColor="#171717"  onPress={() => Actions.iqbalance()} />
+                        <MeItem icon={"md-flower"}        text={"文章推荐"}     iconColor="#00BFFF"  onPress={() => Actions.myarticlelist({inmode:0})} />
+                        <MeItem icon={"md-cube"}          text={"答案库"}       iconColor="#D15FEE"  onPress={() => Actions.answerlib()} />
                         <MeItem icon={"md-link"}          text={"分享管理"} onPress={() => Actions.sharemanager()} />
                         <MeItem icon={"md-heart"}         text={"我的收藏"} subText={"10篇"} iconColor="#32cd32" onPress={() => Actions.mycollectlist()} />
                         <MeItem icon={"md-sync"}          text={"更新"}  subText={"4本"} onPress={() => Actions.mybooklist()} />
@@ -127,6 +127,7 @@ class Me extends Component {
                         <MeItem icon={"md-notifications"} text={"通知"} iconColor="#1C86EE" onPress={() => Actions.notificationlist()} />
                         <MeItem icon={"md-people"}        text={"朋友"} iconColor="#EE9A00" onPress={() => Actions.friendlist({inmode:0})} />
                         <MeItem icon={"md-school"}        text={"成就"} iconColor="#242424" onPress={() => Actions.achievementlist()} />
+                        <MeItem icon={"md-rose"}          text={"更多"} iconColor="#7B68EE" onPress={() => Actions.moremore()} />
                         <MeItem icon={"md-settings"}      text={"设置"} iconColor="#ea66a6" onPress={() => Actions.setting()} />
                     </View>
                 </ScrollView>
