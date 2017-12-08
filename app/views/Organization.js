@@ -384,7 +384,7 @@ class Organization extends Component {
     renderAddJobButton(){
         if(this.state.organizationdata.adminid == global.userid){
             return(
-                <TouchableOpacity style={{height:24,borderRadius:6,justifyContent:"center",alignItems:"center",margin:8,backgroundColor:"#00FF00"}} onPress={()=> this.addjob()} >
+                <TouchableOpacity style={{height:24,borderRadius:6,justifyContent:"center",alignItems:"center",margin:8,backgroundColor:"#00FF00"}} onPress={()=> Actions.newjob({orgdata:this.state.organizationdata})} >
                     <Text style={styles.bottomButtonText} >添加职位</Text>
                 </TouchableOpacity>
             )

@@ -417,8 +417,8 @@ class ChatList extends Component {
     }
 
     renderMsgItem(rowData,sectionID, rowID){
-        var d = new Date();
-        d.setTime(rowData.message_time);
+        var d = new Date(rowData.message_time * 1000);
+        //d.setTime(rowData.message_time);
         var msglr = styles.msgleft ;
         if(rowData.send_from_userid == global.userid){
             msglr = styles.msgRight ;

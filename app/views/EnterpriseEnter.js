@@ -200,7 +200,7 @@ class EnterpriseEnter extends Component {
     }
 
     render(){
-        let buttontext = this.state.uploading ==0 ?"添加企业":"添加中";
+        let buttontext = this.state.uploading ==0 ?"添加组织":"添加中";
         return (
             <View style={[GlobleStyles.withoutTitleContainer,styles.container]}>
                 <ScrollView>

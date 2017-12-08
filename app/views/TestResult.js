@@ -88,8 +88,8 @@ class TestResult extends Component {
     }
 
     renderRecordItem(rowData,sectionID, rowID){
-        let time_o = new Date();
-        time_o.setMilliseconds(rowData.begintime);
+        let time_o = new Date(rowData.begintime * 1000);
+        //time_o.setMilliseconds(rowData.begintime);
         let time_t = time_o.toLocaleString();
         return(
             <View style={{

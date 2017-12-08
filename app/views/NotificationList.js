@@ -294,8 +294,8 @@ class NotificationList extends Component {
         var userId = (people.userid);
         var askId = (people.askid);
 
-        let time_o = new Date();
-        time_o.setMilliseconds(people.message_time);
+        let time_o = new Date(people.message_time * 1000);
+        //time_o.setMilliseconds(people.message_time);
         let time_t = time_o.toLocaleString();
         return (
 

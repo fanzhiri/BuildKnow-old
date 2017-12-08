@@ -117,9 +117,10 @@ import EnterpriseEnter from './views/EnterpriseEnter';
 import MoreMore from './views/MoreMore';
 import Organization from './views/Organization';
 
-import OrganizeList from './views/OrganizeList';
-
 //81
+import OrganizeList from './views/OrganizeList';
+import NewJob from './views/NewJob';
+
 import Icon from 'react-native-vector-icons/Ionicons';
 
 export default class BuildKnow extends Component {
@@ -150,7 +151,7 @@ export default class BuildKnow extends Component {
     componentDidMount() {
         // do stuff while splash screen is shown
         // After having done stuff (such as async tasks) hide the splash screen
-        this._timer=setInterval(()=>this.hidesplash(),2000);
+        this._timer=setInterval(()=>this.hidesplash(),1000);
         //SplashScreen.show();
 
     }
@@ -251,10 +252,11 @@ export default class BuildKnow extends Component {
                 <Scene key="achievementlist"    title="成就"        component={AchievementList} duration={0} />
                 <Scene key="changepasswd"       title="更改密码"        component={ChangePasswd} duration={0} />
                 <Scene key="answerlibadd"       title="添加答案群" component={AnswerLibAdd} duration={0} />
-                <Scene key="enterpriseenter"    title="企业进驻" component={EnterpriseEnter} duration={0} />
+                <Scene key="enterpriseenter"    title="组织进驻" component={EnterpriseEnter} duration={0} />
                 <Scene key="moremore"           title="更多"      component={MoreMore} duration={0} />
                 <Scene key="organization"       title="组织"      component={Organization} duration={0} />
                 <Scene key="organizelist"       title="组织列表"      component={OrganizeList} duration={0} rightTitle={"申添"} onRight={() => Actions.enterpriseenter()} />
+                <Scene key="newjob"             title="新建职位"      component={NewJob} duration={0} />
             </Router>
         );
     }

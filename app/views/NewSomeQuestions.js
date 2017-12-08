@@ -628,9 +628,10 @@ class NewSomeQuestions extends Component {
         if(this.state.intype == 0){
             return;
         }
-        let date = new Date();
-        let time = date.setMilliseconds(this.state.questiondata.inputtime);
-        let date_str = date.toLocaleString();
+
+        let time_o = new Date(this.state.questiondata.inputtime*1000);
+
+        let date_str = time_o.toUTCString();
         return(
             <View style={styles.typeContainer}>
                 <Text style={styles.typetext}>时间：{date_str}</Text>

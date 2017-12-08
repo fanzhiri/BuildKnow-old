@@ -25,6 +25,7 @@
     "react-native-image-picker": "^0.26.3",
     "react-native-keyboard-aware-scroll-view": "^0.4.1",
     "react-native-parallax-scroll-view": "^0.19.0",
+    "react-native-picker": "^4.3.1",
     "react-native-popup-menu": "^0.7.5",
     "react-native-router-flux": "^3.38.0",
     "react-native-simple-modal": "^5.1.1",

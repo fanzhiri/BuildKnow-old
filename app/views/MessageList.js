@@ -265,8 +265,8 @@ class MessageList extends Component {
 
 
     renderPeople(rowData, sectionID, rowID){
-        var dt = new Date();
-        dt.setTime(rowData.lastmsgtime);
+        var dt = new Date(rowData.lastmsgtime * 1000);
+        //dt.setTime(rowData.lastmsgtime);
         let cvstName=rowData.nickname;
         if(rowData.peoplenum >= 3){
             cvstName=rowData.name;

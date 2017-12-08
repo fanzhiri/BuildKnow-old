@@ -272,8 +272,8 @@ class RegisterVerify extends Component {
     }
 
     renderPeople(rowData,sectionID, rowID){
-        let time_o = new Date();
-        time_o.setMilliseconds(rowData.regdate);
+        let time_o = new Date(rowData.regdate * 1000);
+        //time_o.setMilliseconds(rowData.regdate);
         let time_t = time_o.toLocaleString();
         return (
 

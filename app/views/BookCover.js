@@ -388,8 +388,9 @@ class BookCover extends Component {
     }
 
     renderIntroduceView(){
-        let time_o = new Date();
-        time_o.setMilliseconds(this.state.bookdata.releasetime);
+        let time_o = new Date(this.state.bookdata.releasetime * 1000);
+        //time_o.setMilliseconds(this.state.bookdata.releasetime);
+        //time_o.setTime(this.state.bookdata.releasetime);
         let time_t = time_o.toLocaleString();
         return (
             <View>
@@ -412,8 +413,8 @@ class BookCover extends Component {
     }
 
     renderDiscussItem(rowData, sectionID, rowID){
-        let time_o = new Date();
-        time_o.setMilliseconds(rowData.create_at);
+        let time_o = new Date(rowData.create_at*1000);
+        //time_o.setMilliseconds(rowData.create_at);
         let time_t = time_o.toLocaleString();
         let iconColor = "#FF0000";
         return(
@@ -438,8 +439,9 @@ class BookCover extends Component {
     }
 
     renderRankItem(rowData,sectionID, rowID){
-        let time_o = new Date();
-        time_o.setMilliseconds(rowData.begintime);
+        let time_o = new Date(rowData.begintime * 1000);
+        //time_o.setMilliseconds(rowData.begintime);
+        //time_o.setTime(rowData.begintime);
         let time_t = time_o.toLocaleString();
         return(
             <View style={{

@@ -74,8 +74,8 @@ class Disscuss extends Component {
     }
 
     renderDiscussItem(rowData, sectionID, rowID){
-        let time_o = new Date();
-        time_o.setMilliseconds(rowData.create_at);
+        let time_o = new Date(rowData.create_at * 1000);
+        //time_o.setMilliseconds(rowData.create_at);
         let time_t = time_o.toLocaleString();
         let iconColor = "#FF0000";
         return(

@@ -81,7 +81,7 @@ class OrganizeList extends Component {
         if(nextProps.gorefresh == null){
             return;
         }
-        this.dofetch_mybooks();
+        this.dofetchOrganizes();
     }
 
     componentDidMount() {

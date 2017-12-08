@@ -299,8 +299,8 @@ class PublishList extends Component {
         var follow =rowData.follow;
         var bookstatus =rowData.status;
         var reviewid =rowData.reviewid;
-        let time_o = new Date();
-        time_o.setMilliseconds(rowData.applytime);
+        let time_o = new Date(rowData.applytime * 1000);
+        //time_o.setMilliseconds(rowData.applytime);
         let time_t = time_o.toLocaleString();
         return (
             <TouchableOpacity  onPress={()=>(Actions.reviewchecklist({reviewid}))} >
