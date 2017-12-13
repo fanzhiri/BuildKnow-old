@@ -54,7 +54,10 @@ const styles = StyleSheet.create({
     },
     list:{
         marginBottom:80
-    }
+    },
+    segmented:{
+        margin:4,
+    },
 });
 
 var peoplelistUrl = "https://slako.applinzi.com/index.php?m=question&c=index&a=peoplelist";

@@ -92,6 +92,9 @@ const styles = StyleSheet.create({
         borderBottomWidth:1,
         borderBottomColor:'#ab82ff',
     },
+    segmented:{
+        margin:4,
+    },
 });
 const {width, height} = Dimensions.get('window');
 
@@ -460,6 +463,10 @@ class Discover extends Component {
                 this.renderOrgsView()
             )
         }
+    }
+
+    onItemPress(rowData){
+        Actions.organization({title:rowData.name,orgid:rowData.id});
     }
 
     renderOrgItem(rowData, sectionID, rowID){

@@ -91,6 +91,15 @@ const styles = StyleSheet.create({
         width: 80,
         height: 80,
     },
+    jobItem:{
+        margin:8,
+        padding:6,
+        backgroundColor:'#EFBFF0',
+        borderWidth:1,
+        borderRadius:8
+        //主轴方向
+        //flexDirection:'row',
+    },
 });
 
 var homepagetUrl = "https://slako.applinzi.com/index.php?m=question&c=index&a=personalhp";
@@ -109,6 +118,12 @@ var doGetPersonBaseUrl = "https://slako.applinzi.com/api/1/person/";
 
 let organizationPagetUrl = "https://slako.applinzi.com/index.php?m=question&c=organize&a=orgpage";
 let organizationJobstUrl = "https://slako.applinzi.com/index.php?m=question&c=organize&a=orgjobs";
+
+let educationtext=['不限','大专','本科','研究生','博士','博士后'];
+
+let salarytext=['2000以下','2000 - 3000','3000 - 4500','4500 - 6000','6000 - 8000','8000 - 10000','10000 - 15000','15000 - 20000','20000 - 30000','30000 - 40000','40000 - 50000','50000 - 60000'];
+
+
 class Organization extends Component {
     constructor(props) {
         super(props);
@@ -127,7 +142,8 @@ class Organization extends Component {
     }
 
     componentDidMount() {
-        this.fetchOrganization()
+        this.fetchOrganization();
+        this.fetchJobs();
     }
 
     fetchOrganization(){
@@ -391,6 +407,16 @@ class Organization extends Component {
         }
     }
 
+    renderEditPicButton(){
+        if(this.state.organizationdata.adminid == global.userid){
+            return(
+                <TouchableOpacity style={{height:24,borderRadius:6,justifyContent:"center",alignItems:"center",margin:8,backgroundColor:"#00FF00"}} onPress={()=> Actions.newjob({orgdata:this.state.organizationdata})} >
+                    <Text style={styles.bottomButtonText} >编辑照片</Text>
+                </TouchableOpacity>
+            )
+        }
+    }
+
     renderSegmentedView() {
 
 
@@ -413,7 +439,9 @@ class Organization extends Component {
             )
         }else if (this.state.selectedIndex === 3) {
             return (
-                this.renderAboutView()
+                <View>
+                    {this.renderEditPicButton()}
+                </View>
             )
         }
 
@@ -423,10 +451,12 @@ class Organization extends Component {
     renderJobRow(rowData, sectionID, rowID) {
 
         return (
-            <View sytle={{height:80}}>
-                <Text>{rowData.name}</Text>
+            <View style={styles.jobItem}>
+                <Text style={{fontSize:18}}>{rowData.name}</Text>
                 <Text>{rowData.workplace}</Text>
-                <Text>{rowData.workyear}</Text>
+                <Text>{rowData.jobyearlow} - {rowData.jobyearhigh}</Text>
+                <Text>{educationtext[rowData.education]}</Text>
+                <Text>{salarytext[rowData.salary]}</Text>
             </View>
         );
 

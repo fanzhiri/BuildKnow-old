@@ -2,11 +2,11 @@
  * Created by slako on 17/12/08.
  */
 import React, { Component ,PropTypes} from 'react';
-import {View, Text, StyleSheet,Image,TouchableOpacity,TextInput,ScrollView,Alert} from "react-native";
+import {View, Text, StyleSheet,Image,TouchableOpacity,TextInput,ScrollView,Alert,ListView} from "react-native";
 import {Actions} from "react-native-router-flux";
 import Button from 'apsl-react-native-button'
 import GlobleStyles from '../styles/GlobleStyles';
-
+import DataStore from '../util/DataStore';
 import Picker from 'react-native-picker';
 import TcombForm from "tcomb-form-native";
 import ImagePicker from 'react-native-image-crop-picker';
@@ -26,7 +26,8 @@ const styles = StyleSheet.create({
         borderColor: 'gray',
         borderWidth: 1,
         paddingLeft:10,
-        paddingRight:10
+        paddingRight:10,
+        borderRadius:8,
     },
     briefinput:{
         fontSize:16,
@@ -35,7 +36,8 @@ const styles = StyleSheet.create({
         borderColor: 'gray',
         borderWidth: 1,
         paddingLeft:10,
-        paddingRight:10
+        paddingRight:10,
+        borderRadius:8
     },
     descriptioninput:{
         fontSize:16,
@@ -44,7 +46,8 @@ const styles = StyleSheet.create({
         borderColor: 'gray',
         borderWidth: 1,
         paddingLeft:10,
-        paddingRight:10
+        paddingRight:10,
+        borderRadius:8
     },
     imgcontainer:{
         flex:1,
@@ -73,18 +76,22 @@ const styles = StyleSheet.create({
     },
 });
 
-let doCommitNewJobPostUrl = "https://slako.applinzi.com/index.php?m=question&c=personal&a=addjob";
+let doCommitNewJobPostUrl = "https://slako.applinzi.com/index.php?m=question&c=organize&a=addjob";
 
 var doCommitPicPostUrl = "https://slako.applinzi.com/index.php?m=attachment&c=attachment&a=upload";
 
 let educationtext=['不限','大专','本科','研究生','博士','博士后'];
+
+let salarytext=['2000以下','2000 - 3000','3000 - 4500','4500 - 6000','6000 - 8000','8000 - 10000','10000 - 15000','15000 - 20000','20000 - 30000','30000 - 40000','40000 - 50000','50000 - 60000'];
+
+const MAX_BOOKITEM = 12 ;
 
 class NewJob extends Component {
 
     constructor() {
 
         super();
-        let addcoveruri ={uri:"https://slako.applinzi.com/statics/images/question/util/addcover.png", width: 80, height: 80 };
+        let t_book_item_list = new Array();
         this.state = {
             name:"",//职位名字
             jobyearlow:0,//工作年限低
@@ -95,12 +102,10 @@ class NewJob extends Component {
             extrapoint:'',//加分项
             offernum:0,//招聘人数
             education:0,//学历等级 0 不限 1大专 2本科 3研究生 4博士 5博士后
+            book_item_list : t_book_item_list,
+            select_jobbook_idx:0,//给跳转页面返回值用
+            salary:0,//0：2000以下 1：3000 2：4500 3：6000 4：8000 5：10000 6：15000 7：20000 8：30000 9：40000 10：50000 11：60000
 
-            coverSource8080: addcoveruri,
-            coverSource18080: addcoveruri,
-
-            bookcover8080_id:null,
-            bookcover18080_id:null,
             uploading:0,
             bookcover8080_size:0,
             bookcover18080_size:0,
@@ -109,7 +114,24 @@ class NewJob extends Component {
 
         };
 
-        this._onSelectCoverPress = this.onSelectCoverPress.bind(this)
+        this._onSelectCoverPress = this.onSelectCoverPress.bind(this);
+        this._renderJobBookItem = this.renderJobBookItem.bind(this);
+    }
+
+    componentWillReceiveProps(nextProps){
+        if(nextProps.bookdata == null){
+            return;
+        }
+        let t_book_item_list=this.state.book_item_list;
+
+        t_book_item_list[this.state.select_jobbook_idx].name = nextProps.bookdata.bookname;
+        t_book_item_list[this.state.select_jobbook_idx].bookid = nextProps.bookdata.reviewid;
+        t_book_item_list[this.state.select_jobbook_idx].cover = nextProps.bookdata.cover;
+        t_book_item_list[this.state.select_jobbook_idx].poster = nextProps.bookdata.poster;
+
+        this.setState({
+            book_item_list:t_book_item_list
+        })
     }
 
     docommit(){
@@ -123,13 +145,17 @@ class NewJob extends Component {
 
         formData.append("auth",global.auth);
         formData.append("userid",global.userid);
+        formData.append("orgid",this.props.orgdata.id);
         formData.append("name",this.state.name);
-        formData.append("jobyearlow",this.state.jobyearlow);
-        formData.append("jobyearhigh",this.state.jobyearhigh);
+        formData.append("jobyearlow",parseInt(this.state.jobyearlow));
+        formData.append("jobyearhigh",parseInt(this.state.jobyearhigh));
         formData.append("workplace",this.state.workplace);
         formData.append("duty",this.state.duty);
         formData.append("description",this.state.description);
-        formData.append("extrapoint",this.state.extrapoint);
+        formData.append("offernum",parseInt(this.state.offernum));
+        formData.append("education",parseInt(this.state.education));
+        formData.append("book_item_list",JSON.stringify(this.state.book_item_list));
+        formData.append("salary",parseInt(this.state.salary));
 
         var opts = {
             method:"POST",
@@ -152,7 +178,10 @@ class NewJob extends Component {
 
             })
             .catch((error) => {
-                alert(error)
+                alert(error);
+                this.setState({
+                    uploading:0,
+                });
             })
     }
 
@@ -186,9 +215,13 @@ class NewJob extends Component {
         });
     }
 
-    newbook(){
+    newjobcheck(){
         if(this.state.name ===""){
             alert("需填写岗位名字");
+            return;
+        }
+        if(this.state.workplace ===""){
+            alert("需填写工作地点");
             return;
         }
         if(this.state.duty ===""){
@@ -216,15 +249,15 @@ class NewJob extends Component {
             pickerTitleText: '选择最低年限',
             pickerConfirmBtnText:'确定',
             pickerCancelBtnText:'取消',
-            onPickerConfirm: pickedValue => {
-                if(this.state.jobyearhigh < this.state.jobyearlow){
+            onPickerConfirm: (pickedValue,pickedIndex ) => {
+                if(this.state.jobyearhigh < parseInt(pickedIndex)){
                     this.setState({
-                        jobyearhigh:pickedValue,
-                        jobyearlow:pickedValue,
+                        jobyearhigh:parseInt(pickedIndex),
+                        jobyearlow:parseInt(pickedIndex),
                     })
                 }else{
                     this.setState({
-                        jobyearlow:pickedValue,
+                        jobyearlow:parseInt(pickedIndex),
                     })
                 }
 
@@ -252,9 +285,10 @@ class NewJob extends Component {
             pickerTitleText: '选择最高年限',
             pickerConfirmBtnText:'确定',
             pickerCancelBtnText:'取消',
-            onPickerConfirm: pickedValue => {
+            onPickerConfirm: (pickedValue,pickedIndex) => {
+                //alert(pickedValue);
                 this.setState({
-                    jobyearhigh:pickedValue,
+                    jobyearhigh:parseInt(pickedValue),
                 })
             },
             onPickerCancel: pickedValue => {
@@ -280,9 +314,9 @@ class NewJob extends Component {
             pickerTitleText: '选择招聘人数',
             pickerConfirmBtnText:'确定',
             pickerCancelBtnText:'取消',
-            onPickerConfirm: pickedValue => {
+            onPickerConfirm: (pickedValue,pickedIndex )=> {
                 this.setState({
-                    offernum:pickedValue,
+                    offernum:parseInt(pickedValue),
                 })
             },
             onPickerCancel: pickedValue => {
@@ -297,14 +331,15 @@ class NewJob extends Component {
 
     changeeducation(){
 
-        let selectedValue = educationtext[this.state.offernum];
+        let selectedValue = [educationtext[this.state.education]];
+        //let selectedValue = 2;
         Picker.init({
             pickerData:educationtext,
             selectedValue:selectedValue,
             pickerTitleText: '选择学历等级',
             pickerConfirmBtnText:'确定',
             pickerCancelBtnText:'取消',
-            onPickerConfirm: pickedIndex => {
+            onPickerConfirm: (pickedValue,pickedIndex )=> {
                 this.setState({
                     education:pickedIndex,
                 })
@@ -317,6 +352,169 @@ class NewJob extends Component {
             }
         });
         Picker.show();
+    }
+
+    changesalary(){
+
+        let selectedValue = [salarytext[this.state.salary]];
+        //let selectedValue = 2;
+        Picker.init({
+            pickerData:salarytext,
+            selectedValue:selectedValue,
+            pickerTitleText: '选择薪酬范围',
+            pickerConfirmBtnText:'确定',
+            pickerCancelBtnText:'取消',
+            onPickerConfirm: (pickedValue,pickedIndex )=> {
+                this.setState({
+                    salary:pickedIndex,
+                })
+            },
+            onPickerCancel: pickedValue => {
+
+            },
+            onPickerSelect: pickedValue => {
+
+            }
+        });
+        Picker.show();
+    }
+
+    addSubItemButton(rowData, rowID){
+        if(rowData.bookid != 0){
+            Actions.bookcover({bookpublicid:rowData.bookid})
+            return;
+        }
+        this.setState({
+            select_jobbook_idx:rowID
+        });
+
+        Actions.mycollectlist({intype:1,processprop:1,inmode:1});
+    }
+
+    change_subitem(rowData, rowID){
+
+        this.setState({
+            select_jobbook_idx:rowID
+        });
+
+        Actions.mycollectlist({intype:1,processprop:1,inmode:1});
+    }
+
+    del_subitem(rowID){
+
+        let t_book_item_list=this.state.book_item_list;
+
+        t_book_item_list.splice(rowID,1);
+
+        this.setState({
+            book_item_list:t_book_item_list
+        })
+    }
+
+    proficientChange(rowID,text){
+        let t_book_item_list=this.state.book_item_list;
+        t_book_item_list[rowID].proficient = text;
+        this.setState({
+            book_item_list:t_book_item_list
+        });
+
+    }
+
+    renderAddDellBtn(rowData, rowID){
+        if(rowData.name == "点击添加"){
+            return;
+        }
+        return(
+            <View style={{flexDirection:"row",height:24,width:200,alignItems:"center"}}>
+                <TextInput
+                    style={{height:24,width:80,fontSize:14,borderColor:"#0000FF",borderWidth: 1,padding:2,marginLeft:4,backgroundColor:"#FFFFFF",borderRadius:6}}
+                    onChangeText={(text) => this.proficientChange(rowID,text)}
+                    value={rowData.proficient}
+                    placeholder={"熟练度"}
+                    maxLength={10}
+                    multiline={false}
+                />
+                <TouchableOpacity style={{flex:1}} onPress={() => this.change_subitem(rowData, rowID)}>
+                    <View style={{borderRadius:4,margin:2,padding:2,flexDirection:"row",backgroundColor:"#ADD8E6",justifyContent:"center",alignItems:"center"}}>
+                        <Text>修改</Text>
+                    </View>
+                </TouchableOpacity>
+                <TouchableOpacity style={{flex:1}} onPress={() => this.del_subitem(rowID)}>
+                    <View style={{borderRadius:4,margin:2,padding:2,flexDirection:"row",backgroundColor:"#ADD8E6",justifyContent:"center",alignItems:"center"}}>
+                        <Text>删除</Text>
+                    </View>
+                </TouchableOpacity>
+            </View>
+        )
+    }
+
+    renderJobBookItem(rowData,sectionID,rowID) {
+        return(
+            <View style={{flexDirection:"row",height:24,alignItems:"center",margin:4}}>
+                <TouchableOpacity style={{flex:1}} onPress={() => this.addSubItemButton(rowData, rowID)}>
+                    <View style={{borderRadius:6,borderColor:"#0000FF",borderWidth: 1,margin:2,padding:2,flexDirection:"row",backgroundColor:"#ADD8E6"}}>
+                        <Text>{rowID} </Text>
+                        <Text style={{marginLeft:6}}>{rowData.name}</Text>
+                    </View>
+                </TouchableOpacity>
+                {this.renderAddDellBtn(rowData, rowID)}
+            </View>
+
+        )
+    }
+
+    renderBookItemListView(){
+
+        if(this.state.book_item_list.length == 0){
+            return;
+        }
+        return(
+            <ListView
+                style={{margin:6}}
+                dataSource={DataStore.cloneWithRows(this.state.book_item_list)}
+                renderRow={this._renderJobBookItem}
+                enableEmptySections = {true}
+            />
+        )
+    }
+
+    addSubItem(){
+
+        let t_book_item_list = this.state.book_item_list;
+        let remainadd = MAX_BOOKITEM - t_book_item_list.length;
+
+        let sub_item_one={
+            bookid:0,
+            name:"点击添加",
+            cover:null,
+            poster:null,
+            url:null,
+            sortnum:MAX_BOOKITEM - remainadd + 1,
+            proficient:'1000'
+        };
+
+        t_book_item_list.push(sub_item_one);
+        this.setState({
+            book_item_list:t_book_item_list
+        })
+    }
+
+    renderKnowBook(){
+        let remainadd = 10 - this.state.book_item_list.length;
+        return(
+            <View style={{borderWidth: 1,borderRadius:8,marginTop:8,padding:4}}>
+                <Text>
+                   添加熟悉题本
+                </Text>
+                {this.renderBookItemListView()}
+                <TouchableOpacity onPress={() => this.addSubItem()}>
+                    <View
+                        style={{justifyContent:"center",alignItems:"center",margin:4,height:32,borderRadius:8,backgroundColor:"#CD69C9"}}>
+                        <Text>添加项,还可以添加{remainadd}个</Text>
+                    </View>
+                </TouchableOpacity>
+            </View>
+        )
     }
 
     render(){
@@ -354,10 +552,18 @@ class NewJob extends Component {
                         </TouchableOpacity>
                     </View>
                     <View style={{flexDirection:"row",alignItems:"center"}}>
-                        <Text style={{fontSize:16}}>学   历: </Text>
+                        <Text style={{fontSize:16}}>学历等级: </Text>
                         <TouchableOpacity style={{width:68,padding:2,margin:4,borderRadius:8,height:32,
                         backgroundColor:"#0FFBF0",justifyContent:"center",alignItems:"center"}} onPress={() => this.changeeducation()} >
                             <Text style={{fontSize: 14}}>{educationtext[this.state.education]}</Text>
+                        </TouchableOpacity>
+
+                    </View>
+                    <View style={{flexDirection:"row",alignItems:"center"}}>
+                        <Text style={{fontSize:16}}>薪资范围: </Text>
+                        <TouchableOpacity style={{width:128,padding:2,margin:4,borderRadius:8,height:32,
+                        backgroundColor:"#0FFBF0",justifyContent:"center",alignItems:"center"}} onPress={() => this.changesalary()} >
+                            <Text style={{fontSize: 14}}>{salarytext[this.state.salary]}</Text>
                         </TouchableOpacity>
 
                     </View>
@@ -365,8 +571,8 @@ class NewJob extends Component {
                         style={styles.briefinput}
                         onChangeText={(text) => this.setState({workplace:text})}
                         value={this.state.workplace}
-                        placeholder={"工作地点：请添写最多64字"}
-                        maxLength={64}
+                        placeholder={"工作地点：请添写最多60字"}
+                        maxLength={60}
                         multiline={true}
                         returnKeyType={'done'}
                     />
@@ -374,8 +580,8 @@ class NewJob extends Component {
                         style={styles.briefinput}
                         onChangeText={(text) => this.setState({duty:text})}
                         value={this.state.duty}
-                        placeholder={"职责：请添写最多120字"}
-                        maxLength={120}
+                        placeholder={"职责：请添写最多250字"}
+                        maxLength={250}
                         multiline={true}
                         returnKeyType={'done'}
                     />
@@ -384,8 +590,8 @@ class NewJob extends Component {
                         style={styles.descriptioninput}
                         onChangeText={(text) => this.setState({description:text})}
                         value={this.state.description}
-                        placeholder={"任职要求：请添写最多100字"}
-                        maxLength={100}
+                        placeholder={"任职要求：请添写最多250字"}
+                        maxLength={250}
                         multiline={true}
                         returnKeyType={'done'}
                     />
@@ -393,21 +599,23 @@ class NewJob extends Component {
                         style={styles.descriptioninput}
                         onChangeText={(text) => this.setState({extrapoint:text})}
                         value={this.state.extrapoint}
-                        placeholder={"加分项：请添写最多100字"}
-                        maxLength={100}
+                        placeholder={"加分项：请添写最多250字"}
+                        maxLength={250}
                         multiline={true}
                         returnKeyType={'done'}
                     />
+                    {this.renderKnowBook()}
+                    <View style={{flex:1,justifyContent:"flex-end"}}>
+                        <TouchableOpacity style={{margin:2,borderRadius:8,height:32,
+                        backgroundColor:"#0FFBF0",justifyContent:"center",alignItems:"center"}} onPress={() => this.newjobcheck()} >
+                            <Text style={{fontSize: 18}}>{buttontext}</Text>
+                        </TouchableOpacity>
+                    </View>
 
                 </ScrollView>
 
 
-                <View style={{flex:1,justifyContent:"flex-end"}}>
-                    <TouchableOpacity style={{margin:4,borderRadius:8,height:32,
-                        backgroundColor:"#0FFBF0",justifyContent:"center",alignItems:"center"}} onPress={() => this.newbook()} >
-                        <Text style={{fontSize: 18}}>{buttontext}</Text>
-                    </TouchableOpacity>
-                </View>
+
 
             </View>
         );
@@ -416,6 +624,7 @@ class NewJob extends Component {
 
 NewJob.PropTypes = {
     orgdata:PropTypes.object,
+    bookdata:PropTypes.object
 };
 
 module.exports = NewJob;
