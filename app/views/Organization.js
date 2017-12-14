@@ -100,6 +100,12 @@ const styles = StyleSheet.create({
         //主轴方向
         //flexDirection:'row',
     },
+    imagepic: {
+        padding:8,
+        width: window.width-16,
+        height: 160,
+        borderRadius:8,
+    },
 });
 
 var homepagetUrl = "https://slako.applinzi.com/index.php?m=question&c=index&a=personalhp";
@@ -139,6 +145,14 @@ class Organization extends Component {
         };
         this._onChange = this.onChange.bind(this);
         this._renderJobRow = this.renderJobRow.bind(this);
+        this._renderPicRow = this.renderPicRow.bind(this);
+    }
+
+    componentWillReceiveProps(nextProps){
+        if(nextProps.gorefresh == null){
+            return;
+        }
+        this.fetchOrganization();
     }
 
     componentDidMount() {
@@ -407,14 +421,45 @@ class Organization extends Component {
         }
     }
 
+    renderPicRow(rowData, sectionID, rowID){
+
+        return(
+            <View style={{height:160,padding:8}}>
+                <Image style={styles.imagepic} resizeMode="cover" source={{uri:`${httpsPicBaseUrl}${rowData}`}} />
+            </View>
+        )
+    }
+
+    renderAllPicsView() {
+        if(this.state.organizationdata.picsaid == ''){
+            return(
+                <EmptyData/>
+            )
+        }
+        return (
+            <ListView
+                enableEmptySections={true}
+                dataSource={DataStore.cloneWithRows(JSON.parse(this.state.organizationdata.pictures))}
+                renderRow={this._renderPicRow} />
+        )
+    }
+
     renderEditPicButton(){
         if(this.state.organizationdata.adminid == global.userid){
             return(
-                <TouchableOpacity style={{height:24,borderRadius:6,justifyContent:"center",alignItems:"center",margin:8,backgroundColor:"#00FF00"}} onPress={()=> Actions.newjob({orgdata:this.state.organizationdata})} >
+                <TouchableOpacity style={{height:24,borderRadius:6,justifyContent:"center",alignItems:"center",margin:8,backgroundColor:"#00FF00"}} onPress={()=> Actions.editpic({orgdata:this.state.organizationdata})} >
                     <Text style={styles.bottomButtonText} >编辑照片</Text>
                 </TouchableOpacity>
             )
         }
+    }
+
+    renderIntroduceView(){
+        return(
+            <View>
+                <Text>{this.state.organizationdata.description}</Text>
+            </View>
+        )
     }
 
     renderSegmentedView() {
@@ -435,12 +480,13 @@ class Organization extends Component {
 
         } else if (this.state.selectedIndex === 2) {
             return (
-                this.renderAboutView()
+                this.renderIntroduceView()
             )
         }else if (this.state.selectedIndex === 3) {
             return (
                 <View>
                     {this.renderEditPicButton()}
+                    {this.renderAllPicsView()}
                 </View>
             )
         }
@@ -482,7 +528,6 @@ class Organization extends Component {
                 enableEmptySections={true}
                 dataSource={DataStore.cloneWithRows(this.state.jobsdata_source)}
                 renderRow={this._renderJobRow} />
-
         )
     }
 
@@ -569,6 +614,7 @@ Organization.PropTypes = {
     orgid:PropTypes.number,
     userId: PropTypes.string.isRequired,
     peopledata:PropTypes.object,
+    gorefresh: PropTypes.number,
 };
 
 Array.prototype.contains = function (element) {

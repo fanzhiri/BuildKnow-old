@@ -120,6 +120,8 @@ import Organization from './views/Organization';
 //81
 import OrganizeList from './views/OrganizeList';
 import NewJob from './views/NewJob';
+import EditPic from './views/EditPic';
+
 
 import Icon from 'react-native-vector-icons/Ionicons';
 
@@ -257,6 +259,7 @@ export default class BuildKnow extends Component {
                 <Scene key="organization"       title="组织"      component={Organization} duration={0} />
                 <Scene key="organizelist"       title="组织列表"      component={OrganizeList} duration={0} rightTitle={"申添"} onRight={() => Actions.enterpriseenter()} />
                 <Scene key="newjob"             title="新建职位"      component={NewJob} duration={0} />
+                <Scene key="editpic"            title="编辑图片"      component={EditPic} duration={0} />
             </Router>
         );
     }
