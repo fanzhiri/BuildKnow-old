@@ -76,7 +76,7 @@ class MyBookList extends Component {
             gorefreshing:false,
         };
 
-        this._renderBookItem = this.renderBookItem.bind(this)
+        this._renderBookItem = this.renderBookItem.bind(this);
     }
 
     componentWillReceiveProps(nextProps){

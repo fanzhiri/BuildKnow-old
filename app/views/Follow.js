@@ -261,7 +261,6 @@ onRefresh={this._peoplelist()}
     renderFriendView(){
         return (
             <View>
-                <Button onPress={this.rankList()}>排名方法</Button>
                 <ListView
                     refreshControl={
                         <RefreshControl
@@ -282,7 +281,7 @@ onRefresh={this._peoplelist()}
     renderIntroduceView(){
         return (
             <View>
-                <Button onPress={this.rankList()}>排名方法</Button>
+
                 <ListView
                     refreshControl={
                         <RefreshControl

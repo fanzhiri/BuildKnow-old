@@ -2,10 +2,11 @@
  * Created by slako on 17/2/18.
  */
 import React, { Component } from 'react';
-import {View, Text, StyleSheet,TouchableOpacity} from "react-native";
+import {View, Text, StyleSheet,TouchableOpacity,ScrollView} from "react-native";
 import {Actions} from "react-native-router-flux";
-import Button from "react-native-button";
+
 import GlobleStyles from '../styles/GlobleStyles';
+import SettingItem from '../component/SettingItem';
 
 const styles = StyleSheet.create({
     container: {
@@ -15,8 +16,8 @@ const styles = StyleSheet.create({
         backgroundColor: '#F5FCFF',
     },
     abouttext:{
-        fontSize:20,
-        margin:6
+        fontSize:16,
+        margin:4
     }
 });
 
@@ -25,14 +26,20 @@ class About extends Component {
         return (
             <View style={GlobleStyles.withoutTitleContainer}>
                 <View style={styles.container}>
-                    <Text style={styles.abouttext}>Version 1.1</Text>
-                    <Text style={styles.abouttext}>bringup : slakofan</Text>
-                    <Text style={styles.abouttext}>Phone 13246715168</Text>
-                    <Text style={styles.abouttext}>Email 48921093@qq.com</Text>
+                    <Text style={styles.abouttext}>版本 1.1</Text>
+                    <Text style={styles.abouttext}>创始人: slakofan</Text>
+                    <Text style={styles.abouttext}>邮箱: 48921093@qq.com</Text>
                     <TouchableOpacity  onPress={()=>(Actions.donate())} >
-                        <Text>捐赠</Text>
+                        <View style={{margin:12,height:24,width:48,justifyContent: 'center',alignItems: 'center',borderRadius:6,backgroundColor:"#00FF00"}}>
+                            <Text>捐赠</Text>
+                        </View>
                     </TouchableOpacity>
+
                 </View>
+                <ScrollView>
+                    <SettingItem text={"用户协议"} onPress={() => Actions.about()}/>
+                    <SettingItem text={"隐私政策"} onPress={() => Actions.about()}/>
+                </ScrollView>
             </View>
         );
     }

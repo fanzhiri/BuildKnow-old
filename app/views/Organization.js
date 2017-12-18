@@ -456,8 +456,8 @@ class Organization extends Component {
 
     renderIntroduceView(){
         return(
-            <View>
-                <Text>{this.state.organizationdata.description}</Text>
+            <View style={{padding:10}}>
+                <Text style={{fontSize:20}}>  {this.state.organizationdata.description}</Text>
             </View>
         )
     }
@@ -471,11 +471,10 @@ class Organization extends Component {
                     {this.renderAddJobButton()}
                     {this.renderAllJobsView()}
                 </View>
-
             )
         } else if (this.state.selectedIndex === 1) {
             return (
-                this.renderAboutView()
+                <EmptyData/>
             )
 
         } else if (this.state.selectedIndex === 2) {
@@ -624,6 +623,6 @@ Array.prototype.contains = function (element) {
         }
     }
     return false;
-}
+};
 
 module.exports = Organization;

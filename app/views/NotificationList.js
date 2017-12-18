@@ -62,7 +62,9 @@ const styles = StyleSheet.create({
         marginRight:6,
         marginLeft:10,
         alignItems: 'center',
-    }
+    },segmented:{
+        margin:4,
+    },
 
 });
 

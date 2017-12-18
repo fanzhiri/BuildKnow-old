@@ -13,6 +13,7 @@ const styles = StyleSheet.create({
     container: {
 
         backgroundColor: '#F5FCFF',
+        padding:8
     },
     question:{
         fontSize:20,
@@ -22,6 +23,7 @@ const styles = StyleSheet.create({
         fontSize:20
     },
     nextperbuttoncontainer:{
+        marginTop:28,
         flexDirection:'row',
         justifyContent: 'space-around',
         alignItems: 'center',
@@ -50,14 +52,13 @@ const styles = StyleSheet.create({
     },listItem: {
         flex: 1,
         height: 48,
-        backgroundColor: 'white',
+        backgroundColor: '#FFAFA0',
         flexDirection: 'row',
         alignItems: 'center',
         paddingLeft: 16,
         paddingRight: 25,
-        borderBottomColor: '#c4c4c4',
-        borderBottomWidth: 1,
-        marginTop:4,
+        margin:4,
+        borderRadius:12
     },circle:{
         borderRadius:16,
         height:32,
@@ -504,7 +505,7 @@ class AnswerQuestion extends Component {
         }
 
         return(
-            <Text style={styles.question}>题目类型：{questiontype}</Text>
+            <Text style={{fontSize:16,color:"#FF0000"}}>[{questiontype}]</Text>
         )
     }
 
@@ -552,9 +553,24 @@ class AnswerQuestion extends Component {
                 </ScrollView>
 
                 <View style={styles.nextperbuttoncontainer}>
-                    <Button style={styles.nextperbutton} textStyle={{fontSize: 16}} onPress={() => this.onPressPre() }>上个</Button>
-                    <Button style={styles.nextperbutton} textStyle={{fontSize: 16}} onPress={() => this.onPressNext()}>下个</Button>
-                    <Button style={styles.nextperbutton} textStyle={{fontSize: 16}} onPress={() => this.onPressNext()}>不懂</Button>
+                    <TouchableOpacity onPress={() => this.onPressPre()} >
+                        <View style={{height:32,width:80,justifyContent: 'space-around',alignItems: 'center',backgroundColor:"#C1C1C1",borderRadius:12}}>
+                            <Text>上一个</Text>
+                        </View>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => this.onPressNext()} >
+                        <View style={{height:32,width:80,justifyContent: 'space-around',alignItems: 'center',backgroundColor:"#C1C1C1",borderRadius:12}}>
+                            <Text>下一个</Text>
+                        </View>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => this.onPressNext()} >
+                        <View style={{height:32,width:80,justifyContent: 'space-around',alignItems: 'center',backgroundColor:"#C1C1C1",borderRadius:12}}>
+                            <Text>不懂</Text>
+                        </View>
+                    </TouchableOpacity>
+                    {/*<Button style={styles.nextperbutton} textStyle={{fontSize: 16}} onPress={() => this.onPressPre() }>上个</Button>*/}
+                    {/*<Button style={styles.nextperbutton} textStyle={{fontSize: 16}} onPress={() => this.onPressNext()}>下个</Button>*/}
+                    {/*<Button style={styles.nextperbutton} textStyle={{fontSize: 16}} onPress={() => this.onPressNext()}>不懂</Button>*/}
 
                 </View>
 

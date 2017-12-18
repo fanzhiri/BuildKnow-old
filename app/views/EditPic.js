@@ -87,11 +87,22 @@ let MAX_PICS = 20;
 
 class EditPic extends Component {
 
-    constructor() {
+    constructor(props) {
 
-        super();
+        super(props);
         let addcoveruri ={uri:"https://slako.applinzi.com/statics/images/question/util/addcover.png", width: 80, height: 80 };
+        let pictures_arr = JSON.parse(this.props.orgdata.pictures);
         let t_pictures = new Array();
+        for(let i=0;i < pictures_arr.length ;i++){
+            let newpic={
+                pic_net:pictures_arr[i],
+                pic_local: null,
+                size:0,
+                filename:""
+            };
+            t_pictures.push(newpic);
+        }
+
         this.state = {
 
             pictures:t_pictures,
@@ -266,6 +277,5 @@ class EditPic extends Component {
 
 EditPic.PropTypes = {
     orgdata:PropTypes.object,
-
 };
 module.exports = EditPic;

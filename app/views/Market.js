@@ -2,7 +2,7 @@
  * Created by slako on 17/2/18.
  */
 import React, { Component } from 'react';
-import {View, Text, StyleSheet, ListView, ScrollView, Image,RefreshControl,TouchableOpacity} from "react-native";
+import {View, Text, StyleSheet, ListView, ScrollView, Image,RefreshControl,TouchableOpacity,TouchableWithoutFeedback} from "react-native";
 import {Actions} from "react-native-router-flux";
 import Button from "react-native-button";
 import Swiper from 'react-native-swiper';
@@ -36,8 +36,10 @@ const styles = StyleSheet.create({
         marginTop:16,
         marginBottom:8,
         marginLeft:8,
+        marginRight:8,
         color: 'red',
-        fontSize: 24,
+        fontSize: 20,
+
     }
 });
 
@@ -63,17 +65,22 @@ class Market extends Component {
         this._renderPrevHoriRow     = this.renderPrevHoriRow.bind(this);
     }
 
+
+    //如下函数中需使用TouchableWithoutFeedback，不能使用TouchableOpacity，不然会显示不出来
     renderImage(store_data_item){
         let imageViews=[];
         for(let i=0;i< store_data_item.sub_item.length;i++){
             imageViews.push(
+                <View style={{flex:1}} key={i}>
+                    <TouchableWithoutFeedback onPress={()=>(Actions.bookcover({bookpublicid:store_data_item.sub_item[i].bookid}))}>
+                        <Image
+                            key={i}
+                            style={styles.imgCarousel}
+                            source={{uri:`${httpsPicBaseUrl}${store_data_item.sub_item[i].poster}`}}
 
-                    <Image
-                        key={i}
-                        style={styles.imgCarousel}
-                        source={{uri:`${httpsPicBaseUrl}${store_data_item.sub_item[i].poster}`}}
-
-                    />
+                        />
+                    </TouchableWithoutFeedback>
+                </View>
 
             );
         }
@@ -94,27 +101,32 @@ class Market extends Component {
         switch (this.state.store_data_source[rowID].type){
             case 0 :
                 return(
-                    <View>
-                        <Swiper height={200} loop={true} autoplay={true}>
 
-                                {this.renderImage(this.state.store_data_source[rowID])}
+                        <View>
+                            <Swiper height={200} loop={true} autoplay={true}>
 
-                        </Swiper>
-                    </View>
-                )
+                                    {this.renderImage(this.state.store_data_source[rowID])}
+
+                            </Swiper>
+                        </View>
+
+                );
                 break;
             case 1 :
                 return(
-                    <View>
+                    <View
+                        style={{borderTopWidth:2,borderTopColor:"#00FFFF",paddingTop:4}}
+                    >
                         <Text style={styles.title} >{this.state.store_data_source[rowID].name}</Text>
                         <ListView
+
                             enableEmptySections={true}
                             horizontal={true}
                             dataSource={DataStore.cloneWithRows(this.state.store_data_source[rowID].sub_item)}
                             showsHorizontalScrollIndicator={false}
                             renderRow={this._renderPrevHoriRow} />
                     </View>
-                )
+                );
                 break;
             case 2 :break;
         }

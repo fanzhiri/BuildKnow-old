@@ -320,14 +320,19 @@ class Discover extends Component {
 
     renderCatalogueBarRow(rowData, sectionID, rowID){
         let cateColor ;
+        let cateFontSize ;
         if(this.state.categorySelect == rowID){
             cateColor="#FF0000";
+            cateFontSize=14;
         }else{
-            cateColor="#000000";
+            cateColor="#98F5FF";
+            cateFontSize=12;
         }
         return(
-            <TouchableOpacity onPress={()=> this.onCateloguePressFunc(rowID)} activeOpacity={0.8}>
-                <Text style={{marginRight:6,marginLeft:6,color:cateColor}}>{rowData.catname}</Text>
+            <TouchableOpacity onPress={()=> this.onCateloguePressFunc(rowID)} >
+                <View style={{height:20,width:48,backgroundColor:cateColor,borderRadius:8,justifyContent: 'center',alignItems: 'center',marginLeft:4,marginRight:4}}>
+                    <Text style={{marginRight:2,marginLeft:2,fontSize:cateFontSize}}>{rowData.catname}</Text>
+                </View>
             </TouchableOpacity>
         )
     }
@@ -341,11 +346,12 @@ class Discover extends Component {
                 return;
             }
             return(
-                <View  style={{height:32,backgroundColor:'#F0FF00',flexDirection:'row',alignItems: 'center',}}>
+                <View  style={{height:32,backgroundColor:'#F0FF00',flexDirection:'row',alignItems: 'center',borderRadius:16,margin:4,paddingLeft:4,paddingRight:4}}>
                     <ListView
                         enableEmptySections={true}
                         horizontal={true}
                         dataSource={DataStore.cloneWithRows(this.state.cataloguebardata)}
+                        showsHorizontalScrollIndicator={false}
                         renderRow={this._renderCatalogueBarRow} />
                 </View>
             )
@@ -534,8 +540,8 @@ class Discover extends Component {
                     paddingRight:8
                 }}>
                     <Text style={{fontSize:16,marginBottom:4,color:"#E08020"}}>{rowData.title}</Text>
-                    <Text style={{fontSize:12,marginBottom:4}}>{rowData.description}</Text>
-                    <Text style={{fontSize:10}}>来源 100评论 时间 题目数:{rowData.qsnum}</Text>
+                    <Text style={{fontSize:14,marginBottom:4}}>{rowData.description}</Text>
+                    <Text style={{fontSize:12}}>来源 100评论 时间 题目数:{rowData.qsnum}</Text>
                 </View>
             </TouchableOpacity>
         )

@@ -121,7 +121,8 @@ import Organization from './views/Organization';
 import OrganizeList from './views/OrganizeList';
 import NewJob from './views/NewJob';
 import EditPic from './views/EditPic';
-
+import UserAgreement from './views/UserAgreement';
+import PrivacyPolicy from './views/PrivacyPolicy';
 
 import Icon from 'react-native-vector-icons/Ionicons';
 
@@ -260,6 +261,8 @@ export default class BuildKnow extends Component {
                 <Scene key="organizelist"       title="组织列表"      component={OrganizeList} duration={0} rightTitle={"申添"} onRight={() => Actions.enterpriseenter()} />
                 <Scene key="newjob"             title="新建职位"      component={NewJob} duration={0} />
                 <Scene key="editpic"            title="编辑图片"      component={EditPic} duration={0} />
+                <Scene key="useragreement"      title="用户协议"      component={UserAgreement} duration={0} />
+                <Scene key="privacypolicy"      title="隐私政策"      component={PrivacyPolicy} duration={0} />
             </Router>
         );
     }

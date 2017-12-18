@@ -1,5 +1,5 @@
 /**
- * Created by slako on 17/2/18.
+ * Created by slako on 17/12/18.
  */
 import React, { Component ,PropTypes} from 'react';
 import {View, Text, StyleSheet} from "react-native";
@@ -18,7 +18,7 @@ const styles = StyleSheet.create({
 
 });
 
-class Help extends Component {
+class PrivacyPolicy extends Component {
 
     constructor(props) {
         super(props);
@@ -36,8 +36,8 @@ class Help extends Component {
     }
 }
 
-Help.PropTypes = {
+PrivacyPolicy.PropTypes = {
     idnumber:PropTypes.number,
 };
 
-module.exports = Help;
+module.exports = PrivacyPolicy;

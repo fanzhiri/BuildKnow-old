@@ -53,6 +53,9 @@ const styles = StyleSheet.create({
         borderBottomWidth:1,
         borderBottomColor:'#ab82ff',
     },
+    segmented:{
+        margin:4,
+    },
 });
 
 

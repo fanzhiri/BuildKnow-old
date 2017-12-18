@@ -54,6 +54,9 @@ const styles = StyleSheet.create({
     }
 });
 
+let textSizeArr = [14,16,18,20,22];
+let autoNextArr = [1,3,6,0];
+
 class AnswerSetting extends Component {
 
     constructor(props) {
@@ -66,7 +69,7 @@ class AnswerSetting extends Component {
             autoexplanselect:0,
             timetoexplanselect:0,
         };
-
+        this._onSelectSegmentChange        = this.onSelectSegmentChange.bind(this);
     }
 
 
@@ -76,6 +79,7 @@ class AnswerSetting extends Component {
                 this.setState({
                     qafontsizeselect: event.nativeEvent.selectedSegmentIndex,
                 });
+                global.gfontsize=textSizeArr[event.nativeEvent.selectedSegmentIndex];
                 break;
             case 2:
                 this.setState({
@@ -84,8 +88,9 @@ class AnswerSetting extends Component {
                 break;
             case 3:
                 this.setState({
-                    qafontsizeselect: event.nativeEvent.selectedSegmentIndex,
+                    autonextselect: event.nativeEvent.selectedSegmentIndex,
                 });
+                global.gautonext=autoNextArr[event.nativeEvent.selectedSegmentIndex];
                 break;
             case 4:
                 this.setState({
@@ -102,17 +107,30 @@ class AnswerSetting extends Component {
 
     }
 
-    renderSelectSegmentView(name,values,selectindex,stateindex,changeindex){
+    renderSettingTitle(name,changeindex){
+
+        let textSize = 18;
+        if(changeindex == 1){
+            textSize = textSizeArr[this.state.qafontsizeselect];
+        }
+        return(
+            <Text style={{fontSize:textSize}}>{name}</Text>
+        )
+    }
+
+    renderSelectSegmentView(name,values,selectindex,changeindex){
+
         return(
             <View style={styles.itemcontainer}>
-                <Text style={styles.typetext}>{name}</Text>
+                {this.renderSettingTitle(name,changeindex)}
                 <View style={styles.segmentcontainer}>
                     <SegmentedControlIOS
                         values={values}
                         selectedIndex={selectindex}
                         style={styles.segmented}
                         onChange={(event) => {
-                            this.onSelectSegmentChange(event,changeindex)
+
+                            this._onSelectSegmentChange(event,changeindex);
                         }}
                     />
                 </View>
@@ -126,9 +144,9 @@ class AnswerSetting extends Component {
             <View style={GlobleStyles.withoutTitleContainer}>
                 <ScrollView>
                     <View style={styles.list}>
-                        {this.renderSelectSegmentView("字体大小",['偏小', '小', '大', '偏大'],this.state.qafontsizeselect,1)}
+                        {this.renderSelectSegmentView("字体大小",['偏小', '小','中', '大', '偏大'],this.state.qafontsizeselect,1)}
                         {this.renderSelectSegmentView("背景颜色",['黑', '灰', '白'],this.state.backgroudselect,2)}
-                        {this.renderSelectSegmentView("自动跳",['立即', '5秒', '否'],this.state.backgroudselect,3)}
+                        {this.renderSelectSegmentView("自动跳",['立即','3秒','6秒','否'],this.state.autonextselect,3)}
                         {this.renderSelectSegmentView("自动弹出解析",['否','是'],this.state.autoexplanselect,4)}
                         {this.renderSelectSegmentView("选错几次显示答案",['1','2'],this.state.timetoexplanselect,5)}
                     </View>
