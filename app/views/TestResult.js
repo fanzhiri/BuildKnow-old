@@ -99,6 +99,7 @@ class TestResult extends Component {
                 flexDirection:"row",
                 alignItems:"center"
                 }}>
+                <Text>{rowID} </Text>
                 <Text>得分:{rowData.score}  </Text>
                 <Text>题数:{rowData.qstnum}  </Text>
                 <Text>开始:{time_t}  </Text>
@@ -137,7 +138,7 @@ class TestResult extends Component {
                         onRefresh={() => this.doFetchBookTestRecord()}
                     />
                 }
-                style={{flex:1}}
+                style={{flex:1,margin:6}}
                 dataSource={DataStore.cloneWithRows(this.state.testrecord_data_source)}
                 renderRow={this._renderRecordItem}
                 enableEmptySections = {true}

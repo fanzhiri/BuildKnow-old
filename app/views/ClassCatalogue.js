@@ -285,9 +285,11 @@ class ClassCatalogue extends Component {
                 activeOpacity={0.8}
                 >
                 <View style={styles.listItem}>
-                    <Text style={{color:"#0000FF", fontSize: 14}}>{rowData.name}</Text>
-                    <View style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-end', alignItems:'center'}}>
-                        <Text style={{color: "#ccc"}}>子类数量：{rowData.num}   题本累计：{rowData.booknum }</Text>
+                    <Text style={{flex:1,color:"#0000FF", fontSize: 16}}>{rowData.name}</Text>
+                    <View style={{flex:4, flexDirection: 'row', justifyContent: 'flex-end', alignItems:'center'}}>
+                        <Text style={{flex:1,color: "#A020F0"}}>子类数：{rowData.num} </Text>
+                        <Text style={{flex:1,color: "#0c0c0c"}}>子类总：{rowData.suballnum} </Text>
+                        <Text style={{flex:1,color: "#00BFFF"}}>题本：{rowData.suballbooknum}</Text>
                     </View>
                 </View>
             </TouchableOpacity>

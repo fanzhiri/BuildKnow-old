@@ -55,10 +55,15 @@ const styles = StyleSheet.create({
         padding:10,
         flexDirection:'row',
         alignItems: 'center',
-        height:100,
+        height:120,
     },
     dataitemcontainer:{
         flex: 1,
+        height:100,
+        borderRadius:12,
+        backgroundColor:"#90FF90",
+        margin:4,
+        padding:6
     },
     topButtoncontainer:{
         flexDirection:'row',
@@ -283,15 +288,16 @@ class PublicBook extends Component {
         return(
             <View  style={styles.datacontainer}>
                 <ScrollView style={styles.dataitemcontainer}>
-                    <Text>熟练程度：</Text>
-                    <Text>做题数：</Text>
-                    <Text>未看题数：</Text>
+                    <Text>熟练程度：{this.state.collectbookdata.proficiency} </Text>
+                    <Text>总测题数：{this.state.collectbookdata.qstallnum} </Text>
+                    <Text>答对次数：{this.state.collectbookdata.rightalltime} </Text>
+                    {/*<Text>未看题数：</Text>*/}
                     <Text>测试次数：{this.state.collectbookdata.testtime}</Text>
-                    <Text>最近均分：</Text>
-                    <Text>错题数：</Text>
+                    {/*<Text>最近均分：</Text>*/}
+                    {/*<Text>错题数：</Text>*/}
                 </ScrollView>
                 <ScrollView style={styles.dataitemcontainer}>
-                    <Text>熟练程度：</Text>
+                    <Text>熟练排行：</Text>
                     <Text>做题数：</Text>
                     <Text>未看题数：</Text>
                     <Text>测试次数：</Text>

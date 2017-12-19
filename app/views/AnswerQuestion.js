@@ -293,8 +293,13 @@ class AnswerQuestion extends Component {
         this.setState({
             selectone:idx,
             choose:t_choose
-        })
-        this.timer_to_jump=setInterval(()=>this.anotherquestion(1),400);
+        });
+        if(global.gautonext == 0){
+
+        }else{
+            this.timer_to_jump=setInterval(()=>this.anotherquestion(1),400);
+        }
+
     }
 
     showAnswerItem(text,idx){
