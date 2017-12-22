@@ -75,6 +75,8 @@ const styles = StyleSheet.create({
         marginRight:10,
         justifyContent: 'center',
         color: 'red',
+    },segmented:{
+        margin:4,
     },
 });
 

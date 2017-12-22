@@ -183,11 +183,12 @@ class PublicBook extends Component {
         switch (idx){
             case 0:
                 Actions.answerquestion({
+                    title:"看题:"+this.state.bookdata.bookname,
                     intype:1,
                     publicbookdata:this.state.bookdata,
                     questioncount:10,
                     asktype:0,
-                    answermode:0
+                    answermode:0//看题
                 });
                 break;
             case 1:
@@ -325,7 +326,7 @@ class PublicBook extends Component {
                 </View>
                 {this.renderreadortest()}
 
-                {this.renderListItem("md-medal",   "比拼",   () => this.invote(17))}
+                {this.renderListItem("md-medal",   "出卷",   () => this.invote(17))}
                 {this.renderListItem("md-medkit",  "错题",   () => this.invote(2))}
                 {this.renderListItem("md-medkit",  "记录",   () => this.invote(2))}
                 {this.renderListItem("md-medkit",  "排行",   () => this.invote(2))}

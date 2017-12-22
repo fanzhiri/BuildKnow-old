@@ -6,13 +6,14 @@ import {Alert,View, Text, StyleSheet,TouchableOpacity,SegmentedControlIOS,ListVi
 import {Actions} from "react-native-router-flux";
 import GlobleStyles from '../styles/GlobleStyles';
 import DataStore from '../util/DataStore';
+import EmptyData from '../component/EmptyData';
+import LoadingData from '../component/LoadingData';
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#F5FCFF',
     },
     listItem: {
         flex: 1,
@@ -24,6 +25,8 @@ const styles = StyleSheet.create({
         paddingRight: 25,
         borderBottomColor: '#c4c4c4',
         borderBottomWidth: 1
+    },segmented:{
+        margin:4,
     },
 
 });
@@ -187,7 +190,7 @@ class AnswerLib extends Component {
     renderLoading(){
         return (
             <View style={styles.container}>
-                <Text>Loading...</Text>
+                <LoadingData/>
             </View>
 
         )

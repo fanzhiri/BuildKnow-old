@@ -2,7 +2,7 @@
  * Created by slako on 17/2/18.
  */
 import React, { Component } from 'react';
-import {View, Text, StyleSheet,Alert} from "react-native";
+import {View, Text, StyleSheet,Alert,TouchableOpacity} from "react-native";
 import {Actions} from "react-native-router-flux";
 import Button from "react-native-button";
 import GlobleStyles from '../styles/GlobleStyles';
@@ -174,6 +174,24 @@ class Register extends Component {
 
                     />
                     <GiftedForm.ErrorsWidget />
+
+                    <View style={{height:42,justifyContent: 'center',flexDirection:"row",alignItems:"center",paddingLeft:4}}>
+                        <Text>请确定您同意</Text>
+                        <TouchableOpacity onPress={() => Actions.useragreement()} >
+                            <View style={{height:24,justifyContent: 'center',alignItems: 'center',backgroundColor:"#00FFC1",borderRadius:6,marginLeft:4,marginRight:4,paddingRight:4,paddingLeft:4}}>
+                                <Text style={{color:"#FF0000"}}>用户协议</Text>
+                            </View>
+                        </TouchableOpacity>
+                        <Text>和</Text>
+                        <TouchableOpacity onPress={() => Actions.useragreement()} >
+                            <View style={{height:24,justifyContent: 'center',alignItems: 'center',backgroundColor:"#00FFC1",borderRadius:6,marginLeft:4,marginRight:4,paddingRight:4,paddingLeft:4}}>
+                                <Text style={{color:"#FF0000"}}>隐私政策</Text>
+                            </View>
+                        </TouchableOpacity>
+                        <Text>再点击注册</Text>
+                    </View>
+
+
                     <GiftedForm.SubmitWidget
                         title={buttontext}
                         widgetStyles={{
@@ -209,10 +227,6 @@ class Register extends Component {
                             //GiftedFormManager.reset('registerForm');
                         }}
 
-                    />
-
-                    <GiftedForm.NoticeWidget
-                        title='请确定您同意服务条款和隐私政策再点击注册'
                     />
 
                     <GiftedForm.HiddenWidget name='tos' value={true} />

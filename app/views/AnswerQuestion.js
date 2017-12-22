@@ -527,9 +527,9 @@ class AnswerQuestion extends Component {
 
     }
 
-    showquestion(){
-        return (
-            <View style={styles.container}>
+    renderTopButtonView(){
+        if(this.props.answermode == 0){
+            return(
                 <View style={styles.topButtoncontainer}>
                     {this.rendertopbutton("md-grid",        "题卡",   () => this.invote(5))}
                     {this.rendertopbutton("md-git-branch",  "克隆",   () => this.invote(7))}
@@ -540,6 +540,28 @@ class AnswerQuestion extends Component {
                     {this.rendertopbutton("md-stats",       "统计",   () => this.invote(1))}
                     {this.rendertopbutton("md-settings",    "设置",   () => this.invote(0))}
                 </View>
+            )
+        }else{
+            return(
+                <View style={styles.topButtoncontainer}>
+                    {this.rendertopbutton("md-grid",        "题卡",   () => this.invote(5))}
+                    {/*{this.rendertopbutton("md-git-branch",  "克隆",   () => this.invote(7))}*/}
+                    {/*{this.rendertopbutton("md-cafe",        "评论",   () => this.invote(6))}*/}
+                    {/*{this.rendertopbutton("md-thumbs-up",   "赞",    () => this.invote(4))}*/}
+                    {this.renderCollect()}
+                    {/*{this.rendertopbutton("md-share",       "分享",   () => this.invote(2))}*/}
+                    {/*{this.rendertopbutton("md-stats",       "统计",   () => this.invote(1))}*/}
+                    {this.rendertopbutton("md-settings",    "设置",   () => this.invote(0))}
+                </View>
+            )
+        }
+
+    }
+
+    showquestion(){
+        return (
+            <View style={styles.container}>
+                {this.renderTopButtonView()}
                 <Text style={styles.question}>位置: {this.state.questionidx+1}:{this.state.allcount}</Text>
                 {
                     this.state.questiondata.img?

@@ -43,7 +43,7 @@ class IqBalance extends Component {
         return (
             <View style={GlobleStyles.withoutTitleContainer}>
                 <View style={{justifyContent:"center",alignItems:"center",height:72,backgroundColor:"#EEEE00"}}>
-                    <Text style={{fontSize:32}}>${this.state.balance}</Text>
+                    <Text style={{fontSize:32}}>{this.state.balance}</Text>
                 </View>
                 <View style={styles.listItem}>
                     <Text style={{fontSize:14}}>最近明细</Text>
@@ -51,11 +51,11 @@ class IqBalance extends Component {
                 <View style={styles.listItem}>
                     <Text style={{fontSize:14}}>出入统计</Text>
                 </View>
-                <TouchableOpacity onPress={() => Actions.balancerecharge()}>
-                    <View style={styles.listItem}>
-                        <Text style={{fontSize:14}}>充值</Text>
-                    </View>
-                </TouchableOpacity>
+                {/*<TouchableOpacity onPress={() => Actions.balancerecharge()}>*/}
+                    {/*<View style={styles.listItem}>*/}
+                        {/*<Text style={{fontSize:14}}>充值</Text>*/}
+                    {/*</View>*/}
+                {/*</TouchableOpacity>*/}
             </View>
         );
     }

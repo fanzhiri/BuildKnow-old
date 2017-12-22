@@ -241,7 +241,7 @@ export default class BuildKnow extends Component {
                 <Scene key="chatsetting"        title="聊天设置" component={ChatSetting} duration={0}  />
                 <Scene key="editchapter"        title="章节编辑" component={EditChapter} duration={0}  />
                 <Scene key="myarticlelist"      title="文章推荐" component={MyArticleList} duration={0}  rightTitle={"添加"} onRight={() => Actions.newarticleqst()}/>
-                <Scene key="iqbalance"          title="智商资产" component={IqBalance} duration={0}  />
+                <Scene key="iqbalance"          title="建识币" component={IqBalance} duration={0}  />
                 <Scene key="newarticleqst"      title="新建文推" component={NewArticleQst} duration={0} />
                 <Scene key="marketmanage"       title="上架管理" component={MarketManage} duration={0} />
                 <Scene key="balancerecharge"    title="智商充值" component={BalanceRecharge} duration={0} />

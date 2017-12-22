@@ -26,7 +26,7 @@ class EmptyData extends Component {
     render() {
         return (
             <View style={styles.container}>
-                <Text style={{fontSize:18}}>没有数据,点击刷新</Text>
+                <Text style={{fontSize:18}}>这里空荡荡的</Text>
             </View>
         );
     }

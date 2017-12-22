@@ -11,7 +11,8 @@ import DataStore from '../util/DataStore';
 import {storageSave,storeageGet} from '../util/NativeStore';
 import {PicBaseUrl} from '../util/Attributes';
 import {checkerrorcode } from '../util/CheckNetError'
-
+import EmptyData from '../component/EmptyData';
+import LoadingData from '../component/LoadingData';
 const styles = StyleSheet.create({
     container: {
         flex: 1,
@@ -234,7 +235,7 @@ class MyBookList extends Component {
     renderLoading(){
         return (
             <View style={styles.container}>
-                <Text>Loading...</Text>
+                <LoadingData/>
             </View>
 
         )
