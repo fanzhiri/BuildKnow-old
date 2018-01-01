@@ -38,7 +38,7 @@ class About extends Component {
                 </View>
                 <ScrollView>
                     <SettingItem text={"用户协议"} onPress={() => Actions.useragreement()}/>
-                    <SettingItem text={"隐私政策"} onPress={() => Actions.about()}/>
+                    <SettingItem text={"隐私政策"} onPress={() => Actions.privacypolicy()}/>
                 </ScrollView>
             </View>
         );

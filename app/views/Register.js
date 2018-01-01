@@ -183,7 +183,7 @@ class Register extends Component {
                             </View>
                         </TouchableOpacity>
                         <Text>和</Text>
-                        <TouchableOpacity onPress={() => Actions.useragreement()} >
+                        <TouchableOpacity onPress={() => Actions.privacypolicy()} >
                             <View style={{height:24,justifyContent: 'center',alignItems: 'center',backgroundColor:"#00FFC1",borderRadius:6,marginLeft:4,marginRight:4,paddingRight:4,paddingLeft:4}}>
                                 <Text style={{color:"#FF0000"}}>隐私政策</Text>
                             </View>

@@ -52,14 +52,14 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     datacontainer:{
-        padding:10,
+        padding:4,
         flexDirection:'row',
         alignItems: 'center',
-        height:120,
+        height:160,
     },
     dataitemcontainer:{
         flex: 1,
-        height:100,
+        height:140,
         borderRadius:12,
         backgroundColor:"#90FF90",
         margin:4,
@@ -309,9 +309,23 @@ class PublicBook extends Component {
         )
     }
 
+    renderDetialdataTitle(){
+        return(
+            <View  style={{margin:2,flexDirection:'row',alignItems: 'center'}}>
+                <View style={{flex:1,alignItems: 'center',height:20,justifyContent:"center"}}>
+                    <Text style={{flex:1,fontSize:18,alignItems: 'center'}}>个人</Text>
+                </View>
+                <View style={{flex:1,alignItems: 'center',height:20,justifyContent:"center"}}>
+                    <Text style={{flex:1,fontSize:18,alignItems: 'center'}}>排行</Text>
+                </View>
+            </View>
+        )
+    }
+
     renderbook(){
         return(
             <View >
+                {this.renderDetialdataTitle()}
                 {this.renderDetialdata()}
 
                 <View style={styles.segmentcontainer}>

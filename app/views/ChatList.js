@@ -125,7 +125,9 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         width: 40,
-    }
+    },segmented:{
+        margin:4,
+    },
 
 });
 
@@ -165,6 +167,13 @@ class ChatList extends Component {
 
     detial(){
         Actions.chatsetting({chat_id:this.props.cvstid});
+    }
+
+    componentWillReceiveProps(nextProps){
+        if(nextProps.gorefresh == null){
+            return;
+        }
+        this.dofetch_checkmsglist();
     }
 
     componentWillMount(){
@@ -406,6 +415,31 @@ class ChatList extends Component {
         )
     }
 
+    renderRedPacket(rowData){
+        let redpacketinfo= JSON.parse(rowData.content);
+        let words  =redpacketinfo.words;
+        let split  =redpacketinfo.split;
+        let take  =redpacketinfo.take;
+        let status = "领取红包";
+
+        if(split == take){
+            status = "红包已被领完";
+        }
+        return(
+            <TouchableOpacity onPress={() => Actions.redpacket({idnumber:redpacketinfo.id})}>
+                <View style={{width:240,height:60,flexDirection:"row",alignItems:"center",backgroundColor:"#FF4500",borderRadius:6,padding:6}}>
+                    <View style={{justifyContent:"center",alignItems:"center",width:54,height:54,borderWidth:1,borderRadius:6}}>
+                        <Icon name={"md-mail"} size={38} color={"#11FF00"}/>
+                    </View>
+                    <View>
+                        <Text style={{marginLeft:6,marginTop:2,fontSize:16}}>{words}</Text>
+                        <Text style={{marginLeft:6,marginTop:4,fontSize:12}}>{status}</Text>
+                    </View>
+                </View>
+            </TouchableOpacity>
+        )
+    }
+
     renderMsgType(rowData){
 
         switch (parseInt(rowData.msg_type)){
@@ -413,6 +447,7 @@ class ChatList extends Component {
             case 1 : return(this.renderPeopleCard(rowData));break;
             case 2 : return(this.renderQstCard(rowData));break;
             case 3 : return(this.renderBookCard(rowData));break;
+            case 4 : return(this.renderRedPacket(rowData));break;
         }
     }
 
@@ -438,7 +473,7 @@ class ChatList extends Component {
         }else{
             return(
                 <View style={[styles.msgitem,msglr]}>
-                    <View style={{borderWidth:1,backgroundColor:"#FFFF0",
+                    <View style={{borderWidth:1,backgroundColor:"#FFFF00",
                         borderRadius:8,
                         paddingLeft:8,paddingRight:8,
                         paddingTop:6,paddingBottom:6,
@@ -457,6 +492,7 @@ class ChatList extends Component {
             case 1:Actions.friendlist({inmode:1,intype:1,cvst_id:this.props.cvstid,chattoid:this.state.chattoid});break;
             case 2:Actions.mycollectlist({intype:1,cvst_id:this.props.cvstid});break;
             case 3:break;
+            case 4:Actions.handoutvc({cvst_id:this.props.cvstid});break;
 
         }
     }
@@ -547,6 +583,7 @@ class ChatList extends Component {
 ChatList.PropTypes = {
     chattoid:PropTypes.number,
     cvstid:PropTypes.number,
+    gorefresh: PropTypes.number,
 };
 
 module.exports = ChatList;

@@ -123,6 +123,10 @@ import NewJob from './views/NewJob';
 import EditPic from './views/EditPic';
 import UserAgreement from './views/UserAgreement';
 import PrivacyPolicy from './views/PrivacyPolicy';
+import DonateRecord from './views/DonateRecord';
+import UnderstandVC from './views/UnderstandVC';
+import HandoutVC from './views/HandoutVC';
+import RedPacket from './views/RedPacket';
 
 import Icon from 'react-native-vector-icons/Ionicons';
 
@@ -241,7 +245,7 @@ export default class BuildKnow extends Component {
                 <Scene key="chatsetting"        title="聊天设置" component={ChatSetting} duration={0}  />
                 <Scene key="editchapter"        title="章节编辑" component={EditChapter} duration={0}  />
                 <Scene key="myarticlelist"      title="文章推荐" component={MyArticleList} duration={0}  rightTitle={"添加"} onRight={() => Actions.newarticleqst()}/>
-                <Scene key="iqbalance"          title="建识币" component={IqBalance} duration={0}  />
+                <Scene key="iqbalance"          title="建识币" component={IqBalance} duration={0}  rightTitle={"了解建识币"} onRight={() => Actions.understandvc()}/>
                 <Scene key="newarticleqst"      title="新建文推" component={NewArticleQst} duration={0} />
                 <Scene key="marketmanage"       title="上架管理" component={MarketManage} duration={0} />
                 <Scene key="balancerecharge"    title="智商充值" component={BalanceRecharge} duration={0} />
@@ -263,6 +267,10 @@ export default class BuildKnow extends Component {
                 <Scene key="editpic"            title="编辑图片"      component={EditPic} duration={0} />
                 <Scene key="useragreement"      title="用户协议"      component={UserAgreement} duration={0} />
                 <Scene key="privacypolicy"      title="隐私政策"      component={PrivacyPolicy} duration={0} />
+                <Scene key="donaterecord"       title="捐助录入"      component={DonateRecord} duration={0} />
+                <Scene key="understandvc"       title="了解建识币"      component={UnderstandVC} duration={0} />
+                <Scene key="handoutvc"          title="发红包"      component={HandoutVC} duration={0} />
+                <Scene key="redpacket"          title="建识红包"      component={RedPacket} duration={0} />
             </Router>
         );
     }

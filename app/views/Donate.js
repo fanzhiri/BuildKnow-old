@@ -32,6 +32,12 @@ class Donate extends Component {
         this._renderDonateItem = this.renderDonateItem.bind(this);
     }
 
+    componentWillMount(){
+        if(global.adminid <= 10){
+            Actions.refresh({rightTitle: "捐助录入",onRight:() => Actions.donaterecord()});
+        }
+    }
+
     componentDidMount(){
         this.dofetchDonate();
     }
@@ -90,14 +96,14 @@ class Donate extends Component {
 
         )
     }
+
     render(){
         const {idNumber} = this.props;
         return (
             <View style={GlobleStyles.withoutTitleContainer}>
                 <View  style={{alignItems:"center"}}>
-                    <Text style={{fontSize:18,margin:20}}>    如果您感觉【buildquestion】能够帮助您，如果您有意向支持我们发展得越来越好，如下是捐赠的方式，受捐资产将会全部投入到服务器运营，感谢。</Text>
-                    <Image style={{width:200,height:200}} resizeMode="cover" source={{uri:`${httpsPicBaseUrl}${danate_weixin}`}}/>
-
+                    <Text style={{fontSize:18,margin:12}}>    如果您感觉【buildquestion】能够帮助您，如果您有意向支持我们发展得越来越好，如下是捐赠的方式，受捐资产将会全部投入到服务器运营，感谢。</Text>
+                    <Image style={{width:180,height:180}} resizeMode="cover" source={{uri:`${httpsPicBaseUrl}${danate_weixin}`}}/>
                 </View>
                 {this.renderDonateList()}
             </View>

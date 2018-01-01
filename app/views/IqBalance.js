@@ -27,15 +27,48 @@ const styles = StyleSheet.create({
 
 });
 
+let doGetBalancePostUrl = "https://slako.applinzi.com/index.php?m=question&c=personal&a=getbalance";
+
 class IqBalance extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            balance:1000,//0看题 1测试
+            balance:0,//0看题 1测试
 
         };
 
+    }
+
+    componentDidMount(){
+        this.dofetchBalance();
+    }
+
+    dofetchBalance(){
+
+        let formData = new FormData();
+        formData.append("auth",global.auth);
+        formData.append("userid",global.userid);
+        var opts = {
+            method:"POST",
+            body:formData
+        }
+        fetch(doGetBalancePostUrl,opts)
+            .then((response) => response.json())
+            .then((responseData) => {
+                if(responseData.code == 100){
+                    this.setState({
+                        balance:responseData.data
+                    })
+
+                }else{
+                    checkerrorcode(responseData);
+                }
+
+            })
+            .catch((error) => {
+                alert(error)
+            })
     }
 
     render(){
@@ -51,6 +84,11 @@ class IqBalance extends Component {
                 <View style={styles.listItem}>
                     <Text style={{fontSize:14}}>出入统计</Text>
                 </View>
+                <TouchableOpacity onPress={() => Actions.booklist({title:"做题赚币",inmode:0,whose:2})}>
+                    <View style={styles.listItem}>
+                        <Text style={{fontSize:14}}>做题赚币</Text>
+                    </View>
+                </TouchableOpacity>
                 {/*<TouchableOpacity onPress={() => Actions.balancerecharge()}>*/}
                     {/*<View style={styles.listItem}>*/}
                         {/*<Text style={{fontSize:14}}>充值</Text>*/}

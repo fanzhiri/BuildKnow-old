@@ -88,11 +88,14 @@ class BookList extends Component {
         if(this.props.classifyid != null){
             formData.append("classify",this.props.classifyid);
         }
+        if(this.props.whose != null){
+            formData.append("whose",this.props.whose);
+        }
 
-        var opts = {
+        let opts = {
             method:"POST",
             body:formData
-        }
+        };
         fetch(doGetSomeBookListUrl,opts)
             .then((response) => response.json())
             .then((responseData) => {
@@ -102,6 +105,7 @@ class BookList extends Component {
                         get_bookdata:true
                     })
                 }else{
+                    alert(responseData.message);
                     this.setState({
                         get_bookdata:true
                     })
@@ -153,19 +157,6 @@ class BookList extends Component {
         }
     }
 
-    renderReviewing(status){
-
-        if(status == 1){
-            return(
-                <View >
-                    <Text style={styles.statusText}>等待审核中</Text>
-                </View>
-            )
-        }else{
-            return null;
-        }
-    }
-
     onItemPress(rowData){
         if(this.props.inmode == 0){
             Actions.bookcover({bookpublicid:rowData.reviewid,title:rowData.bookname})
@@ -179,7 +170,7 @@ class BookList extends Component {
     }
 
     renderBookItem(rowData, sectionID, rowID){
-        var cover = rowData.cover;
+        let cover = rowData.cover;
         return (
             <TouchableOpacity onPress={() => this.onItemPress(rowData)}>
                 <View style={styles.listItem}>
@@ -189,7 +180,7 @@ class BookList extends Component {
                         <Text style={styles.topTitleStyle}>
                             {rowData.bookname}
                         </Text>
-                        {this.renderReviewing(rowData.status)}
+
                         <Text >
                             {rowData.bookbrief}
                         </Text>
@@ -233,7 +224,7 @@ class BookList extends Component {
 BookList.PropTypes = {
     inmode: PropTypes.number.isRequired,//0查看，1选择
     intype: PropTypes.number,//1 克隆
-    whose:PropTypes.number,//0个人  1 所有
+    whose:PropTypes.number,//0个人 1所有 2能挣建识币的
     qstid:PropTypes.number,
     cvst_id: PropTypes.number,//发送给会话人时用
     chattoid:PropTypes.number,

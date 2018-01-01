@@ -30,6 +30,9 @@ import DataStore from '../util/DataStore';
 import GlobleStyles from '../styles/GlobleStyles';
 import Icon from 'react-native-vector-icons/Ionicons';
 
+import EmptyData from '../component/EmptyData';
+import LoadingData from '../component/LoadingData';
+
 var doGetBookUrl = "https://slako.applinzi.com/index.php?m=question&c=personal&a=getbook";
 var httpsBaseUrl = "https://slako.applinzi.com/";
 
@@ -638,7 +641,7 @@ class BuildingBook extends Component {
     renderrecommend(){
         if(this.state.idea_recommend_data_source == null){
             return(
-                this.rendernodata()
+                <EmptyData/>
             )
         }else{
             return(
@@ -663,7 +666,7 @@ class BuildingBook extends Component {
             <View style={styles.ButtonViewContainer}>
                 {this.renderrecommend()}
                 <View style={styles.bottomButtonViewContainer}>
-                    <TouchableOpacity  onPress={()=> Actions.newsomequestions({bookid:this.props.bookid,title:this.state.bookdata.bookname})} >
+                    <TouchableOpacity  onPress={()=> Actions.newsomequestions({intype:0,bookid:this.props.bookid,title:this.state.bookdata.bookname})} >
                         <Text style={styles.bottomButtonText} >贡献</Text>
                     </TouchableOpacity>
                 </View>
