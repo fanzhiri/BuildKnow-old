@@ -18,9 +18,9 @@ const styles = StyleSheet.create({
 
 });
 
-var httpsPicBaseUrl = "http://slako-buildqst.stor.sinaapp.com/";
-var danate_weixin ="currency/donate/weixindonate.pic.jpeg";
-var doGetDonateUrl = "https://slako.applinzi.com/index.php?m=question&c=index&a=donate";
+let httpsPicBaseUrl = "http://slako-buildqst.stor.sinaapp.com/";
+let danate_weixin ="currency/donate/weixindonate.pic.jpeg";
+let doGetDonateUrl = "https://slako.applinzi.com/index.php?m=question&c=index&a=donate";
 
 class Donate extends Component {
 
@@ -47,10 +47,10 @@ class Donate extends Component {
         let formData = new FormData();
         formData.append("auth",global.auth);
         formData.append("userid",global.userid);
-        var opts = {
+        let opts = {
             method:"POST",
             body:formData
-        }
+        };
         fetch(doGetDonateUrl,opts)
             .then((response) => response.json())
             .then((responseData) => {

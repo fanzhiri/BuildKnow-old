@@ -127,6 +127,8 @@ import DonateRecord from './views/DonateRecord';
 import UnderstandVC from './views/UnderstandVC';
 import HandoutVC from './views/HandoutVC';
 import RedPacket from './views/RedPacket';
+import RedPacketDetail from './views/RedPacketDetail';
+import ExchangeDetail from './views/ExchangeDetail';
 
 import Icon from 'react-native-vector-icons/Ionicons';
 
@@ -134,15 +136,6 @@ export default class BuildKnow extends Component {
 
     nothingtodo(){
 
-    }
-
-    endanswer(nowstatus){
-        alert(nowstatus)
-        if(nowstatus == 0){
-            Actions.pop();
-        }else{
-            Actions.testresult();
-        }
     }
 
     constructor(props) {
@@ -270,7 +263,9 @@ export default class BuildKnow extends Component {
                 <Scene key="donaterecord"       title="捐助录入"      component={DonateRecord} duration={0} />
                 <Scene key="understandvc"       title="了解建识币"      component={UnderstandVC} duration={0} />
                 <Scene key="handoutvc"          title="发红包"      component={HandoutVC} duration={0} />
-                <Scene key="redpacket"          title="建识红包"      component={RedPacket} duration={0} />
+                <Scene key="redpacket"          title="建识红包"      component={RedPacket} duration={0} onLeft={()=> Actions.pop({refresh:{gorefresh:1}}) }/>
+                <Scene key="redpacketdetail"    title="红包记录"      component={RedPacketDetail} duration={0} />
+                <Scene key="exchangedetail"     title="交易详情"      component={ExchangeDetail} duration={0} />
             </Router>
         );
     }

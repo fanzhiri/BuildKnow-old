@@ -119,11 +119,7 @@ class HandoutVC extends Component {
                     this.setState({
                         uploading:0,
                     });
-                    /*
-                    Alert.alert('操作提示','发送成功',[
-                        {text:'ok'}
-                    ]);
-                    */
+                    global.money = responseData.data;
                     Actions.pop({refresh:{gorefresh:1}});
                 }else{
                     alert(global.auth);
@@ -182,6 +178,9 @@ class HandoutVC extends Component {
         return (
             <View style={[GlobleStyles.withoutTitleContainer,styles.container]}>
                 <ScrollView>
+                    <View style={{height:32,margin:8}}>
+                        <Text style={{fontSize:20}}>余币：{global.money}</Text>
+                    </View>
                     <TextInput
                         style={styles.briefinput}
                         keyboardType ={"numeric"}

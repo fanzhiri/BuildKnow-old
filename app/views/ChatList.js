@@ -415,6 +415,14 @@ class ChatList extends Component {
         )
     }
 
+    clickRedPacket(rowData,id){
+        if(rowData.send_from_userid == global.userid){
+            Actions.redpacket({idnumber:id,intype:0});
+        }else{
+            Actions.redpacket({idnumber:id,intype:1});
+        }
+    }
+
     renderRedPacket(rowData){
         let redpacketinfo= JSON.parse(rowData.content);
         let words  =redpacketinfo.words;
@@ -426,10 +434,10 @@ class ChatList extends Component {
             status = "红包已被领完";
         }
         return(
-            <TouchableOpacity onPress={() => Actions.redpacket({idnumber:redpacketinfo.id})}>
+            <TouchableOpacity onPress={() => this.clickRedPacket(rowData,redpacketinfo.id)}>
                 <View style={{width:240,height:60,flexDirection:"row",alignItems:"center",backgroundColor:"#FF4500",borderRadius:6,padding:6}}>
-                    <View style={{justifyContent:"center",alignItems:"center",width:54,height:54,borderWidth:1,borderRadius:6}}>
-                        <Icon name={"md-mail"} size={38} color={"#11FF00"}/>
+                    <View style={{justifyContent:"center",alignItems:"center",width:46,height:46,borderWidth:1,borderRadius:6}}>
+                        <Icon name={"md-mail"} size={42} color={"#11FF00"}/>
                     </View>
                     <View>
                         <Text style={{marginLeft:6,marginTop:2,fontSize:16}}>{words}</Text>

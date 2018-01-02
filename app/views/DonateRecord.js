@@ -73,7 +73,7 @@ const styles = StyleSheet.create({
     },
 });
 
-var doCommitDonatePostUrl = "https://slako.applinzi.com/index.php?m=question&c=admin&a=donaterecord";
+let doCommitDonatePostUrl = "https://slako.applinzi.com/index.php?m=question&c=admin&a=donaterecord";
 
 class DonateRecord extends Component {
 

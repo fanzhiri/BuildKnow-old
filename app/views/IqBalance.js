@@ -59,8 +59,8 @@ class IqBalance extends Component {
                 if(responseData.code == 100){
                     this.setState({
                         balance:responseData.data
-                    })
-
+                    });
+                    global.money=responseData.data;
                 }else{
                     checkerrorcode(responseData);
                 }
