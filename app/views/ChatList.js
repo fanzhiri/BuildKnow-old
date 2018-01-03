@@ -11,7 +11,9 @@ import {
     ListView,
     ScrollView,
     TextInput,
-    Image
+    Image,
+    Keyboard,
+    Dimensions
 } from "react-native";
 import {Actions} from "react-native-router-flux";
 import Button from 'apsl-react-native-button'
@@ -20,9 +22,12 @@ import { GiftedChat } from 'react-native-gifted-chat';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import DataStore from '../util/DataStore';
+import EmptyData from '../component/EmptyData';
+import LoadingData from '../component/LoadingData';
+import {PicBaseUrl} from '../util/Attributes';
 
 const styles = StyleSheet.create({
-    container: {
+    thiscontainer: {
         marginLeft:2,
         marginRight:2,
         marginBottom:2
@@ -81,6 +86,7 @@ const styles = StyleSheet.create({
     },
     bottomAttachmentViewContainer:{
         paddingTop:8,
+        paddingBottom:8,
         flexDirection:'row',
         alignItems: 'center',
         justifyContent: 'space-around',
@@ -138,7 +144,9 @@ var sendMsgUrl = "https://slako.applinzi.com/index.php?m=question&c=personal&a=s
 
 var checkMsgListUrl = "https://slako.applinzi.com/index.php?m=question&c=personal&a=checkmsglist";
 
-var httpsBaseUrl = "https://slako.applinzi.com/";
+
+
+let  windowheight = Dimensions.get('window').height - 64;
 
 class ChatList extends Component {
 
@@ -154,7 +162,8 @@ class ChatList extends Component {
             inputtextstring:"",
             showattach:false,
             chattoid:props.chattoid,
-            cvstid:props.cvstid
+            cvstid:props.cvstid,
+            withoutkeyboardheight:windowheight,
         };
         this._onChange = this.onChange.bind(this);
         this._peoplelist = this.peoplelist.bind(this);
@@ -163,6 +172,52 @@ class ChatList extends Component {
         this._detial=this.detial.bind(this);
         this._renderMsgItem=this.renderMsgItem.bind(this);
         this._renderMsgContent=this.renderMsgContent.bind(this);
+        this._changeheight=this.changeheight.bind(this);
+        this._keyboardDidShow=this.keyboardDidShow.bind(this);
+        this._keyboardDidHide=this.keyboardDidHide.bind(this);
+        this._keyboardWillShow=this.keyboardWillShow.bind(this);
+        this._keyboardWillHide=this.keyboardWillHide.bind(this);
+        this.timer_to_refresh=null;//延时滚屏
+    }
+
+
+
+    componentWillUnmount () {
+        this.keyboardDidShowListener.remove();
+        this.keyboardDidHideListener.remove();
+    }
+
+    changeheight(hh){
+        this.setState({
+            withoutkeyboardheight:hh
+        });
+    }
+
+    keyboardDidShow() {
+        this.refs.scrview.scrollToEnd();
+    }
+
+    scrollviewtoend(){
+        this.timer_to_refresh && clearInterval(this.timer_to_refresh);
+        this.refs.scrview.scrollToEnd();
+    }
+
+    keyboardDidHide() {
+        this.refs.scrview.scrollToEnd();
+    }
+
+    keyboardWillShow() {
+
+        this.setState({
+            showattach:false,
+            withoutkeyboardheight:windowheight-258
+        });
+
+    }
+
+    keyboardWillHide() {
+        this.changeheight(windowheight);
+
     }
 
     detial(){
@@ -177,7 +232,11 @@ class ChatList extends Component {
     }
 
     componentWillMount(){
-        Actions.refresh({rightTitle: "详情",onRight: this._detial})
+        Actions.refresh({rightTitle: "详情",onRight: this._detial});
+        this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', this._keyboardDidShow);
+        this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this._keyboardDidHide);
+        this.keyboardDidShowListener = Keyboard.addListener('keyboardWillShow', this._keyboardWillShow);
+        this.keyboardDidHideListener = Keyboard.addListener('keyboardWillHide', this._keyboardWillHide);
     }
 
     dofetch_sendmsg(){
@@ -231,7 +290,8 @@ class ChatList extends Component {
                     this.setState({
                         messageslist:responseData.data,
                     });
-                    this.refs.scrview.scrollToEnd();
+                    this.timer_to_jump=setTimeout(()=>this.scrollviewtoend(),10);
+
                 }else{
                     alert(responseData.message);
                 }
@@ -275,8 +335,10 @@ class ChatList extends Component {
     }
 
     render(){
+
+
         return (
-            <View style={[GlobleStyles.withoutTitleContainer,styles.container]}>
+            <View style={[styles.thiscontainer,{height:this.state.withoutkeyboardheight,marginTop:64,}]}>
                 <View>
                     <SegmentedControlIOS
                         values={['全部','照片','推荐']}
@@ -303,11 +365,11 @@ class ChatList extends Component {
 
         } else if (this.state.selectedIndex === 1) {
             return (
-                this.renderLoading()
+                <EmptyData/>
             )
         } else if (this.state.selectedIndex === 2) {
             return (
-                this.renderLoading()
+                <EmptyData/>
             )
         }
     }
@@ -352,7 +414,7 @@ class ChatList extends Component {
         return(
             <TouchableOpacity onPress={() => Actions.homepage({userId:peopleinfo.userid,title:nickname})}>
             <View>
-                <Image style={[{width: 80,height: 80,}, this.props.imageStyle]} resizeMode="cover" source={{uri:`${httpsBaseUrl}${head}`}} />
+                <Image style={[{width: 80,height: 80,}, this.props.imageStyle]} resizeMode="cover" source={{uri:`${PicBaseUrl}${head}`}} />
                 <Text>{nickname}</Text>
             </View>
             </TouchableOpacity>
@@ -406,7 +468,7 @@ class ChatList extends Component {
             <TouchableOpacity onPress={() => Actions.bookcover({bookpublicid:bookinfo.reviewid})}>
                 <View style={{width:200}}>
                     <View style={{flexDirection:"row"}}>
-                        <Image style={[{width: 80,height: 80,}, this.props.imageStyle]} resizeMode="cover" source={{uri:`${httpsBaseUrl}${cover}`}} />
+                        <Image style={[{width: 80,height: 80,}, this.props.imageStyle]} resizeMode="cover" source={{uri:`${PicBaseUrl}${cover}`}} />
                         <Text style={{color:"#FF0000",fontSize:20,marginLeft:6}}>{bookname}</Text>
                     </View>
                     <Text style={{marginLeft:6,marginTop:4}}>简介: {bookbrief}</Text>
@@ -435,7 +497,7 @@ class ChatList extends Component {
         }
         return(
             <TouchableOpacity onPress={() => this.clickRedPacket(rowData,redpacketinfo.id)}>
-                <View style={{width:240,height:60,flexDirection:"row",alignItems:"center",backgroundColor:"#FF4500",borderRadius:6,padding:6}}>
+                <View style={{width:240,height:62,flexDirection:"row",alignItems:"center",backgroundColor:"#FF4500",borderRadius:6,padding:4}}>
                     <View style={{justifyContent:"center",alignItems:"center",width:46,height:46,borderWidth:1,borderRadius:6}}>
                         <Icon name={"md-mail"} size={42} color={"#11FF00"}/>
                     </View>
@@ -475,7 +537,7 @@ class ChatList extends Component {
                         {this.renderMsgType(rowData)}
                         <Text style={styles.msgtime}>{d.toDateString()}</Text>
                     </View>
-                    <Image style={{borderRadius:4,height:36,width:36}} resizeMode="cover" source={{uri:`${httpsBaseUrl}${global.userhead}`}}/>
+                    <Image style={{borderRadius:4,height:36,width:36}} resizeMode="cover" source={{uri:`${PicBaseUrl}${global.userhead}`}}/>
                 </View>
             );
         }else{
@@ -533,20 +595,22 @@ class ChatList extends Component {
     }
 
     changeshowattach(now){
+
+        if(now == false){
+            Keyboard.dismiss();
+        }
         this.setState({
             showattach:now ? false:true,
-        })
-
+        });
+        this.timer_to_jump=setTimeout(()=>this.scrollviewtoend(),10);
     }
 
     renderIntroduceView(){
         return (
-            <KeyboardAwareScrollView extraScrollHeight={20} >
+
                 <View style={{flex:1,justifyContent:"flex-end"}}>
 
-                    <ScrollView
 
-                        style={styles.scrlist}>
                         <ListView
                             ref="scrview"
                             style={styles.list}
@@ -554,7 +618,7 @@ class ChatList extends Component {
                             renderRow={this._renderMsgItem}
                             enableEmptySections = {true}
                         />
-                    </ScrollView>
+
 
                     <View style={styles.bottomInputViewContainer}>
                         <TouchableOpacity onPress={()=>this.changeshowattach(this.state.showattach)} >
@@ -583,7 +647,7 @@ class ChatList extends Component {
                     {this.renderAttachView()}
 
                 </View>
-            </KeyboardAwareScrollView>
+
         )
     }
 }

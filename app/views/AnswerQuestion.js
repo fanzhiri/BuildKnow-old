@@ -297,7 +297,7 @@ class AnswerQuestion extends Component {
         if(global.gautonext == 0){
 
         }else{
-            this.timer_to_jump=setInterval(()=>this.anotherquestion(1),400);
+            this.timer_to_jump=setTimeout(()=>this.anotherquestion(1),400);
         }
 
     }
