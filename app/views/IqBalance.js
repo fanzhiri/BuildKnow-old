@@ -78,12 +78,14 @@ class IqBalance extends Component {
                 <View style={{justifyContent:"center",alignItems:"center",height:72,backgroundColor:"#EEEE00"}}>
                     <Text style={{fontSize:32}}>{this.state.balance}</Text>
                 </View>
-                <View style={styles.listItem}>
-                    <Text style={{fontSize:14}}>最近明细</Text>
-                </View>
-                <View style={styles.listItem}>
-                    <Text style={{fontSize:14}}>出入统计</Text>
-                </View>
+                <TouchableOpacity onPress={() => Actions.exchangedetail()}>
+                    <View style={styles.listItem}>
+                        <Text style={{fontSize:14}}>交易明细</Text>
+                    </View>
+                </TouchableOpacity>
+                {/*<View style={styles.listItem}>*/}
+                    {/*<Text style={{fontSize:14}}>出入统计</Text>*/}
+                {/*</View>*/}
                 <TouchableOpacity onPress={() => Actions.booklist({title:"做题赚币",inmode:0,whose:2})}>
                     <View style={styles.listItem}>
                         <Text style={{fontSize:14}}>做题赚币</Text>

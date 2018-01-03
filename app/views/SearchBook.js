@@ -13,7 +13,8 @@ import {
 import {Actions} from "react-native-router-flux";
 import Button from "react-native-button";
 import GlobleStyles from '../styles/GlobleStyles';
-
+import EmptyData from '../component/EmptyData';
+import LoadingData from '../component/LoadingData';
 
 import DataStore from '../util/DataStore';
 
@@ -50,9 +51,9 @@ const styles = StyleSheet.create({
     bottomTitleStyle:{
         color:'blue'
     },
-    list:{
-
-    }
+    segmented:{
+        margin:4,
+    },
 
 });
 
@@ -141,11 +142,11 @@ class SearchBook extends Component {
 
         } else if (this.state.selectedIndex === 1) {
             return (
-                this.renderLoading()
+                <EmptyData/>
             )
         } else if (this.state.selectedIndex === 2) {
             return (
-                this.renderLoading()
+                <EmptyData/>
             )
         }
     }

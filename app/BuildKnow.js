@@ -129,6 +129,7 @@ import HandoutVC from './views/HandoutVC';
 import RedPacket from './views/RedPacket';
 import RedPacketDetail from './views/RedPacketDetail';
 import ExchangeDetail from './views/ExchangeDetail';
+import JobDetail from './views/JobDetail';
 
 import Icon from 'react-native-vector-icons/Ionicons';
 
@@ -266,6 +267,7 @@ export default class BuildKnow extends Component {
                 <Scene key="redpacket"          title="建识红包"      component={RedPacket} duration={0} onLeft={()=> Actions.pop({refresh:{gorefresh:1}}) }/>
                 <Scene key="redpacketdetail"    title="红包记录"      component={RedPacketDetail} duration={0} />
                 <Scene key="exchangedetail"     title="交易详情"      component={ExchangeDetail} duration={0} />
+                <Scene key="jobdetail"          title="职位详情"      component={JobDetail} duration={0} />
             </Router>
         );
     }

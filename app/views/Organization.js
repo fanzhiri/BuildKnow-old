@@ -496,13 +496,15 @@ class Organization extends Component {
     renderJobRow(rowData, sectionID, rowID) {
 
         return (
-            <View style={styles.jobItem}>
-                <Text style={{fontSize:18}}>{rowData.name}</Text>
-                <Text>{rowData.workplace}</Text>
-                <Text>{rowData.jobyearlow} - {rowData.jobyearhigh}</Text>
-                <Text>{educationtext[rowData.education]}</Text>
-                <Text>{salarytext[rowData.salary]}</Text>
-            </View>
+            <TouchableOpacity onPress={() => Actions.jobdetail({jobid:rowData.id,jobdata:rowData})}>
+                <View style={styles.jobItem}>
+                    <Text style={{fontSize:18}}>{rowData.name}</Text>
+                    <Text>{rowData.workplace}</Text>
+                    <Text>{rowData.jobyearlow} - {rowData.jobyearhigh} 年</Text>
+                    <Text>{educationtext[rowData.education]}</Text>
+                    <Text>月薪：{salarytext[rowData.salary]}</Text>
+                </View>
+            </TouchableOpacity>
         );
 
     }

@@ -7,6 +7,8 @@ import {Actions} from "react-native-router-flux";
 import Button from 'apsl-react-native-button'
 import GlobleStyles from '../styles/GlobleStyles';
 import DataStore from '../util/DataStore';
+import EmptyData from '../component/EmptyData';
+import LoadingData from '../component/LoadingData';
 
 const styles = StyleSheet.create({
     container: {
@@ -37,7 +39,7 @@ const styles = StyleSheet.create({
 
 });
 
-var doGetExchangeDetailUrl = "https://slako.applinzi.com/index.php?m=question&c=personal&a=getbooktestrecord";
+var doGetExchangeDetailUrl = "https://slako.applinzi.com/index.php?m=question&c=personal&a=getexchangedetail";
 
 class ExchangeDetail extends Component {
 
@@ -46,7 +48,7 @@ class ExchangeDetail extends Component {
 
         this.state = {
 
-            testrecord_data_source:null,
+            exchangedetail_data:null,
             getdata:0,
             gorefreshing:false
         };
@@ -54,28 +56,28 @@ class ExchangeDetail extends Component {
 
     }
 
-    doFetchBookTestRecord(){
+    doFetchExchangeDetai(){
         let formData = new FormData();
         formData.append("auth",global.auth);
         formData.append("userid",global.userid);
-        formData.append("bookid",this.props.bookid);
 
-        var opts = {
+
+        let opts = {
             method:"POST",
             body:formData
-        }
-        fetch(doGetBookTestRecordUrl,opts)
+        };
+        fetch(doGetExchangeDetailUrl,opts)
             .then((response) => response.json())
             .then((responseData) => {
                 if(responseData.code == 100){
 
                     this.setState({
-                        testrecord_data_source:responseData.data,
+                        exchangedetail_data:responseData.data.reverse(),
                         getdata:1
                     })
 
                 }else{
-                    alert(responseData.message)
+                    alert(responseData.message);
                     this.setState({
                         getdata:1
                     })
@@ -88,33 +90,45 @@ class ExchangeDetail extends Component {
     }
 
     renderRecordItem(rowData,sectionID, rowID){
-        let time_o = new Date(rowData.begintime * 1000);
-        //time_o.setMilliseconds(rowData.begintime);
-        let time_t = time_o.toLocaleString();
+        //let time_o = new Date(rowData.begintime * 1000);
+
+        //let time_t = time_o.toLocaleString();
+        let inout ="收入";
+        let inoutcolor = "#00FF00"
+        if(rowData.addsub == 1){
+            inout ="支出";
+            inoutcolor = "#FF0000"
+        }
+        let extype ="红包";
+        if(rowData.extype == 1){
+            extype ="转账";
+        }
         return(
             <View style={{
-                height:32,
+                height:68,
                 borderBottomWidth:1,
                 borderBottomColor:'#e464e4',
-                flexDirection:"row",
-                alignItems:"center"
                 }}>
                 <Text>{rowID} </Text>
-                <Text>得分:{rowData.score}  </Text>
-                <Text>题数:{rowData.qstnum}  </Text>
-                <Text>开始:{time_t}  </Text>
-                <Text>耗时:{rowData.taketime}  </Text>
+                <View style={{flexDirection:"row",alignItems:"center"}}>
+                    <Text style={{color:"#0000FF"}}>{extype}  </Text>
+                    <Text>时间:{rowData.time }  </Text>
+                </View>
+                <View style={{flexDirection:"row",alignItems:"center"}}>
+                    <Text style={{color:inoutcolor}}>{inout}:{rowData.vc}  </Text>
+                    <Text>余额:{rowData.remain }  </Text>
+                </View>
             </View>
         )
     }
 
     renderPage(){
         if(this.state.getdata == 0){
-            this.doFetchBookTestRecord();
-            return(this.renderLoading())
+            this.doFetchExchangeDetai();
+            return(<LoadingData/>)
         }else{
-            if(this.state.testrecord_data_source == null){
-                return(this.rendernodata())
+            if(this.state.exchangedetail_data == null){
+                return(<EmptyData/>)
             }else{
                 return(this.renderRecordList())
             }
@@ -135,11 +149,11 @@ class ExchangeDetail extends Component {
                 refreshControl={
                     <RefreshControl
                         refreshing={this.state.gorefreshing}
-                        onRefresh={() => this.doFetchBookTestRecord()}
+                        onRefresh={() => this.doFetchExchangeDetai()}
                     />
                 }
                 style={{flex:1,margin:6}}
-                dataSource={DataStore.cloneWithRows(this.state.testrecord_data_source)}
+                dataSource={DataStore.cloneWithRows(this.state.exchangedetail_data)}
                 renderRow={this._renderRecordItem}
                 enableEmptySections = {true}
             />
@@ -147,17 +161,6 @@ class ExchangeDetail extends Component {
         );
     }
 
-    renderLoading(){
-        return (
-            <Text>Loading ...</Text>
-        )
-    }
-
-    rendernodata(){
-        return (
-            <Text>没有数据</Text>
-        )
-    }
 }
 
 module.exports = ExchangeDetail;

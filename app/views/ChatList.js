@@ -491,7 +491,9 @@ class ChatList extends Component {
         let split  =redpacketinfo.split;
         let take  =redpacketinfo.take;
         let status = "领取红包";
-
+        if(redpacketinfo.userid == global.userid){
+            status = "未被领完";
+        }
         if(split == take){
             status = "红包已被领完";
         }

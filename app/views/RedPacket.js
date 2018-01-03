@@ -66,14 +66,34 @@ class RedPacket extends Component {
             })
     }
 
+    renderTaker(){
+        if(this.state.redpacketdata.takeaway == null){
+            return(
+                <View style={{height:36,flexDirection:"row",alignItems:"center",backgroundColor:"#FFFFA0",margin:6,padding:6,borderRadius:6}}>
+                    <Text style={{fontSize:14,margin:6}}>未被领取</Text>
+                </View>
+            );
+        }
+        let time_o = new Date(this.state.redpacketdata.taketime * 1000);
+        let time_t = time_o.toLocaleString();
+        return(
+                <View style={{height:36,flexDirection:"row",alignItems:"center",backgroundColor:"#FFFFA0",margin:6,padding:6,borderRadius:6}}>
+                    <Image source={{uri:`${PicBaseUrl}${this.state.redpacketdata.takeaway.head}`}} style={{width:28,height:28}}/>
+                    <Text style={{fontSize:14,margin:6}}>{this.state.redpacketdata.takeaway.nickname} </Text>
+                    <Text style={{fontSize:14,margin:6}}>{time_t} </Text>
+                    <Text style={{fontSize:14,margin:6}}>{this.state.redpacketdata.vc} </Text>
+                </View>
+            )
+
+    }
+
     renderRedPacket(){
         if(this.state.redpacketdata == null){
             return(
                 <LoadingData/>
             )
         }else{
-            let time_o = new Date(this.state.redpacketdata.taketime * 1000);
-            let time_t = time_o.toLocaleString();
+
             return(
                 <View>
                     <View style={{height:360,alignItems:"center",justifyContent:"center"}}>
@@ -82,12 +102,7 @@ class RedPacket extends Component {
                         <Text style={{fontSize:20,margin:6}}>{this.state.redpacketdata.words}</Text>
                         <Text style={{fontSize:32,margin:6}}>{this.state.redpacketdata.vc} 币</Text>
                         <Text style={{fontSize:14,margin:6}}>{this.state.redpacketdata.createtime}</Text>
-                        <View style={{height:36,flexDirection:"row",alignItems:"center",backgroundColor:"#FFFFA0",margin:6,padding:6,borderRadius:6}}>
-                            <Image source={{uri:`${PicBaseUrl}${this.state.redpacketdata.takeaway.head}`}} style={{width:28,height:28}}/>
-                            <Text style={{fontSize:14,margin:6}}>{this.state.redpacketdata.takeaway.nickname} </Text>
-                            <Text style={{fontSize:14,margin:6}}>{time_t} </Text>
-                            <Text style={{fontSize:14,margin:6}}>{this.state.redpacketdata.vc} </Text>
-                        </View>
+                        {this.renderTaker()}
 
                     </View>
                 </View>
