@@ -92,7 +92,7 @@ class Login extends Component {
                     global.userhead=responseData.data.userhead;
                     global.adminid=responseData.data.adminid;
                     global.mydata=responseData.data.mydata;
-                    global.money=responseData.data.iqbalance;
+                    global.money=responseData.data.vc;
                     //注意看下面！！如果数据库中该字段为空，使用JSON.parse会出错！！在数据库操作的php中，应该检查空并置为[]
                     global.followperson=JSON.parse(responseData.data.followperson);
                     global.friend=JSON.parse(responseData.data.friend);
@@ -289,11 +289,11 @@ class Login extends Component {
                             validate: [{
                                 validator: 'isLength',
                                 arguments: [2, 16],
-                                message: '{TITLE} must be between {ARGS[0]} and {ARGS[1]} characters'
+                                message: '{TITLE} 长度必须大于 {ARGS[0]} 和小于 {ARGS[1]} '
                             },{
                                 validator: 'matches',
                                 arguments: /^[a-zA-Z0-9]*$/,
-                                message: '{TITLE} can contains only alphanumeric characters'
+                                message: '{TITLE} 只能包涵字母和数字 '
                             }]
                         },
                         password: {
@@ -301,7 +301,7 @@ class Login extends Component {
                             validate: [{
                                 validator: 'isLength',
                                 arguments: [6, 16],
-                                message: '{TITLE} must be between {ARGS[0]} and {ARGS[1]} characters'
+                                message: '{TITLE} 长度必须大于 {ARGS[0]} 和小于 {ARGS[1]} '
                             }]
                         },
                     }}

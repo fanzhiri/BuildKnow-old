@@ -71,7 +71,9 @@ const styles = StyleSheet.create({
     },leftbuttonContainer2:{
         justifyContent: 'space-around',
         alignItems: 'center',
-    }
+    },segmented:{
+        margin:4,
+    },
 
 });
 
@@ -205,7 +207,7 @@ class RegisterVerify extends Component {
         let formData = new FormData();
         formData.append("auth",global.auth);
         formData.append("adminid",global.adminid);
-        formData.append("userid",verifyid);
+        formData.append("verifyuserid",verifyid);
         var opts = {
             method:"POST",
             body:formData

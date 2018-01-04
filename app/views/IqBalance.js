@@ -34,8 +34,7 @@ class IqBalance extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            balance:0,//0看题 1测试
-
+            balance:0,//
         };
 
     }
@@ -57,10 +56,7 @@ class IqBalance extends Component {
             .then((response) => response.json())
             .then((responseData) => {
                 if(responseData.code == 100){
-                    this.setState({
-                        balance:responseData.data
-                    });
-                    global.money=responseData.data;
+                    global.money = responseData.data.vc;
                 }else{
                     checkerrorcode(responseData);
                 }
@@ -75,8 +71,13 @@ class IqBalance extends Component {
         const {idNumber} = this.props;
         return (
             <View style={GlobleStyles.withoutTitleContainer}>
-                <View style={{justifyContent:"center",alignItems:"center",height:72,backgroundColor:"#EEEE00"}}>
-                    <Text style={{fontSize:32}}>{this.state.balance}</Text>
+                <View style={{justifyContent:"center",alignItems:"center",height:120,backgroundColor:"#EEEE00"}}>
+                    <Text style={{fontSize:38,margin:8}}>{global.money}</Text>
+                    <TouchableOpacity onPress={() => this.dofetchBalance()}>
+                        <View style={{borderRadius:4,margin:2,padding:2,flexDirection:"row",backgroundColor:"#7A67EE",justifyContent:"center",alignItems:"center"}}>
+                            <Text>刷新一下</Text>
+                        </View>
+                    </TouchableOpacity>
                 </View>
                 <TouchableOpacity onPress={() => Actions.exchangedetail()}>
                     <View style={styles.listItem}>

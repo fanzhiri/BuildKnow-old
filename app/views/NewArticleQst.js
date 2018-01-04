@@ -2,7 +2,7 @@
  * Created by slako on 17/10/01.
  */
 import React, { Component ,PropTypes} from 'react';
-import {View, Text, StyleSheet, TextInput,SegmentedControlIOS,Image,ScrollView,TouchableOpacity,Alert,WebView,ListView} from "react-native";
+import {View, Text, StyleSheet, TextInput,SegmentedControlIOS,Image,ScrollView,TouchableOpacity,Alert,WebView,ListView,Keyboard} from "react-native";
 import {Actions} from "react-native-router-flux";
 import Button from 'apsl-react-native-button'
 import GlobleStyles from '../styles/GlobleStyles';
@@ -92,11 +92,11 @@ const styles = StyleSheet.create({
     },
 });
 
-var addimguri ={uri:"https://slako.applinzi.com/statics/images/question/util/addimg.jpg", width: 80, height: 80 };
-var addvideouri ={uri:"https://slako.applinzi.com/statics/images/question/util/addimg.jpg", width: 100, height: 68 };
+let addimguri ={uri:"https://slako.applinzi.com/statics/images/question/util/addimg.jpg", width: 80, height: 80 };
+let addvideouri ={uri:"https://slako.applinzi.com/statics/images/question/util/addimg.jpg", width: 100, height: 68 };
 
-var docommitpostUrl = "https://slako.applinzi.com/index.php?m=question&c=personal&a=addquestion";
-//var docommitpostUrl = "https://slako.applinzi.com/index.php?m=question&c=index&a=testquestion";
+let doCommitPostUrl = "https://slako.applinzi.com/index.php?m=question&c=personal&a=addarticleqst";
+
 
 const MAX_ITEM = 10 ;
 
@@ -114,7 +114,8 @@ class NewArticleQst extends Component {
             refreshbutton:2, //1改动过
             qsts_data_source:t_qsts_data_source,
             select_idx:-1,
-            selectedIndex:0
+            selectedIndex:0,
+            uploading:0
         };
         this._renderQstItem = this.renderQstItem.bind(this);
         this._onChange              = this.onChange.bind(this);
@@ -140,6 +141,60 @@ class NewArticleQst extends Component {
         });
     }
 
+    docommit(){
+        if(this.state.uploading == 1){
+            return;
+        }
+        this.setState({
+            uploading:1,
+        });
+        let formData = new FormData();
+
+        formData.append("auth",global.auth);
+        formData.append("articletitle",this.state.article_title);
+        formData.append("articlelink",this.state.articlelink);
+
+        let qstids = new Array();
+        for(let i=0;i<this.state.qsts_data_source.length;i++){
+            qstids.push(this.state.qsts_data_source[i].questionid);
+        }
+        formData.append("qsts",JSON.stringify(qstids));
+        formData.append("qsnum",this.state.qsts_data_source.length);
+
+        let opts = {
+            method:"POST",
+            headers:{
+                'Content-Type':'multipart/form-data',
+            },
+            body:formData
+        }
+        fetch(doCommitPostUrl,opts)
+            .then((response) => response.json())
+            .then((responseData) => {
+                if(responseData.code == 100){
+                    this.setState({
+                        uploading:0,
+                    });
+                    Alert.alert('操作提示','提交成功',[
+                        {text:'ok'}
+                    ]);
+                }else{
+                    alert(global.auth);
+                    alert(responseData.message)
+                    this.setState({
+                        uploading:0,
+                    });
+                }
+
+            })
+            .catch((error) => {
+                alert(error);
+                this.setState({
+                    uploading:0,
+                });
+            })
+    }
+
     articleLinkTextChange(text){
         this.setState({
             articlelink_shadow:text,
@@ -155,7 +210,8 @@ class NewArticleQst extends Component {
         this.setState({
             articlelink:this.state.articlelink_shadow,
             refreshbutton:0
-        })
+        });
+        Keyboard.dismiss();
     }
 
     renderRefreshButton(){
@@ -316,56 +372,63 @@ class NewArticleQst extends Component {
                 </TouchableOpacity>
 
                 {this.renderQstList()}
+
+                <TouchableOpacity onPress={() => this.docommit()}>
+                    <View style={{justifyContent:"center",alignItems:"center",height:32,margin:6,
+                        backgroundColor:"#66CD00",
+                        borderRadius:8
+                        }}>
+                        <Text>提交文推</Text>
+                    </View>
+                </TouchableOpacity>
             </View>
 
         );
     }
     renderArticle(){
         return (
-        <View style={[GlobleStyles.withoutTitleContainer,styles.container]}>
-
             <View>
-                <TextInput
-                    onChangeText={(text) => {this.articleTitleChange(text)}}
-                    style={{fontSize:16,
+                <View>
+                    <TextInput
+                        onChangeText={(text) => {this.articleTitleChange(text)}}
+                        style={{fontSize:16,
                         marginTop:6,
                         height: 32,
                         borderColor: 'gray',
                         borderWidth: 2,
                         paddingLeft:10,
                         paddingRight:10}}
-                    value={this.state.article_title}
-                    placeholder={"填写标题"}
-                    maxLength={20}
-                    multiline={true}
-                />
-                {/*<View style={{justifyContent:"center",alignItems:"center",height:32,margin:6}}>*/}
+                        value={this.state.article_title}
+                        placeholder={"填写标题"}
+                        maxLength={20}
+                        multiline={true}
+                    />
+                    {/*<View style={{justifyContent:"center",alignItems:"center",height:32,margin:6}}>*/}
                     {/*<Text style={{fontSize:16}}>链接拷贝到如下边框,点击刷新</Text>*/}
-                {/*</View>*/}
+                    {/*</View>*/}
 
-                <TextInput
-                    onChangeText={(text) => {this.articleLinkTextChange(text)}}
-                    style={styles.answerinput}
-                    value={this.state.articlelink_shadow}
-                    placeholder={"链接拷贝到这里,点击刷新"}
-                    maxLength={20}
-                    multiline={true}
-                />
+                    <TextInput
+                        onChangeText={(text) => {this.articleLinkTextChange(text)}}
+                        style={styles.answerinput}
+                        value={this.state.articlelink_shadow}
+                        placeholder={"链接拷贝到这里,点击刷新"}
+                        maxLength={20}
+                        multiline={true}
+                    />
 
-            </View>
-            {this.renderRefreshButton()}
-            <View style={{height:300,margin:6,borderWidth:1}}>
-                <WebView
-                    source={{
+                </View>
+                {this.renderRefreshButton()}
+                <View style={{height:400,margin:6,borderWidth:1}}>
+                    <WebView
+                        source={{
                     uri: this.state.articlelink,
                     method: 'GET'
                 }}
-                    domStorageEnabled={true}
-                    scalesPageToFit={false}
-                    javaScriptEnabled={true}
-                />
-            </View>
-
+                        domStorageEnabled={true}
+                        scalesPageToFit={false}
+                        javaScriptEnabled={true}
+                    />
+                </View>
             </View>
         );
     }

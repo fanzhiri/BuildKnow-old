@@ -99,39 +99,39 @@ class Register extends Component {
                     }}
                     validators={{
                         username: {
-                            title: 'Username',
+                            title: '用户名',
                             validate: [{
                                 validator: 'isLength',
                                 arguments: [3, 16],
-                                message: '{TITLE} must be between {ARGS[0]} and {ARGS[1]} characters'
+                                message: '{TITLE} 长度必须大于 {ARGS[0]} 和小于 {ARGS[1]} '
                             },{
                                 validator: 'matches',
                                 arguments: /^[a-zA-Z0-9]*$/,
-                                message: '{TITLE} can contains only alphanumeric characters'
+                                message: '{TITLE} 只能包涵字母和数字'
                             }]
                         },
                         password: {
-                            title: 'Password',
+                            title: '密码',
                             validate: [{
                                 validator: 'isLength',
                                 arguments: [6, 16],
-                                message: '{TITLE} must be between {ARGS[0]} and {ARGS[1]} characters'
+                                message: '{TITLE} 长度必须大于 {ARGS[0]} 和小于 {ARGS[1]} '
                             }]
                         },
                         passwordagain: {
-                            title: 'Passwordagain',
+                            title: '确认密码',
                             validate: [{
                                 validator: 'isLength',
                                 arguments: [6, 16],
-                                message: '{TITLE} must be between {ARGS[0]} and {ARGS[1]} characters'
+                                message: '{TITLE} 长度必须大于 {ARGS[0]} 和小于 {ARGS[1]} '
                             }]
                         },
                         emailaddress: {
-                            title: 'Email address',
+                            title: '邮箱地址',
                             validate: [{
                                 validator: 'isLength',
                                 arguments: [6, 60],
-                                message: '{TITLE} must be between {ARGS[0]} and {ARGS[1]} characters'
+                                message: '{TITLE} 长度必须大于 {ARGS[0]} 和小于 {ARGS[1]} '
                             },{
                                 validator: 'isEmail',
 
