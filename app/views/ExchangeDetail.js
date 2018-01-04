@@ -59,7 +59,7 @@ class ExchangeDetail extends Component {
     doFetchExchangeDetai(){
         let formData = new FormData();
         formData.append("auth",global.auth);
-        formData.append("userid",global.userid);
+        //formData.append("userid",global.userid);
 
 
         let opts = {

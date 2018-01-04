@@ -92,7 +92,7 @@ class MyBookList extends Component {
         let formData = new FormData();
         formData.append("auth",global.auth);
         formData.append("api","true");
-        formData.append("userid",global.userid);
+
         var opts = {
             method:"POST",
             body:formData
@@ -119,7 +119,7 @@ class MyBookList extends Component {
 
         let formData = new FormData();
         formData.append("auth",global.auth);
-        formData.append("userid",global.userid);
+
         formData.append("bookid",bookid);
         formData.append("qstid",this.props.qstid);
         var opts = {
