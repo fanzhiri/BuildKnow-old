@@ -34,7 +34,7 @@ class IqBalance extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            balance:0,//
+            balance:global.money,//
         };
 
     }
@@ -57,6 +57,9 @@ class IqBalance extends Component {
             .then((responseData) => {
                 if(responseData.code == 100){
                     global.money = responseData.data.vc;
+                    this.setState({
+                        balance:responseData.data.vc//
+                    });
                 }else{
                     checkerrorcode(responseData);
                 }
@@ -72,7 +75,7 @@ class IqBalance extends Component {
         return (
             <View style={GlobleStyles.withoutTitleContainer}>
                 <View style={{justifyContent:"center",alignItems:"center",height:120,backgroundColor:"#EEEE00"}}>
-                    <Text style={{fontSize:38,margin:8}}>{global.money}</Text>
+                    <Text style={{fontSize:38,margin:8}}>{this.state.balance}</Text>
                     <TouchableOpacity onPress={() => this.dofetchBalance()}>
                         <View style={{borderRadius:4,margin:2,padding:2,flexDirection:"row",backgroundColor:"#7A67EE",justifyContent:"center",alignItems:"center"}}>
                             <Text>刷新一下</Text>
