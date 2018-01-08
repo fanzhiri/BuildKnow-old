@@ -161,7 +161,8 @@ class AnswerQuestion extends Component {
                 }
             }
         }
-        //alert(JSON.stringify(do_arr));
+        let begintimesecond =this.state.startTime / 1000;
+
         let formData = new FormData();
         formData.append("auth",global.auth);
         formData.append("userid",global.userid);
@@ -173,7 +174,7 @@ class AnswerQuestion extends Component {
         formData.append("qstnum",this.state.answer_arr.length);
         formData.append("taketime",taketime);
         formData.append("rightnum",rightnum);
-        formData.append("begintime",this.state.startTime);
+        formData.append("begintime",begintimesecond);
         formData.append("qstasktext",JSON.stringify(this.props.readyquestion_arr));
         formData.append("qstanswertext",JSON.stringify(this.props.answer_arr));
         formData.append("answerchoose",JSON.stringify(this.state.choose));
@@ -772,14 +773,14 @@ class AnswerQuestion extends Component {
 
         };
         let endTimeSecond=endTime.getTime();
-        let takeTime = endTimeSecond-this.state.startTime;
+        let takeTime = (endTimeSecond - this.state.startTime)/1000;
         return(
             <View style={{flex:1}}>
                 <Text>得分   :{score}</Text>
                 <Text>答对题数:{right_num}</Text>
                 <Text>答错题数:{wrong_num}</Text>
                 <Text>今天第几次:{1}</Text>
-                <Text>耗时:{takeTime}</Text>
+                <Text>耗时:{takeTime}秒</Text>
                 <Text>今天第几次:{1}</Text>
                 <Text>历史第几次:{1}</Text>
                 <Text>开始时间:{this.state.startTimeText}</Text>

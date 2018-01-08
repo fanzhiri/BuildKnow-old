@@ -15,11 +15,9 @@ const styles = StyleSheet.create({
         backgroundColor: '#F5FCFF',
     },
     descriptioninput:{
-        marginLeft:20,
-        marginRight:20,
-        marginBottom:20,
-        marginTop:20,
-        height: 40,
+        margin:20,
+        padding:6,
+        height: 160,
         borderColor: 'gray',
         borderWidth: 1
     },
@@ -61,6 +59,7 @@ class Comment extends Component {
                         placeholder={"写评论..."}
                         maxLength={96}
                         returnKeyType={'done'}
+                        multiline={true}
                     />
                     <Button onPress={() => this.sendComment()}>{buttonText}</Button>
                 </View>
@@ -71,6 +70,12 @@ class Comment extends Component {
     sendComment(){
         if(this.state.upload == 1){
             return;
+        }
+
+        if(this.state.commenttext == ""){
+            Alert.alert('操作提示','还没填写',[
+                {text:'好的'}
+            ]);
         }
         const {userId} = this.props;
 
@@ -97,7 +102,7 @@ class Comment extends Component {
                     this.setState({
                         netresult:responseData.code,
                         upload:0
-                    })
+                    });
                     alert("网络不通")
                 }
 

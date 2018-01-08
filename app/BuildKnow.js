@@ -242,7 +242,7 @@ export default class BuildKnow extends Component {
                 <Scene key="iqbalance"          title="建识币" component={IqBalance} duration={0}  rightTitle={"了解建识币"} onRight={() => Actions.understandvc()}/>
                 <Scene key="newarticleqst"      title="新建文推" component={NewArticleQst} duration={0} />
                 <Scene key="marketmanage"       title="上架管理" component={MarketManage} duration={0} />
-                <Scene key="balancerecharge"    title="智商充值" component={BalanceRecharge} duration={0} />
+                <Scene key="balancerecharge"    title="充值" component={BalanceRecharge} duration={0} />
                 <Scene key="attributechange"    title="属性修改" component={AttributeChange} duration={0} />
                 <Scene key="serverdata"         title="服务器数据" component={ServerData} duration={0} />
                 <Scene key="publishlist"        title="出版列表" component={PublishList} duration={0} />

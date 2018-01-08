@@ -82,10 +82,12 @@ class HandoutVC extends Component {
         super();
 
         this.state = {
+            remainmoney:global.money,
             name:"",
-            money:1,
+            money:0,
             words:"恭喜发财",
             uploading:0,
+            cansend:true
         };
 
     }
@@ -118,6 +120,7 @@ class HandoutVC extends Component {
                 if(responseData.code == 100){
                     this.setState({
                         uploading:0,
+                        remainmoney:responseData.data
                     });
                     global.money = responseData.data;
                     Actions.pop({refresh:{gorefresh:1}});
@@ -141,6 +144,8 @@ class HandoutVC extends Component {
 
 
     commitcheck(){
+        if(this.state.cansend == false){return;}
+        if(this.state.money == 0){return;}
         this.docommit();
     }
 
@@ -151,15 +156,33 @@ class HandoutVC extends Component {
         }else{
             moneyint = parseInt(text);
         }
-        this.setState({money:moneyint})
+        if(this.state.remainmoney  < moneyint){
+            this.setState({
+                money:moneyint,
+                cansend:false
+            });
+        }else{
+            this.setState({
+                money:moneyint,
+                cansend:true
+            });
+        }
+
     }
 
     renderCommitButton(){
-        let buttontext = this.state.uploading == 0 ?"塞建识币进红包":"正在发出";
+        let buttontext = null;
+        let buttonColor = "#FF0F00";
+        if(this.state.cansend == true){
+            buttontext = this.state.uploading == 0 ?"塞建识币进红包":"正在发出";
+        }else{
+            buttontext = "没那么多币";
+            buttonColor = "#CCCCCC";
+        }
         if(this.state.money > 0){
             return(
-                <TouchableOpacity style={{margin:4,borderRadius:8,height:32,
-                        backgroundColor:"#FF0F00",justifyContent:"center",alignItems:"center"}} onPress={() => this.commitcheck()} >
+                <TouchableOpacity style={{margin:4,borderRadius:8,height:38,
+                        backgroundColor:buttonColor,justifyContent:"center",alignItems:"center"}} onPress={() => this.commitcheck()} >
                     <Text style={{fontSize: 18}}>{buttontext}</Text>
                 </TouchableOpacity>
             )
@@ -179,7 +202,7 @@ class HandoutVC extends Component {
             <View style={[GlobleStyles.withoutTitleContainer,styles.container]}>
                 <ScrollView>
                     <View style={{height:32,margin:8}}>
-                        <Text style={{fontSize:20}}>余币：{global.money}</Text>
+                        <Text style={{fontSize:20}}>余币：{this.state.remainmoney}</Text>
                     </View>
                     <TextInput
                         style={styles.briefinput}

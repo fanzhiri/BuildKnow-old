@@ -273,7 +273,7 @@ class PublicBook extends Component {
         var iconColor="#90F000";
         return(
             <TouchableOpacity onPress={onpressfunc} activeOpacity={0.8}>
-                <View style={{height:32,flexDirection:"row",alignItems:"center",borderBottomWidth:0.5, borderColor:'#48e8e8',paddingLeft:10}}>
+                <View style={{height:42,flexDirection:"row",alignItems:"center",borderBottomWidth:0.5, borderColor:'#48e8e8',paddingLeft:10}}>
                     <Text style={{fontSize:18}}>
                         {title}
                     </Text>

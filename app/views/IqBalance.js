@@ -70,6 +70,20 @@ class IqBalance extends Component {
             })
     }
 
+    renderCharge(){
+        if(global.adminid <= 10){
+            return(
+                <TouchableOpacity onPress={() => Actions.balancerecharge()}>
+                    <View style={styles.listItem}>
+                        <Text style={{fontSize:14}}>充值</Text>
+                    </View>
+                </TouchableOpacity>
+            )
+        }else{
+            return;
+        }
+    }
+
     render(){
         const {idNumber} = this.props;
         return (
@@ -95,11 +109,7 @@ class IqBalance extends Component {
                         <Text style={{fontSize:14}}>做题赚币</Text>
                     </View>
                 </TouchableOpacity>
-                {/*<TouchableOpacity onPress={() => Actions.balancerecharge()}>*/}
-                    {/*<View style={styles.listItem}>*/}
-                        {/*<Text style={{fontSize:14}}>充值</Text>*/}
-                    {/*</View>*/}
-                {/*</TouchableOpacity>*/}
+                {this.renderCharge()}
             </View>
         );
     }

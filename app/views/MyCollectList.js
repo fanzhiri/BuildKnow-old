@@ -108,7 +108,6 @@ class MyCollectList extends Component {
         let formData = new FormData();
         formData.append("auth",global.auth);
         formData.append("api","true");
-        formData.append("userid",global.userid);
         formData.append("collect_type",2);
         var opts = {
             method:"POST",
@@ -134,17 +133,48 @@ class MyCollectList extends Component {
             })
     }
 
+    dofetch_mycollecttest(){
+        let formData = new FormData();
+        formData.append("auth",global.auth);
+        formData.append("api","true");
+        formData.append("collect_type",3);
+        let opts = {
+            method:"POST",
+            body:formData
+        };
+        fetch(doGetMyCollectUrl,opts)
+            .then((response) => response.json())
+            .then((responseData) => {
+                if(responseData.code == 100){
+
+                    this.setState({
+
+                        test_data_source:responseData.data,
+                        get_test_data:1
+                    })
+                }else{
+
+                    this.setState({
+                        get_test_data:2
+                    })
+                }
+
+            })
+            .catch((error) => {
+                alert(error)
+            })
+    }
+
     dofetch_mycollectqst(){
 
         let formData = new FormData();
         formData.append("auth",global.auth);
         formData.append("api","true");
-        formData.append("userid",global.userid);
         formData.append("collect_type",1);
-        var opts = {
+        let opts = {
             method:"POST",
             body:formData
-        }
+        };
         fetch(doGetMyCollectUrl,opts)
             .then((response) => response.json())
             .then((responseData) => {
@@ -385,7 +415,7 @@ class MyCollectList extends Component {
 
     renderCollectTest(){
         if(this.state.get_test_data == 0){
-            this.dofetch_mycollectqst();
+            this.dofetch_mycollecttest();
             return (this.renderLoading())
         }else{
             if(this.state.test_data_source == null){
