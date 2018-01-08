@@ -1,6 +1,7 @@
 package com.buildknow;
 
 import com.facebook.react.ReactActivity;
+import com.microsoft.codepush.react.CodePush;
 import com.honaf.dialog.MyDialogPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
 
