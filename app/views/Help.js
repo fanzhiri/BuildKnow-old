@@ -2,7 +2,7 @@
  * Created by slako on 17/2/18.
  */
 import React, { Component ,PropTypes} from 'react';
-import {View, Text, StyleSheet} from "react-native";
+import {View, Text, StyleSheet,ScrollView} from "react-native";
 import {Actions} from "react-native-router-flux";
 import Button from "react-native-button";
 import GlobleStyles from '../styles/GlobleStyles';
@@ -28,9 +28,11 @@ class Help extends Component {
         const {idNumber} = this.props;
         return (
             <View style={GlobleStyles.withoutTitleContainer}>
-                <Text>{this.props.name}</Text>
-                <Text>{this.props.idnumber}</Text>
-                <Button onPress={Actions.pop}>Help</Button>
+                <ScrollView>
+                    <View style={styles.list}>
+                        <SettingItem text={"广告合作"} onPress={() => Actions.gitbookshow({shownumber:2})}/>
+                    </View>
+                </ScrollView>
             </View>
         );
     }

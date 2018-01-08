@@ -20,8 +20,9 @@ const styles = StyleSheet.create({
         flexDirection:'row',
         justifyContent: 'center',
         alignItems: 'center',
-        height:32,
-        backgroundColor: '#00EE00'
+        height:38,
+        backgroundColor: '#00EE00',
+        borderRadius:8
     },
     textdesc:{
         fontSize:20
@@ -340,7 +341,7 @@ class BeginTest extends Component {
     renderpktest(){
         let pkpeople = JSON.parse(this.props.pkdata.people);
         return(
-            <View>
+            <View style={{padding:4}}>
                 <Text style={styles.textdesc}>名字：{this.props.pkdata.bookname}</Text>
                 <Text style={styles.textdesc}>题数：{this.props.pkdata.testnum}</Text>
 

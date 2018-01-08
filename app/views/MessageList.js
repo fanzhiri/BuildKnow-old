@@ -188,6 +188,8 @@ class MessageList extends Component {
 
     renderPkItem(rowData, sectionID, rowID){
         let pkpeople = JSON.parse(rowData.people);
+        let time_o = new Date(rowData.time*1000);
+        let time_t = time_o.toLocaleString();
         return(
             <TouchableOpacity onPress={() => Actions.begintest({pkdata:rowData,intype:1})}>
                 <View style={styles.listItem}>
@@ -202,7 +204,10 @@ class MessageList extends Component {
                             邀请人:{rowData.inviter} 参与人数:{pkpeople.length}
                         </Text>
                         <Text >
-                            创建时间:{rowData.time} 题目数量:{rowData.testnum}
+                            题目数量:{rowData.testnum}
+                        </Text>
+                        <Text >
+                            创建时间:{time_t}
                         </Text>
                     </View>
                 </View>

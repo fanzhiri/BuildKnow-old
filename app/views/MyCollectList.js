@@ -69,7 +69,7 @@ class MyCollectList extends Component {
 
         super(props);
 
-        let t_selectedIndex = -1;
+        let t_selectedIndex = 0;
         if(props.processprop != -1) {
             t_selectedIndex = props.processprop;
         }
