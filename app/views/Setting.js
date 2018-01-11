@@ -82,6 +82,7 @@ class Setting extends Component {
                         <SettingItem text={"意见反馈"} onPress={() => Actions.feedback()}/>
                         <SettingItem text={"关于"} onPress={() => Actions.about()}/>
                         <SettingItem text={"帮助"} onPress={() => Actions.help({idnumber:9})}/>
+                        <SettingItem text={"软件更新"} onPress={() => Actions.softwareupdate()}/>
                         <SettingItem text={"退出登录"} onPress={() => (this._dologout())}/>
 
                     </View>

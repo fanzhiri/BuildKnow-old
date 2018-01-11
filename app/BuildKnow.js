@@ -133,6 +133,8 @@ import RedPacketDetail from './views/RedPacketDetail';
 import ExchangeDetail from './views/ExchangeDetail';
 import JobDetail from './views/JobDetail';
 import GitbookShow from './views/GitbookShow';
+import SoftwareUpdate from './views/SoftwareUpdate';
+
 import Icon from 'react-native-vector-icons/Ionicons';
 
 export default class BuildKnow extends Component {
@@ -271,6 +273,7 @@ export default class BuildKnow extends Component {
                 <Scene key="exchangedetail"     title="交易详情"      component={ExchangeDetail} duration={0} />
                 <Scene key="jobdetail"          title="职位详情"      component={JobDetail} duration={0} />
                 <Scene key="gitbookshow"        title="接入网页"      component={GitbookShow} duration={0} />
+                <Scene key="softwareupdate"     title="软件更新"      component={SoftwareUpdate} duration={0} />
             </Router>
         );
     }

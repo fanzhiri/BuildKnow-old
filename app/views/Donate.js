@@ -8,6 +8,7 @@ import Button from "react-native-button";
 import GlobleStyles from '../styles/GlobleStyles';
 import {checkerrorcode } from '../util/CheckNetError'
 import DataStore from '../util/DataStore';
+
 const styles = StyleSheet.create({
     container: {
         flex: 1,
